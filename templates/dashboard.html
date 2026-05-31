@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}대시보드 - Pilot Dream{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold mb-2">안녕하세요, 강로운 미래의 기장님 ✈️</h1>
+        <p class="text-lg text-[#88aa88]">오늘도 한 걸음 더 기장으로 다가가고 있나요?</p>
+        
+        <!-- 기장으로 가는 여정 시각화 -->
+        <div class="mt-4 p-5 bg-[#001a00] border border-[#33ff33]/30 rounded-xl">
+            <div class="flex justify-between items-center mb-3">
+                <div>
+                    <div class="text-sm text-gray-400">기장으로 가는 여정</div>
+                    <div class="text-xl font-bold">총 비행시간 기준 진행률</div>
+                </div>
+                <div class="text-right">
+                    <div class="text-3xl font-bold text-[#33ff33]">{{ total_hours | default(0) }} <span class="text-base">/ 5,000</span></div>
+                    <div class="text-xs text-gray-400">시간 (기장 최소 목표)</div>
+                </div>
+            </div>
+            <div class="h-3 bg-black rounded-full overflow-hidden mb-2">
+                {% set progress = ((total_hours | default(0)) / 5000 * 100) | round %}
+                <div class="h-3 bg-gradient-to-r from-[#33ff33] to-[#ffaa00] rounded-full transition-all" style="width: {{ progress }}%"></div>
+            </div>
+            <div class="flex justify-between text-xs text-gray-400">
+                <div>현재: {{ total_hours | default(0) }}시간</div>
+                <div>{{ progress }}% 달성</div>
+                <div>목표: 5,000시간</div>
+            </div>
+            <div class="mt-2 text-xs text-[#ffaa00]">※ 실제 기장 최소 비행시간은 항공사마다 다르지만, 5,000시간을 장기 목표로 설정했습니다.</div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Quick Stats -->
+        <div class="info-card p-6">
+            <div class="text-sm text-gray-400">총 비행 시간</div>
+            <div class="text-4xl font-semibold mt-1 tracking-tighter">{{ total_hours }} <span class="text-xl font-medium">hrs</span></div>
+            <div class="text-xs mt-1 text-[#0A84FF]">+{{ flight_count }} flights recorded</div>
+        </div>
+
+        <div class="info-card p-6">
+            <div class="text-sm text-gray-400">경험 기종</div>
+            <div class="text-4xl font-semibold mt-1 tracking-tighter">{{ aircraft_types }} <span class="text-xl font-medium">types</span></div>
+            <div class="text-xs mt-1 text-gray-400">기록된 기종 수</div>
+        </div>
+
+        <div class="info-card p-6">
+            <div class="text-sm text-gray-400">획득 뱃지</div>
+            <div class="text-4xl font-semibold mt-1 tracking-tighter" id="badge-count">0 / 0</div>
+            <div class="w-full bg-[#2c2c2e] h-1.5 rounded-full mt-3">
+                <div class="bg-[#0A84FF] h-1.5 rounded-full transition-all" id="badge-progress-bar" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div class="info-card p-6 flex flex-col justify-center" id="next-badge-box">
+            <div class="text-sm text-gray-400 mb-1">다음 목표</div>
+            <div class="font-semibold text-lg tracking-tight" id="next-badge-name">로딩 중...</div>
+            <div class="text-xs text-[#0A84FF] mt-1" id="next-badge-progress"></div>
+        </div>
+    </div>
+
+    <div class="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Quick Actions -->
+        <div class="info-card p-6 rounded-lg lg:col-span-2">
+            <h3 class="font-bold text-xl mb-4 border-b border-[#33ff33] pb-2">빠른 시작</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <a href="/flight-planner" class="block p-4 bg-[#002200] hover:bg-[#003300] rounded text-center transition">
+                    ✈️ 비행 계획 시뮬레이터
+                </a>
+                <a href="/logbook" class="block p-4 bg-[#002200] hover:bg-[#003300] rounded text-center transition">
+                    📖 오늘의 비행 기록
+                </a>
+                <a href="/atc-english" class="block p-4 bg-[#002200] hover:bg-[#003300] rounded text-center transition">
+                    🎧 ATC 음성 연습
+                </a>
+                <a href="/radar" class="block p-4 bg-[#002200] hover:bg-[#003300] rounded text-center transition">
+                    📡 실시간 레이더 보기
+                </a>
+            </div>
+        </div>
+
+        <div class="info-card p-6 rounded-lg">
+            <h3 class="font-bold text-xl mb-4 border-b border-[#33ff33] pb-2">오늘의 동기부여</h3>
+            
+            <div class="space-y-3 text-sm">
+                <p class="leading-relaxed">
+                    "기장은 하늘을 날아다니는 사람이 아니라, 수백 명의 생명을 책임지는 리더입니다."
+                </p>
+                <p class="text-xs text-gray-400">— 어느 대한항공 기장의 말</p>
+                
+                <div class="pt-3 border-t border-[#33ff33]/20">
+                    <p class="leading-relaxed">
+                        "오늘의 작은 기록 하나가, 10년 후 강로운이 기장으로 앉을 때의 자신감이 됩니다."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 성장 시각화 섹션 (미래 기장 느낌 강화) -->
+    <div class="mt-8 info-card p-6 rounded-2xl">
+        <h3 class="font-bold text-xl mb-4">강로운의 성장 리포트</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- 비행시간 성장 -->
+            <div>
+                <div class="text-sm text-gray-400 mb-1">비행시간 성장</div>
+                <div class="text-2xl font-bold">{{ total_hours | default(0) }} <span class="text-base">시간</span></div>
+                <div class="mt-2 h-2 bg-black rounded">
+                    <div class="h-2 bg-[#33ff33] rounded" style="width: {{ ((total_hours | default(0)) / 5000 * 100) | round }}%"></div>
+                </div>
+                <div class="text-xs text-gray-500 mt-1">기장 목표 5,000시간까지 {{ ((5000 - (total_hours | default(0))) | round) }}시간 남음</div>
+            </div>
+
+            <!-- 기종 다양성 -->
+            <div>
+                <div class="text-sm text-gray-400 mb-1">기종 경험 다양성</div>
+                <div class="text-2xl font-bold">{{ aircraft_types | default(0) }} <span class="text-base">기종</span></div>
+                <div class="flex gap-1 mt-2">
+                    {% for i in range(1, 6) %}
+                        <div class="flex-1 h-2 rounded {{ 'bg-[#ffaa00]' if i <= (aircraft_types | default(0)) else 'bg-[#333]' }}"></div>
+                    {% endfor %}
+                </div>
+                <div class="text-xs text-gray-500 mt-1">다양한 기종 경험 = 기장으로서의 경쟁력</div>
+            </div>
+
+            <!-- 뱃지 성취 -->
+            <div>
+                <div class="text-sm text-gray-400 mb-1">뱃지 성취도</div>
+                <div class="text-2xl font-bold" id="badge-achievement">로딩중...</div>
+                <div class="text-xs text-[#33ff33] mt-1">획득한 뱃지가 곧 당신의 파일럿 스펙입니다.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function loadBadgeSummary() {
+    try {
+        const res = await fetch('/badges/api/progress');
+        const data = await res.json();
+        
+        const countEl = document.getElementById('badge-count');
+        if (countEl) {
+            countEl.innerText = `${data.unlocked_count} / ${data.total_badges}`;
+        }
+        
+        const percent = data.total_badges > 0 ? Math.round((data.unlocked_count / data.total_badges) * 100) : 0;
+        const bar = document.getElementById('badge-progress-bar');
+        if (bar) bar.style.width = percent + '%';
+        
+        // 새로운 성장 리포트용 뱃지 성취도
+        const achievementEl = document.getElementById('badge-achievement');
+        if (achievementEl) {
+            achievementEl.innerText = `${data.unlocked_count} / ${data.total_badges} (${percent}%)`;
+        }
+        
+        if (data.next_badge) {
+            const nameEl = document.getElementById('next-badge-name');
+            const progEl = document.getElementById('next-badge-progress');
+            
+            if (nameEl) nameEl.innerText = data.next_badge.name;
+            if (progEl) {
+                progEl.innerText = `${data.next_badge.current || 0} / ${data.next_badge.target || '?'} (${data.next_badge.progress}%)`;
+            }
+        }
+    } catch (e) {
+        console.log('Badge summary load failed');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadBadgeSummary);
+</script>
+{% endblock %}

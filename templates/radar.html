@@ -1,0 +1,907 @@
+{% extends "base.html" %}
+
+{% block title %}관제 레이더 - Pilot Dream{% endblock %}
+
+{% block head %}
+<style>
+    /* 레이더 다크 모드: CSS 필터로 타일만 어둡게 (오버레이 div 대신 - 검정화면 버그 해결) */
+    #map .leaflet-tile-pane {
+        transition: filter 0.5s ease;
+    }
+    #map.radar-dark .leaflet-tile-pane {
+        filter: brightness(0.55) contrast(1.15) saturate(0.25);
+    }
+    /* 밝은 모드: 필터 없음 - 원본 타일 그대로 */
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- 레이더 전용 풀스크린 지도 -->
+<div id="radar-map-wrapper" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 1; background: #111;">
+    <div id="map" style="width: 100%; height: 100%;"></div>
+</div>
+
+<!-- 오버레이 패널들 (필터, 통계, 버튼 등) - 지도 위에 떠있음 -->
+
+    <!-- Filters -->
+    <div class="fixed top-4 right-4 z-[2000] info-card p-4 text-sm flex flex-col gap-2 shadow-xl" style="pointer-events: auto;">
+        <div class="font-bold mb-1">필터</div>
+        <label><input type="checkbox" id="filter-korea" checked> 한국편만 보기</label>
+        <select id="filter-aircraft" class="bg-black border border-[#33ff33] text-xs p-1">
+            <option value="">모든 기종</option>
+        </select>
+        <select id="filter-airline" class="bg-black border border-[#33ff33] text-xs p-1">
+            <option value="">모든 항공사</option>
+        </select>
+        <button onclick="applyFilters()" class="text-[10px] bg-[#003300] px-2 py-1 rounded">적용</button>
+
+        <!-- NEW: Full route toggle (Hybrid radar improvement) -->
+        <label class="mt-1 pt-1 border-t border-[#33ff33]/30">
+            <input type="checkbox" id="show-full-routes" onchange="toggleFullRoutes()">
+            <span class="text-[#ffaa00]">전체 비행 경로 표시</span>
+        </label>
+        <div class="text-[9px] text-gray-500 -mt-0.5">Origin → Destination (희미하게)</div>
+        
+        <!-- 한국편 강조 강화 -->
+        <label class="text-xs mt-1">
+            <input type="checkbox" id="highlight-korea" checked onchange="updateFlights()">
+            <span class="text-[#ffaa00]">한국편 더 강하게 강조</span>
+        </label>
+        
+        <!-- 내 항공편만 보기 (하이브리드 기능) -->
+        <label class="text-xs mt-1">
+            <input type="checkbox" id="show-only-user" onchange="updateFlights()">
+            <span class="text-[#a855f7]">내 항공편만 보기</span>
+        </label>
+    </div>
+
+    <!-- Stats Panel -->
+    <div class="fixed bottom-4 right-4 z-[2000] info-card p-3 text-xs w-64">
+        <div class="font-bold mb-1">실시간 통계</div>
+        <div>총 항공편: <span id="stat-total">0</span></div>
+        <div>한국 관련: <span id="stat-korea">0</span></div>
+        <div>평균 고도: <span id="stat-alt">FL350</span></div>
+        
+        <div class="mt-2 pt-2 border-t border-[#33ff33]/30">
+            <div class="font-bold text-[10px] mb-1">가장 바쁜 공항 TOP 3</div>
+            <div id="busiest-airports" class="text-[10px] space-y-0.5"></div>
+        </div>
+    </div>
+
+    <!-- Day/Night Toggle -->
+    <div class="fixed bottom-4 left-4 z-[2000]">
+        <button id="map-style-btn" onclick="toggleMapStyle()" 
+                class="info-card px-3 py-1 text-xs rounded border border-[#33ff33]">
+            ☀️ 밝게 보기
+        </button>
+    </div>
+
+    <!-- GLOBAL ATC RADAR Panel -->
+    <div class="fixed top-4 left-4 z-[2000] info-card w-80 md:w-96 shadow-lg backdrop-blur-md flex flex-col overflow-hidden" style="max-height: 75vh; pointer-events: auto;">
+        <div class="flex justify-between items-center border-b border-[#33ff33] px-4 py-2 bg-[#001a00]">
+            <div>
+                <h1 class="text-base md:text-lg font-bold text-white">GLOBAL ATC RADAR</h1>
+                <span id="active-flights-count" class="text-[10px] text-gray-400"></span>
+            </div>
+            <button id="toggle-panel-btn" class="text-xs px-3 py-1 border border-[#33ff33] rounded">[-]</button>
+        </div>
+
+        <div id="radar-panel-content" class="flex flex-col p-4 overflow-hidden">
+            <div class="flex justify-between items-center mb-1">
+                <div class="text-[10px] text-[#ffaa00] font-bold">INBOUND TO ICN (한국행)</div>
+                <button onclick="showAddFlightModal()" 
+                        class="text-[10px] px-2 py-0.5 bg-[#003300] border border-[#33ff33] rounded hover:bg-[#004400]">
+                    + 항공편 추가
+                </button>
+            </div>
+            <div id="inbound-list" class="max-h-28 overflow-y-auto space-y-0.5 mb-2 pr-1 text-xs"></div>
+
+            <div class="text-[10px] text-gray-400 font-bold mb-1 border-t border-[#33ff33]/30 pt-1.5">OTHER GLOBAL FLIGHTS</div>
+            <div id="flight-list" class="flex-1 overflow-y-auto space-y-0.5 pr-1 text-xs max-h-52"></div>
+        </div>
+    </div> <!-- GLOBAL ATC RADAR Panel 닫기 -->
+
+    <!-- Add Flight Modal -->
+    <div id="add-flight-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[3000]">
+        <div class="info-card p-6 w-full max-w-md mx-4">
+            <h3 class="text-lg font-bold mb-4">새 항공편 추가 (나의 비행)</h3>
+            
+            <div class="space-y-3">
+                <div>
+                    <label class="text-xs text-gray-400">Callsign</label>
+                    <input type="text" id="modal-callsign" value="MY-001" class="w-full bg-black border border-[#33ff33] p-2 rounded text-sm">
+                </div>
+                
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-xs text-gray-400">출발</label>
+                        <select id="modal-org" class="w-full bg-black border border-[#33ff33] p-2 rounded text-sm"></select>
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-400">도착</label>
+                        <select id="modal-dest" class="w-full bg-black border border-[#33ff33] p-2 rounded text-sm"></select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="text-xs text-gray-400">기종</label>
+                        <input type="text" id="modal-ac" value="B737-800" class="w-full bg-black border border-[#33ff33] p-2 rounded text-sm">
+                    </div>
+                    <div>
+                        <label class="text-xs text-gray-400">한국 항공사?</label>
+                        <select id="modal-korea" class="w-full bg-black border border-[#33ff33] p-2 rounded text-sm">
+                            <option value="true">네 (KE/OZ 스타일)</option>
+                            <option value="false">아니오</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-2 mt-5">
+                <button onclick="addCustomFlight()" class="flex-1 py-2 bg-[#33ff33] text-black font-bold rounded">추가하기</button>
+                <button onclick="hideAddFlightModal()" class="flex-1 py-2 border border-[#33ff33] rounded">취소</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let map;
+let flights = [];
+let markers = {};
+let pathLayerGroup;
+
+function initMap() {
+    console.log('%c[Radar] initMap() 시작', 'color:#0f0; font-weight:bold');
+
+    const mapEl = document.getElementById('map');
+    if (!mapEl) {
+        console.error('Map container #map not found');
+        alert('지도 컨테이너를 찾을 수 없습니다. 페이지를 새로고침 해주세요.');
+        return;
+    }
+
+    map = L.map('map', {
+        center: [37, 127],
+        zoom: 5,
+        zoomControl: true,
+        attributionControl: false
+    });
+
+    // 매우 강력한 크기 보정 (레이더가 안 보이는 주요 원인 해결)
+    setTimeout(() => { if (map) map.invalidateSize(true); }, 50);
+    setTimeout(() => { if (map) map.invalidateSize(true); }, 300);
+    setTimeout(() => { if (map) map.invalidateSize(true); }, 800);
+    window.addEventListener('resize', () => { if (map) map.invalidateSize(true); });
+
+    // 가장 안정적인 타일 (OSM) - CartoDB는 차단되는 경우가 많음
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 10,
+        minZoom: 2
+    }).addTo(map);
+
+    // Scale control
+    L.control.scale({ position: 'bottomleft', metric: true, imperial: false }).addTo(map);
+
+    pathLayerGroup = L.layerGroup().addTo(map);
+
+    // 다크 모드: CSS 필터 방식 (오버레이 div 대신 → 검정 화면 버그 완전 해결)
+    mapEl.classList.add('radar-dark');
+
+    console.log('[Radar] 지도 초기화 완료 (OSM + CSS 다크 필터)');
+
+    // Dummy airports (will be replaced with API later)
+    const airports = [
+        {id:'ICN', lat:37.46, lng:126.44},
+        {id:'LAX', lat:33.94, lng:-118.40},
+        {id:'JFK', lat:40.64, lng:-73.78},
+        {id:'SIN', lat:1.36, lng:103.99},
+        {id:'LHR', lat:51.47, lng:-0.45}
+    ];
+
+    airports.forEach(a => {
+        L.marker([a.lat, a.lng], {
+            icon: L.divIcon({
+                html: `<div style="color:#33ff33; font-size:11px;">✛ ${a.id}</div>`,
+                className: '',
+                iconSize: [40, 16]
+            })
+        }).addTo(map);
+    });
+}
+
+function generateFlights() {
+    flights = [];
+    
+    // Background traffic (기존 랜덤 항공편들)
+    const airports = [
+        {id:'ICN', lat:37.46, lng:126.44, region:'NEA'},
+        {id:'LAX', lat:33.94, lng:-118.40, region:'NA'},
+        {id:'JFK', lat:40.64, lng:-73.78, region:'NA'},
+        {id:'SIN', lat:1.36, lng:103.99, region:'SEA'},
+        {id:'LHR', lat:51.47, lng:-0.45, region:'EU'},
+        {id:'CDG', lat:49.01, lng:2.55, region:'EU'},
+        {id:'HND', lat:35.55, lng:139.78, region:'NEA'}
+    ];
+
+    // 15 inbound to ICN (orange)
+    for (let i = 0; i < 15; i++) {
+        const org = airports[Math.floor(Math.random() * (airports.length-1)) + 1];
+        flights.push({
+            id: 'KR-IN-' + i,
+            callsign: 'KE' + (1000 + i),
+            org: org,
+            dest: airports[0],
+            prog: Math.random() * 0.9,
+            spd: 0.0011 + Math.random()*0.0006,
+            isKorea: true
+        });
+    }
+
+    // 15 outbound from ICN (orange)
+    for (let i = 0; i < 15; i++) {
+        const dest = airports[Math.floor(Math.random() * (airports.length-1)) + 1];
+        flights.push({
+            id: 'KR-OUT-' + i,
+            callsign: 'KE' + (2000 + i),
+            org: airports[0],
+            dest: dest,
+            prog: Math.random() * 0.4,
+            spd: 0.0011 + Math.random()*0.0006,
+            isKorea: true
+        });
+    }
+
+    const aircraftNames = ["B737-800", "A320", "A350-900", "B777-300ER", "A380", "B787-9"];
+
+    // 140 global random
+    for (let i = 0; i < 140; i++) {
+        const dest = airports[Math.floor(Math.random() * airports.length)];
+        let org = airports[Math.floor(Math.random() * airports.length)];
+        while (org.id === dest.id) org = airports[Math.floor(Math.random() * airports.length)];
+
+        flights.push({
+            id: 'GL-' + i,
+            callsign: 'GL' + (3000 + i),
+            org: org,
+            dest: dest,
+            prog: Math.random() * 0.7,
+            spd: 0.0009 + Math.random()*0.0007,
+            isKorea: false,
+            acName: aircraftNames[Math.floor(Math.random() * aircraftNames.length)]
+        });
+    }
+
+    // Assign acName to Korea flights too
+    flights.forEach(f => {
+        if (!f.acName) {
+            f.acName = aircraftNames[Math.floor(Math.random() * aircraftNames.length)];
+        }
+    });
+
+    // 사용자 추가 항공편 병합 (하이브리드 방식 핵심)
+    userFlights.forEach(uf => {
+        const org = airports.find(a => a.id === uf.org_id) || {id: uf.org_id, lat: 37.46, lng: 126.44};
+        const dest = airports.find(a => a.id === uf.dest_id) || {id: uf.dest_id, lat: 33.94, lng: -118.40};
+
+        flights.push({
+            id: 'USER-' + uf.id,
+            callsign: uf.callsign,
+            org: org,
+            dest: dest,
+            prog: Math.random() * 0.65,
+            spd: 0.00095 + Math.random() * 0.0004,
+            isKorea: uf.is_korea,
+            acName: uf.ac_name || "B737-800",
+            isUserFlight: true,
+            userFlightId: uf.id
+        });
+    });
+}
+
+let currentFilters = { koreaOnly: false, aircraft: '', airline: '' };
+let trails = {}; // For short recent trail
+let showFullRoutes = false;
+
+function updateFlights() {
+    const iList = document.getElementById('inbound-list');
+    const oList = document.getElementById('flight-list');
+    iList.innerHTML = '';
+    oList.innerHTML = '';
+
+    let visibleCount = 0;
+    let koreaCount = 0;
+    let totalAlt = 0;
+
+    flights.forEach(f => {
+        f.prog += f.spd;
+        if (f.prog >= 1.0) {
+            f.prog = 0;
+            [f.org, f.dest] = [f.dest, f.org];
+        }
+
+        f.lat = f.org.lat + (f.dest.lat - f.org.lat) * f.prog;
+        let lngDiff = f.dest.lng - f.org.lng;
+        if (lngDiff > 180) lngDiff -= 360;
+        else if (lngDiff < -180) lngDiff += 360;
+        f.lng = f.org.lng + lngDiff * f.prog;
+
+        // Recalculate heading every frame so the plane points toward destination
+        f.hdg = Math.atan2(lngDiff, f.dest.lat - f.org.lat) * 180 / Math.PI;
+        if (f.hdg < 0) f.hdg += 360;
+
+        const highlightKorea = document.getElementById('highlight-korea') ? document.getElementById('highlight-korea').checked : true;
+        
+        // 하이브리드 방식 색상 구분
+        let col;
+        if (f.isUserFlight) {
+            col = '#a855f7';  // 보라 - 사용자 항공편
+        } else if (f.isKorea) {
+            col = highlightKorea ? '#ffaa00' : '#ffaa00';
+        } else {
+            col = '#33ff33';
+        }
+
+        // Altitude-based color
+        const altitude = 280 + (f.prog * 90);
+        let iconColor = '#33ff33';
+        if (altitude > 370) iconColor = '#4da8da';
+        else if (altitude < 320) iconColor = '#ffaa00';
+
+        let finalColor;
+        if (f.isUserFlight) {
+            finalColor = '#a855f7';
+        } else if (f.isKorea) {
+            finalColor = '#ffaa00';
+        } else {
+            finalColor = iconColor;
+        }
+
+        // Better Plane Marker with Label + altitude color
+        const labelHtml = `
+            <div style="position:relative; width:22px; height:22px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" style="transform: rotate(${f.hdg}deg); filter: drop-shadow(0 0 2px #000);">
+                    <path fill="${finalColor}" stroke="#111" stroke-width="0.5" d="M21,16V14L13,9V3.5A1.5,1.5 0 0,0 11.5,2A1.5,1.5 0 0,0 10,3.5V9L2,14V16L10,13.5V19L8,20.5V22L11.5,21L15,22V20.5L13,19V13.5L21,16Z"/>
+                </svg>
+                <div style="position:absolute; top:-15px; left:24px; white-space:nowrap; background:rgba(0,0,0,0.75); color:#fff; font-size:9px; padding:1px 4px; border-radius:3px; line-height:1.1;">
+                    ${f.callsign}<br><span style="color:#4da8da; font-size:8px">${f.acName}</span>
+                </div>
+            </div>`;
+        
+        const icon = L.divIcon({ html: labelHtml, className: '', iconSize: [22,22] });
+
+        if (markers[f.id]) {
+            markers[f.id].setLatLng([f.lat, f.lng]);
+            markers[f.id].setIcon(icon);
+            markers[f.id]._flight = f;   // 참조 저장 (삭제 애니메이션용)
+        } else {
+            markers[f.id] = L.marker([f.lat, f.lng], { icon }).addTo(map);
+            markers[f.id]._flight = f;   // 참조 저장
+        }
+            
+            // Click popup
+            markers[f.id].on('click', () => {
+                // Highlight full route on click (Hybrid UX)
+                if (f.fullRouteLine) {
+                    f.fullRouteLine.setStyle({ weight: 3.5, opacity: 0.65, color: f.isKorea ? '#ffaa00' : '#33ff33' });
+                    setTimeout(() => {
+                        if (f.fullRouteLine) {
+                            f.fullRouteLine.setStyle({
+                                weight: f.isKorea ? 1.8 : 1.2,
+                                opacity: f.isKorea ? 0.22 : 0.12
+                            });
+                        }
+                    }, 2200);
+                } else if (showFullRoutes === false) {
+                    // Temporarily draw the route even if toggle is off
+                    drawFullRoute(f);
+                    f.fullRouteLine.setStyle({ weight: 3.5, opacity: 0.7 });
+                    setTimeout(() => {
+                        if (f.fullRouteLine) removeFullRoute(f);
+                    }, 2400);
+                }
+
+                let popupContent = `
+                    <b>${f.callsign}</b><br>
+                    ${f.acName}<br>
+                    <span style="color:#ffaa00">${f.org.id} → ${f.dest.id}</span><br>
+                    예상 도착: ${Math.round((1 - f.prog) * 8)}시간 후
+                `;
+
+                // 사용자 항공편 전용 버튼
+                if (f.isUserFlight) {
+                    popupContent += `
+                        <div style="margin-top:10px; display:flex; gap:6px;">
+                            <button onclick="deleteUserFlight(${f.userFlightId});" 
+                                    style="background:#7c3aed; color:white; border:none; padding:4px 10px; border-radius:6px; font-size:11px; cursor:pointer;">
+                                삭제
+                            </button>
+                            <button onclick="saveRadarFlightToLogbook('${f.org.id}', '${f.dest.id}', '${f.acName}');" 
+                                    style="background:#0A84FF; color:white; border:none; padding:4px 10px; border-radius:6px; font-size:11px; cursor:pointer;">
+                                로그북에 기록
+                            </button>
+                        </div>
+                    `;
+                }
+
+                markers[f.id].bindPopup(popupContent).openPopup();
+            });
+
+        // === 4. Short Recent Trail (하이브리드 차별화) ===
+        if (!trails[f.id]) trails[f.id] = [];
+        trails[f.id].push([f.lat, f.lng]);
+
+        // 사용자 항공편은 더 긴 트레일 + 다른 점선 스타일
+        const maxTrailLength = f.isUserFlight ? 28 : 15;
+        if (trails[f.id].length > maxTrailLength) trails[f.id].shift();
+
+        if (f.trailLine) map.removeLayer(f.trailLine);
+
+        const trailOptions = f.isUserFlight 
+            ? { color: col, weight: 2.2, opacity: 0.55, dashArray: '5,4' }   // 사용자: 더 길고 선명한 점선
+            : { color: col, weight: 1.8, opacity: 0.38, dashArray: '2,4' };  // 일반: 기존 스타일
+
+        f.trailLine = L.polyline(trails[f.id], trailOptions).addTo(map);
+
+        // === 5. Full Origin → Destination Route (Hybrid feature) ===
+        if (showFullRoutes) {
+            drawFullRoute(f);
+        } else if (f.fullRouteLine) {
+            removeFullRoute(f);
+        }
+
+        // === Filters ===
+        let show = true;
+        if (currentFilters.koreaOnly && !f.isKorea) show = false;
+        if (currentFilters.aircraft && f.acName !== currentFilters.aircraft) show = false;
+        if (currentFilters.airline && !f.callsign.startsWith(currentFilters.airline)) show = false;
+
+        // 내 항공편만 보기 (하이브리드)
+        const onlyUser = document.getElementById('show-only-user') ? document.getElementById('show-only-user').checked : false;
+        if (onlyUser && !f.isUserFlight) show = false;
+
+        if (markers[f.id]) {
+            if (show) {
+                if (!map.hasLayer(markers[f.id])) markers[f.id].addTo(map);
+                if (f.trailLine && !map.hasLayer(f.trailLine)) f.trailLine.addTo(map);
+                if (showFullRoutes && f.fullRouteLine && !map.hasLayer(f.fullRouteLine)) {
+                    f.fullRouteLine.addTo(map);
+                }
+
+                // 사용자 항공편은 항상 위 레이어로 bringToFront
+                if (f.isUserFlight) {
+                    if (markers[f.id]) markers[f.id].bringToFront();
+                    if (f.trailLine) f.trailLine.bringToFront();
+                    if (f.fullRouteLine) f.fullRouteLine.bringToFront();
+                }
+            } else {
+                if (map.hasLayer(markers[f.id])) map.removeLayer(markers[f.id]);
+                if (f.trailLine && map.hasLayer(f.trailLine)) map.removeLayer(f.trailLine);
+                if (f.fullRouteLine && map.hasLayer(f.fullRouteLine)) map.removeLayer(f.fullRouteLine);
+            }
+        }
+
+        if (show) {
+            visibleCount++;
+            if (f.isKorea) koreaCount++;
+            totalAlt += 350 + Math.random() * 50;
+        }
+
+        // List items
+        const item = document.createElement('div');
+        let itemClass = `text-[10px] px-1 py-0.5 cursor-pointer hover:bg-[#003300] rounded `;
+        
+        if (f.isUserFlight) {
+            itemClass += 'text-[#a855f7] font-medium';  // 사용자 항공편 보라
+        } else if (f.isKorea) {
+            itemClass += 'text-[#ffaa00]';
+        }
+        
+        item.className = itemClass;
+        
+        let prefix = f.isUserFlight ? '★ ' : '';
+        item.innerHTML = `${prefix}${f.callsign} ${f.org.id}→${f.dest.id} <span class="text-[#4da8da]">[${f.acName}]</span>`;
+        
+        item.onclick = () => {
+            map.flyTo([f.lat, f.lng], 6, { duration: 1.2 });
+            
+            // Click from list also highlights full route (nice UX)
+            setTimeout(() => {
+                if (markers[f.id]) {
+                    markers[f.id].openPopup();
+                    // Trigger the same highlight logic
+                    if (f.fullRouteLine) {
+                        f.fullRouteLine.setStyle({ weight: 3.5, opacity: 0.65 });
+                        setTimeout(() => {
+                            if (f.fullRouteLine) f.fullRouteLine.setStyle({
+                                weight: f.isKorea ? 1.8 : 1.2,
+                                opacity: f.isKorea ? 0.22 : 0.12
+                            });
+                        }, 2200);
+                    }
+                }
+            }, 1300);
+        };
+        
+        if (f.dest.id === 'ICN' || f.org.id === 'ICN') {
+            iList.appendChild(item);
+        } else {
+            oList.appendChild(item);
+        }
+    });
+
+    // Stats
+    document.getElementById('stat-total').innerText = visibleCount;
+    document.getElementById('stat-korea').innerText = koreaCount;
+    document.getElementById('stat-alt').innerText = 'FL' + Math.round(totalAlt / Math.max(visibleCount,1));
+
+    // Simple collision detection
+    let closeCalls = 0;
+    for (let i = 0; i < flights.length; i++) {
+        for (let j = i + 1; j < flights.length; j++) {
+            const dx = flights[i].lat - flights[j].lat;
+            const dy = flights[i].lng - flights[j].lng;
+            const dist = Math.sqrt(dx*dx + dy*dy);
+            if (dist < 0.8) closeCalls++;
+        }
+    }
+    if (closeCalls > 0) {
+        document.getElementById('stat-alt').innerHTML = `FL${Math.round(totalAlt / Math.max(visibleCount,1))} <span class="text-red-400">⚠ ${closeCalls} close</span>`;
+    }
+
+    // Busiest airports (simple count)
+    const airportCount = {};
+    flights.forEach(f => {
+        airportCount[f.org.id] = (airportCount[f.org.id] || 0) + 1;
+        airportCount[f.dest.id] = (airportCount[f.dest.id] || 0) + 1;
+    });
+    
+    const sorted = Object.entries(airportCount).sort((a,b) => b[1]-a[1]).slice(0,3);
+    let busiestHTML = '';
+    sorted.forEach(([code, count]) => {
+        busiestHTML += `<div>${code} <span class="text-[#33ff33]">${count}</span></div>`;
+    });
+    document.getElementById('busiest-airports').innerHTML = busiestHTML || '데이터 수집 중...';
+
+    document.getElementById('active-flights-count').innerText = visibleCount + ' flights visible';
+}
+
+function startSimulation() {
+    setInterval(() => {
+        updateFlights();
+    }, 1400);
+}
+
+// 초기화 시 사용자 항공편 로드 (하이브리드)
+async function initRadar() {
+    await loadUserFlights();
+    generateFlights();
+    updateFlights();
+    startSimulation();
+
+    // 사용자 항공편까지 모두 로드된 후 다시 invalidate (레이더 검정 화면 방지)
+    setTimeout(() => {
+        if (map) map.invalidateSize(true);
+        console.log('[Radar] 추가 invalidateSize (비행기 생성 후)');
+    }, 500);
+}
+
+function setupToggle() {
+    const btn = document.getElementById('toggle-panel-btn');
+    const content = document.getElementById('radar-panel-content');
+    if (!btn || !content) return;
+
+    btn.onclick = () => {
+        const isHidden = content.style.display === 'none';
+        content.style.display = isHidden ? 'flex' : 'none';
+        btn.innerText = isHidden ? '[-]' : '[+]';
+    };
+}
+
+function applyFilters() {
+    currentFilters.koreaOnly = document.getElementById('filter-korea').checked;
+    currentFilters.aircraft = document.getElementById('filter-aircraft').value;
+    currentFilters.airline = document.getElementById('filter-airline').value;
+    updateFlights();
+}
+
+// === Hybrid Radar: Full Route Helpers ===
+function getRoutePoints(org, dest, steps = 40) {
+    // Simple linear interpolation with lng wrap correction (consistent with movement logic)
+    const points = [];
+    let lngDiff = dest.lng - org.lng;
+    if (lngDiff > 180) lngDiff -= 360;
+    else if (lngDiff < -180) lngDiff += 360;
+
+    for (let i = 0; i <= steps; i++) {
+        const t = i / steps;
+        const lat = org.lat + (dest.lat - org.lat) * t;
+        let lng = org.lng + lngDiff * t;
+        if (lng > 180) lng -= 360;
+        if (lng < -180) lng += 360;
+        points.push([lat, lng]);
+    }
+    return points;
+}
+
+function drawFullRoute(f) {
+    if (f.fullRouteLine) {
+        map.removeLayer(f.fullRouteLine);
+    }
+    const points = getRoutePoints(f.org, f.dest, 50);
+    const isKorea = f.isKorea;
+    const color = isKorea ? '#ffaa00' : '#33ff33';
+    
+    f.fullRouteLine = L.polyline(points, {
+        color: color,
+        weight: isKorea ? 1.8 : 1.2,
+        opacity: isKorea ? 0.22 : 0.12,
+        dashArray: '3,6',
+        className: 'full-route-line'
+    }).addTo(map);
+}
+
+function removeFullRoute(f) {
+    if (f.fullRouteLine && map.hasLayer(f.fullRouteLine)) {
+        map.removeLayer(f.fullRouteLine);
+        f.fullRouteLine = null;
+    }
+}
+
+function toggleFullRoutes() {
+    showFullRoutes = document.getElementById('show-full-routes').checked;
+
+    if (!showFullRoutes) {
+        flights.forEach(f => {
+            if (f.fullRouteLine) removeFullRoute(f);
+        });
+    }
+    updateFlights();
+}
+
+// ==================== Custom Flight (User Radar Flights) ====================
+
+let userFlights = []; // DB에서 불러온 사용자 항공편
+
+async function loadUserFlights() {
+    try {
+        const res = await fetch('/api/radar/flights');
+        userFlights = await res.json();
+    } catch (e) {
+        console.error('Failed to load user radar flights');
+        userFlights = [];
+    }
+}
+
+function showAddFlightModal() {
+    const modal = document.getElementById('add-flight-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    // Populate airport selects
+    populateAirportSelects();
+}
+
+function hideAddFlightModal() {
+    const modal = document.getElementById('add-flight-modal');
+    modal.classList.remove('flex');
+    modal.classList.add('hidden');
+}
+
+async function populateAirportSelects() {
+    try {
+        const res = await fetch('/api/airports');
+        const airports = await res.json();
+
+        const orgSel = document.getElementById('modal-org');
+        const destSel = document.getElementById('modal-dest');
+
+        orgSel.innerHTML = '';
+        destSel.innerHTML = '';
+
+        airports.forEach(a => {
+            const opt1 = new Option(`${a.name} (${a.id})`, a.id);
+            const opt2 = new Option(`${a.name} (${a.id})`, a.id);
+            orgSel.add(opt1);
+            destSel.add(opt2);
+        });
+
+        // Default selection
+        orgSel.value = 'ICN';
+        destSel.value = 'LAX';
+    } catch (e) {
+        alert('공항 목록을 불러오지 못했습니다.');
+    }
+}
+
+async function addCustomFlight() {
+    const callsign = document.getElementById('modal-callsign').value || 'MY-001';
+    const org_id = document.getElementById('modal-org').value;
+    const dest_id = document.getElementById('modal-dest').value;
+    const ac_name = document.getElementById('modal-ac').value || 'B737-800';
+    const is_korea = document.getElementById('modal-korea').value === 'true';
+
+    if (!org_id || !dest_id) {
+        alert('출발/도착 공항을 선택해주세요.');
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/radar/flights', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                callsign,
+                org_id,
+                dest_id,
+                ac_name,
+                is_korea
+            })
+        });
+
+        const result = await res.json();
+
+        if (result.status === 'success') {
+            hideAddFlightModal();
+            await loadUserFlights();     // DB에서 최신 사용자 항공편 로드
+            generateFlights();           // flights 배열에 새 사용자 항공편 병합 (핵심!)
+            updateFlights();             // 지도 + 목록 완전 갱신
+            alert('항공편이 레이더에 추가되었습니다!');
+        } else {
+            alert('추가 실패: ' + (result.message || '오류'));
+        }
+    } catch (e) {
+        alert('서버 오류가 발생했습니다.');
+    }
+}
+
+// 사용자 항공편 부드러운 삭제 (페이드 아웃 애니메이션)
+async function deleteUserFlight(flightId) {
+    if (!confirm('이 항공편을 레이더에서 삭제할까요?')) return;
+
+    // 먼저 화면에서 부드럽게 사라지게 처리
+    const targetFlight = flights.find(f => f.userFlightId === flightId);
+
+    if (targetFlight) {
+        // 마커 페이드 아웃
+        if (markers[targetFlight.id]) {
+            const markerEl = markers[targetFlight.id].getElement();
+            if (markerEl) {
+                markerEl.style.transition = 'opacity 0.4s ease-out';
+                markerEl.style.opacity = '0';
+            }
+        }
+
+        // 트레일 페이드 아웃
+        if (targetFlight.trailLine) {
+            targetFlight.trailLine.setStyle({
+                opacity: 0,
+                transition: 'opacity 0.4s ease-out'
+            });
+        }
+    }
+
+    // 애니메이션 후 실제 삭제
+    setTimeout(async () => {
+        try {
+            const res = await fetch(`/api/radar/flights/${flightId}`, { method: 'DELETE' });
+            const result = await res.json();
+
+            if (result.status === 'success') {
+                await loadUserFlights();
+                updateFlights();   // 완전 갱신
+            } else {
+                alert('삭제 실패');
+            }
+        } catch (e) {
+            alert('서버 오류');
+            // 실패 시 다시 표시
+            updateFlights();
+        }
+    }, 380);
+}
+
+// 레이더 항공편을 로그북에 기록
+async function saveRadarFlightToLogbook(org, dest, aircraft) {
+    const route = `${org}-${dest}`;
+    const data = {
+        date: new Date().toISOString().split('T')[0],
+        flight_number: "USER-" + Math.floor(Math.random() * 9000),
+        aircraft: aircraft,
+        route: route,
+        hours: (Math.random() * 3 + 2).toFixed(1),
+        notes: "레이더에서 추가한 사용자 항공편"
+    };
+
+    try {
+        const res = await fetch('/api/logbook/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+            alert('로그북에 기록되었습니다!');
+            // 선택적으로 로그북 페이지로 이동하거나 알림만
+        } else {
+            alert('로그북 기록 실패');
+        }
+    } catch (e) {
+        alert('서버 오류');
+    }
+}
+
+// 지도 모드 토글 (CSS 필터 기반 - 오버레이 div 방식 제거)
+let isDarkMode = true;
+
+function toggleMapStyle() {
+    const mapEl = document.getElementById('map');
+    if (!mapEl) return;
+
+    isDarkMode = !isDarkMode;
+    mapEl.classList.toggle('radar-dark', isDarkMode);
+
+    const btn = document.getElementById('map-style-btn');
+    if (btn) {
+        btn.innerText = isDarkMode ? '☀️ 밝게 보기' : '🌙 레이더 모드';
+    }
+}
+
+function populateFilters() {
+    const aircraftSelect = document.getElementById('filter-aircraft');
+    const airlineSelect = document.getElementById('filter-airline');
+
+    const aircraftSet = new Set();
+    const airlineSet = new Set();
+
+    // This will be populated after first updateFlights if needed
+    // For demo, prefill common values
+    ["B737-800","A320","A350-900","B777-300ER","A380","B787-9"].forEach(a => {
+        const opt = document.createElement('option');
+        opt.value = a;
+        opt.text = a;
+        aircraftSelect.appendChild(opt);
+    });
+
+    ["KE","JL","SQ","EK","DL","UA","LH"].forEach(a => {
+        const opt = document.createElement('option');
+        opt.value = a;
+        opt.text = a;
+        airlineSelect.appendChild(opt);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('[Radar] 페이지 로드 시작');
+    initMap();
+    console.log('[Radar] initMap() 호출됨');
+    await initRadar();
+    setupToggle();
+    populateFilters();
+    console.log('[Radar] 모든 초기화 완료 - 지도가 보여야 합니다');
+
+    // 강력한 invalidateSize (검은 화면 방지 핵심)
+    function forceInvalidate() {
+        if (map) {
+            map.invalidateSize(true);
+        }
+    }
+
+    setTimeout(forceInvalidate, 200);
+    setTimeout(forceInvalidate, 600);
+    setTimeout(forceInvalidate, 1200);
+
+    // 리사이즈 대응
+    window.addEventListener('resize', () => {
+        if (map) map.invalidateSize(true);
+    });
+
+    // 마지막 안전장치: 페이지가 완전히 idle 상태일 때 한 번 더
+    if (window.requestIdleCallback) {
+        requestIdleCallback(forceInvalidate);
+    }
+});
+</script>
+{% endblock %}

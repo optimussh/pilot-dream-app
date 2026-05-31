@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}한국에서 기장 되기 - Pilot Dream{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <h1 class="text-3xl font-bold mb-2">🇰🇷 한국에서 민간항공기 기장이 되는 길 (2026년 기준)</h1>
+    <p class="text-gray-400 mb-2">실제 데이터 기반 · 민간 대학 루트 vs 공군 루트 상세 비교</p>
+    <div class="text-xs text-red-400 mb-8">※ 비용과 제도는 매년 변동되니, 최신 모집요강은 반드시 해당 기관 공식 홈페이지에서 확인하세요.</div>
+
+    <!-- 민간 대학 루트 -->
+    <div class="info-card p-8 rounded-2xl mb-10 border border-[#0A84FF]/30">
+        <div class="flex items-center gap-3 mb-6">
+            <span class="text-3xl">🎓</span>
+            <h2 class="text-2xl font-bold text-[#0A84FF]">민간 대학 루트 (가장 일반적)</h2>
+        </div>
+        <div class="mb-6 text-sm">
+            <strong>총 예상 비용:</strong> <span class="text-[#ffaa00] font-bold">1억 5천만 ~ 2억 5천만 원</span><br>
+            <strong>기장까지 소요 기간:</strong> 대학 입학 후 약 10~14년
+        </div>
+
+        <div class="space-y-6">
+            <div class="border-l-4 border-[#0A84FF] pl-5">
+                <div class="font-bold text-lg">Step 1. 대학교 입학 (항공운항학과)</div>
+                <div class="mt-2 text-sm text-gray-300">
+                    <strong>주요 대학:</strong> 한국항공대학교 (KAU), 한서대학교<br>
+                    <strong>비용:</strong> 연 800~1,500만 원 (4년)
+                </div>
+            </div>
+
+            <div class="border-l-4 border-[#0A84FF] pl-5">
+                <div class="font-bold text-lg">Step 2. 비행훈련 과정 (PPL → ATPL)</div>
+                <div class="mt-2 text-sm text-gray-300">
+                    미국/한국 비행훈련원에서 진행<br>
+                    <strong>비용:</strong> 7,000만 ~ 1억 8,000만 원 (가장 큰 부분)
+                </div>
+            </div>
+
+            <div class="border-l-4 border-[#0A84FF] pl-5">
+                <div class="font-bold text-lg">Step 3. 항공사 입사 (부기장)</div>
+                <div class="mt-2 text-sm text-gray-300">
+                    공채 지원 → Type Rating 교육
+                </div>
+            </div>
+
+            <div class="border-l-4 border-[#0A84FF] pl-5">
+                <div class="font-bold text-lg">Step 4. 부기장 근무</div>
+                <div class="mt-2 text-sm text-gray-300">
+                    3~7년 정도 비행시간 축적
+                </div>
+            </div>
+
+            <div class="border-l-4 border-[#0A84FF] pl-5">
+                <div class="font-bold text-lg">Step 5. 기장 승급</div>
+                <div class="mt-2 text-sm text-gray-300">
+                    입사 후 총 7~12년 내 기장 승급
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 공군 루트 -->
+    <div class="info-card p-8 rounded-2xl border border-[#ffaa00]/30">
+        <div class="flex items-center gap-3 mb-6">
+            <span class="text-3xl">✈️</span>
+            <h2 class="text-2xl font-bold text-[#ffaa00]">공군 루트 (비용 최저, 복무 의무 최대)</h2>
+        </div>
+        <div class="mb-6 text-sm">
+            <strong>총 예상 비용:</strong> <span class="text-[#33ff33] font-bold">약 0원 (국비 지원)</span> <span class="text-red-400 text-xs">(중도 탈락 시 수억 원 변상 위험)</span><br>
+            <strong>기장까지 소요 기간:</strong> 공군사관학교 입학 후 약 19~22년 (전역 후 민간 포함)
+        </div>
+
+        <div class="space-y-6">
+            <div class="border-l-4 border-[#ffaa00] pl-5">
+                <div class="font-bold">1. 공군사관학교 입학</div>
+                <div class="text-sm mt-1">고3 때 지원. 신체검사·체력·면접·수능 모두 중요. 조종특기 배정 경쟁 치열.</div>
+            </div>
+            <div class="border-l-4 border-[#ffaa00] pl-5">
+                <div class="font-bold">2. 4년 생도 생활 + 조종 훈련</div>
+                <div class="text-sm mt-1">국비 지원 (등록금·생활비 전액). T-50, KF-21 등 고성능 제트기 비행 경험 축적.</div>
+            </div>
+            <div class="border-l-4 border-[#ffaa00] pl-5">
+                <div class="font-bold">3. 임관 후 15년 의무복무</div>
+                <div class="text-sm mt-1">F-15K, F-35 등 실전기 복무. 수천 시간의 제트시간 + 리더십 경험 쌓음.</div>
+            </div>
+            <div class="border-l-4 border-[#ffaa00] pl-5">
+                <div class="font-bold">4. 전역 후 민간항공사 입사 → 빠른 기장 승급</div>
+                <div class="text-sm mt-1">전역 시 대한항공·아시아나·LCC 취업률 매우 높음. 군 경력으로 부기장 입사 후 3~6년 내 기장 승급 사례 다수.</div>
+            </div>
+        </div>
+
+        <div class="mt-6 p-4 bg-black/40 rounded text-sm">
+            <strong class="text-[#ffaa00]">공군 루트의 최대 장점</strong><br>
+            비용 부담 없이 최고 수준의 제트기 조종 경험을 쌓을 수 있으며, 전역 후 민간에서 스펙으로 크게 인정받습니다. 다만 15년 장기 복무가 필요합니다.
+        </div>
+    </div>
+
+    <div class="mt-8 info-card p-6 rounded-xl">
+        <h3 class="font-bold mb-3">📊 실제 참고 데이터 (2026년 기준, 대략적)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+                <div class="text-gray-400">민간 기장 평균 연봉 (대한항공 B777/A380 기준)</div>
+                <div class="text-xl font-bold text-[#33ff33]">약 2.5억 ~ 4억+ 원</div>
+            </div>
+            <div>
+                <div class="text-gray-400">군 전역 후 민간 입사 시 초기 부기장 연봉</div>
+                <div class="text-xl font-bold">약 1억 ~ 1.4억 원 (군 경력 우대)</div>
+            </div>
+        </div>
+        <div class="text-xs text-gray-500 mt-3">
+            ※ 실제 연봉은 기종, 항공사, 경력, 수당에 따라 크게 차이납니다. 최신 정보는 각 항공사 IR 자료를 참고하세요.
+        </div>
+    </div>
+
+    <div class="mt-6 text-xs text-gray-500 text-center">
+        이 페이지는 2026년 기준 실제 데이터와 여러 공식 자료를 종합한 것입니다.<br>
+        가장 정확한 정보는 <strong>한국항공대학교</strong>, <strong>한서대학교 비행교육원</strong>, <strong>공군사관학교</strong> 공식 모집요강에서 확인하세요.
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}뱃지 - Pilot Dream{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="flex justify-between items-end mb-6">
+        <div>
+            <h1 class="text-3xl font-bold">🏅 나의 뱃지</h1>
+            <p class="text-gray-400">꿈을 향해 한 걸음씩 나아갈 때마다 얻는 성취 • 총 {{ all_badges|length }}개 도전 과제</p>
+        </div>
+        <div class="text-right">
+            <div class="text-4xl font-bold text-[#33ff33]">{{ unlocked|length }}<span class="text-xl text-gray-400">/{{ all_badges|length }}</span></div>
+            <div class="text-sm text-gray-400">획득 완료</div>
+        </div>
+    </div>
+
+    <!-- Unlocked Badges -->
+    <div class="mb-12">
+        <h2 class="text-xl font-semibold mb-4 flex items-center gap-2 text-[#33ff33]">
+            <span>획득한 뱃지</span>
+            <span class="text-sm text-gray-400">({{ unlocked|length }})</span>
+        </h2>
+        {% if unlocked %}
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+                {% for badge in unlocked %}
+                <div class="info-card p-4 rounded-2xl text-center border-2 border-[#33ff33] bg-[#001a00]">
+                    <div class="text-4xl mb-2">{{ badge.icon }}</div>
+                    <div class="font-bold text-sm">{{ badge.name }}</div>
+                    <div class="text-[10px] text-gray-400 mt-1 leading-tight">{{ badge.description }}</div>
+                    <div class="mt-2 text-[10px] text-[#33ff33]">획득 완료 ✓</div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-500">아직 획득한 뱃지가 없습니다. 로그북에 비행을 기록해보세요!</p>
+        {% endif %}
+    </div>
+
+    <!-- Next Goal Highlight -->
+    {% if locked %}
+    <div class="mb-8 p-5 rounded-2xl bg-[#001a00] border border-[#ffaa00]">
+        <div class="text-sm text-[#ffaa00] font-semibold mb-1">🎯 다음 목표 추천</div>
+        {% set next_badge = locked[0] %}
+        <div class="flex items-center gap-4">
+            <div class="text-4xl">{{ next_badge.icon }}</div>
+            <div class="flex-1">
+                <div class="font-bold text-lg">{{ next_badge.name }}</div>
+                <div class="text-sm text-gray-300">{{ next_badge.description }}</div>
+                {% if next_badge.progress is defined and next_badge.target %}
+                <div class="mt-2">
+                    <div class="flex justify-between text-xs mb-1">
+                        <span>{{ next_badge.current }} / {{ next_badge.target }}</span>
+                        <span class="text-[#ffaa00]">{{ next_badge.progress }}%</span>
+                    </div>
+                    <div class="h-2 bg-black rounded">
+                        <div class="h-2 bg-[#ffaa00] rounded transition-all" style="width: {{ next_badge.progress }}%"></div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Locked Badges by Category -->
+    <div>
+        <h2 class="text-xl font-semibold mb-4 text-gray-300">도전 가능한 뱃지</h2>
+        
+        {% for category, badges in locked_by_category.items() %}
+        <div class="mb-8">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="font-semibold text-[#ffaa00]">{{ category }}</span>
+                <span class="text-xs px-2 py-0.5 bg-black rounded text-gray-400">{{ badges|length }}개</span>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+                {% for badge in badges %}
+                <div class="info-card p-3 rounded-xl text-center border border-gray-600 opacity-90 hover:opacity-100 transition">
+                    <div class="text-3xl mb-1.5">{{ badge.icon }}</div>
+                    <div class="font-bold text-sm leading-tight">{{ badge.name }}</div>
+                    <div class="text-[10px] text-gray-400 mt-1 line-clamp-2">{{ badge.description }}</div>
+                    
+                    {% if badge.progress is defined and badge.target %}
+                    <div class="mt-2.5">
+                        <div class="h-1.5 bg-black rounded overflow-hidden">
+                            <div class="h-1.5 transition-all {% if badge.rarity == 'legendary' %}bg-purple-400{% elif badge.rarity == 'epic' %}bg-pink-400{% elif badge.rarity == 'rare' %}bg-blue-400{% else %}bg-gray-400{% endif %}" 
+                                 style="width: {{ badge.progress }}%"></div>
+                        </div>
+                        <div class="text-[9px] text-gray-500 mt-0.5">{{ badge.current }} / {{ badge.target }} ({{ badge.progress }}%)</div>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mt-1 text-[9px]">
+                        {% if badge.rarity == 'legendary' %}
+                        <span class="text-purple-400">전설</span>
+                        {% elif badge.rarity == 'epic' %}
+                        <span class="text-pink-400">에픽</span>
+                        {% elif badge.rarity == 'rare' %}
+                        <span class="text-blue-400">레어</span>
+                        {% else %}
+                        <span class="text-gray-400">일반</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,530 @@
+{% extends "base.html" %}
+
+{% block title %}가상 로그북 - Pilot Dream{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-2">📖 가상 조종사 로그북</h1>
+    <p class="text-gray-400 mb-6">실제 기장처럼 비행을 기록하며 성장하세요</p>
+
+    <!-- New flight entry - CLEARLY SEPARATED Smart vs Manual -->
+    <div class="mb-8">
+        <h3 class="font-semibold text-xl mb-4">새로운 비행 기록하기</h3>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- SMART INPUT - Strong green visual separation -->
+            <div class="border-2 border-[#33ff33] bg-[#001a00] rounded-2xl p-5">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-2xl">✈️</span>
+                    <span class="font-bold text-lg text-[#33ff33]">스마트 입력 (추천)</span>
+                </div>
+                <p class="text-xs text-gray-400 mb-4 pl-8">flights_db.json의 실제 94편 항공편 • 항공사/편명 선택 시 자동 입력</p>
+                
+                <form id="smart-form" class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">항공사</label>
+                            <select id="airline" name="airline" class="w-full bg-black border border-[#33ff33]/70 p-2.5 rounded text-white text-sm">
+                                <option value="">항공사 선택</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">편명</label>
+                            <select id="flight_number" name="flight_number" class="w-full bg-black border border-[#33ff33]/70 p-2.5 rounded text-white text-sm" disabled>
+                                <option value="">항공사 먼저 선택</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">노선</label>
+                            <input type="text" id="route" name="route" class="w-full bg-black border border-[#33ff33]/70 p-2.5 rounded text-white text-sm" readonly>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">기종</label>
+                            <input type="text" id="aircraft" name="aircraft" class="w-full bg-black border border-[#33ff33]/70 p-2.5 rounded text-white text-sm" readonly>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">비행시간</label>
+                            <input type="text" id="hours" name="hours" class="w-full bg-black border border-[#33ff33]/70 p-2.5 rounded text-white text-sm" readonly>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">날짜</label>
+                            <input type="date" id="smart-date" name="date" class="date-input w-full bg-black border border-[#33ff33]/70 p-2.5 rounded text-sm" required>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">특이사항</label>
+                            <select id="smart-remark" name="remark" class="w-full bg-black border border-[#33ff33]/70 p-2.5 rounded text-sm">
+                                <option value="">선택 (선택사항)</option>
+                                <option value="정시 운항">정시 운항</option>
+                                <option value="기상 지연">기상 지연</option>
+                                <option value="ATC 지연">ATC 지연</option>
+                                <option value="기계적 결함">기계적 결함</option>
+                                <option value="승객/화물 문제">승객/화물 문제</option>
+                                <option value="훈련 비행">훈련 비행</option>
+                                <option value="야간 비행">야간 비행</option>
+                                <option value="강풍/난기류">강풍/난기류</option>
+                                <option value="비상 상황">비상 상황</option>
+                                <option value="기타">기타 (직접 입력)</option>
+                            </select>
+                            <input type="text" id="smart-notes-extra" name="notes_extra" class="mt-1 w-full bg-black border border-[#33ff33]/70 p-2 rounded text-sm hidden" placeholder="추가 메모 (선택)">
+                        </div>
+                    </div>
+                    <!-- Hidden combined notes field for smart form -->
+                    <input type="hidden" name="notes" id="smart-notes">
+
+                    <button type="submit" class="w-full bg-[#33ff33] hover:bg-white text-black font-bold py-2.5 rounded-xl text-sm transition">
+                        ✈️ 스마트 입력으로 기록 저장
+                    </button>
+                </form>
+            </div>
+
+            <!-- MANUAL INPUT - Distinct amber visual separation -->
+            <div class="border-2 border-[#ffaa00] bg-[#1a1400] rounded-2xl p-5">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-2xl">📝</span>
+                    <span class="font-bold text-lg text-[#ffaa00]">수동 입력</span>
+                </div>
+                <p class="text-xs text-gray-400 mb-4 pl-8">자유 형식 직접 입력 • 실제 비행이나 연습 기록용</p>
+                
+                <form id="manual-form" class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">날짜</label>
+                            <input type="date" id="manual-date" name="date" class="date-input w-full bg-black border border-[#ffaa00]/70 p-2.5 rounded text-sm" required>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">편명</label>
+                            <input type="text" name="flight_number" placeholder="KE123 또는 SIM-0001" class="w-full bg-black border border-[#ffaa00]/70 p-2.5 rounded text-sm" required>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">노선</label>
+                            <input type="text" name="route" placeholder="ICN-LAX" class="w-full bg-black border border-[#ffaa00]/70 p-2.5 rounded text-sm" required>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">기종</label>
+                            <input type="text" name="aircraft" placeholder="B777-300ER" class="w-full bg-black border border-[#ffaa00]/70 p-2.5 rounded text-sm" required>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">비행시간 (시간)</label>
+                            <input type="number" step="0.1" name="hours" placeholder="11.5" class="w-full bg-black border border-[#ffaa00]/70 p-2.5 rounded text-sm" required>
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 block mb-1">특이사항 (선택)</label>
+                            <select id="manual-remark" name="remark" class="w-full bg-black border border-[#ffaa00]/70 p-2.5 rounded text-sm">
+                                <option value="">선택 (선택사항)</option>
+                                <option value="정시 운항">정시 운항</option>
+                                <option value="기상 지연">기상 지연</option>
+                                <option value="ATC 지연">ATC 지연</option>
+                                <option value="기계적 결함">기계적 결함</option>
+                                <option value="승객/화물 문제">승객/화물 문제</option>
+                                <option value="훈련 비행">훈련 비행</option>
+                                <option value="야간 비행">야간 비행</option>
+                                <option value="강풍/난기류">강풍/난기류</option>
+                                <option value="비상 상황">비상 상황</option>
+                                <option value="기타">기타 (직접 입력)</option>
+                            </select>
+                            <input type="text" id="manual-notes-extra" name="notes_extra" class="mt-1 w-full bg-black border border-[#ffaa00]/70 p-2 rounded text-sm hidden" placeholder="추가 메모 (선택)">
+                        </div>
+                    </div>
+                    <!-- Hidden combined notes field for manual form -->
+                    <input type="hidden" name="notes" id="manual-notes">
+
+                    <button type="submit" class="w-full bg-[#ffaa00] hover:bg-white text-black font-bold py-2.5 rounded-xl text-sm transition">
+                        📝 수동으로 직접 기록 저장
+                    </button>
+                </form>
+            </div>
+
+        </div>
+        <p class="text-[10px] text-center text-gray-500 mt-2">두 입력 방식 모두 사용 가능합니다. 스마트는 실제 항공편 데이터 기반, 수동은 자유 기록.</p>
+    </div>
+
+    <!-- Flight history - Motivational redesign -->
+    <div class="info-card p-6 rounded-2xl border border-[#33ff33]/40">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h3 class="font-semibold text-xl">비행 기록</h3>
+                <p class="text-xs text-gray-400">당신의 하늘을 향한 여정</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="text-right">
+                    <div class="text-2xl font-bold text-[#33ff33]" id="total-hours">0</div>
+                    <div class="text-[10px] text-gray-400">총 비행 시간</div>
+                </div>
+                <!-- 초기화 버튼 -->
+                <button onclick="resetLogbook()" 
+                        class="px-3 py-1.5 text-xs bg-red-900/30 hover:bg-red-900/50 text-red-400 border border-red-700/50 rounded-lg transition flex items-center gap-1">
+                    <span>🗑️</span>
+                    <span>초기화</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="logbook-entries" class="space-y-3 max-h-[420px] overflow-y-auto pr-2">
+            <p class="text-gray-400 text-sm">아직 기록이 없습니다. Flight Planner에서 계획을 세우고 기록해보세요.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+async function loadLogbook() {
+    const res = await fetch('/api/logbook');
+    const entries = await res.json();
+    
+    // 공항 데이터 먼저 로드 (노선 한글 표시용)
+    await loadAirportsForLogbook();
+    
+    const container = document.getElementById('logbook-entries');
+    container.innerHTML = '';
+    
+    let total = 0;
+    
+    if (entries.length === 0) {
+        container.innerHTML = '<p class="text-gray-400 text-sm">아직 기록이 없습니다. Flight Planner에서 계획을 세우고 기록해보세요.</p>';
+        document.getElementById('total-hours').innerText = '0';
+        return;
+    }
+    
+    entries.forEach(entry => {
+        total += parseFloat(entry.hours) || 0;
+        
+        const routeDisplay = getRouteDisplay(entry.route);
+        
+        const div = document.createElement('div');
+        div.className = 'bg-[#1c1c1e] border border-[#2c2c2e] p-4 rounded-2xl hover:border-[#3a3a3c] transition';
+        div.innerHTML = `
+            <div class="flex justify-between items-start">
+                <div class="flex-1">
+                    <div class="font-bold">${entry.date} · <span class="text-[#4da8da]">${entry.flight_number}</span></div>
+                    
+                    <div class="mt-1">
+                        <div class="text-sm font-medium">${entry.route}</div>
+                        <div class="text-xs text-[#88ddff]">${routeDisplay}</div>
+                    </div>
+                    
+                    <div class="text-sm text-gray-300 mt-1">${entry.aircraft}</div>
+                </div>
+                
+                <div class="text-right ml-4">
+                    <div class="text-lg font-bold text-[#33ff33]">${entry.hours}</div>
+                    <div class="text-[10px] text-gray-400">hours</div>
+                </div>
+            </div>
+            
+            ${entry.notes ? `<div class="text-xs text-gray-400 mt-3 pl-2 border-l-2 border-[#33ff33]/30">${entry.notes}</div>` : ''}
+        `;
+        container.appendChild(div);
+    });
+    
+    document.getElementById('total-hours').innerText = total.toFixed(1);
+}
+
+// 비행 기록 전체 초기화
+async function resetLogbook() {
+    const confirmed = confirm(
+        "⚠️ 정말로 모든 데이터를 초기화하시겠습니까?\n\n" +
+        "• 모든 비행 기록 (로그북)\n" +
+        "• 획득한 모든 뱃지\n" +
+        "• 레이더에 추가한 사용자 항공편\n\n" +
+        "이 작업은 되돌릴 수 없습니다!"
+    );
+    
+    if (!confirmed) {
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/logbook/reset', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const result = await res.json();
+        
+        if (result.status === 'success') {
+            alert('✅ ' + (result.message || '초기화 완료'));
+            // 완전 초기화 후 페이지 새로고침 (대시보드/뱃지 카운트까지 반영)
+            setTimeout(() => {
+                window.location.reload();
+            }, 600);
+        } else {
+            alert('초기화에 실패했습니다: ' + (result.message || '알 수 없는 오류'));
+        }
+    } catch (error) {
+        console.error('Reset failed:', error);
+        alert('서버와 통신 중 오류가 발생했습니다.');
+    }
+}
+
+let flightsDB = [];
+let airportsData = [];
+
+async function loadAirportsForLogbook() {
+    if (airportsData.length > 0) return;
+    try {
+        const res = await fetch('/api/airports');
+        airportsData = await res.json();
+    } catch (e) {
+        console.error('공항 데이터를 불러오지 못했습니다.');
+    }
+}
+
+function getRouteDisplay(route) {
+    if (!route || !route.includes('-')) return route;
+    
+    const [fromCode, toCode] = route.split('-');
+    
+    const from = airportsData.find(a => a.id === fromCode);
+    const to = airportsData.find(a => a.id === toCode);
+    
+    // 어린이가 더 쉽게 이해할 수 있도록 도시 중심으로 정리
+    const cityMap = {
+        'ICN': '인천',
+        'GMP': '서울(김포)',
+        'JFK': '뉴욕',
+        'LAX': '로스앤젤레스',
+        'ORD': '시카고',
+        'ATL': '애틀랜타',
+        'SFO': '샌프란시스코',
+        'LHR': '런던',
+        'CDG': '파리',
+        'FRA': '프랑크푸르트',
+        'AMS': '암스테르담',
+        'DXB': '두바이',
+        'DOH': '도하',
+        'SIN': '싱가포르',
+        'HKG': '홍콩',
+        'NRT': '도쿄(나리타)',
+        'HND': '도쿄(하네다)',
+        'BKK': '방콕',
+        'SYD': '시드니'
+    };
+    
+    let fromName = cityMap[fromCode] || (from ? from.name.replace('국제공항', '').replace('공항', '').trim() : fromCode);
+    let toName = cityMap[toCode] || (to ? to.name.replace('국제공항', '').replace('공항', '').trim() : toCode);
+    
+    return `${fromName} → ${toName}`;
+}
+
+
+async function loadFlightsDB() {
+    const res = await fetch('/api/flights');
+    flightsDB = await res.json();
+
+    const airlineSelect = document.getElementById('airline');
+    const uniqueAirlines = [...new Set(flightsDB.map(f => f.airline))];
+
+    uniqueAirlines.forEach(code => {
+        const flight = flightsDB.find(f => f.airline === code);
+        const opt = new Option(`${code} - ${flight.airline_name}`, code);
+        airlineSelect.add(opt);
+    });
+
+    airlineSelect.onchange = () => {
+        populateFlightNumbers(airlineSelect.value);
+    };
+}
+
+function populateFlightNumbers(airlineCode) {
+    const flightSelect = document.getElementById('flight_number');
+    flightSelect.innerHTML = '<option value="">편명 선택</option>';
+    flightSelect.disabled = false;
+
+    const filtered = flightsDB.filter(f => f.airline === airlineCode);
+
+    filtered.forEach(f => {
+        const opt = new Option(f.flight_number, f.flight_number);
+        flightSelect.add(opt);
+    });
+
+    flightSelect.onchange = () => {
+        const selected = flightsDB.find(f => 
+            f.airline === airlineCode && f.flight_number === flightSelect.value
+        );
+        if (selected) {
+            document.getElementById('route').value = selected.route;
+            document.getElementById('aircraft').value = selected.aircraft;
+            document.getElementById('hours').value = selected.typical_duration;
+        }
+    };
+}
+
+// === Logbook Enhancements: Default date + visible calendar + remark dropdown + notes combination ===
+function initLogbookEnhancements() {
+    // 1. Set default date to today for both forms
+    const today = new Date().toISOString().split('T')[0];
+    const smartDate = document.getElementById('smart-date');
+    const manualDate = document.getElementById('manual-date');
+
+    if (smartDate) smartDate.value = today;
+    if (manualDate) manualDate.value = today;
+
+    // 2. Improve date input visibility in dark theme
+    const style = document.createElement('style');
+    style.textContent = `
+        .date-input {
+            color-scheme: dark;
+            background-color: #000000;
+            color: #ffffff;
+            border-color: #555;
+        }
+        .date-input::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+        }
+        .date-input:focus {
+            border-color: #33ff33;
+            box-shadow: 0 0 0 1px rgba(51, 255, 51, 0.3);
+        }
+    `;
+    document.head.appendChild(style);
+
+    // 3. Toggle extra notes input when "기타" is selected
+    function setupRemarkToggle(remarkId, extraId) {
+        const remark = document.getElementById(remarkId);
+        const extra = document.getElementById(extraId);
+        if (!remark || !extra) return;
+
+        remark.addEventListener('change', () => {
+            if (remark.value === '기타') {
+                extra.classList.remove('hidden');
+                extra.required = false;
+            } else {
+                extra.classList.add('hidden');
+                extra.value = '';
+            }
+        });
+    }
+
+    setupRemarkToggle('smart-remark', 'smart-notes-extra');
+    setupRemarkToggle('manual-remark', 'manual-notes-extra');
+
+    // 4. Helper: Combine remark + extra into notes
+    function getCombinedNotes(remarkId, extraId) {
+        const remark = document.getElementById(remarkId);
+        const extra = document.getElementById(extraId);
+        if (!remark) return '';
+
+        let note = remark.value || '';
+        if (note === '기타' && extra && extra.value.trim()) {
+            note = extra.value.trim();
+        } else if (note && extra && extra.value.trim()) {
+            note = note + ' - ' + extra.value.trim();
+        }
+        return note;
+    }
+
+    // 5. Update Smart form submit to use combined notes
+    const smartForm = document.getElementById('smart-form');
+    if (smartForm) {
+        // Remove old listener and re-attach improved one
+        const newSmartHandler = async function(e) {
+            e.preventDefault();
+
+            const combinedNotes = getCombinedNotes('smart-remark', 'smart-notes-extra');
+            const hiddenNotes = document.getElementById('smart-notes');
+            if (hiddenNotes) hiddenNotes.value = combinedNotes;
+
+            const data = {
+                date: document.getElementById('smart-date').value,
+                flight_number: document.getElementById('flight_number').value || 'SMART-ENTRY',
+                aircraft: document.getElementById('aircraft').value,
+                route: document.getElementById('route').value,
+                hours: parseFloat(document.getElementById('hours').value) || 0,
+                notes: combinedNotes
+            };
+
+            const res = await fetch('/api/logbook/add', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+
+            if (res.ok) {
+                alert('스마트 입력으로 비행이 기록되었습니다!');
+                this.reset();
+                // reset extra fields
+                document.getElementById('route').value = '';
+                document.getElementById('aircraft').value = '';
+                document.getElementById('hours').value = '';
+                document.getElementById('flight_number').innerHTML = '<option value="">항공사 먼저 선택</option>';
+                document.getElementById('flight_number').disabled = true;
+
+                // Reset remark and extra
+                const r = document.getElementById('smart-remark');
+                const ex = document.getElementById('smart-notes-extra');
+                if (r) r.value = '';
+                if (ex) ex.classList.add('hidden');
+
+                // Re-apply today's date after reset
+                if (document.getElementById('smart-date')) {
+                    document.getElementById('smart-date').value = new Date().toISOString().split('T')[0];
+                }
+                loadLogbook();
+            }
+        };
+
+        // Replace listener
+        smartForm.removeEventListener('submit', smartForm._oldHandler || (() => {}));
+        smartForm.addEventListener('submit', newSmartHandler);
+        smartForm._oldHandler = newSmartHandler;
+    }
+
+    // 6. Update Manual form submit to combine notes before FormData
+    const manualForm = document.getElementById('manual-form');
+    if (manualForm) {
+        const newManualHandler = async function(e) {
+            e.preventDefault();
+
+            const combinedNotes = getCombinedNotes('manual-remark', 'manual-notes-extra');
+            const hiddenNotes = document.getElementById('manual-notes');
+            if (hiddenNotes) hiddenNotes.value = combinedNotes;
+
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+
+            const res = await fetch('/api/logbook/add', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+
+            if (res.ok) {
+                alert('수동 입력으로 비행이 기록되었습니다!');
+                this.reset();
+
+                // Reset remark/extra visibility
+                const r = document.getElementById('manual-remark');
+                const ex = document.getElementById('manual-notes-extra');
+                if (r) r.value = '';
+                if (ex) ex.classList.add('hidden');
+
+                // Re-apply today's date
+                if (document.getElementById('manual-date')) {
+                    document.getElementById('manual-date').value = new Date().toISOString().split('T')[0];
+                }
+                loadLogbook();
+            }
+        };
+
+        manualForm.removeEventListener('submit', manualForm._oldHandler || (() => {}));
+        manualForm.addEventListener('submit', newManualHandler);
+        manualForm._oldHandler = newManualHandler;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadAirportsForLogbook(); // 미리 로드
+    loadLogbook();
+    loadFlightsDB();
+    initLogbookEnhancements();
+});
+</script>
+{% endblock %}

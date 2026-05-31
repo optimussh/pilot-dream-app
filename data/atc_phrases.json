@@ -1,0 +1,1404 @@
+{
+  "지상 관제 및 택시 (Ground & Taxi)": [
+    {
+      "en": "Request pushback and engine start.",
+      "pron": "리퀘스트 푸시백 앤 엔진 스타트.",
+      "ko": "푸시백과 엔진 시동을 요청합니다."
+    },
+    {
+      "en": "Pushback approved, facing north.",
+      "pron": "푸시백 어프루브드, 페이싱 노스.",
+      "ko": "푸시백 허가, 북쪽 방향."
+    },
+    {
+      "en": "Taxi to runway 34 via taxiway A and B.",
+      "pron": "택시 투 런웨이 34 바이 택시웨이 A 앤 B.",
+      "ko": "A, B 유도로를 통해 34번 활주로로 지상 이동."
+    },
+    {
+      "en": "Hold short of runway 16.",
+      "pron": "홀드 쇼트 오브 런웨이 16.",
+      "ko": "16번 활주로 진입 전 대기."
+    },
+    {
+      "en": "Taxi with caution, work in progress on taxiway C.",
+      "pron": "택시 위드 코션, 워크 인 프로그레스 온 택시웨이 C.",
+      "ko": "C 유도로 공사 중이니 주의하며 이동."
+    },
+    {
+      "en": "Contact ground on 121.7 when ready.",
+      "pron": "컨택 그라운드 온 121.7 웬 레디.",
+      "ko": "준비되면 그라운드 121.7로 연락."
+    },
+    {
+      "en": "Request taxi to parking stand 23.",
+      "pron": "리퀘스트 택시 투 파킹 스탠드 23.",
+      "ko": "23번 주기장까지 지상 이동 요청."
+    },
+    {
+      "en": "Follow the green lights to the gate.",
+      "pron": "팔로우 더 그린 라이트 투 더 게이트.",
+      "ko": "녹색 유도로등을 따라 게이트로 이동."
+    },
+    {
+      "en": "Give way to the 777 on your left.",
+      "pron": "기브 웨이 투 더 777 온 유어 레프트.",
+      "ko": "왼쪽의 777에게 양보하세요."
+    },
+    {
+      "en": "Cross runway 09, report when clear.",
+      "pron": "크로스 런웨이 09, 리포트 웬 클리어.",
+      "ko": "09번 활주로 횡단 후 통과 보고."
+    },
+    {
+      "en": "Request progressive taxi instructions.",
+      "pron": "리퀘스트 프로그레시브 택시 인스트럭션.",
+      "ko": "단계별 지상 이동 지시 요청."
+    },
+    {
+      "en": "Taxi via Alpha, hold at Alpha 3.",
+      "pron": "택시 바이 알파, 홀드 앳 알파 3.",
+      "ko": "알파 유도로 이동, 알파3에서 대기."
+    },
+    {
+      "en": "Behind the landing 320, taxi to holding point.",
+      "pron": "비하인드 더 랜딩 320, 택시 투 홀딩 포인트.",
+      "ko": "착륙 중인 320 뒤를 따라 홀딩 포인트로 이동."
+    },
+    {
+      "en": "Request de-icing at stand.",
+      "pron": "리퀘스트 디아이싱 앳 스탠드.",
+      "ko": "주기장에서 제빙 요청."
+    },
+    {
+      "en": "We are ready for pushback, brakes released.",
+      "pron": "위 아 레디 포 푸시백, 브레이크스 릴리스트.",
+      "ko": "푸시백 준비 완료, 브레이크 해제."
+    },
+    {
+      "en": "Confirm parking brake set.",
+      "pron": "컨펌 파킹 브레이크 셋.",
+      "ko": "파킹 브레이크 체결 확인."
+    },
+    {
+      "en": "Taxi slower, jet blast ahead.",
+      "pron": "택시 슬로어, 제트 블라스트 어헤드.",
+      "ko": "전방 제트 분출 주의, 천천히 이동."
+    },
+    {
+      "en": "Request to taxi to cargo apron.",
+      "pron": "리퀘스트 투 택시 투 카고 에이프런.",
+      "ko": "화물 에이프런으로 지상 이동 요청."
+    },
+    {
+      "en": "Line up and wait runway 27.",
+      "pron": "라인 업 앤 웨이트 런웨이 27.",
+      "ko": "27번 활주로 정렬 대기."
+    },
+    {
+      "en": "Backtrack approved on runway 34.",
+      "pron": "백트랙 어프루브드 온 런웨이 34.",
+      "ko": "34번 활주로 후진 이동 허가."
+    },
+    {
+      "en": "Request follow-me to remote stand.",
+      "pron": "리퀘스트 팔로우 미 투 리모트 스탠드.",
+      "ko": "원격 주기장까지 팔로우미 차량 요청."
+    },
+    {
+      "en": "Unable to comply, need tug assistance.",
+      "pron": "어네이블 투 컴플라이, 니드 터그 어시스턴스.",
+      "ko": "이동 불가, 토잉 카 필요."
+    },
+    {
+      "en": "Taxi to runway 22 via Bravo.",
+      "pron": "택시 투 런웨이 22 바이 브라보.",
+      "ko": "브라보 유도로를 통해 22번 활주로 이동."
+    },
+    {
+      "en": "Report when number one for departure.",
+      "pron": "리포트 웬 넘버 원 포 디파처.",
+      "ko": "출발 순서 1번 되면 보고."
+    },
+    {
+      "en": "Request intersection departure runway 16.",
+      "pron": "리퀘스트 인터섹션 디파처 런웨이 16.",
+      "ko": "교차로 출발 요청 (16번 활주로)."
+    },
+    {
+      "en": "Hold position, traffic crossing ahead.",
+      "pron": "홀드 포지션, 트래픽 크로싱 어헤드.",
+      "ko": "현재 위치 유지, 전방 항공기 횡단 중."
+    },
+    {
+      "en": "Taxi at your discretion to the ramp.",
+      "pron": "택시 앳 유어 디스크리션 투 더 램프.",
+      "ko": "램프까지 자율 이동."
+    },
+    {
+      "en": "Confirm you are clear of the active runway.",
+      "pron": "컨펌 유 아 클리어 오브 디 액티브 런웨이.",
+      "ko": "사용 중 활주로에서 벗어났는지 확인."
+    },
+    {
+      "en": "Request to start engines at the stand.",
+      "pron": "리퀘스트 투 스타트 엔진스 앳 더 스탠드.",
+      "ko": "주기장에서 엔진 시동 요청."
+    },
+    {
+      "en": "Pushback will be facing east, confirm.",
+      "pron": "푸시백 윌 비 페이싱 이스트, 컨펌.",
+      "ko": "푸시백 후 동쪽 방향, 확인."
+    },
+    {
+      "en": "We have traffic on the parallel taxiway.",
+      "pron": "위 해브 트래픽 온 더 패럴렐 택시웨이.",
+      "ko": "평행 유도로에 다른 항공기 있음."
+    },
+    {
+      "en": "Request progressive taxi to gate 45.",
+      "pron": "리퀘스트 프로그레시브 택시 투 게이트 45.",
+      "ko": "45번 게이트까지 단계별 이동 지시."
+    },
+    {
+      "en": "Unable to accept intersection, request full length.",
+      "pron": "어네이블 투 엑셉트 인터섹션, 리퀘스트 풀 렝스.",
+      "ko": "교차로 출발 불가, 전체 활주로 요청."
+    },
+    {
+      "en": "Taxi via Charlie, hold short of Delta.",
+      "pron": "택시 바이 찰리, 홀드 쇼트 오브 델타.",
+      "ko": "찰리 유도로 이동, 델타 전 대기."
+    },
+    {
+      "en": "Ground, Korean Air 123, request pushback.",
+      "pron": "그라운드, 코리안 에어 123, 리퀘스트 푸시백.",
+      "ko": "그라운드, 대한항공 123, 푸시백 요청."
+    },
+    {
+      "en": "Roger, pushback approved facing south.",
+      "pron": "로저, 푸시백 어프루브드 페이싱 사우스.",
+      "ko": "알겠습니다, 남쪽 방향 푸시백 허가."
+    },
+    {
+      "en": "Taxi to holding point runway 09 via Alpha.",
+      "pron": "택시 투 홀딩 포인트 런웨이 09 바이 알파.",
+      "ko": "알파를 통해 09번 활주로 홀딩 포인트 이동."
+    },
+    {
+      "en": "Give way to company traffic on the right.",
+      "pron": "기브 웨이 투 컴퍼니 트래픽 온 더 라이트.",
+      "ko": "오른쪽 동료 항공기에 양보."
+    },
+    {
+      "en": "Request to taxi to maintenance hangar.",
+      "pron": "리퀘스트 투 택시 투 메인터넌스 행거.",
+      "ko": "정비 격납고로 이동 요청."
+    },
+    {
+      "en": "We are stuck, need assistance.",
+      "pron": "위 아 스턱, 니드 어시스턴스.",
+      "ko": "이동 불가, 지원 필요."
+    },
+    {
+      "en": "Taxi carefully, FOD reported on taxiway B.",
+      "pron": "택시 케어풀리, FOD 리포티드 온 택시웨이 B.",
+      "ko": "B 유도로 이물질 보고, 주의 이동."
+    },
+    {
+      "en": "Request to change to stand 12.",
+      "pron": "리퀘스트 투 체인지 투 스탠드 12.",
+      "ko": "12번 주기장으로 변경 요청."
+    },
+    {
+      "en": "Behind the 747, continue taxi.",
+      "pron": "비하인드 더 747, 컨티뉴 택시.",
+      "ko": "747 뒤를 따라 계속 이동."
+    },
+    {
+      "en": "Confirm you have the NOTAM for runway 22 closure.",
+      "pron": "컨펌 유 해브 더 노탐 포 런웨이 22 클로저.",
+      "ko": "22번 활주로 폐쇄 NOTAM 확인."
+    },
+    {
+      "en": "Request to start one engine only for pushback.",
+      "pron": "리퀘스트 투 스타트 원 엔진 온리 포 푸시백.",
+      "ko": "푸시백 시 한 엔진만 시동 요청."
+    },
+    {
+      "en": "Taxi to the de-icing pad via Echo.",
+      "pron": "택시 투 디아이싱 패드 바이 에코.",
+      "ko": "에코 유도로를 통해 제빙 패드로 이동."
+    },
+    {
+      "en": "We are number two behind the A350.",
+      "pron": "위 아 넘버 투 비하인드 더 A350.",
+      "ko": "A350 뒤 2번째 순서."
+    },
+    {
+      "en": "Request to taxi via the shortest route.",
+      "pron": "리퀘스트 투 택시 바이 더 쇼티스트 루트.",
+      "ko": "최단 경로로 지상 이동 요청."
+    },
+    {
+      "en": "Hold at the CAT III holding point.",
+      "pron": "홀드 앳 더 CAT 쓰리 홀딩 포인트.",
+      "ko": "CAT III 홀딩 포인트에서 대기."
+    }
+  ],
+  "이륙 및 출발 (Takeoff & Departure)": [
+    {
+      "en": "Cleared for takeoff runway 34.",
+      "pron": "클리어드 포 테이크오프 런웨이 34.",
+      "ko": "34번 활주로 이륙 허가."
+    },
+    {
+      "en": "Line up and wait runway 27, traffic landing 09.",
+      "pron": "라인 업 앤 웨이트 런웨이 27, 트래픽 랜딩 09.",
+      "ko": "27번 활주로 정렬 대기, 09번 착륙기 있음."
+    },
+    {
+      "en": "Wind 270 at 12 knots, runway 27 cleared for takeoff.",
+      "pron": "윈드 270 앳 12 노츠, 런웨이 27 클리어드 포 테이크오프.",
+      "ko": "풍향 270도, 풍속 12노트, 27번 활주로 이륙 허가."
+    },
+    {
+      "en": "After departure turn right heading 090.",
+      "pron": "애프터 디파처 턴 라이트 헤딩 090.",
+      "ko": "이륙 후 우측 090도 선회."
+    },
+    {
+      "en": "Climb via SID, maintain 5000 feet.",
+      "pron": "클라임 바이 시드, 메인테인 5000 피트.",
+      "ko": "SID 경로로 상승, 5000피트 유지."
+    },
+    {
+      "en": "No speed restriction, climb unrestricted.",
+      "pron": "노 스피드 리스트릭션, 클라임 언리스트릭티드.",
+      "ko": "속도 제한 없음, 자유 상승."
+    },
+    {
+      "en": "Contact departure 124.5 passing 2000 feet.",
+      "pron": "컨택 디파처 124.5 패싱 2000 피트.",
+      "ko": "2000피트 통과 후 출발 관제 124.5 연락."
+    },
+    {
+      "en": "Cleared for takeoff, no delay.",
+      "pron": "클리어드 포 테이크오프, 노 딜레이.",
+      "ko": "이륙 허가, 지체 없이."
+    },
+    {
+      "en": "Reduce to minimum speed due to traffic ahead.",
+      "pron": "리듀스 투 미니멈 스피드 듀 투 트래픽 어헤드.",
+      "ko": "전방 교통으로 최저 속도 감속."
+    },
+    {
+      "en": "Turn left heading 180, climb to FL150.",
+      "pron": "턴 레프트 헤딩 180, 클라임 투 FL150.",
+      "ko": "좌선회 180도, FL150까지 상승."
+    },
+    {
+      "en": "Maintain 250 knots below 10000 feet.",
+      "pron": "메인테인 250 노츠 빌로 10000 피트.",
+      "ko": "1만 피트 이하 250노트 유지."
+    },
+    {
+      "en": "After takeoff, direct to ABC VOR.",
+      "pron": "애프터 테이크오프, 다이렉트 투 ABC VOR.",
+      "ko": "이륙 후 ABC VOR 직행."
+    },
+    {
+      "en": "Climb on runway heading to 3000 feet.",
+      "pron": "클라임 온 런웨이 헤딩 투 3000 피트.",
+      "ko": "활주로 방향으로 3000피트까지 상승."
+    },
+    {
+      "en": "Cancel SID, fly heading 120.",
+      "pron": "캔슬 시드, 플라이 헤딩 120.",
+      "ko": "SID 취소, 120도 직진."
+    },
+    {
+      "en": "Traffic 2 o'clock, 5 miles, descending.",
+      "pron": "트래픽 2 어클락, 5 마일스, 디센딩.",
+      "ko": "오른쪽 2시 방향 5마일 하강 중."
+    },
+    {
+      "en": "Report passing 5000 feet.",
+      "pron": "리포트 패싱 5000 피트.",
+      "ko": "5000피트 통과 보고."
+    },
+    {
+      "en": "Climb to FL280, cross XYZ at FL200 or above.",
+      "pron": "클라임 투 FL280, 크로스 XYZ 앳 FL200 오어 어보브.",
+      "ko": "FL280까지 상승, XYZ 지점을 FL200 이상으로 통과."
+    },
+    {
+      "en": "Continue climb to FL350.",
+      "pron": "컨티뉴 클라임 투 FL350.",
+      "ko": "계속 FL350까지 상승."
+    },
+    {
+      "en": "Departure frequency 126.8, good day.",
+      "pron": "디파처 프리퀀시 126.8, 굿 데이.",
+      "ko": "출발 주파수 126.8, 좋은 하루 되세요."
+    },
+    {
+      "en": "Maintain 280 knots, climb to FL200.",
+      "pron": "메인테인 280 노츠, 클라임 투 FL200.",
+      "ko": "280노트 유지하며 FL200까지 상승."
+    },
+    {
+      "en": "After takeoff, turn right direct to ABC.",
+      "pron": "애프터 테이크오프, 턴 라이트 다이렉트 투 ABC.",
+      "ko": "이륙 후 우측 선회하여 ABC 직행."
+    },
+    {
+      "en": "Speed 250 knots until advised.",
+      "pron": "스피드 250 노츠 언틸 어드바이즈드.",
+      "ko": "지시 있을 때까지 250노트."
+    },
+    {
+      "en": "Climb via the ABC 1A departure.",
+      "pron": "클라임 바이 더 ABC 1A 디파처.",
+      "ko": "ABC 1A 출발 경로로 상승."
+    },
+    {
+      "en": "Report reaching FL100.",
+      "pron": "리포트 리칭 FL100.",
+      "ko": "FL100 도달 보고."
+    },
+    {
+      "en": "Maintain visual separation with traffic.",
+      "pron": "메인테인 비주얼 세퍼레이션 위드 트래픽.",
+      "ko": "시각적으로 다른 항공기와 간격 유지."
+    },
+    {
+      "en": "Cleared for takeoff, wind 180 at 8 knots.",
+      "pron": "클리어드 포 테이크오프, 윈드 180 앳 8 노츠.",
+      "ko": "이륙 허가, 풍향 180도 8노트."
+    },
+    {
+      "en": "Turn left heading 090, climb unrestricted.",
+      "pron": "턴 레프트 헤딩 090, 클라임 언리스트릭티드.",
+      "ko": "좌선회 090도, 자유 상승."
+    },
+    {
+      "en": "Contact approach 119.3 at FL150.",
+      "pron": "컨택 어프로치 119.3 앳 FL150.",
+      "ko": "FL150에서 접근 관제 119.3 연락."
+    },
+    {
+      "en": "Reduce speed to 210 knots for spacing.",
+      "pron": "리듀스 스피드 투 210 노츠 포 스페이싱.",
+      "ko": "간격 유지를 위해 210노트 감속."
+    },
+    {
+      "en": "Climb to FL320, cross ABC at FL240.",
+      "pron": "클라임 투 FL320, 크로스 ABC 앳 FL240.",
+      "ko": "FL320까지 상승, ABC를 FL240로 통과."
+    },
+    {
+      "en": "No ATC speed restriction.",
+      "pron": "노 ATC 스피드 리스트릭션.",
+      "ko": "ATC 속도 제한 없음."
+    },
+    {
+      "en": "After departure, climb on heading 270.",
+      "pron": "애프터 디파처, 클라임 온 헤딩 270.",
+      "ko": "출발 후 270도 방향으로 상승."
+    },
+    {
+      "en": "Maintain 3000 feet until further advised.",
+      "pron": "메인테인 3000 피트 언틸 퍼더 어드바이즈드.",
+      "ko": "추가 지시까지 3000피트 유지."
+    },
+    {
+      "en": "Direct to ABC VOR after takeoff.",
+      "pron": "다이렉트 투 ABC VOR 애프터 테이크오프.",
+      "ko": "이륙 후 ABC VOR 직행."
+    },
+    {
+      "en": "Climb to 4000 feet, turn right heading 120.",
+      "pron": "클라임 투 4000 피트, 턴 라이트 헤딩 120.",
+      "ko": "4000피트까지 상승 후 우측 120도."
+    },
+    {
+      "en": "Report when established on the SID.",
+      "pron": "리포트 웬 이스타블리쉬드 온 더 시드.",
+      "ko": "SID 경로 진입 시 보고."
+    },
+    {
+      "en": "Speed your discretion.",
+      "pron": "스피드 유어 디스크리션.",
+      "ko": "속도 자율."
+    },
+    {
+      "en": "Climb via radar vectors to FL180.",
+      "pron": "클라임 바이 레이더 벡터스 투 FL180.",
+      "ko": "레이더 유도로 FL180까지 상승."
+    },
+    {
+      "en": "Cancel altitude restriction, climb now.",
+      "pron": "캔슬 알티튜드 리스트릭션, 클라임 나우.",
+      "ko": "고도 제한 해제, 즉시 상승."
+    },
+    {
+      "en": "Maintain runway heading until 5 miles.",
+      "pron": "메인테인 런웨이 헤딩 언틸 5 마일스.",
+      "ko": "5마일까지 활주로 방향 유지."
+    },
+    {
+      "en": "Contact departure 125.1, good day.",
+      "pron": "컨택 디파처 125.1, 굿 데이.",
+      "ko": "출발 관제 125.1, 좋은 하루."
+    },
+    {
+      "en": "Climb to FL200, expect higher in 5 minutes.",
+      "pron": "클라임 투 FL200, 익스펙트 하이어 인 5 미닛츠.",
+      "ko": "FL200까지 상승, 5분 후 더 높은 고도 예상."
+    },
+    {
+      "en": "Turn right heading 180 for spacing.",
+      "pron": "턴 라이트 헤딩 180 포 스페이싱.",
+      "ko": "간격 유지를 위해 우측 180도."
+    },
+    {
+      "en": "Maintain 250 knots until passing 10000 feet.",
+      "pron": "메인테인 250 노츠 언틸 패싱 10000 피트.",
+      "ko": "1만 피트 통과까지 250노트 유지."
+    },
+    {
+      "en": "After takeoff, proceed direct to ABC.",
+      "pron": "애프터 테이크오프, 프로시드 다이렉트 투 ABC.",
+      "ko": "이륙 후 ABC 직행."
+    },
+    {
+      "en": "Climb on SID, maintain 6000 feet.",
+      "pron": "클라임 온 시드, 메인테인 6000 피트.",
+      "ko": "SID로 상승, 6000피트 유지."
+    },
+    {
+      "en": "Report passing 10000 feet.",
+      "pron": "리포트 패싱 10000 피트.",
+      "ko": "1만 피트 통과 보고."
+    },
+    {
+      "en": "Speed 280 knots, climb to FL240.",
+      "pron": "스피드 280 노츠, 클라임 투 FL240.",
+      "ko": "280노트로 FL240까지 상승."
+    },
+    {
+      "en": "Turn left 30 degrees for traffic avoidance.",
+      "pron": "턴 레프트 30 디그리즈 포 트래픽 어보이던스.",
+      "ko": "충돌 회피를 위해 좌측 30도."
+    },
+    {
+      "en": "Cleared for takeoff, report airborne.",
+      "pron": "클리어드 포 테이크오프, 리포트 에어본.",
+      "ko": "이륙 허가, 이륙 후 보고."
+    }
+  ],
+  "순항 및 항로 (Cruise & Enroute)": [
+    {
+      "en": "Maintain FL350, report reaching.",
+      "pron": "메인테인 FL350, 리포트 리칭.",
+      "ko": "FL350 유지, 도달 시 보고."
+    },
+    {
+      "en": "Request higher level, FL370.",
+      "pron": "리퀘스트 하이어 레벨, FL370.",
+      "ko": "더 높은 고도 FL370 요청."
+    },
+    {
+      "en": "Traffic 12 o'clock, 20 miles, opposite direction.",
+      "pron": "트래픽 12 어클락, 20 마일스, 오퍼짓 디렉션.",
+      "ko": "정면 12시 방향 20마일 반대 방향."
+    },
+    {
+      "en": "Descend to FL280 due to traffic.",
+      "pron": "디센드 투 FL280 듀 투 트래픽.",
+      "ko": "교통으로 FL280까지 하강."
+    },
+    {
+      "en": "Request direct to ABC VOR.",
+      "pron": "리퀘스트 다이렉트 투 ABC VOR.",
+      "ko": "ABC VOR 직행 요청."
+    },
+    {
+      "en": "Maintain Mach 0.84.",
+      "pron": "메인테인 마하 0.84.",
+      "ko": "마하 0.84 유지."
+    },
+    {
+      "en": "Cross ABC at FL300 or above.",
+      "pron": "크로스 ABC 앳 FL300 오어 어보브.",
+      "ko": "ABC를 FL300 이상으로 통과."
+    },
+    {
+      "en": "Request weather deviation 30 degrees left.",
+      "pron": "리퀘스트 웨더 디비에이션 30 디그리즈 레프트.",
+      "ko": "기상 회피를 위해 좌측 30도 요청."
+    },
+    {
+      "en": "Unable RVSM, request FL280.",
+      "pron": "어네이블 RVSM, 리퀘스트 FL280.",
+      "ko": "RVSM 불가, FL280 요청."
+    },
+    {
+      "en": "Report when ready for descent.",
+      "pron": "리포트 웬 레디 포 디센트.",
+      "ko": "하강 준비되면 보고."
+    },
+    {
+      "en": "Maintain FL320, expect descent in 10 minutes.",
+      "pron": "메인테인 FL320, 익스펙트 디센트 인 10 미닛츠.",
+      "ko": "FL320 유지, 10분 후 하강 예상."
+    },
+    {
+      "en": "Traffic 10 o'clock, 15 miles, same direction.",
+      "pron": "트래픽 10 어클락, 15 마일스, 세임 디렉션.",
+      "ko": "왼쪽 10시 15마일 같은 방향."
+    },
+    {
+      "en": "Request FL360 for better fuel efficiency.",
+      "pron": "리퀘스트 FL360 포 베터 퓨얼 이피션시.",
+      "ko": "연료 효율을 위해 FL360 요청."
+    },
+    {
+      "en": "Descend via STAR, maintain 280 knots.",
+      "pron": "디센드 바이 스타, 메인테인 280 노츠.",
+      "ko": "STAR 경로로 하강, 280노트 유지."
+    },
+    {
+      "en": "Proceed direct to ABC, descend to FL200.",
+      "pron": "프로시드 다이렉트 투 ABC, 디센드 투 FL200.",
+      "ko": "ABC 직행하며 FL200까지 하강."
+    },
+    {
+      "en": "Maintain Mach 0.82 until further advised.",
+      "pron": "메인테인 마하 0.82 언틸 퍼더 어드바이즈드.",
+      "ko": "추가 지시까지 마하 0.82 유지."
+    },
+    {
+      "en": "Request to deviate 20 miles left of track for weather.",
+      "pron": "리퀘스트 투 디비에이트 20 마일스 레프트 오브 트랙 포 웨더.",
+      "ko": "기상으로 항로 좌측 20마일 이탈 요청."
+    },
+    {
+      "en": "Climb to FL380, report reaching.",
+      "pron": "클라임 투 FL380, 리포트 리칭.",
+      "ko": "FL380까지 상승, 도달 보고."
+    },
+    {
+      "en": "Traffic crossing left to right, 5 miles ahead.",
+      "pron": "트래픽 크로싱 레프트 투 라이트, 5 마일스 어헤드.",
+      "ko": "전방 5마일 좌측에서 우측으로 횡단."
+    },
+    {
+      "en": "Request step climb to FL360.",
+      "pron": "리퀘스트 스텝 클라임 투 FL360.",
+      "ko": "단계적 상승으로 FL360 요청."
+    },
+    {
+      "en": "Maintain FL350, Mach 0.85.",
+      "pron": "메인테인 FL350, 마하 0.85.",
+      "ko": "FL350, 마하 0.85 유지."
+    },
+    {
+      "en": "Expect lower at 50 miles from ABC.",
+      "pron": "익스펙트 로어 앳 50 마일스 프롬 ABC.",
+      "ko": "ABC로부터 50마일 지점에서 하강 예상."
+    },
+    {
+      "en": "Report when level at FL280.",
+      "pron": "리포트 웬 레벨 앳 FL280.",
+      "ko": "FL280 수평 비행 시 보고."
+    },
+    {
+      "en": "Direct routing to XYZ approved.",
+      "pron": "다이렉트 루팅 투 XYZ 어프루브드.",
+      "ko": "XYZ 직행 경로 허가."
+    },
+    {
+      "en": "Maintain 300 knots, descend to FL240.",
+      "pron": "메인테인 300 노츠, 디센드 투 FL240.",
+      "ko": "300노트 유지하며 FL240까지 하강."
+    },
+    {
+      "en": "Request to change to FL330 for turbulence.",
+      "pron": "리퀘스트 투 체인지 투 FL330 포 터뷸런스.",
+      "ko": "난기류로 FL330 변경 요청."
+    },
+    {
+      "en": "Cross ABC at or above FL260.",
+      "pron": "크로스 ABC 앳 오어 어보브 FL260.",
+      "ko": "ABC를 FL260 이상으로 통과."
+    },
+    {
+      "en": "Reduce to Mach 0.80 for spacing.",
+      "pron": "리듀스 투 마하 0.80 포 스페이싱.",
+      "ko": "간격 유지를 위해 마하 0.80 감속."
+    },
+    {
+      "en": "Maintain present heading, expect vectors in 5 minutes.",
+      "pron": "메인테인 프레전트 헤딩, 익스펙트 벡터스 인 5 미닛츠.",
+      "ko": "현재 방향 유지, 5분 후 레이더 유도 예상."
+    },
+    {
+      "en": "Request higher for better performance.",
+      "pron": "리퀘스트 하이어 포 베터 퍼포먼스.",
+      "ko": "성능 향상을 위해 더 높은 고도 요청."
+    },
+    {
+      "en": "Traffic 3 o'clock, 8 miles, climbing.",
+      "pron": "트래픽 3 어클락, 8 마일스, 클라이밍.",
+      "ko": "오른쪽 3시 8마일 상승 중."
+    },
+    {
+      "en": "Descend to FL200, cross ABC at FL220.",
+      "pron": "디센드 투 FL200, 크로스 ABC 앳 FL220.",
+      "ko": "FL200까지 하강, ABC를 FL220로 통과."
+    },
+    {
+      "en": "Maintain FL340 until 80 miles from destination.",
+      "pron": "메인테인 FL340 언틸 80 마일스 프롬 데스티네이션.",
+      "ko": "목적지 80마일 전까지 FL340 유지."
+    },
+    {
+      "en": "Request direct to final approach fix.",
+      "pron": "리퀘스트 다이렉트 투 파이널 어프로치 픽스.",
+      "ko": "최종 접근 지점 직행 요청."
+    },
+    {
+      "en": "Mach 0.83, maintain FL360.",
+      "pron": "마하 0.83, 메인테인 FL360.",
+      "ko": "마하 0.83로 FL360 유지."
+    },
+    {
+      "en": "Expect FL280 in 15 minutes.",
+      "pron": "익스펙트 FL280 인 15 미닛츠.",
+      "ko": "15분 후 FL280 예상."
+    },
+    {
+      "en": "Report when ready to commence descent.",
+      "pron": "리포트 웬 레디 투 커멘스 디센트.",
+      "ko": "하강 시작 준비되면 보고."
+    },
+    {
+      "en": "Maintain 290 knots, no speed restriction below FL100.",
+      "pron": "메인테인 290 노츠, 노 스피드 리스트릭션 빌로 FL100.",
+      "ko": "290노트 유지, FL100 이하 속도 제한 없음."
+    },
+    {
+      "en": "Request weather deviation up to 40 miles.",
+      "pron": "리퀘스트 웨더 디비에이션 업 투 40 마일스.",
+      "ko": "기상 회피 최대 40마일 요청."
+    },
+    {
+      "en": "Climb to FL390, report reaching.",
+      "pron": "클라임 투 FL390, 리포트 리칭.",
+      "ko": "FL390까지 상승, 도달 보고."
+    },
+    {
+      "en": "Traffic 1 o'clock, 25 miles, same altitude.",
+      "pron": "트래픽 1 어클락, 25 마일스, 세임 알티튜드.",
+      "ko": "1시 방향 25마일 동일 고도."
+    },
+    {
+      "en": "Descend via the ABC STAR.",
+      "pron": "디센드 바이 더 ABC 스타.",
+      "ko": "ABC STAR 경로로 하강."
+    },
+    {
+      "en": "Maintain Mach 0.81 until FL200.",
+      "pron": "메인테인 마하 0.81 언틸 FL200.",
+      "ko": "FL200까지 마하 0.81 유지."
+    },
+    {
+      "en": "Request to hold at ABC VOR.",
+      "pron": "리퀘스트 투 홀드 앳 ABC VOR.",
+      "ko": "ABC VOR에서 홀딩 요청."
+    },
+    {
+      "en": "Expect lower level at 100 miles from destination.",
+      "pron": "익스펙트 로어 레벨 앳 100 마일스 프롬 데스티네이션.",
+      "ko": "목적지 100마일 지점에서 하강 예상."
+    },
+    {
+      "en": "Maintain FL330, Mach 0.84.",
+      "pron": "메인테인 FL330, 마하 0.84.",
+      "ko": "FL330, 마하 0.84 유지."
+    },
+    {
+      "en": "Direct to XYZ, descend to FL180.",
+      "pron": "다이렉트 투 XYZ, 디센드 투 FL180.",
+      "ko": "XYZ 직행하며 FL180까지 하강."
+    },
+    {
+      "en": "Report when level at FL300.",
+      "pron": "리포트 웬 레벨 앳 FL300.",
+      "ko": "FL300 수평 비행 시 보고."
+    },
+    {
+      "en": "Reduce speed to 250 knots for approach sequencing.",
+      "pron": "리듀스 스피드 투 250 노츠 포 어프로치 시퀀싱.",
+      "ko": "접근 순서를 위해 250노트 감속."
+    },
+    {
+      "en": "Request step descent to FL240.",
+      "pron": "리퀘스트 스텝 디센트 투 FL240.",
+      "ko": "단계적 하강으로 FL240 요청."
+    }
+  ],
+  "접근 및 착륙 (Approach & Landing)": [
+    {
+      "en": "Cleared for ILS approach runway 34.",
+      "pron": "클리어드 포 ILS 어프로치 런웨이 34.",
+      "ko": "34번 활주로 ILS 접근 허가."
+    },
+    {
+      "en": "Descend to 3000 feet, cleared for ILS 34.",
+      "pron": "디센드 투 3000 피트, 클리어드 포 ILS 34.",
+      "ko": "3000피트까지 하강, 34번 ILS 접근 허가."
+    },
+    {
+      "en": "Turn right heading 090, intercept localizer 34.",
+      "pron": "턴 라이트 헤딩 090, 인터셉트 로컬라이저 34.",
+      "ko": "우측 090도, 34번 로컬라이저 포착."
+    },
+    {
+      "en": "Report established on the localizer.",
+      "pron": "리포트 이스타블리쉬드 온 더 로컬라이저.",
+      "ko": "로컬라이저 진입 보고."
+    },
+    {
+      "en": "Cleared to land runway 27, wind 260 at 10 knots.",
+      "pron": "클리어드 투 랜드 런웨이 27, 윈드 260 앳 10 노츠.",
+      "ko": "27번 활주로 착륙 허가, 풍향 260도 10노트."
+    },
+    {
+      "en": "Continue approach, report at 5 miles.",
+      "pron": "컨티뉴 어프로치, 리포트 앳 5 마일스.",
+      "ko": "접근 계속, 5마일 보고."
+    },
+    {
+      "en": "Go around, climb to 3000 feet, contact tower.",
+      "pron": "고 어라운드, 클라임 투 3000 피트, 컨택 타워.",
+      "ko": "고 어라운드, 3000피트 상승 후 타워 연락."
+    },
+    {
+      "en": "Number 3, contact tower 118.1.",
+      "pron": "넘버 3, 컨택 타워 118.1.",
+      "ko": "3번째 순서, 타워 118.1 연락."
+    },
+    {
+      "en": "Runway 34, cleared to land.",
+      "pron": "런웨이 34, 클리어드 투 랜드.",
+      "ko": "34번 활주로 착륙 허가."
+    },
+    {
+      "en": "Report 10 miles final runway 16.",
+      "pron": "리포트 10 마일스 파이널 런웨이 16.",
+      "ko": "16번 활주로 파이널 10마일 보고."
+    },
+    {
+      "en": "Reduce to minimum approach speed.",
+      "pron": "리듀스 투 미니멈 어프로치 스피드.",
+      "ko": "최저 접근 속도로 감속."
+    },
+    {
+      "en": "Turn left heading 270, descend to 2000 feet.",
+      "pron": "턴 레프트 헤딩 270, 디센드 투 2000 피트.",
+      "ko": "좌선회 270도, 2000피트 하강."
+    },
+    {
+      "en": "Established on the glide slope, runway 34.",
+      "pron": "이스타블리쉬드 온 더 글라이드 슬로프, 런웨이 34.",
+      "ko": "글라이드 슬로프 진입, 34번 활주로."
+    },
+    {
+      "en": "Wind shear reported on final, use caution.",
+      "pron": "윈드 시어 리포티드 온 파이널, 유즈 코션.",
+      "ko": "파이널에 윈드 시어 보고, 주의."
+    },
+    {
+      "en": "Request visual approach runway 27.",
+      "pron": "리퀘스트 비주얼 어프로치 런웨이 27.",
+      "ko": "27번 활주로 시각 접근 요청."
+    },
+    {
+      "en": "Cleared visual approach runway 09.",
+      "pron": "클리어드 비주얼 어프로치 런웨이 09.",
+      "ko": "09번 활주로 시각 접근 허가."
+    },
+    {
+      "en": "Report when you have the runway in sight.",
+      "pron": "리포트 웬 유 해브 더 런웨이 인 사이트.",
+      "ko": "활주로 확인 시 보고."
+    },
+    {
+      "en": "Continue, you are number 2.",
+      "pron": "컨티뉴, 유 아 넘버 2.",
+      "ko": "계속, 2번째 순서."
+    },
+    {
+      "en": "Runway 34, wind 320 at 15 knots, cleared to land.",
+      "pron": "런웨이 34, 윈드 320 앳 15 노츠, 클리어드 투 랜드.",
+      "ko": "34번 활주로, 풍향 320도 15노트, 착륙 허가."
+    },
+    {
+      "en": "Go around, traffic on the runway.",
+      "pron": "고 어라운드, 트래픽 온 더 런웨이.",
+      "ko": "고 어라운드, 활주로에 항공기 있음."
+    },
+    {
+      "en": "Maintain 160 knots to 5 miles final.",
+      "pron": "메인테인 160 노츠 투 5 마일스 파이널.",
+      "ko": "파이널 5마일까지 160노트 유지."
+    },
+    {
+      "en": "Turn right heading 120, descend to 1500 feet.",
+      "pron": "턴 라이트 헤딩 120, 디센드 투 1500 피트.",
+      "ko": "우측 120도, 1500피트 하강."
+    },
+    {
+      "en": "Report 4 miles final.",
+      "pron": "리포트 4 마일스 파이널.",
+      "ko": "파이널 4마일 보고."
+    },
+    {
+      "en": "You are cleared to land, check landing gear down.",
+      "pron": "유 아 클리어드 투 랜드, 체크 랜딩 기어 다운.",
+      "ko": "착륙 허가, 랜딩 기어 확인."
+    },
+    {
+      "en": "Runway 27, braking action good.",
+      "pron": "런웨이 27, 브레이킹 액션 굿.",
+      "ko": "27번 활주로 제동 상태 좋음."
+    },
+    {
+      "en": "Request to circle to land runway 16.",
+      "pron": "리퀘스트 투 서클 투 랜드 런웨이 16.",
+      "ko": "16번 활주로로 선회 착륙 요청."
+    },
+    {
+      "en": "Low visibility, use ILS category 2.",
+      "pron": "로 비저빌리티, 유즈 ILS 카테고리 2.",
+      "ko": "시정 불량, ILS 카테고리 2 사용."
+    },
+    {
+      "en": "Continue approach, wind 180 at 20 knots.",
+      "pron": "컨티뉴 어프로치, 윈드 180 앳 20 노츠.",
+      "ko": "접근 계속, 풍향 180도 20노트."
+    },
+    {
+      "en": "Go around, wind shear on short final.",
+      "pron": "고 어라운드, 윈드 시어 온 쇼트 파이널.",
+      "ko": "고 어라운드, 숏 파이널 윈드 시어."
+    },
+    {
+      "en": "Cleared for straight-in approach runway 34.",
+      "pron": "클리어드 포 스트레이트 인 어프로치 런웨이 34.",
+      "ko": "34번 활주로 직진 접근 허가."
+    },
+    {
+      "en": "Report at the outer marker.",
+      "pron": "리포트 앳 더 아우터 마커.",
+      "ko": "아우터 마커 통과 보고."
+    },
+    {
+      "en": "Reduce to final approach speed 140 knots.",
+      "pron": "리듀스 투 파이널 어프로치 스피드 140 노츠.",
+      "ko": "최종 접근 속도 140노트 감속."
+    },
+    {
+      "en": "You are 3 miles from touchdown, cleared to land.",
+      "pron": "유 아 3 마일스 프롬 터치다운, 클리어드 투 랜드.",
+      "ko": "터치다운 3마일, 착륙 허가."
+    },
+    {
+      "en": "Runway 16, cleared to land, check your speed.",
+      "pron": "런웨이 16, 클리어드 투 랜드, 체크 유어 스피드.",
+      "ko": "16번 활주로 착륙 허가, 속도 확인."
+    },
+    {
+      "en": "Go around, runway occupied.",
+      "pron": "고 어라운드, 런웨이 어큐파이드.",
+      "ko": "고 어라운드, 활주로 사용 중."
+    },
+    {
+      "en": "Maintain 180 knots until 4 miles.",
+      "pron": "메인테인 180 노츠 언틸 4 마일스.",
+      "ko": "4마일까지 180노트 유지."
+    },
+    {
+      "en": "Turn left 20 degrees, intercept final.",
+      "pron": "턴 레프트 20 디그리즈, 인터셉트 파이널.",
+      "ko": "좌측 20도, 파이널 포착."
+    },
+    {
+      "en": "Request priority landing, medical emergency on board.",
+      "pron": "리퀘스트 프라이어리티 랜딩, 메디컬 에머전시 온 보드.",
+      "ko": "우선 착륙 요청, 기내 의료 응급."
+    },
+    {
+      "en": "Cleared for VOR approach runway 27.",
+      "pron": "클리어드 포 VOR 어프로치 런웨이 27.",
+      "ko": "27번 활주로 VOR 접근 허가."
+    },
+    {
+      "en": "Report when you see the runway lights.",
+      "pron": "리포트 웬 유 시 더 런웨이 라이트.",
+      "ko": "활주로 등화 확인 시 보고."
+    },
+    {
+      "en": "Continue, you are number 1.",
+      "pron": "컨티뉴, 유 아 넘버 1.",
+      "ko": "계속, 1번째 순서."
+    },
+    {
+      "en": "Runway 34, cleared to land, wind calm.",
+      "pron": "런웨이 34, 클리어드 투 랜드, 윈드 캄.",
+      "ko": "34번 활주로 착륙 허가, 바람 잔잔."
+    },
+    {
+      "en": "Go around, traffic departing.",
+      "pron": "고 어라운드, 트래픽 디파팅.",
+      "ko": "고 어라운드, 이륙 중인 항공기."
+    },
+    {
+      "en": "Descend to 1000 feet, cleared for visual 16.",
+      "pron": "디센드 투 1000 피트, 클리어드 포 비주얼 16.",
+      "ko": "1000피트 하강, 16번 시각 접근 허가."
+    },
+    {
+      "en": "Maintain 150 knots to the threshold.",
+      "pron": "메인테인 150 노츠 투 더 쓰레시홀드.",
+      "ko": "문턱까지 150노트 유지."
+    },
+    {
+      "en": "You are 1 mile from touchdown, cleared to land.",
+      "pron": "유 아 1 마일 프롬 터치다운, 클리어드 투 랜드.",
+      "ko": "터치다운 1마일, 착륙 허가."
+    },
+    {
+      "en": "Request to land long, long runway available.",
+      "pron": "리퀘스트 투 랜드 롱, 롱 런웨이 어베일러블.",
+      "ko": "길게 착륙 요청, 긴 활주로 사용 가능."
+    },
+    {
+      "en": "Go around, wind shear alert.",
+      "pron": "고 어라운드, 윈드 시어 알러트.",
+      "ko": "고 어라운드, 윈드 시어 경고."
+    },
+    {
+      "en": "Runway 27, braking action medium.",
+      "pron": "런웨이 27, 브레이킹 액션 미디엄.",
+      "ko": "27번 활주로 제동 상태 보통."
+    },
+    {
+      "en": "Cleared to land, report when vacated.",
+      "pron": "클리어드 투 랜드, 리포트 웬 베이케이티드.",
+      "ko": "착륙 허가, 활주로 이탈 시 보고."
+    }
+  ],
+  "비정상 및 긴급 (Emergency & Abnormal)": [
+    {
+      "en": "Mayday, mayday, mayday, Korean Air 123 engine failure.",
+      "pron": "메이데이, 메이데이, 메이데이, 코리안 에어 123 엔진 페일리어.",
+      "ko": "메이데이, 대한항공 123 엔진 고장."
+    },
+    {
+      "en": "Pan pan, pan pan, pan pan, medical emergency on board.",
+      "pron": "팬 팬, 팬 팬, 팬 팬, 메디컬 에머전시 온 보드.",
+      "ko": "팬팬, 기내 의료 응급."
+    },
+    {
+      "en": "Request priority landing, hydraulic failure.",
+      "pron": "리퀘스트 프라이어리티 랜딩, 하이드롤릭 페일리어.",
+      "ko": "우선 착륙 요청, 유압계 고장."
+    },
+    {
+      "en": "We have a fire in the aft cargo hold.",
+      "pron": "위 해브 어 파이어 인 더 애프트 카고 홀드.",
+      "ko": "후방 화물칸에 화재 발생."
+    },
+    {
+      "en": "Declaring emergency, 2 engines out, request nearest airport.",
+      "pron": "디클레어링 에머전시, 2 엔진스 아웃, 리퀘스트 니어리스트 에어포트.",
+      "ko": "비상 선언, 2개 엔진 정지, 가장 가까운 공항 요청."
+    },
+    {
+      "en": "Request emergency descent to 10000 feet.",
+      "pron": "리퀘스트 에머전시 디센트 투 10000 피트.",
+      "ko": "비상 하강으로 1만 피트 요청."
+    },
+    {
+      "en": "Cabin depressurization, descending to 10000 feet.",
+      "pron": "캐빈 디프레셔라이제이션, 디센딩 투 10000 피트.",
+      "ko": "기내 감압, 1만 피트까지 하강 중."
+    },
+    {
+      "en": "Request vectors to the nearest suitable airport.",
+      "pron": "리퀘스트 벡터스 투 더 니어리스트 슈터블 에어포트.",
+      "ko": "가장 가까운 적합 공항으로 유도 요청."
+    },
+    {
+      "en": "We have smoke in the cockpit, request immediate descent.",
+      "pron": "위 해브 스모크 인 더 콕핏, 리퀘스트 이미디어트 디센트.",
+      "ko": "조종실에 연기, 즉시 하강 요청."
+    },
+    {
+      "en": "Mayday, bird strike, both engines damaged.",
+      "pron": "메이데이, 버드 스트라이크, 보스 엔진스 대미지드.",
+      "ko": "메이데이, 버드 스트라이크, 양 엔진 손상."
+    },
+    {
+      "en": "Request to dump fuel, 30 minutes.",
+      "pron": "리퀘스트 투 덤프 퓨얼, 30 미닛츠.",
+      "ko": "연료 방출 요청, 30분 소요."
+    },
+    {
+      "en": "Emergency, landing gear failure, request foam on runway.",
+      "pron": "에머전시, 랜딩 기어 페일리어, 리퀘스트 폼 온 런웨이.",
+      "ko": "비상, 랜딩 기어 고장, 활주로 폼 요청."
+    },
+    {
+      "en": "We are returning to the airport, request priority.",
+      "pron": "위 아 리터닝 투 더 에어포트, 리퀘스트 프라이어리티.",
+      "ko": "공항으로 회항 중, 우선권 요청."
+    },
+    {
+      "en": "Mayday, explosive decompression, descending rapidly.",
+      "pron": "메이데이, 익스플로시브 디프레셔라이제이션, 디센딩 래피들리.",
+      "ko": "메이데이, 폭발적 감압, 급속 하강 중."
+    },
+    {
+      "en": "Request emergency services on arrival, medical emergency.",
+      "pron": "리퀘스트 에머전시 서비스스 온 어리벌, 메디컬 에머전시.",
+      "ko": "도착 시 응급 구조대 대기, 의료 응급."
+    },
+    {
+      "en": "Unable to maintain altitude, request lower immediately.",
+      "pron": "어네이블 투 메인테인 알티튜드, 리퀘스트 로어 이미디어틀리.",
+      "ko": "고도 유지 불가, 즉시 하강 요청."
+    },
+    {
+      "en": "Pan pan, electrical failure, using battery power.",
+      "pron": "팬 팬, 일렉트리컬 페일리어, 유징 배터리 파워.",
+      "ko": "팬팬, 전기 고장, 배터리 전원 사용 중."
+    },
+    {
+      "en": "Request to land on the longest runway available.",
+      "pron": "리퀘스트 투 랜드 온 더 롱기스트 런웨이 어베일러블.",
+      "ko": "가장 긴 활주로 착륙 요청."
+    },
+    {
+      "en": "Mayday, engine fire, shutting down engine 2.",
+      "pron": "메이데이, 엔진 파이어, 셧팅 다운 엔진 2.",
+      "ko": "메이데이, 2번 엔진 화재, 엔진 정지 중."
+    },
+    {
+      "en": "We have a passenger with heart attack, request ambulance.",
+      "pron": "위 해브 어 패신저 위드 하트 어택, 리퀘스트 앰뷸런스.",
+      "ko": "승객 심장마비, 구급차 요청."
+    },
+    {
+      "en": "Declaring fuel emergency, 20 minutes remaining.",
+      "pron": "디클레어링 퓨얼 에머전시, 20 미닛츠 리메이닝.",
+      "ko": "연료 비상 선언, 20분 남음."
+    },
+    {
+      "en": "Request to hold, need time to run checklists.",
+      "pron": "리퀘스트 투 홀드, 니드 타임 투 런 체크리스트.",
+      "ko": "홀딩 요청, 체크리스트 수행 시간 필요."
+    },
+    {
+      "en": "Mayday, severe turbulence, injuries in cabin.",
+      "pron": "메이데이, 시비어 터뷸런스, 인저리즈 인 캐빈.",
+      "ko": "메이데이, 심한 난기류, 기내 부상자 발생."
+    },
+    {
+      "en": "Request emergency landing, cargo fire indication.",
+      "pron": "리퀘스트 에머전시 랜딩, 카고 파이어 인디케이션.",
+      "ko": "비상 착륙 요청, 화물 화재 표시."
+    },
+    {
+      "en": "We are descending to 10000 feet, oxygen masks on.",
+      "pron": "위 아 디센딩 투 10000 피트, 옥시전 마스크스 온.",
+      "ko": "1만 피트까지 하강 중, 산소 마스크 착용."
+    },
+    {
+      "en": "Request nearest airport with long runway and fire services.",
+      "pron": "리퀘스트 니어리스트 에어포트 위드 롱 런웨이 앤 파이어 서비스스.",
+      "ko": "긴 활주로와 소방 시설 있는 가장 가까운 공항 요청."
+    },
+    {
+      "en": "Pan pan, navigation system failure, request radar vectors.",
+      "pron": "팬 팬, 내비게이션 시스템 페일리어, 리퀘스트 레이더 벡터스.",
+      "ko": "팬팬, 항법 장치 고장, 레이더 유도 요청."
+    },
+    {
+      "en": "Mayday, bird strike on takeoff, returning immediately.",
+      "pron": "메이데이, 버드 스트라이크 온 테이크오프, 리터닝 이미디어틀리.",
+      "ko": "메이데이, 이륙 중 버드 스트라이크, 즉시 회항."
+    },
+    {
+      "en": "Request to jettison fuel, emergency descent.",
+      "pron": "리퀘스트 투 제티슨 퓨얼, 에머전시 디센트.",
+      "ko": "연료 방출 요청, 비상 하강."
+    },
+    {
+      "en": "We have a bomb threat, request priority handling.",
+      "pron": "위 해브 어 밤 쓰렛, 리퀘스트 프라이어리티 핸들링.",
+      "ko": "폭탄 위협, 우선 처리 요청."
+    },
+    {
+      "en": "Declaring emergency due to severe icing.",
+      "pron": "디클레어링 에머전시 듀 투 시비어 아이싱.",
+      "ko": "심한 착빙으로 비상 선언."
+    },
+    {
+      "en": "Request ambulance and fire truck on arrival.",
+      "pron": "리퀘스트 앰뷸런스 앤 파이어 트럭 온 어리벌.",
+      "ko": "도착 시 구급차와 소방차 대기."
+    },
+    {
+      "en": "Mayday, loss of cabin pressure, emergency descent.",
+      "pron": "메이데이, 로스 오브 캐빈 프레셔, 에머전시 디센트.",
+      "ko": "메이데이, 기내 압력 상실, 비상 하강."
+    },
+    {
+      "en": "We need to land immediately, passenger medical emergency.",
+      "pron": "위 니드 투 랜드 이미디어틀리, 패신저 메디컬 에머전시.",
+      "ko": "즉시 착륙 필요, 승객 의료 응급."
+    },
+    {
+      "en": "Request to dump fuel over the sea, 25 minutes.",
+      "pron": "리퀘스트 투 덤프 퓨얼 오버 더 씨, 25 미닛츠.",
+      "ko": "바다 상공 연료 방출 요청, 25분."
+    },
+    {
+      "en": "Pan pan, smoke in the cabin, diverting to ABC.",
+      "pron": "팬 팬, 스모크 인 더 캐빈, 디버팅 투 ABC.",
+      "ko": "팬팬, 기내 연기, ABC로 회항."
+    },
+    {
+      "en": "Mayday, engine explosion, severe damage.",
+      "pron": "메이데이, 엔진 익스플로전, 시비어 대미지.",
+      "ko": "메이데이, 엔진 폭발, 심각한 손상."
+    },
+    {
+      "en": "Request emergency services, multiple injuries.",
+      "pron": "리퀘스트 에머전시 서비스스, 멀티플 인저리즈.",
+      "ko": "응급 구조대 요청, 다수 부상자."
+    },
+    {
+      "en": "Unable to maintain cabin pressure, descending to 8000 feet.",
+      "pron": "어네이블 투 메인테인 캐빈 프레셔, 디센딩 투 8000 피트.",
+      "ko": "기내 압력 유지 불가, 8000피트 하강."
+    },
+    {
+      "en": "Request priority approach and landing.",
+      "pron": "리퀘스트 프라이어리티 어프로치 앤 랜딩.",
+      "ko": "우선 접근 및 착륙 요청."
+    },
+    {
+      "en": "Mayday, flight control malfunction, limited control.",
+      "pron": "메이데이, 플라이트 컨트롤 멀펑션, 리미티드 컨트롤.",
+      "ko": "메이데이, 비행 조종 장치 고장, 제한된 조종."
+    },
+    {
+      "en": "Request to land on any runway, emergency.",
+      "pron": "리퀘스트 투 랜드 온 애니 런웨이, 에머전시.",
+      "ko": "어떤 활주로든 착륙 요청, 비상."
+    },
+    {
+      "en": "We are declaring an emergency, 15 minutes fuel remaining.",
+      "pron": "위 아 디클레어링 언 에머전시, 15 미닛츠 퓨얼 리메이닝.",
+      "ko": "비상 선언, 연료 15분 남음."
+    },
+    {
+      "en": "Request crash tender and medical team.",
+      "pron": "리퀘스트 크래시 텐더 앤 메디컬 팀.",
+      "ko": "소방차와 의료팀 요청."
+    },
+    {
+      "en": "Pan pan, hydraulic system failure, using alternate system.",
+      "pron": "팬 팬, 하이드롤릭 시스템 페일리어, 유징 올터네이트 시스템.",
+      "ko": "팬팬, 유압계 고장, 비상 시스템 사용 중."
+    },
+    {
+      "en": "Mayday, severe structural damage, request immediate landing.",
+      "pron": "메이데이, 시비어 스트럭처럴 대미지, 리퀘스트 이미디어트 랜딩.",
+      "ko": "메이데이, 심각한 기체 손상, 즉시 착륙 요청."
+    },
+    {
+      "en": "Request to evacuate passengers after landing.",
+      "pron": "리퀘스트 투 이백유에이트 패신저스 애프터 랜딩.",
+      "ko": "착륙 후 승객 대피 요청."
+    },
+    {
+      "en": "We have a confirmed fire in the forward cargo, emergency descent.",
+      "pron": "위 해브 어 컨펌드 파이어 인 더 포워드 카고, 에머전시 디센트.",
+      "ko": "전방 화물칸 화재 확인, 비상 하강."
+    },
+    {
+      "en": "Request nearest airport with category 9 fire services.",
+      "pron": "리퀘스트 니어리스트 에어포트 위드 카테고리 9 파이어 서비스스.",
+      "ko": "카테고리 9 소방 시설 있는 가장 가까운 공항 요청."
+    }
+  ],
+  "기내 방송 (Passenger Announcements)": [
+    {
+      "en": "Ladies and gentlemen, welcome aboard Korean Air flight KE001 to Los Angeles.",
+      "pron": "레이디스 앤 젠틀맨, 웰컴 어보드 코리안 에어 플라이트 KE001 투 로스앤젤레스.",
+      "ko": "신사 숙녀 여러분, 대한항공 KE001편 로스앤젤레스행에 탑승하신 것을 환영합니다."
+    },
+    {
+      "en": "For your safety, please place all electronic devices in airplane mode.",
+      "pron": "포 유어 세이프티, 플리즈 플레이스 올 일렉트로닉 디바이시스 인 에어플레인 모드.",
+      "ko": "안전을 위해 모든 전자기기를 비행기 모드로 전환해 주시기 바랍니다."
+    },
+    {
+      "en": "Please fasten your seatbelts and return your seat backs and tray tables to their upright positions.",
+      "pron": "플리즈 패슨 유어 시트벨츠 앤 리턴 유어 시트 백스 앤 트레이 테이블스 투 데어 업라이트 포지션스.",
+      "ko": "좌석 벨트를 매주시고 좌석 등받이와 트레이 테이블을 원래 위치로 되돌려 주십시오."
+    },
+    {
+      "en": "In the event of a loss of cabin pressure, oxygen masks will drop from the overhead compartments.",
+      "pron": "인 디 이벤트 오브 어 로스 오브 캐빈 프레셔, 옥시전 마스크스 윌 드롭 프롬 디 오버헤드 컴파트먼츠.",
+      "ko": "만약 기내 압력이 떨어지면 위 선반에서 산소마스크가 내려옵니다."
+    },
+    {
+      "en": "Please secure your own mask before assisting others.",
+      "pron": "플리즈 시큐어 유어 오운 마스크 비포 어시스팅 아더스.",
+      "ko": "다른 사람을 돕기 전에 먼저 본인의 마스크를 착용해 주십시오."
+    },
+    {
+      "en": "Your life vest is located under your seat. Please do not inflate it inside the aircraft.",
+      "pron": "유어 라이프 베스트 이즈 로케이티드 언더 유어 시트. 플리즈 두 낫 인플레이트 잇 인사이드 디 에어크래프트.",
+      "ko": "구명조끼는 좌석 아래에 있습니다. 기내에서는 절대 부풀리지 마십시오."
+    },
+    {
+      "en": "There are emergency exits located at the front, over the wings, and at the rear of the aircraft.",
+      "pron": "데어 아 에머전시 이그짓츠 로케이티드 앳 더 프론트, 오버 더 윙스, 앤 앳 더 리어 오브 디 에어크래프트.",
+      "ko": "비상구는 전방, 날개 위, 그리고 후방에 있습니다."
+    },
+    {
+      "en": "We are currently taxiing to the runway. Please remain seated with your seatbelt fastened.",
+      "pron": "위 아 커렌틀리 택시잉 투 더 런웨이. 플리즈 리메인 시티드 위드 유어 시트벨트 패슨드.",
+      "ko": "현재 활주로로 이동 중입니다. 안전벨트를 매고 좌석에 앉아 계셔 주십시오."
+    },
+    {
+      "en": "Cabin crew, please prepare for takeoff.",
+      "pron": "캐빈 크루, 플리즈 프리페어 포 테이크오프.",
+      "ko": "객실 승무원 여러분, 이륙 준비를 해주십시오."
+    },
+    {
+      "en": "We have reached our cruising altitude. You may now use electronic devices in airplane mode.",
+      "pron": "위 해브 리치드 아워 크루징 알티튜드. 유 메이 나우 유스 일렉트로닉 디바이시스 인 에어플레인 모드.",
+      "ko": "순항 고도에 도달했습니다. 이제 전자기기를 비행기 모드로 사용하실 수 있습니다."
+    },
+    {
+      "en": "Due to turbulence, the seatbelt sign has been turned on. Please return to your seats.",
+      "pron": "듀 투 터뷸런스, 더 시트벨트 사인 해즈 빈 턴드 온. 플리즈 리턴 투 유어 시츠.",
+      "ko": "난기류로 인해 안전벨트 사인이 켜졌습니다. 좌석으로 돌아가 주십시오."
+    },
+    {
+      "en": "Ladies and gentlemen, the meal service will begin shortly from the rear of the aircraft.",
+      "pron": "레이디스 앤 젠틀맨, 더 밀 서비스 윌 비긴 쇼틀리 프롬 더 리어 오브 디 에어크래프트.",
+      "ko": "식사 서비스를 기체 후방부터 시작하겠습니다."
+    },
+    {
+      "en": "Please return your tray tables to the upright position as we prepare for landing.",
+      "pron": "플리즈 리턴 유어 트레이 테이블스 투 디 업라이트 포지션 애즈 위 프리페어 포 랜딩.",
+      "ko": "착륙 준비를 위해 트레이 테이블을 원래 위치로 되돌려 주십시오."
+    },
+    {
+      "en": "We are now beginning our descent into Incheon International Airport.",
+      "pron": "위 아 나우 비기닝 아워 디센트 인투 인천 인터내셔널 에어포트.",
+      "ko": "인천국제공항으로 하강을 시작합니다."
+    },
+    {
+      "en": "Cabin crew, please take your seats for landing.",
+      "pron": "캐빈 크루, 플리즈 테이크 유어 시츠 포 랜딩.",
+      "ko": "객실 승무원 여러분, 착륙을 위해 좌석에 앉아 주십시오."
+    },
+    {
+      "en": "Please remain in your seats with your seatbelts fastened until the aircraft has come to a complete stop.",
+      "pron": "플리즈 리메인 인 유어 시츠 위드 유어 시트벨츠 패슨드 언틸 디 에어크래프트 해즈 컴 투 어 컴플리트 스탑.",
+      "ko": "항공기가 완전히 정지할 때까지 안전벨트를 매고 좌석에 앉아 계셔 주십시오."
+    },
+    {
+      "en": "Thank you for flying with Korean Air. We hope you had a pleasant flight.",
+      "pron": "땡큐 포 플라잉 위드 코리안 에어. 위 호프 유 해드 어 플레전트 플라이트.",
+      "ko": "대한항공을 이용해 주셔서 감사합니다. 즐거운 비행이 되셨기를 바랍니다."
+    },
+    {
+      "en": "For passengers with connecting flights, please check the departure information on the screens.",
+      "pron": "포 패신저스 위드 커넥팅 플라이트스, 플리즈 체크 더 디파처 인포메이션 온 더 스크린스.",
+      "ko": "연결편을 이용하시는 승객께서는 스크린의 출발 정보를 확인해 주시기 바랍니다."
+    },
+    {
+      "en": "Your checked baggage will be available at baggage claim carousel number 7.",
+      "pron": "유어 체크드 뱃기지 윌 비 어베일러블 앳 뱃기지 클레임 캐러셀 넘버 7.",
+      "ko": "위탁 수하물은 7번 캐러셀에서 찾으실 수 있습니다."
+    },
+    {
+      "en": "Please be careful when opening the overhead bins, as baggage may have shifted during the flight.",
+      "pron": "플리즈 비 케어풀 웬 오프닝 디 오버헤드 빈스, 애즈 뱃기지 메이 해브 시프티드 듀링 더 플라이트.",
+      "ko": "비행 중 물건이 이동했을 수 있으니, 위 선반을 열 때 주의해 주십시오."
+    },
+    {
+      "en": "We will be landing in approximately 15 minutes. Please prepare for arrival.",
+      "pron": "위 윌 비 랜딩 인 어프록시메이트리 15 미닛츠. 플리즈 프리페어 포 어리벌.",
+      "ko": "약 15분 후 착륙합니다. 도착 준비를 해주시기 바랍니다."
+    },
+    {
+      "en": "Welcome to Incheon International Airport. The local time is now 4:20 PM.",
+      "pron": "웰컴 투 인천 인터내셔널 에어포트. 더 로컬 타임 이즈 나우 4:20 PM.",
+      "ko": "인천국제공항에 오신 것을 환영합니다. 현재 현지 시간은 오후 4시 20분입니다."
+    },
+    {
+      "en": "If you require special assistance, our staff will be happy to help you.",
+      "pron": "이프 유 리콰이어 스페셜 어시스턴스, 아워 스태프 윌 비 해피 투 헬프 유.",
+      "ko": "특별한 도움이 필요하시면 직원이 도와드리겠습니다."
+    },
+    {
+      "en": "The use of mobile phones is now permitted.",
+      "pron": "더 유스 오브 모바일 폰스 이즈 나우 퍼미티드.",
+      "ko": "이제 휴대전화 사용이 가능합니다."
+    },
+    {
+      "en": "We are currently experiencing light turbulence. Please remain seated with your seatbelt fastened.",
+      "pron": "위 아 커렌틀리 익스피리언싱 라이트 터뷸런스. 플리즈 리메인 시티드 위드 유어 시트벨트 패슨드.",
+      "ko": "현재 약한 난기류가 있습니다. 안전벨트를 매고 좌석에 앉아 계셔 주십시오."
+    },
+    {
+      "en": "Thank you for your attention during the safety demonstration.",
+      "pron": "땡큐 포 유어 어텐션 듀링 더 세이프티 데몬스트레이션.",
+      "ko": "안전 시범 방송에 주의해 주셔서 감사합니다."
+    },
+    {
+      "en": "For passengers seated in the emergency exit rows, please review the safety card in the seat pocket.",
+      "pron": "포 패신저스 시티드 인 디 에머전시 이그짓 로우스, 플리즈 리뷰 더 세이프티 카드 인 더 시트 포켓.",
+      "ko": "비상구 좌석에 앉으신 승객께서는 좌석 주머니의 안전 카드를 확인해 주십시오."
+    },
+    {
+      "en": "We would like to thank you for choosing Korean Air for your travel today.",
+      "pron": "위 우드 라이크 투 땡크 유 포 추징 코리안 에어 포 유어 트래블 투데이.",
+      "ko": "오늘 대한항공을 이용해 주셔서 진심으로 감사드립니다."
+    },
+    {
+      "en": "Have a wonderful stay in Korea or continue safely to your final destination.",
+      "pron": "해브 어 원더풀 스테이 인 코리아 오어 컨티뉴 세이프리 투 유어 파이널 데스티네이션.",
+      "ko": "한국에서의 즐거운 체류가 되시거나, 최종 목적지까지 안전한 여행 되시기 바랍니다."
+    },
+    {
+      "en": "It has been our pleasure serving you on this flight. Goodbye.",
+      "pron": "잇 해즈 빈 아워 플레저 서빙 유 온 디스 플라이트. 굿바이.",
+      "ko": "이번 비행 동안 모시게 되어 영광이었습니다. 안녕히 가십시오."
+    }
+  ]
+}

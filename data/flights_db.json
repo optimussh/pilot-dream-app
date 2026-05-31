@@ -1,0 +1,866 @@
+[
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE044",
+    "route": "ICN-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 13.5
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE001",
+    "route": "ICN-LAX",
+    "aircraft": "Airbus A380-800",
+    "typical_duration": 11.5
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE031",
+    "route": "ICN-CDG",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 12.0
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE019",
+    "route": "ICN-LHR",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 11.0
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE085",
+    "route": "ICN-DXB",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 9.5
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE003",
+    "route": "ICN-SFO",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 11.0
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE035",
+    "route": "ICN-FRA",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 10.5
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE061",
+    "route": "ICN-BKK",
+    "aircraft": "Airbus A330-300",
+    "typical_duration": 5.0
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE011",
+    "route": "ICN-ORD",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 13.2
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE023",
+    "route": "ICN-ATL",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 14.0
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE041",
+    "route": "ICN-AMS",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 10.8
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE051",
+    "route": "ICN-SIN",
+    "aircraft": "Airbus A330-300",
+    "typical_duration": 5.8
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE071",
+    "route": "ICN-HKG",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 3.5
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE081",
+    "route": "ICN-NRT",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 2.2
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE093",
+    "route": "ICN-PEK",
+    "aircraft": "Airbus A321-200",
+    "typical_duration": 1.8
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE105",
+    "route": "ICN-SYD",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 10.5
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE125",
+    "route": "ICN-JNB",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 14.5
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE015",
+    "route": "ICN-YYZ",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 13.8
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE027",
+    "route": "ICN-MIA",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 15.0
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE033",
+    "route": "ICN-MAD",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 12.8
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE037",
+    "route": "ICN-ZRH",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 11.2
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE045",
+    "route": "ICN-VIE",
+    "aircraft": "Airbus A330-300",
+    "typical_duration": 10.8
+  },
+  {
+    "airline": "OZ",
+    "airline_name": "아시아나항공",
+    "flight_number": "OZ221",
+    "route": "ICN-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 13.8
+  },
+  {
+    "airline": "OZ",
+    "airline_name": "아시아나항공",
+    "flight_number": "OZ201",
+    "route": "ICN-LAX",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 11.8
+  },
+  {
+    "airline": "OZ",
+    "airline_name": "아시아나항공",
+    "flight_number": "OZ501",
+    "route": "ICN-NRT",
+    "aircraft": "Airbus A320-200",
+    "typical_duration": 2.5
+  },
+  {
+    "airline": "OZ",
+    "airline_name": "아시아나항공",
+    "flight_number": "OZ301",
+    "route": "ICN-LHR",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 11.2
+  },
+  {
+    "airline": "OZ",
+    "airline_name": "아시아나항공",
+    "flight_number": "OZ741",
+    "route": "ICN-SIN",
+    "aircraft": "Airbus A330-300",
+    "typical_duration": 6.0
+  },
+  {
+    "airline": "OZ",
+    "airline_name": "아시아나항공",
+    "flight_number": "OZ211",
+    "route": "ICN-SFO",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 11.2
+  },
+  {
+    "airline": "OZ",
+    "airline_name": "아시아나항공",
+    "flight_number": "OZ231",
+    "route": "ICN-ORD",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 13.5
+  },
+  {
+    "airline": "OZ",
+    "airline_name": "아시아나항공",
+    "flight_number": "OZ321",
+    "route": "ICN-CDG",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 12.2
+  },
+  {
+    "airline": "OZ",
+    "airline_name": "아시아나항공",
+    "flight_number": "OZ401",
+    "route": "ICN-FRA",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 10.8
+  },
+  {
+    "airline": "OZ",
+    "airline_name": "아시아나항공",
+    "flight_number": "OZ601",
+    "route": "ICN-DXB",
+    "aircraft": "Airbus A330-300",
+    "typical_duration": 9.8
+  },
+  {
+    "airline": "OZ",
+    "airline_name": "아시아나항공",
+    "flight_number": "OZ711",
+    "route": "ICN-BKK",
+    "aircraft": "Airbus A330-300",
+    "typical_duration": 5.2
+  },
+  {
+    "airline": "OZ",
+    "airline_name": "아시아나항공",
+    "flight_number": "OZ101",
+    "route": "ICN-HND",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 2.3
+  },
+  {
+    "airline": "JL",
+    "airline_name": "일본항공",
+    "flight_number": "JL001",
+    "route": "HND-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 13.0
+  },
+  {
+    "airline": "JL",
+    "airline_name": "일본항공",
+    "flight_number": "JL061",
+    "route": "HND-LAX",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 11.0
+  },
+  {
+    "airline": "JL",
+    "airline_name": "일본항공",
+    "flight_number": "JL003",
+    "route": "HND-LHR",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 12.5
+  },
+  {
+    "airline": "JL",
+    "airline_name": "일본항공",
+    "flight_number": "JL005",
+    "route": "HND-SIN",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 7.2
+  },
+  {
+    "airline": "JL",
+    "airline_name": "일본항공",
+    "flight_number": "JL071",
+    "route": "HND-SFO",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 10.5
+  },
+  {
+    "airline": "NH",
+    "airline_name": "전일본공수",
+    "flight_number": "NH001",
+    "route": "HND-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 13.2
+  },
+  {
+    "airline": "NH",
+    "airline_name": "전일본공수",
+    "flight_number": "NH105",
+    "route": "HND-SIN",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 7.0
+  },
+  {
+    "airline": "NH",
+    "airline_name": "전일본공수",
+    "flight_number": "NH211",
+    "route": "HND-LAX",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 10.8
+  },
+  {
+    "airline": "NH",
+    "airline_name": "전일본공수",
+    "flight_number": "NH101",
+    "route": "HND-LHR",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 12.8
+  },
+  {
+    "airline": "EK",
+    "airline_name": "에미레이트",
+    "flight_number": "EK384",
+    "route": "DXB-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 14.5
+  },
+  {
+    "airline": "EK",
+    "airline_name": "에미레이트",
+    "flight_number": "EK204",
+    "route": "DXB-LHR",
+    "aircraft": "Airbus A380-800",
+    "typical_duration": 7.5
+  },
+  {
+    "airline": "EK",
+    "airline_name": "에미레이트",
+    "flight_number": "EK318",
+    "route": "DXB-LAX",
+    "aircraft": "Airbus A380-800",
+    "typical_duration": 16.5
+  },
+  {
+    "airline": "EK",
+    "airline_name": "에미레이트",
+    "flight_number": "EK412",
+    "route": "DXB-SIN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 7.0
+  },
+  {
+    "airline": "EK",
+    "airline_name": "에미레이트",
+    "flight_number": "EK354",
+    "route": "DXB-CDG",
+    "aircraft": "Airbus A380-800",
+    "typical_duration": 7.2
+  },
+  {
+    "airline": "EK",
+    "airline_name": "에미레이트",
+    "flight_number": "EK424",
+    "route": "DXB-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 9.5
+  },
+  {
+    "airline": "QR",
+    "airline_name": "카타르항공",
+    "flight_number": "QR701",
+    "route": "DOH-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 14.0
+  },
+  {
+    "airline": "QR",
+    "airline_name": "카타르항공",
+    "flight_number": "QR001",
+    "route": "DOH-LHR",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 7.0
+  },
+  {
+    "airline": "QR",
+    "airline_name": "카타르항공",
+    "flight_number": "QR755",
+    "route": "DOH-LAX",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 15.5
+  },
+  {
+    "airline": "QR",
+    "airline_name": "카타르항공",
+    "flight_number": "QR137",
+    "route": "DOH-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 9.8
+  },
+  {
+    "airline": "QR",
+    "airline_name": "카타르항공",
+    "flight_number": "QR065",
+    "route": "DOH-SIN",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 7.5
+  },
+  {
+    "airline": "EY",
+    "airline_name": "에티하드",
+    "flight_number": "EY151",
+    "route": "AUH-LHR",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 7.5
+  },
+  {
+    "airline": "EY",
+    "airline_name": "에티하드",
+    "flight_number": "EY101",
+    "route": "AUH-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 14.2
+  },
+  {
+    "airline": "SQ",
+    "airline_name": "싱가포르항공",
+    "flight_number": "SQ023",
+    "route": "SIN-JFK",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 16.5
+  },
+  {
+    "airline": "SQ",
+    "airline_name": "싱가포르항공",
+    "flight_number": "SQ317",
+    "route": "SIN-LHR",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 13.0
+  },
+  {
+    "airline": "SQ",
+    "airline_name": "싱가포르항공",
+    "flight_number": "SQ011",
+    "route": "SIN-LAX",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 15.0
+  },
+  {
+    "airline": "SQ",
+    "airline_name": "싱가포르항공",
+    "flight_number": "SQ451",
+    "route": "SIN-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 5.8
+  },
+  {
+    "airline": "CX",
+    "airline_name": "캐세이퍼시픽",
+    "flight_number": "CX888",
+    "route": "HKG-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 15.5
+  },
+  {
+    "airline": "CX",
+    "airline_name": "캐세이퍼시픽",
+    "flight_number": "CX238",
+    "route": "HKG-LHR",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 13.5
+  },
+  {
+    "airline": "CX",
+    "airline_name": "캐세이퍼시픽",
+    "flight_number": "CX889",
+    "route": "HKG-LAX",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 14.0
+  },
+  {
+    "airline": "CX",
+    "airline_name": "캐세이퍼시픽",
+    "flight_number": "CX777",
+    "route": "HKG-ICN",
+    "aircraft": "Airbus A330-300",
+    "typical_duration": 3.2
+  },
+  {
+    "airline": "BR",
+    "airline_name": "에바항공",
+    "flight_number": "BR001",
+    "route": "TPE-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 14.5
+  },
+  {
+    "airline": "BR",
+    "airline_name": "에바항공",
+    "flight_number": "BR051",
+    "route": "TPE-LAX",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 12.5
+  },
+  {
+    "airline": "CI",
+    "airline_name": "중화항공",
+    "flight_number": "CI001",
+    "route": "TPE-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 14.8
+  },
+  {
+    "airline": "CA",
+    "airline_name": "중국국제항공",
+    "flight_number": "CA981",
+    "route": "PEK-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 13.5
+  },
+  {
+    "airline": "DL",
+    "airline_name": "델타항공",
+    "flight_number": "DL001",
+    "route": "JFK-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 14.0
+  },
+  {
+    "airline": "DL",
+    "airline_name": "델타항공",
+    "flight_number": "DL160",
+    "route": "JFK-LHR",
+    "aircraft": "Airbus A330-300",
+    "typical_duration": 7.0
+  },
+  {
+    "airline": "DL",
+    "airline_name": "델타항공",
+    "flight_number": "DL188",
+    "route": "JFK-LAX",
+    "aircraft": "Boeing 757-200",
+    "typical_duration": 6.0
+  },
+  {
+    "airline": "UA",
+    "airline_name": "유나이티드항공",
+    "flight_number": "UA001",
+    "route": "EWR-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 14.2
+  },
+  {
+    "airline": "UA",
+    "airline_name": "유나이티드항공",
+    "flight_number": "UA900",
+    "route": "EWR-LHR",
+    "aircraft": "Boeing 777-200ER",
+    "typical_duration": 7.0
+  },
+  {
+    "airline": "UA",
+    "airline_name": "유나이티드항공",
+    "flight_number": "UA892",
+    "route": "EWR-LAX",
+    "aircraft": "Boeing 777-200ER",
+    "typical_duration": 5.5
+  },
+  {
+    "airline": "AA",
+    "airline_name": "아메리칸항공",
+    "flight_number": "AA001",
+    "route": "JFK-LHR",
+    "aircraft": "Boeing 777-200ER",
+    "typical_duration": 7.2
+  },
+  {
+    "airline": "AA",
+    "airline_name": "아메리칸항공",
+    "flight_number": "AA123",
+    "route": "DFW-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 14.5
+  },
+  {
+    "airline": "LH",
+    "airline_name": "루프트한자",
+    "flight_number": "LH401",
+    "route": "FRA-ICN",
+    "aircraft": "Airbus A340-300",
+    "typical_duration": 10.5
+  },
+  {
+    "airline": "LH",
+    "airline_name": "루프트한자",
+    "flight_number": "LH400",
+    "route": "FRA-JFK",
+    "aircraft": "Airbus A340-300",
+    "typical_duration": 8.5
+  },
+  {
+    "airline": "LH",
+    "airline_name": "루프트한자",
+    "flight_number": "LH720",
+    "route": "FRA-SIN",
+    "aircraft": "Airbus A340-300",
+    "typical_duration": 12.0
+  },
+  {
+    "airline": "AF",
+    "airline_name": "에어프랑스",
+    "flight_number": "AF011",
+    "route": "CDG-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 8.0
+  },
+  {
+    "airline": "AF",
+    "airline_name": "에어프랑스",
+    "flight_number": "AF257",
+    "route": "CDG-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 10.5
+  },
+  {
+    "airline": "BA",
+    "airline_name": "영국항공",
+    "flight_number": "BA001",
+    "route": "LHR-JFK",
+    "aircraft": "Boeing 777-200ER",
+    "typical_duration": 7.5
+  },
+  {
+    "airline": "BA",
+    "airline_name": "영국항공",
+    "flight_number": "BA031",
+    "route": "LHR-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 11.0
+  },
+  {
+    "airline": "KL",
+    "airline_name": "KLM",
+    "flight_number": "KL641",
+    "route": "AMS-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 8.0
+  },
+  {
+    "airline": "KL",
+    "airline_name": "KLM",
+    "flight_number": "KL861",
+    "route": "AMS-SIN",
+    "aircraft": "Airbus A330-300",
+    "typical_duration": 12.5
+  },
+  {
+    "airline": "VS",
+    "airline_name": "Virgin Atlantic",
+    "flight_number": "VS003",
+    "route": "LHR-JFK",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 7.5
+  },
+  {
+    "airline": "QF",
+    "airline_name": "Qantas",
+    "flight_number": "QF1",
+    "route": "SYD-LHR",
+    "aircraft": "Airbus A380-800",
+    "typical_duration": 22.0
+  },
+  {
+    "airline": "QF",
+    "airline_name": "Qantas",
+    "flight_number": "QF7",
+    "route": "MEL-LAX",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 14.0
+  },
+  {
+    "airline": "AC",
+    "airline_name": "Air Canada",
+    "flight_number": "AC001",
+    "route": "YYZ-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 13.5
+  },
+  {
+    "airline": "AC",
+    "airline_name": "Air Canada",
+    "flight_number": "AC857",
+    "route": "YYZ-LHR",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 7.0
+  },
+  {
+    "airline": "TK",
+    "airline_name": "터키항공",
+    "flight_number": "TK001",
+    "route": "IST-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 10.5
+  },
+  {
+    "airline": "TK",
+    "airline_name": "터키항공",
+    "flight_number": "TK021",
+    "route": "IST-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 10.0
+  },
+  {
+    "airline": "MU",
+    "airline_name": "중국동방항공",
+    "flight_number": "MU581",
+    "route": "PVG-JFK",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 14.0
+  },
+  {
+    "airline": "MU",
+    "airline_name": "중국동방항공",
+    "flight_number": "MU507",
+    "route": "PVG-LAX",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 12.5
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE075",
+    "route": "ICN-MNL",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 4.2
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE095",
+    "route": "ICN-TPE",
+    "aircraft": "Airbus A321-200",
+    "typical_duration": 2.8
+  },
+  {
+    "airline": "OZ",
+    "airline_name": "아시아나항공",
+    "flight_number": "OZ751",
+    "route": "ICN-HKG",
+    "aircraft": "Airbus A330-300",
+    "typical_duration": 3.8
+  },
+  {
+    "airline": "JL",
+    "airline_name": "일본항공",
+    "flight_number": "JL077",
+    "route": "HND-SIN",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 7.3
+  },
+  {
+    "airline": "NH",
+    "airline_name": "전일본공수",
+    "flight_number": "NH219",
+    "route": "HND-BKK",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 6.5
+  },
+  {
+    "airline": "EK",
+    "airline_name": "에미레이트",
+    "flight_number": "EK306",
+    "route": "DXB-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 9.8
+  },
+  {
+    "airline": "QR",
+    "airline_name": "카타르항공",
+    "flight_number": "QR857",
+    "route": "DOH-HKG",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 7.8
+  },
+  {
+    "airline": "SQ",
+    "airline_name": "싱가포르항공",
+    "flight_number": "SQ221",
+    "route": "SIN-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 6.1
+  },
+  {
+    "airline": "CX",
+    "airline_name": "캐세이퍼시픽",
+    "flight_number": "CX501",
+    "route": "HKG-ICN",
+    "aircraft": "Airbus A330-300",
+    "typical_duration": 3.5
+  },
+  {
+    "airline": "DL",
+    "airline_name": "델타항공",
+    "flight_number": "DL198",
+    "route": "ATL-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 14.5
+  },
+  {
+    "airline": "UA",
+    "airline_name": "유나이티드항공",
+    "flight_number": "UA892",
+    "route": "SFO-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 11.8
+  },
+  {
+    "airline": "LH",
+    "airline_name": "루프트한자",
+    "flight_number": "LH716",
+    "route": "FRA-ICN",
+    "aircraft": "Airbus A340-300",
+    "typical_duration": 10.8
+  },
+  {
+    "airline": "AF",
+    "airline_name": "에어프랑스",
+    "flight_number": "AF275",
+    "route": "CDG-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 10.8
+  },
+  {
+    "airline": "BA",
+    "airline_name": "영국항공",
+    "flight_number": "BA029",
+    "route": "LHR-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 11.2
+  }
+]
