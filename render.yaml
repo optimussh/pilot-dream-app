@@ -2,16 +2,13 @@ services:
   - type: web
     name: pilot-dream-app
     env: docker
-    region: oregon  # 또는 frankfurt (유럽), singapore 등
-    plan: free      # 무료 플랜 (나중에 업그레이드 가능)
+    region: oregon
+    plan: free
     dockerfilePath: ./Dockerfile
     autoDeploy: true
     envVars:
       - key: FLASK_ENV
         value: production
       - key: SECRET_KEY
-        generateValue: true   # 자동으로 강력한 키 생성
-    disk:
-      name: pilot-db
-      mountPath: /app/instance
-      sizeGB: 1
+        generateValue: true
+    # disk 항목 삭제됨
