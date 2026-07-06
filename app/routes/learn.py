@@ -7,7 +7,7 @@ from app.services.gamification import (
     get_unlocked_content, try_unlock_badges, today_str, week_key,
     get_daily_learning, save_daily_learning, quiz_public
 )
-from app.services.economy import get_wallet_summary, salary_progress
+from app.services.economy import get_wallet_summary, salary_progress, process_salary_bonuses
 from app.services.content_bank import (
     get_quiz_bank, get_flashcard_bank, get_scenario_bank,
     daily_sample, lookup_by_ids
@@ -121,9 +121,11 @@ def mission_complete():
     hours, msg, money = complete_mission(prog, mission_id)
     if hours is None:
         return jsonify({'error': msg}), 400
+    bonuses, bonus_total = process_salary_bonuses(prog)
     return jsonify({
         'status': 'ok', 'message': msg, 'virtual_hours': hours,
-        'money_earned': money, 'wallet_balance': prog.wallet_balance or 0,
+        'money_earned': money + bonus_total, 'bonuses': bonuses,
+        'wallet_balance': prog.wallet_balance or 0,
     })
 
 
@@ -211,12 +213,15 @@ def quiz_submit():
     else:
         quiz_money = award_money(prog, LEARNING_REWARDS['quiz_done'], f'퀴즈 완료 ({score}점)')
     try_unlock_badges(prog)
+    bonus_extra = {'quiz_perfect': score >= 100}
+    bonuses, bonus_total = process_salary_bonuses(prog, bonus_extra)
     db.session.commit()
     return jsonify({
         'score': score, 'correct': correct, 'total': len(questions),
         'results': results, 'pool_size': len(bank),
         'daily_done': True,
-        'money_earned': quiz_money,
+        'money_earned': quiz_money + bonus_total,
+        'bonuses': bonuses,
         'wallet_balance': prog.wallet_balance or 0,
     })
 
@@ -248,12 +253,14 @@ def flashcard_learn():
         flash_money = award_money(prog, LEARNING_REWARDS['flashcard'] * new_count, f'플래시카드 {new_count}개')
     log_activity(prog, 'flashcard', f'learned={len(card_ids)}')
     try_unlock_badges(prog)
+    bonuses, bonus_total = process_salary_bonuses(prog)
     db.session.commit()
     return jsonify({
         'learned_total': len(learned),
         'new_count': new_count,
         'streak': prog.flashcard_streak,
-        'money_earned': flash_money,
+        'money_earned': flash_money + bonus_total,
+        'bonuses': bonuses,
         'wallet_balance': prog.wallet_balance or 0,
     })
 
@@ -321,6 +328,7 @@ def scenario_complete():
         save_daily_learning(prog, dl)
 
     try_unlock_badges(prog)
+    bonuses, bonus_total = process_salary_bonuses(prog)
     db.session.commit()
     return jsonify({
         'status': 'ok',
@@ -328,7 +336,8 @@ def scenario_complete():
         'completed_count': len(completed_today),
         'total': len(daily_ids),
         'daily_done': sc_day.get('all_done', False),
-        'money_earned': scenario_money + bonus_money,
+        'money_earned': scenario_money + bonus_money + bonus_total,
+        'bonuses': bonuses,
         'wallet_balance': prog.wallet_balance or 0,
     })
 

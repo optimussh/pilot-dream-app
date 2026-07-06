@@ -76,13 +76,13 @@ def add_logbook_entry():
     db.session.add(entry)
     db.session.commit()
 
-    salary_result = None
+    rewards_result = None
     try:
         from app.services.gamification import get_or_create_progress, log_activity
-        from app.services.economy import process_salary
+        from app.services.economy import process_all_rewards
         prog = get_or_create_progress()
         log_activity(prog, 'logbook', data.get('flight_number', ''))
-        salary_result = process_salary(prog)
+        rewards_result = process_all_rewards(prog)
     except Exception:
         pass
     
@@ -126,13 +126,30 @@ def add_logbook_entry():
                 new_badge = UserBadge(badge_id=badge['id'])
                 db.session.add(new_badge)
                 db.session.commit()
-                
+
+        try:
+            from app.services.economy import process_salary_bonuses
+            prog = UserProgress.query.first()
+            if prog:
+                bonus_res, bonus_amt = process_salary_bonuses(prog)
+                if bonus_res:
+                    if rewards_result is None:
+                        rewards_result = {'bonuses': [], 'bonus_total': 0}
+                    rewards_result['bonuses'] = (rewards_result.get('bonuses') or []) + bonus_res
+                    rewards_result['bonus_total'] = (rewards_result.get('bonus_total') or 0) + bonus_amt
+        except Exception:
+            pass
+
     except Exception as e:
         pass  # fail silently for now
     
     resp = {"status": "success"}
-    if salary_result:
-        resp["salary"] = salary_result
+    if rewards_result:
+        if rewards_result.get('salary'):
+            resp["salary"] = rewards_result['salary']
+        if rewards_result.get('bonuses'):
+            resp["bonuses"] = rewards_result['bonuses']
+            resp["bonus_total"] = rewards_result.get('bonus_total', 0)
         prog = UserProgress.query.first()
         resp["wallet_balance"] = (prog.wallet_balance or 0) if prog else 0
     return jsonify(resp)

@@ -101,6 +101,15 @@
         <div id="career-tree" class="flex flex-wrap gap-2 justify-between"></div>
     </div>
 
+    <!-- 보너스 급여 미리보기 -->
+    <div class="info-card p-5 mb-6 border border-[#ffaa00]/20">
+        <div class="flex justify-between items-center mb-3">
+            <h3 class="font-bold">🎁 달성 보너스 급여</h3>
+            <a href="/shop" onclick="setTimeout(()=>document.querySelector('[data-tab=bonuses]')?.click(),500)" class="text-xs text-[#ffaa00] hover:underline">전체 보기 →</a>
+        </div>
+        <div id="dash-bonuses" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-xs"></div>
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <div class="info-card p-6">
             <div class="text-sm text-gray-400">로그북 비행</div>
@@ -190,6 +199,17 @@ async function loadDashboard() {
             `다음 급여까지 ${s.flights_until_salary}비행 (${s.progress_in_cycle}/${s.cycle_size}) · ₩10,000,000`;
         const pct = Math.round((s.progress_in_cycle / s.cycle_size) * 100);
         document.getElementById('dash-salary-bar').style.width = pct + '%';
+    }
+    if (g.wallet?.bonuses) {
+        const pending = g.wallet.bonuses.filter(b => !b.achieved).slice(0, 6);
+        document.getElementById('dash-bonuses').innerHTML = pending.length ? pending.map(b => {
+            const pct = b.target > 0 ? Math.min(100, Math.round(b.current / b.target * 100)) : 0;
+            return `<div class="p-2 bg-black/40 rounded-lg">
+                <div class="flex justify-between"><span>${b.icon} ${b.title}</span><span class="text-[#ffaa00]">${b.amount_formatted}</span></div>
+                <div class="h-1 bg-black rounded mt-1"><div class="h-1 bg-[#0A84FF] rounded" style="width:${pct}%"></div></div>
+                <div class="text-[10px] text-gray-500 mt-0.5">${b.current}/${b.target}</div>
+            </div>`;
+        }).join('') : '<p class="text-gray-400">모든 보너스를 달성했어요! 🎉</p>';
     }
     document.getElementById('dash-total-hours').textContent = g.total_hours;
     document.getElementById('dash-virtual').textContent = '+' + g.virtual_hours;

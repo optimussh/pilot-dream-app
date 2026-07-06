@@ -5,7 +5,8 @@ from app.services.economy import (
     get_wallet_summary, get_shop_catalog, get_all_aircraft_status,
     buy_item, sell_item, equip_avatar, buy_aircraft, accelerate_unlock,
     set_active_aircraft, equip_aircraft_deco, get_aircraft_catalog,
-    format_krw, SELL_RATIO, get_effective_hours,
+    format_krw, SELL_RATIO, get_effective_hours, get_bonus_progress,
+    process_salary_bonuses,
 )
 
 bp = Blueprint('shop', __name__)
@@ -25,6 +26,21 @@ def hangar_page():
 def wallet_api():
     prog = get_or_create_progress()
     return jsonify(get_wallet_summary(prog))
+
+
+@bp.route('/api/economy/bonuses')
+def bonuses_api():
+    prog = get_or_create_progress()
+    bonuses = get_bonus_progress(prog)
+    by_cat = {}
+    for b in bonuses:
+        by_cat.setdefault(b.get('category', '기타'), []).append(b)
+    return jsonify({
+        'bonuses': bonuses,
+        'by_category': by_cat,
+        'achieved': sum(1 for b in bonuses if b['achieved']),
+        'total': len(bonuses),
+    })
 
 
 @bp.route('/api/economy/cosmetics')
@@ -171,9 +187,12 @@ def hangar_buy():
     ok, msg = buy_aircraft(prog, aircraft_id)
     if not ok:
         return jsonify({'error': msg}), 400
+    bonuses, bonus_total = process_salary_bonuses(prog)
     return jsonify({
         'status': 'ok',
         'message': msg,
+        'bonuses': bonuses,
+        'bonus_total': bonus_total,
         'wallet': get_wallet_summary(prog),
     })
 

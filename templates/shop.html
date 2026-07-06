@@ -39,7 +39,13 @@
         <button data-tab="boost" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">⚡ 가속권</button>
         <button data-tab="hangar" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">✈️ 행거</button>
         <button data-tab="inventory" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🎒 인벤토리</button>
+        <button data-tab="bonuses" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🎁 보너스</button>
         <button data-tab="wallet" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">💰 지갑</button>
+    </div>
+
+    <div id="shop-search-bar" class="mb-4 hidden">
+        <input id="shop-search" type="text" placeholder="아이템 검색..." class="w-full max-w-md px-4 py-2 bg-black border border-gray-600 rounded-lg text-sm" oninput="filterShopItems()">
+        <span id="shop-item-count" class="text-xs text-gray-500 ml-2"></span>
     </div>
 
     <div id="shop-content" class="min-h-[400px]">
@@ -70,18 +76,22 @@ const DEFAULT_TAB = '{{ default_tab|default("avatar") }}';
 let shopData = {};
 let hangarData = {};
 let walletData = {};
+let bonusData = {};
+let currentTab = 'avatar';
 const CAT_LABELS = { avatar:'아바타', livery:'리버리', deco:'데코', lounge:'라운지', boost:'가속권' };
 const RARITY_LABELS = { common:'일반', uncommon:'고급', rare:'희귀', epic:'영웅', legendary:'전설' };
 
 function fmt(n) { return '₩' + (n||0).toLocaleString('ko-KR'); }
 
 async function loadAll() {
-    const [shopRes, hangarRes, walletRes] = await Promise.all([
-        fetch('/api/shop/items'), fetch('/api/hangar/aircraft'), fetch('/api/economy/wallet')
+    const [shopRes, hangarRes, walletRes, bonusRes] = await Promise.all([
+        fetch('/api/shop/items'), fetch('/api/hangar/aircraft'), fetch('/api/economy/wallet'), fetch('/api/economy/bonuses')
     ]);
     shopData = await shopRes.json();
     hangarData = await hangarRes.json();
     walletData = await walletRes.json();
+    bonusData = await bonusRes.json();
+    updateTabCounts();
     document.getElementById('shop-balance').textContent = walletData.balance_formatted;
     document.getElementById('shop-hour-boost').textContent = `가속 +${walletData.hour_boosts}h · 유효 ${walletData.effective_hours}h`;
     document.getElementById('avatar-preview').textContent = walletData.avatar_preview || '👨‍✈️';
@@ -110,17 +120,68 @@ async function unequipSlot(slot) {
     renderTab(document.querySelector('.shop-tab.active')?.dataset.tab || 'avatar');
 }
 
+const TAB_BASE = { avatar:'👤 아바타', livery:'🎨 리버리', deco:'✨ 데코', lounge:'🏠 라운지', boost:'⚡ 가속권', hangar:'✈️ 행거', inventory:'🎒 인벤토리', bonuses:'🎁 보너스', wallet:'💰 지갑' };
+
+function updateTabCounts() {
+    const cats = shopData.categories || {};
+    document.querySelectorAll('.shop-tab').forEach(t => {
+        const tab = t.dataset.tab;
+        const base = TAB_BASE[tab] || tab;
+        if (tab === 'bonuses') t.textContent = `${base} (${bonusData.achieved||0}/${bonusData.total||0})`;
+        else if (cats[tab]) t.textContent = `${base} (${cats[tab].length})`;
+        else t.textContent = base;
+    });
+}
+
+function filterShopItems() {
+    renderTab(currentTab);
+}
+
 function renderTab(tab) {
+    currentTab = tab;
     document.querySelectorAll('.shop-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
     const el = document.getElementById('shop-content');
-    if (tab === 'hangar') { el.innerHTML = renderHangar(); return; }
-    if (tab === 'inventory') { el.innerHTML = renderInventory(); return; }
-    if (tab === 'wallet') { el.innerHTML = renderWallet(); return; }
-    const items = (shopData.categories || {})[tab] || [];
+    const searchBar = document.getElementById('shop-search-bar');
+    if (tab === 'hangar') { searchBar.classList.add('hidden'); el.innerHTML = renderHangar(); return; }
+    if (tab === 'inventory') { searchBar.classList.add('hidden'); el.innerHTML = renderInventory(); return; }
+    if (tab === 'wallet') { searchBar.classList.add('hidden'); el.innerHTML = renderWallet(); return; }
+    if (tab === 'bonuses') { searchBar.classList.add('hidden'); el.innerHTML = renderBonuses(); return; }
+    searchBar.classList.remove('hidden');
+    let items = (shopData.categories || {})[tab] || [];
+    const q = (document.getElementById('shop-search')?.value || '').toLowerCase();
+    if (q) items = items.filter(i => (i.name+i.desc+i.id).toLowerCase().includes(q));
+    document.getElementById('shop-item-count').textContent = `${items.length}개 표시`;
     if (!items.length) { el.innerHTML = '<p class="text-gray-400">아이템이 없습니다.</p>'; return; }
     el.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
         ${items.map(item => renderItemCard(item, tab)).join('')}
     </div>`;
+}
+
+function renderBonuses() {
+    const byCat = bonusData.by_category || {};
+    let html = `<div class="mb-4 p-3 bg-[#001a00] rounded-lg text-sm">
+        달성 <b class="text-[#33ff33]">${bonusData.achieved||0}</b> / ${bonusData.total||0} 보너스 급여
+    </div>`;
+    for (const [cat, list] of Object.entries(byCat)) {
+        html += `<h3 class="font-bold text-sm mb-2 mt-4 text-[#88aa88]">${cat}</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">`;
+        for (const b of list) {
+            const done = b.achieved;
+            const pct = b.target > 0 ? Math.min(100, Math.round(b.current / b.target * 100)) : (done ? 100 : 0);
+            html += `<div class="item-card ${done?'owned':''}">
+                <div class="flex justify-between items-start">
+                    <span class="text-2xl">${b.icon||'🎁'}</span>
+                    <span class="text-[10px] ${done?'text-[#33ff33]':'text-[#ffaa00]'}">${done?'✓ 수령완료':b.amount_formatted}</span>
+                </div>
+                <div class="font-bold text-sm">${b.title}</div>
+                <div class="text-[10px] text-gray-500">${b.desc}</div>
+                ${!done ? `<div class="h-1 bg-black rounded mt-2"><div class="h-1 bg-[#0A84FF] rounded" style="width:${pct}%"></div></div>
+                <div class="text-[10px] text-gray-400 mt-1">${b.current} / ${b.target}</div>` : ''}
+            </div>`;
+        }
+        html += '</div>';
+    }
+    return html;
 }
 
 function renderItemCard(item, tab) {
@@ -236,6 +297,7 @@ function renderWallet() {
                 <li>📇 플래시카드 1장 → ₩80,000</li>
                 <li>🚨 시나리오 A등급 → ₩600,000</li>
                 <li>🏆 주간 챌린지 → ₩1,500,000</li>
+                <li>🎁 <b>달성 보너스</b> — 비행·시간·뱃지·기체 등 (보너스 탭 참고)</li>
             </ul>
             <div class="mt-4 p-3 bg-black rounded-lg">
                 <div class="text-xs text-gray-400">다음 급여까지</div>

@@ -499,6 +499,16 @@ function initLogbookFilterControls() {
     document.getElementById('next-period-month')?.addEventListener('click', () => navigateLogbookPeriod(-1));
 }
 
+function formatRewardAlert(result, baseMsg) {
+    let msg = baseMsg;
+    if (result.salary) msg += `\n\n🎉 급여일! ₩${result.salary.amount.toLocaleString()} 입금!`;
+    if (result.bonuses?.length) {
+        msg += '\n\n🎁 보너스 급여:';
+        result.bonuses.forEach(b => msg += `\n  ${b.icon||'🎁'} ${b.title}: ₩${(b.amount_paid||b.amount).toLocaleString()}`);
+    }
+    return msg;
+}
+
 async function loadLogbook() {
     const container = document.getElementById('logbook-entries');
     const totalHoursEl = document.getElementById('total-hours');
@@ -880,9 +890,7 @@ function initLogbookEnhancements() {
                 const result = await res.json().catch(() => ({}));
 
                 if (res.ok && result.status === 'success') {
-                    let msg = '스마트 입력으로 비행이 기록되었습니다!';
-                    if (result.salary) msg += `\n\n🎉 급여일! ₩${result.salary.amount.toLocaleString()} 입금!`;
-                    alert(msg);
+                    alert(formatRewardAlert(result, '스마트 입력으로 비행이 기록되었습니다!'));
                     logbookFilterMode = 'day';
                     logbookSelectedDate = data.date;
                     resetSmartForm();
@@ -931,9 +939,7 @@ function initLogbookEnhancements() {
                 const result = await res.json().catch(() => ({}));
 
                 if (res.ok && result.status === 'success') {
-                    let msg = '수동 입력으로 비행이 기록되었습니다!';
-                    if (result.salary) msg += `\n\n🎉 급여일! ₩${result.salary.amount.toLocaleString()} 입금!`;
-                    alert(msg);
+                    alert(formatRewardAlert(result, '수동 입력으로 비행이 기록되었습니다!'));
                     logbookFilterMode = 'day';
                     logbookSelectedDate = data.date;
                     this.reset();

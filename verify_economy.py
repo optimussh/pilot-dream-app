@@ -5,7 +5,7 @@ from app.models import db, UserProgress, LogbookEntry
 from app.services.gamification import get_or_create_progress
 from app.services.gamification import load_json
 from app.services.economy import (
-    award_money, buy_item, sell_item, process_salary,
+    award_money, buy_item, sell_item, process_salary, process_salary_bonuses,
     get_wallet_summary, get_all_aircraft_status,
 )
 
@@ -46,7 +46,12 @@ with app.app_context():
     check(prog.wallet_balance == 500000, 'award_money works')
 
     items = load_json('shop_items.json')
-    check(len(items) >= 30, f'shop has {len(items)} items')
+    check(len(items) >= 150, f'shop has {len(items)} items')
+
+    bonuses = load_json('salary_bonuses.json')
+    check(len(bonuses) >= 20, f'salary bonuses: {len(bonuses)}')
+    newly, total = process_salary_bonuses(prog)
+    check(isinstance(newly, list), 'bonus check runs')
 
     aircraft = load_json('aircraft.json')
     check(len(aircraft) >= 40, f'aircraft catalog has {len(aircraft)} types')

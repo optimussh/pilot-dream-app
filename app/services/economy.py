@@ -1,7 +1,7 @@
 """경제 시스템: 급여, 학습 보상, 상점, 기체 해금/구매"""
 import json
 from datetime import datetime
-from app.models import db, UserProgress, LogbookEntry
+from app.models import db, UserProgress, LogbookEntry, UserBadge
 from app.services.gamification import load_json, get_total_hours, log_activity, get_or_create_progress
 
 # ── 급여 & 보상 밸런스 ──
@@ -139,6 +139,161 @@ def get_all_aircraft_status(prog):
     return [aircraft_unlock_status(prog, aid) for aid in catalog]
 
 
+def get_salary_bonuses():
+    return load_json('salary_bonuses.json')
+
+
+def _bonus_paid_set(prog):
+    return set(prog._json('salary_bonuses_paid', []))
+
+
+def _mark_bonus_paid(prog, bonus_id):
+    paid = prog._json('salary_bonuses_paid', [])
+    if bonus_id not in paid:
+        paid.append(bonus_id)
+        prog.set_json('salary_bonuses_paid', paid)
+
+
+def _logbook_stats():
+    entries = LogbookEntry.query.all()
+    aircraft_types = {e.aircraft for e in entries if e.aircraft}
+    routes = {e.route for e in entries if e.route}
+    logbook_hours = sum(e.hours for e in entries)
+    max_single = max((e.hours for e in entries), default=0)
+    has_international = any(
+        '-' in (e.route or '') and any(
+            code in (e.route or '').upper()
+            for code in ('ICN', 'GMP', 'PUS', 'CJU', 'CJJ', 'TAE', 'KWJ', 'RSU', 'USN', 'WJU')
+        ) and len((e.route or '').split('-')) == 2
+        and (e.route or '').split('-')[0].strip() != (e.route or '').split('-')[1].strip()
+        for e in entries
+    )
+    intl_routes = [e for e in entries if e.route and '-' in e.route]
+    for e in intl_routes:
+        parts = [p.strip().upper() for p in e.route.split('-')]
+        if len(parts) == 2 and parts[0] != parts[1]:
+            korea = {'ICN', 'GMP', 'PUS', 'CJU', 'CJJ', 'TAE', 'KWJ', 'RSU', 'USN', 'WJU', 'KUV', 'MWX'}
+            if (parts[0] in korea) != (parts[1] in korea):
+                has_international = True
+                break
+    return {
+        'flight_count': len(entries),
+        'aircraft_variety': len(aircraft_types),
+        'unique_routes': len(routes),
+        'logbook_hours': logbook_hours,
+        'max_single_hours': max_single,
+        'has_international': has_international,
+    }
+
+
+def _bonus_met(prog, bonus, stats=None, extra=None):
+    stats = stats or _logbook_stats()
+    extra = extra or {}
+    btype = bonus['type']
+    val = bonus['value']
+    if btype == 'flight_count':
+        return stats['flight_count'] >= val
+    if btype == 'total_hours':
+        return get_total_hours(prog) >= val
+    if btype == 'logbook_hours':
+        return stats['logbook_hours'] >= val
+    if btype == 'badge_count':
+        return UserBadge.query.count() >= val
+    if btype == 'aircraft_variety':
+        return stats['aircraft_variety'] >= val
+    if btype == 'single_flight_hours':
+        return stats['max_single_hours'] >= val
+    if btype == 'streak_days':
+        return (prog.streak_days or 0) >= val
+    if btype == 'mission_streak':
+        return (prog.daily_mission_streak or 0) >= val
+    if btype == 'flashcard_count':
+        return len(prog._json('flashcards_learned', [])) >= val
+    if btype == 'owned_aircraft':
+        return len(get_owned_aircraft(prog)) >= val
+    if btype == 'international_route':
+        return stats['has_international']
+    if btype == 'unique_routes':
+        return stats['unique_routes'] >= val
+    if btype == 'quiz_perfect':
+        return extra.get('quiz_perfect', False) or any(
+            q.get('score', 0) >= 100 for q in prog._json('quiz_history', [])
+        )
+    return False
+
+
+def process_salary_bonuses(prog, extra=None):
+    """달성 보너스 급여 일괄 체크. 새로 지급된 보너스 목록 반환."""
+    paid = _bonus_paid_set(prog)
+    stats = _logbook_stats()
+    newly = []
+    total = 0
+    for bonus in get_salary_bonuses():
+        bid = bonus['id']
+        if bid in paid:
+            continue
+        if _bonus_met(prog, bonus, stats, extra):
+            amount = bonus['amount']
+            award_money(prog, amount, f"보너스: {bonus['title']}", 'bonus')
+            _mark_bonus_paid(prog, bid)
+            newly.append({**bonus, 'amount_paid': amount})
+            total += amount
+    if newly:
+        db.session.commit()
+    return newly, total
+
+
+def get_bonus_progress(prog):
+    paid = _bonus_paid_set(prog)
+    stats = _logbook_stats()
+    result = []
+    for bonus in get_salary_bonuses():
+        bid = bonus['id']
+        achieved = bid in paid
+        met = achieved or _bonus_met(prog, bonus, stats)
+        current = _bonus_current(prog, bonus, stats)
+        result.append({
+            **bonus,
+            'achieved': achieved,
+            'met': met,
+            'current': current,
+            'target': bonus['value'],
+            'amount_formatted': format_krw(bonus['amount']),
+        })
+    return result
+
+
+def _bonus_current(prog, bonus, stats):
+    btype = bonus['type']
+    if btype == 'flight_count':
+        return stats['flight_count']
+    if btype == 'total_hours':
+        return int(get_total_hours(prog))
+    if btype == 'logbook_hours':
+        return int(stats['logbook_hours'])
+    if btype == 'badge_count':
+        return UserBadge.query.count()
+    if btype == 'aircraft_variety':
+        return stats['aircraft_variety']
+    if btype == 'single_flight_hours':
+        return round(stats['max_single_hours'], 1)
+    if btype == 'streak_days':
+        return prog.streak_days or 0
+    if btype == 'mission_streak':
+        return prog.daily_mission_streak or 0
+    if btype == 'flashcard_count':
+        return len(prog._json('flashcards_learned', []))
+    if btype == 'owned_aircraft':
+        return len(get_owned_aircraft(prog))
+    if btype == 'international_route':
+        return 1 if stats['has_international'] else 0
+    if btype == 'unique_routes':
+        return stats['unique_routes']
+    if btype == 'quiz_perfect':
+        return 1 if any(q.get('score', 0) >= 100 for q in prog._json('quiz_history', [])) else 0
+    return 0
+
+
 def process_salary(prog):
     flight_count = LogbookEntry.query.count()
     due = flight_count // FLIGHTS_PER_SALARY
@@ -155,6 +310,17 @@ def process_salary(prog):
         'milestones': milestones,
         'flight_count': flight_count,
         'next_salary_at': (due + 1) * FLIGHTS_PER_SALARY,
+    }
+
+
+def process_all_rewards(prog, extra=None):
+    """정기 급여 + 달성 보너스 한번에 처리"""
+    salary = process_salary(prog)
+    bonuses, bonus_total = process_salary_bonuses(prog, extra)
+    return {
+        'salary': salary,
+        'bonuses': bonuses,
+        'bonus_total': bonus_total,
     }
 
 
@@ -344,6 +510,9 @@ def get_wallet_summary(prog):
         'hour_boosts': prog.hour_boosts or 0,
         'effective_hours': get_effective_hours(prog),
         'salary': salary_progress(prog),
+        'bonuses': get_bonus_progress(prog),
+        'bonuses_achieved': sum(1 for b in get_bonus_progress(prog) if b['achieved']),
+        'bonuses_total': len(get_salary_bonuses()),
         'owned_aircraft': get_owned_aircraft(prog),
         'active_aircraft': active,
         'active_aircraft_name': ac_catalog.get(active, {}).get('name', active),

@@ -1,0 +1,41 @@
+[
+  {"id": "first_flight_log", "type": "flight_count", "value": 1, "amount": 500000, "title": "첫 비행 기록!", "desc": "로그북에 첫 비행을 기록했어요", "icon": "🛫", "category": "비행"},
+  {"id": "flight_5", "type": "flight_count", "value": 5, "amount": 1500000, "title": "5회 비행 달성", "desc": "비행 5회 누적", "icon": "✈️", "category": "비행"},
+  {"id": "flight_10", "type": "flight_count", "value": 10, "amount": 3000000, "title": "10회 비행 달성", "desc": "비행 10회 누적", "icon": "🎯", "category": "비행"},
+  {"id": "flight_25", "type": "flight_count", "value": 25, "amount": 5000000, "title": "25회 비행 달성", "desc": "비행 25회 누적", "icon": "🏅", "category": "비행"},
+  {"id": "flight_50", "type": "flight_count", "value": 50, "amount": 10000000, "title": "50회 비행 달성", "desc": "비행 50회 누적 — 특별 보너스!", "icon": "🌟", "category": "비행"},
+  {"id": "flight_100", "type": "flight_count", "value": 100, "amount": 25000000, "title": "100회 비행 달성", "desc": "백 회 비행 전설", "icon": "👑", "category": "비행"},
+  {"id": "flight_200", "type": "flight_count", "value": 200, "amount": 50000000, "title": "200회 비행 달성", "desc": "베테랑 파일럿!", "icon": "💎", "category": "비행"},
+
+  {"id": "hours_10", "type": "total_hours", "value": 10, "amount": 1000000, "title": "10시간 돌파", "desc": "총 비행시간 10시간", "icon": "⏱️", "category": "시간"},
+  {"id": "hours_50", "type": "total_hours", "value": 50, "amount": 3000000, "title": "50시간 돌파", "desc": "총 비행시간 50시간", "icon": "⏰", "category": "시간"},
+  {"id": "hours_100", "type": "total_hours", "value": 100, "amount": 7000000, "title": "100시간 돌파", "desc": "백 시간 파일럿", "icon": "🏆", "category": "시간"},
+  {"id": "hours_500", "type": "total_hours", "value": 500, "amount": 20000000, "title": "500시간 돌파", "desc": "시니어 파일럿 구간", "icon": "🎖️", "category": "시간"},
+  {"id": "hours_1000", "type": "total_hours", "value": 1000, "amount": 50000000, "title": "1000시간 돌파", "desc": "천 시간의 전설", "icon": "💫", "category": "시간"},
+
+  {"id": "badge_1", "type": "badge_count", "value": 1, "amount": 500000, "title": "첫 뱃지 획득", "desc": "뱃지 1개 달성", "icon": "🎖️", "category": "성취"},
+  {"id": "badge_5", "type": "badge_count", "value": 5, "amount": 2000000, "title": "뱃지 5개", "desc": "뱃지 컬렉터", "icon": "🏅", "category": "성취"},
+  {"id": "badge_10", "type": "badge_count", "value": 10, "amount": 5000000, "title": "뱃지 10개", "desc": "뱃지 마스터", "icon": "🌟", "category": "성취"},
+  {"id": "badge_20", "type": "badge_count", "value": 20, "amount": 12000000, "title": "뱃지 20개", "desc": "뱃지 레전드", "icon": "👑", "category": "성취"},
+
+  {"id": "aircraft_variety_3", "type": "aircraft_variety", "value": 3, "amount": 1500000, "title": "3종목 비행", "desc": "서로 다른 기종 3종 비행", "icon": "🛩️", "category": "기록"},
+  {"id": "aircraft_variety_5", "type": "aircraft_variety", "value": 5, "amount": 3000000, "title": "5종목 비행", "desc": "다양한 기종 경험", "icon": "✈️", "category": "기록"},
+  {"id": "long_flight_5h", "type": "single_flight_hours", "value": 5, "amount": 2000000, "title": "5시간 단일 비행", "desc": "한 번에 5시간 이상 비행", "icon": "🌏", "category": "기록"},
+  {"id": "long_flight_10h", "type": "single_flight_hours", "value": 10, "amount": 5000000, "title": "10시간 장거리", "desc": "한 번에 10시간 이상 비행", "icon": "🌍", "category": "기록"},
+
+  {"id": "streak_3", "type": "streak_days", "value": 3, "amount": 800000, "title": "3일 연속 학습", "desc": "3일 연속 활동", "icon": "🔥", "category": "학습"},
+  {"id": "streak_7", "type": "streak_days", "value": 7, "amount": 2000000, "title": "7일 연속 학습", "desc": "일주일 연속 활동", "icon": "🔥", "category": "학습"},
+  {"id": "streak_30", "type": "streak_days", "value": 30, "amount": 10000000, "title": "30일 연속 학습", "desc": "한 달 연속 활동!", "icon": "💪", "category": "학습"},
+
+  {"id": "quiz_perfect", "type": "quiz_perfect", "value": 1, "amount": 1500000, "title": "퀴즈 만점!", "desc": "퀴즈 100점 달성", "icon": "🧠", "category": "학습"},
+  {"id": "mission_streak_7", "type": "mission_streak", "value": 7, "amount": 3000000, "title": "미션 7일 연속", "desc": "7일 연속 미션 완료", "icon": "🎯", "category": "학습"},
+  {"id": "flashcard_50", "type": "flashcard_count", "value": 50, "amount": 2500000, "title": "플래시카드 50개", "desc": "용어 50개 학습", "icon": "📇", "category": "학습"},
+
+  {"id": "owned_aircraft_3", "type": "owned_aircraft", "value": 3, "amount": 2000000, "title": "기체 3대 보유", "desc": "행거에 3대 이상", "icon": "🏢", "category": "기체"},
+  {"id": "owned_aircraft_10", "type": "owned_aircraft", "value": 10, "amount": 8000000, "title": "기체 10대 보유", "desc": "항공사 규모 행거", "icon": "🛫", "category": "기체"},
+  {"id": "owned_aircraft_25", "type": "owned_aircraft", "value": 25, "amount": 20000000, "title": "기체 25대 보유", "desc": "대형 항공사!", "icon": "🌐", "category": "기체"},
+
+  {"id": "first_international", "type": "international_route", "value": 1, "amount": 2500000, "title": "첫 국제선!", "desc": "ICN↔해외 노선 비행", "icon": "🌏", "category": "노선"},
+  {"id": "routes_10", "type": "unique_routes", "value": 10, "amount": 4000000, "title": "10개 노선 비행", "desc": "서로 다른 노선 10개", "icon": "🗺️", "category": "노선"},
+  {"id": "total_logbook_hours_50", "type": "logbook_hours", "value": 50, "amount": 5000000, "title": "로그북 50시간", "desc": "실제 기록 50시간", "icon": "📔", "category": "기록"}
+]

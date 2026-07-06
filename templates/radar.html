@@ -1069,6 +1069,10 @@ async function saveRadarFlightToLogbook(org, dest, aircraft) {
             const result = await res.json().catch(() => ({}));
             let msg = '로그북에 기록되었습니다!';
             if (result.salary) msg += `\n\n🎉 급여일! ₩${result.salary.amount.toLocaleString()} 입금!`;
+            if (result.bonuses?.length) {
+                msg += '\n\n🎁 보너스:';
+                result.bonuses.forEach(b => msg += `\n  ${b.icon||'🎁'} ${b.title}: ₩${(b.amount_paid||b.amount).toLocaleString()}`);
+            }
             alert(msg);
             // 선택적으로 로그북 페이지로 이동하거나 알림만
         } else {
