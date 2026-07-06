@@ -134,9 +134,19 @@ def aircraft_unlock_status(prog, aircraft_id):
     }
 
 
+def _enrich_aircraft_status(status):
+    if not status:
+        return status
+    from app.services.pilot_features import kid_status
+    s = kid_status(status)
+    s['ready'] = s.get('unlocked', False)
+    s['unlock_hours'] = s.get('practice_hours', s.get('unlock_hours', 0))
+    return s
+
+
 def get_all_aircraft_status(prog):
     catalog = get_aircraft_catalog()
-    return [aircraft_unlock_status(prog, aid) for aid in catalog]
+    return [_enrich_aircraft_status(aircraft_unlock_status(prog, aid)) for aid in catalog]
 
 
 def get_salary_bonuses():
@@ -301,9 +311,15 @@ def process_salary(prog):
     if due <= paid:
         return None
     milestones = due - paid
-    amount = milestones * SALARY_PER_MILESTONE
+    try:
+        from app.services.pilot_features import salary_multiplier, get_pilot_rank
+        mult = salary_multiplier(prog)
+        rank_name = get_pilot_rank(prog)['name']
+    except Exception:
+        mult, rank_name = 1.0, '파일럿'
+    amount = int(milestones * SALARY_PER_MILESTONE * mult)
     prog.salary_milestones_paid = due
-    award_money(prog, amount, f'급여일 ({flight_count}비행 달성 × {milestones}회)')
+    award_money(prog, amount, f'급여일 ({flight_count}비행 × {milestones}회, {rank_name})')
     db.session.commit()
     return {
         'amount': amount,
@@ -350,14 +366,14 @@ def buy_aircraft(prog, aircraft_id):
         owned.append(aircraft_id)
         prog.set_json('owned_aircraft', owned)
         db.session.commit()
-        return True, f'{status["name"]} 해금 완료!'
+        return True, f'{status["name"]} 준비 완료! 내 비행기가 됐어요!'
     price = status.get('discounted_price') or status.get('purchase_price', 0)
     if price <= 0:
         owned = get_owned_aircraft(prog)
         owned.append(aircraft_id)
         prog.set_json('owned_aircraft', owned)
         db.session.commit()
-        return True, f'{status["name"]} 해금 완료!'
+        return True, f'{status["name"]} 준비 완료! 내 비행기가 됐어요!'
     ok, msg = spend_money(prog, price, f'기체 구매: {status["name"]}')
     if not ok:
         return False, msg
@@ -373,10 +389,10 @@ def accelerate_unlock(prog, aircraft_id, money_amount):
     if not status:
         return False, '기종을 찾을 수 없습니다.'
     if status['owned'] or status.get('unlocked'):
-        return False, '이미 해금된 기종입니다.'
+        return False, '이미 준비 완료된 비행기예요.'
     if money_amount <= 0:
         return False, '금액을 입력해주세요.'
-    ok, msg = spend_money(prog, money_amount, f'해금 가속: {status["name"]}')
+    ok, msg = spend_money(prog, money_amount, f'연습 시간 채우기: {status["name"]}')
     if not ok:
         return False, msg
     hours_added = money_amount * HOUR_BOOST_PER_WON
@@ -504,7 +520,7 @@ def get_wallet_summary(prog):
     loadouts = prog._json('aircraft_loadouts', {})
     active = prog.active_aircraft or 'b737'
     ac_catalog = get_aircraft_catalog()
-    return {
+    summary = {
         'balance': prog.wallet_balance or 0,
         'balance_formatted': format_krw(prog.wallet_balance or 0),
         'hour_boosts': prog.hour_boosts or 0,
@@ -528,6 +544,13 @@ def get_wallet_summary(prog):
         'transactions': list(reversed(prog._json('transaction_log', [])[-20:])),
         'avatar_preview': build_avatar_preview(equipped, catalog),
     }
+    try:
+        from app.services.pilot_features import get_features_summary, KID_TERMS
+        summary['features'] = get_features_summary(prog)
+        summary['kid_terms'] = KID_TERMS
+    except Exception:
+        pass
+    return summary
 
 
 def build_avatar_preview(equipped, catalog):

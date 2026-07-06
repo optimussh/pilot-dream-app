@@ -12,7 +12,8 @@
         <div class="info-card px-5 py-3 text-center border border-[#ffaa00]/40">
             <div class="text-xs text-gray-400">내 지갑</div>
             <div class="text-2xl font-bold text-[#ffaa00]" id="shop-balance">₩0</div>
-            <div class="text-[10px] text-gray-500" id="shop-hour-boost">가속 +0h</div>
+            <div class="text-[10px] text-gray-500" id="shop-hour-boost">연습 도우미 +0h</div>
+            <div class="text-[10px] text-[#0A84FF] mt-1" id="shop-rank">📘 비행 학생</div>
         </div>
     </div>
 
@@ -36,9 +37,15 @@
         <button data-tab="livery" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🎨 리버리</button>
         <button data-tab="deco" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">✨ 데코</button>
         <button data-tab="lounge" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🏠 라운지</button>
-        <button data-tab="boost" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">⚡ 가속권</button>
-        <button data-tab="hangar" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">✈️ 행거</button>
-        <button data-tab="inventory" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🎒 인벤토리</button>
+        <button data-tab="boost" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">⚡ 연습도우미</button>
+        <button data-tab="hangar" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">✈️ 비행기창고</button>
+        <button data-tab="season" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">☀️ 시즌</button>
+        <button data-tab="daily" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🏷️ 오늘특가</button>
+        <button data-tab="missions" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🎯 미션세트</button>
+        <button data-tab="routes" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🗺️ 노선도전</button>
+        <button data-tab="gifts" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🎀 선물함</button>
+        <button data-tab="airline" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🏢 내항공사</button>
+        <button data-tab="inventory" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🎒 가방</button>
         <button data-tab="bonuses" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🎁 보너스</button>
         <button data-tab="wallet" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">💰 지갑</button>
     </div>
@@ -77,6 +84,12 @@ let shopData = {};
 let hangarData = {};
 let walletData = {};
 let bonusData = {};
+let featureData = {};
+let seasonData = {};
+let dailyData = {};
+let missionShopData = {};
+let routeData = {};
+let airlineData = {};
 let currentTab = 'avatar';
 const CAT_LABELS = { avatar:'아바타', livery:'리버리', deco:'데코', lounge:'라운지', boost:'가속권' };
 const RARITY_LABELS = { common:'일반', uncommon:'고급', rare:'희귀', epic:'영웅', legendary:'전설' };
@@ -84,14 +97,24 @@ const RARITY_LABELS = { common:'일반', uncommon:'고급', rare:'희귀', epic:
 function fmt(n) { return '₩' + (n||0).toLocaleString('ko-KR'); }
 
 async function loadAll() {
-    const [shopRes, hangarRes, walletRes, bonusRes] = await Promise.all([
-        fetch('/api/shop/items'), fetch('/api/hangar/aircraft'), fetch('/api/economy/wallet'), fetch('/api/economy/bonuses')
+    const [shopRes, hangarRes, walletRes, bonusRes, featRes, seasonRes, dailyRes, msRes, routeRes, airlineRes] = await Promise.all([
+        fetch('/api/shop/items'), fetch('/api/hangar/aircraft'), fetch('/api/economy/wallet'), fetch('/api/economy/bonuses'),
+        fetch('/api/features/summary'), fetch('/api/features/season'), fetch('/api/features/daily-shop'),
+        fetch('/api/features/mission-shop'), fetch('/api/features/routes'), fetch('/api/features/airline')
     ]);
     shopData = await shopRes.json();
     hangarData = await hangarRes.json();
     walletData = await walletRes.json();
     bonusData = await bonusRes.json();
+    featureData = await featRes.json();
+    seasonData = await seasonRes.json();
+    dailyData = await dailyRes.json();
+    missionShopData = await msRes.json();
+    routeData = await routeRes.json();
+    airlineData = await airlineRes.json();
     updateTabCounts();
+    if (featureData.rank) document.getElementById('shop-rank').textContent = `${featureData.rank.icon} ${featureData.rank.name}`;
+    document.getElementById('shop-hour-boost').textContent = `연습 도우미 +${walletData.hour_boosts}h · 연습 ${walletData.effective_hours}h`;
     document.getElementById('shop-balance').textContent = walletData.balance_formatted;
     document.getElementById('shop-hour-boost').textContent = `가속 +${walletData.hour_boosts}h · 유효 ${walletData.effective_hours}h`;
     document.getElementById('avatar-preview').textContent = walletData.avatar_preview || '👨‍✈️';
@@ -120,7 +143,7 @@ async function unequipSlot(slot) {
     renderTab(document.querySelector('.shop-tab.active')?.dataset.tab || 'avatar');
 }
 
-const TAB_BASE = { avatar:'👤 아바타', livery:'🎨 리버리', deco:'✨ 데코', lounge:'🏠 라운지', boost:'⚡ 가속권', hangar:'✈️ 행거', inventory:'🎒 인벤토리', bonuses:'🎁 보너스', wallet:'💰 지갑' };
+const TAB_BASE = { avatar:'👤 아바타', livery:'🎨 리버리', deco:'✨ 데코', lounge:'🏠 라운지', boost:'⚡ 연습도우미', hangar:'✈️ 비행기창고', season:'☀️ 시즌', daily:'🏷️ 오늘특가', missions:'🎯 미션세트', routes:'🗺️ 노선도전', gifts:'🎀 선물함', airline:'🏢 내항공사', inventory:'🎒 가방', bonuses:'🎁 보너스', wallet:'💰 지갑' };
 
 function updateTabCounts() {
     const cats = shopData.categories || {};
@@ -146,6 +169,12 @@ function renderTab(tab) {
     if (tab === 'inventory') { searchBar.classList.add('hidden'); el.innerHTML = renderInventory(); return; }
     if (tab === 'wallet') { searchBar.classList.add('hidden'); el.innerHTML = renderWallet(); return; }
     if (tab === 'bonuses') { searchBar.classList.add('hidden'); el.innerHTML = renderBonuses(); return; }
+    if (tab === 'season') { searchBar.classList.add('hidden'); el.innerHTML = renderSeason(); return; }
+    if (tab === 'daily') { searchBar.classList.add('hidden'); el.innerHTML = renderDaily(); return; }
+    if (tab === 'missions') { searchBar.classList.add('hidden'); el.innerHTML = renderMissionShop(); return; }
+    if (tab === 'routes') { searchBar.classList.add('hidden'); el.innerHTML = renderRoutes(); return; }
+    if (tab === 'gifts') { searchBar.classList.add('hidden'); el.innerHTML = renderGifts(); return; }
+    if (tab === 'airline') { searchBar.classList.add('hidden'); el.innerHTML = renderAirline(); return; }
     searchBar.classList.remove('hidden');
     let items = (shopData.categories || {})[tab] || [];
     const q = (document.getElementById('shop-search')?.value || '').toLowerCase();
@@ -205,9 +234,9 @@ function renderItemCard(item, tab) {
         </div>
         <div class="font-bold text-sm">${item.name}</div>
         <div class="text-[10px] text-gray-500 mt-1 line-clamp-2">${item.desc || ''}</div>
-        ${item.boost_hours ? `<div class="text-xs text-[#0A84FF] mt-1">+${item.boost_hours}h 가속</div>` : ''}
+        ${item.boost_hours ? `<div class="text-xs text-[#0A84FF] mt-1">+${item.boost_hours}h 연습 도움</div>` : ''}
         <div class="flex gap-2 mt-3 flex-wrap">${actions}</div>
-        ${owned ? '<div class="text-[10px] text-[#0A84FF] mt-1">✓ 보유중</div>' : ''}
+        ${owned ? '<div class="text-[10px] text-[#0A84FF] mt-1">✓ 가지고 있어요</div>' : ''}
     </div>`;
 }
 
@@ -215,8 +244,8 @@ function renderHangar() {
     const acs = hangarData.aircraft || [];
     const cats = [...new Set(acs.map(a => a.category))];
     let html = `<div class="mb-4 p-3 bg-[#001a00] rounded-lg text-sm">
-        보유 <b class="text-[#33ff33]">${hangarData.owned_count}</b> / ${hangarData.total_count}기종
-        · 유효시간 <b>${hangarData.effective_hours}h</b> (가속 +${hangarData.hour_boosts}h)
+        내 비행기 <b class="text-[#33ff33]">${hangarData.owned_count}</b> / ${hangarData.total_count}기종
+        · 연습 시간 <b>${hangarData.effective_hours}h</b> (도우미 +${hangarData.hour_boosts}h)
     </div>`;
     for (const cat of cats) {
         const group = acs.filter(a => a.category === cat);
@@ -233,24 +262,24 @@ function renderHangarCard(ac) {
     const isActive = ac.is_active;
     let status = '', actions = '';
     if (owned) {
-        status = '<span class="text-[#33ff33] text-xs">✓ 보유</span>';
+        status = '<span class="text-[#33ff33] text-xs">✓ 내 비행기</span>';
         const decoItems = (walletData.inventory||[]).filter(i => ['livery','deco'].includes(i.category));
         const decoBtns = decoItems.length ? `<div class="mt-2 text-[10px] text-gray-400">장식 적용:</div>
             <div class="flex gap-1 flex-wrap mt-1">${decoItems.slice(0,6).map(i =>
                 `<button onclick="equipDeco('${ac.id}','${i.slot||'livery'}','${i.id}')" class="text-[10px] px-1.5 py-0.5 border border-purple-500/40 rounded">${i.emoji||''}${i.name}</button>`
             ).join('')}</div>` : '';
         actions = `<button onclick="setActive('${ac.id}')" class="text-xs px-2 py-1 ${isActive?'bg-[#ffaa00] text-black':'border border-[#ffaa00]'} rounded font-bold">${isActive?'★ 주력':'주력 설정'}</button>${decoBtns}`;
-    } else if (unlocked) {
-        status = '<span class="text-[#0A84FF] text-xs">해금 가능</span>';
+    } else if (unlocked || ac.ready) {
+        status = '<span class="text-[#0A84FF] text-xs">✨ 준비 완료!</span>';
         const price = ac.discounted_price || ac.purchase_price || 0;
         actions = price > 0
-            ? `<button onclick="buyAircraft('${ac.id}')" class="text-xs px-3 py-1 bg-[#ffaa00] text-black rounded font-bold">구매 ${fmt(price)}</button>`
-            : `<button onclick="buyAircraft('${ac.id}')" class="text-xs px-3 py-1 bg-[#33ff33] text-black rounded font-bold">무료 해금</button>`;
+            ? `<button onclick="buyAircraft('${ac.id}')" class="text-xs px-3 py-1 bg-[#ffaa00] text-black rounded font-bold">사기 ${fmt(price)}</button>`
+            : `<button onclick="buyAircraft('${ac.id}')" class="text-xs px-3 py-1 bg-[#33ff33] text-black rounded font-bold">무료로 받기</button>`;
     } else {
-        status = `<span class="text-gray-400 text-xs">${ac.progress_pct}% (${ac.hours_remaining}h 남음)</span>`;
+        status = `<span class="text-gray-400 text-xs">연습 ${ac.progress_pct}% (더 필요 ${ac.hours_remaining||ac.practice_left}h)</span>`;
         const bar = `<div class="h-1.5 bg-black rounded mt-1"><div class="h-1.5 bg-[#0A84FF] rounded" style="width:${ac.progress_pct}%"></div></div>`;
         status += bar;
-        actions = `<button onclick="accelAircraft('${ac.id}','${ac.name}')" class="text-xs px-2 py-1 border border-[#0A84FF] rounded">💰 가속 구매</button>
+        actions = `<button onclick="accelAircraft('${ac.id}','${ac.name}')" class="text-xs px-2 py-1 border border-[#0A84FF] rounded">💰 연습시간 채우기</button>
             <button onclick="buyAircraft('${ac.id}')" class="text-xs px-2 py-1 bg-[#ffaa00] text-black rounded font-bold">${fmt(ac.discounted_price)}</button>`;
     }
     return `<div class="hangar-card ${owned?'owned':''} ${isActive?'active-ac':''}">
@@ -262,7 +291,7 @@ function renderHangarCard(ac) {
             <span class="text-[10px] px-1.5 py-0.5 bg-black rounded">${ac.type||''}</span>
         </div>
         <div class="text-[10px] text-gray-400 mt-2 line-clamp-2">${ac.desc||''}</div>
-        <div class="text-[10px] mt-2">해금 ${ac.unlock_hours}h · 정가 ${fmt(ac.purchase_price)}</div>
+        <div class="text-[10px] mt-2">연습 필요 ${ac.unlock_hours}h · 정가 ${fmt(ac.purchase_price)}</div>
         <div class="mt-2">${status}</div>
         <div class="flex gap-2 mt-3 flex-wrap">${actions}</div>
     </div>`;
@@ -284,6 +313,153 @@ function renderInventory() {
     </div>`;
 }
 
+function renderSeason() {
+    const s = seasonData;
+    const pct = s.next_level ? Math.min(100, Math.round(s.xp / s.next_level.xp * 100)) : 100;
+    return `<div class="info-card p-5 mb-4 border border-yellow-500/30">
+        <div class="text-3xl mb-2">${s.icon||'☀️'} ${s.title||'시즌'}</div>
+        <p class="text-sm text-gray-400 mb-3">${s.desc||''}</p>
+        <div class="flex justify-between text-sm mb-1"><span>시즌 레벨 ${s.current_level||0}</span><span>XP ${s.xp||0}${s.next_level?' / '+s.next_level.xp:''}</span></div>
+        <div class="h-2 bg-black rounded"><div class="h-2 bg-yellow-500 rounded" style="width:${pct}%"></div></div>
+        <p class="text-xs text-gray-500 mt-2">비행·퀴즈·미션으로 XP를 모아요!</p>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-2">${(s.levels||[]).map(lv => {
+        const done = (s.claimed||[]).includes(lv.level);
+        return `<div class="item-card text-center p-2 ${done?'owned':''}"><div class="text-xs font-bold">Lv${lv.level}</div><div class="text-[10px]">${lv.label}</div><div class="text-[10px] text-[#ffaa00]">${fmt(lv.reward_money)}</div>${done?'<div class="text-[10px] text-[#33ff33]">✓</div>':''}</div>`;
+    }).join('')}</div>`;
+}
+
+function renderDaily() {
+    const items = dailyData.items || [];
+    if (!items.length) return '<p class="text-gray-400">오늘의 특가 준비 중...</p>';
+    return `<p class="text-sm text-gray-400 mb-3">매일 바뀌는 30% 할인! 오늘만 이 가격이에요 🏷️</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">${items.map(i => `
+        <div class="item-card border border-[#ffaa00]/40">
+            <div class="text-3xl mb-1">${i.emoji||'📦'}</div>
+            <div class="font-bold">${i.name}</div>
+            <div class="text-xs text-gray-500 line-through">${fmt(i.price)}</div>
+            <div class="text-lg text-[#ffaa00] font-bold">${fmt(i.sale_price)}</div>
+            <button onclick="buyDaily('${i.id}')" class="mt-2 text-xs px-3 py-1 bg-[#ffaa00] text-black rounded font-bold">특가로 사기</button>
+        </div>`).join('')}</div>`;
+}
+
+function renderMissionShop() {
+    const items = missionShopData.items || [];
+    return `<p class="text-sm text-gray-400 mb-3">오늘 공부+비행 미션을 완료하면 특별 가격으로 살 수 있어요!</p>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">${items.map(m => `
+        <div class="item-card ${m.requirements_met?'border border-[#33ff33]/40':''}">
+            <div class="text-2xl">${m.icon||'🎯'}</div>
+            <div class="font-bold text-sm">${m.name}</div>
+            <div class="text-[10px] text-gray-500">${m.desc}</div>
+            <div class="text-[#ffaa00] text-sm mt-1">${fmt(m.discount_price)} <span class="text-gray-500 line-through text-xs">${fmt(m.original_price)}</span></div>
+            <div class="text-[10px] mt-1 ${m.requirements_met?'text-[#33ff33]':'text-gray-400'}">${m.kid_label}</div>
+            ${m.already_bought ? '<div class="text-[10px] text-[#0A84FF]">✓ 구매 완료</div>' :
+              m.requirements_met ? `<button onclick="buyMissionShop('${m.id}')" class="mt-2 text-xs px-3 py-1 bg-[#ffaa00] text-black rounded font-bold">특가 구매</button>` : ''}
+        </div>`).join('')}</div>`;
+}
+
+function renderRoutes() {
+    const chs = routeData.challenges || [];
+    return `<p class="text-sm text-gray-400 mb-3">특별 노선을 비행하면 보상이 와요! 로그북에 노선을 정확히 적어주세요.</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">${chs.map(c => `
+        <div class="item-card ${c.completed?'owned':''}">
+            <div class="font-bold">${c.name}</div>
+            <div class="text-[10px] text-gray-500">${c.desc}</div>
+            <div class="text-[10px] text-[#ffaa00] mt-1">보상 ${fmt(c.reward_money)}</div>
+            ${c.completed ? '<div class="text-[10px] text-[#33ff33] mt-1">✓ 도전 성공!</div>' : '<div class="text-[10px] text-gray-400 mt-1">아직 도전 중...</div>'}
+        </div>`).join('')}</div>`;
+}
+
+function renderGifts() {
+    const inbox = featureData.gift_inbox || [];
+    const giftable = (walletData.inventory||[]).filter(i => i.category !== 'boost');
+    const giftSelect = giftable.length
+        ? `<select id="gift-item-select" class="w-full px-3 py-2 bg-black border rounded text-sm mb-2">
+            ${giftable.map(i => `<option value="${i.id}">${i.emoji||''} ${i.name}</option>`).join('')}
+           </select>`
+        : '<p class="text-sm text-gray-400 mb-2">선물할 아이템이 없어요. 상점에서 사서 가방에 넣어보세요!</p>';
+    const giftBtn = giftable.length
+        ? '<button onclick="createGift()" class="w-full py-2 bg-[#ffaa00] text-black rounded font-bold text-sm">선물 코드 만들기</button>'
+        : '<button disabled class="w-full py-2 bg-gray-700 text-gray-400 rounded font-bold text-sm cursor-not-allowed">선물할 아이템 없음</button>';
+    return `<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="info-card p-5">
+            <h3 class="font-bold mb-3">🎁 선물 코드 받기</h3>
+            <p class="text-xs text-gray-400 mb-2">친구나 가족이 준 GIFT-코드를 입력하세요</p>
+            <input id="gift-code-input" class="w-full px-3 py-2 bg-black border rounded text-sm mb-2" placeholder="GIFT-XXXX 코드 입력">
+            <button onclick="redeemGift()" class="w-full py-2 bg-purple-600 rounded font-bold text-sm">선물 열기!</button>
+        </div>
+        <div class="info-card p-5">
+            <h3 class="font-bold mb-3">📤 내 아이템 선물하기</h3>
+            <p class="text-xs text-gray-400 mb-2">가방 아이템을 친구/가족에게 줄 수 있어요 (코드 생성)</p>
+            ${giftSelect}
+            <input id="gift-message" class="w-full px-3 py-2 bg-black border rounded text-sm mb-2" placeholder="메시지 (선택)">
+            ${giftBtn}
+        </div>
+    </div>
+    ${inbox.length ? `<h3 class="font-bold mt-6 mb-2">받은 선물</h3><div class="space-y-2">${inbox.map(g => 
+        `<div class="p-2 bg-black/40 rounded text-sm">🎁 ${g.from_name}: ${g.message||'선물이 도착했어요!'} (${g.received})</div>`
+    ).join('')}</div>` : ''}`;
+}
+
+function renderAirline() {
+    const a = airlineData;
+    if (!a.can_found && !a.founded) {
+        return `<div class="info-card p-8 text-center">
+            <div class="text-5xl mb-3">🏢</div>
+            <h3 class="font-bold text-lg">내 항공사 만들기</h3>
+            <p class="text-gray-400 mt-2">${a.kid_hint}</p>
+            <div class="mt-4 text-2xl font-bold text-[#33ff33]">${a.owned_count} / ${a.need_count}대</div>
+        </div>`;
+    }
+    return `<div class="info-card p-6 max-w-md mx-auto">
+        <h3 class="font-bold text-lg mb-4">${a.founded ? '✈️ 내 항공사' : '🎉 항공사 창업 가능!'}</h3>
+        ${a.founded ? `<div class="text-center text-4xl mb-2">${a.logo}</div><div class="text-center text-2xl font-bold mb-4">${a.name}</div>` : ''}
+        <input id="airline-name" class="w-full px-3 py-2 bg-black border rounded mb-2" placeholder="항공사 이름 (예: 하늘나라 항공)" value="${a.name||''}">
+        <input id="airline-logo" class="w-full px-3 py-2 bg-black border rounded mb-3" placeholder="로고 이모지 (예: ✈️)" value="${a.logo||'✈️'}" maxlength="4">
+        <button onclick="foundAirline()" class="w-full py-2 bg-[#ffaa00] text-black rounded font-bold">${a.founded?'이름 바꾸기':'항공사 창업하기!'}</button>
+        ${!a.founded ? '<p class="text-xs text-gray-500 mt-2 text-center">창업 축하금 ₩5,000,000 + 레인보우 리버리!</p>' : ''}
+    </div>`;
+}
+
+async function buyDaily(id) {
+    const res = await fetch('/api/features/daily-shop/buy', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({item_id:id}) });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    alert(d.message); await loadAll(); renderTab('daily');
+}
+async function buyMissionShop(id) {
+    const res = await fetch('/api/features/mission-shop/buy', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({mission_id:id}) });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    alert(d.message); await loadAll(); renderTab('missions');
+}
+async function createGift() {
+    const sel = document.getElementById('gift-item-select');
+    if (!sel) { alert('선물할 아이템이 없어요. 상점에서 먼저 사보세요!'); return; }
+    const item_id = sel.value;
+    const message = document.getElementById('gift-message').value;
+    const res = await fetch('/api/features/gift/create', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({item_id, message, from_name:'나'}) });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    alert(`선물 코드: ${d.code}\n${d.item_name}을(를) 선물했어요! 코드를 친구에게 알려주세요.`);
+    await loadAll(); renderTab('gifts');
+}
+async function redeemGift() {
+    const code = document.getElementById('gift-code-input').value;
+    const res = await fetch('/api/features/gift/redeem', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({code}) });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    alert(d.message); await loadAll(); renderTab('gifts');
+}
+async function foundAirline() {
+    const name = document.getElementById('airline-name').value;
+    const logo = document.getElementById('airline-logo').value || '✈️';
+    const res = await fetch('/api/features/airline', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({name, logo}) });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    alert(d.message); await loadAll(); renderTab('airline');
+}
+
 function renderWallet() {
     const txs = walletData.transactions || [];
     const sal = walletData.salary || {};
@@ -298,7 +474,9 @@ function renderWallet() {
                 <li>🚨 시나리오 A등급 → ₩600,000</li>
                 <li>🏆 주간 챌린지 → ₩1,500,000</li>
                 <li>🎁 <b>달성 보너스</b> — 비행·시간·뱃지·기체 등 (보너스 탭 참고)</li>
+                <li>☀️ 시즌 패스 · 🏷️ 오늘 특가 · 🗺️ 노선 도전 · 🔥 연속 비행</li>
             </ul>
+            <a href="/payslip" class="inline-block mt-4 px-4 py-2 bg-[#0A84FF] text-white rounded font-bold text-sm">📋 월급 명세서 보기</a>
             <div class="mt-4 p-3 bg-black rounded-lg">
                 <div class="text-xs text-gray-400">다음 급여까지</div>
                 <div class="font-bold text-[#ffaa00]">${sal.flights_until_salary||'?'}비행 남음 (${sal.progress_in_cycle||0}/${sal.cycle_size||20})</div>
@@ -377,13 +555,13 @@ async function equipDeco(aircraftId, slot, itemId) {
 }
 
 async function accelAircraft(id, name) {
-    const amount = prompt(`${name} 해금 가속 — 투자 금액 (₩)\n₩250,000 = 1시간 가속`, '1000000');
+    const amount = prompt(`${name} 연습 시간 채우기 — 돈을 넣으면 연습 시간이 빨리 찰 수 있어요!\n₩250,000 = 1시간`, '1000000');
     if (!amount) return;
     const res = await fetch('/api/hangar/accelerate', { method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({aircraft_id:id, amount: parseInt(amount)}) });
     const d = await res.json();
     if (d.error) { alert(d.error); return; }
-    alert(d.message + (d.auto_unlocked ? '\n🎉 해금 조건 달성!' : ''));
+    alert(d.message + (d.auto_unlocked ? '\n🎉 준비 완료! 이제 비행기를 받을 수 있어요!' : ''));
     await loadAll();
     const hangarRes = await fetch('/api/hangar/aircraft');
     hangarData = await hangarRes.json();

@@ -1,0 +1,8 @@
+[
+  {"id": "rt_icn_gmp", "name": "국내선 첫 비행", "route_match": ["ICN-GMP", "GMP-ICN", "ICN-PUS", "PUS-ICN"], "reward_money": 500000, "reward_item": "av_cap_ke", "shop_item_id": "ch_icn_gmp", "desc": "인천↔김포(또는 부산) 노선 비행"},
+  {"id": "rt_icn_nrt", "name": "일본 가기", "route_match": ["ICN-NRT", "NRT-ICN", "ICN-HND", "HND-ICN", "ICN-KIX"], "reward_money": 1500000, "reward_item": "lv_ana", "shop_item_id": "ch_icn_nrt", "desc": "한국↔일본 노선"},
+  {"id": "rt_icn_syd", "name": "호주 가기", "route_match": ["ICN-SYD", "SYD-ICN", "ICN-BNE", "BNE-ICN"], "reward_money": 3000000, "reward_item": "lv_qantas", "shop_item_id": "ch_icn_syd", "desc": "한국↔호주 장거리"},
+  {"id": "rt_icn_jfk", "name": "뉴욕 도전!", "route_match": ["ICN-JFK", "JFK-ICN", "ICN-EWR", "EWR-ICN"], "reward_money": 8000000, "reward_item": "dc_callsign_gold", "shop_item_id": "ch_icn_jfk", "desc": "한국↔뉴욕 대서양 횡단"},
+  {"id": "rt_icn_lhr", "name": "런던 가기", "route_match": ["ICN-LHR", "LHR-ICN", "ICN-CDG", "CDG-ICN"], "reward_money": 5000000, "reward_item": "lv_ba", "shop_item_id": "ch_icn_lhr", "desc": "한국↔유럽"},
+  {"id": "rt_long_8h", "name": "8시간 이상 비행", "min_hours": 8, "reward_money": 4000000, "reward_item": "dc_patch_world", "shop_item_id": "ch_long_8h", "desc": "한 번에 8시간 넘게 비행 기록"}
+]

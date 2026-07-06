@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}월급 명세서 - Pilot Dream{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">📋 나의 월급 명세서</h1>
+        <button onclick="window.print()" class="px-4 py-2 bg-[#ffaa00] text-black rounded font-bold text-sm no-print">인쇄하기</button>
+    </div>
+    <div id="payslip-content" class="info-card p-8 rounded-2xl border-2 border-[#ffaa00]/30">
+        <p class="text-gray-400">로딩 중...</p>
+    </div>
+    <div class="mt-4 text-center no-print">
+        <a href="/shop" class="text-sm text-[#0A84FF]">← 상점으로</a>
+    </div>
+</div>
+<style>
+@media print { .no-print, nav { display: none !important; } body { background: white; color: black; } }
+</style>
+<script>
+function fmt(n) { return '₩' + (n||0).toLocaleString('ko-KR'); }
+async function loadPayslip() {
+    const res = await fetch('/api/economy/payslip');
+    const d = await res.json();
+    const txs = d.transactions || [];
+    document.getElementById('payslip-content').innerHTML = `
+        <div class="text-center mb-6 border-b border-gray-600 pb-4">
+            <div class="text-2xl font-bold">${d.kid_title || '월급 명세서'}</div>
+            <div class="text-lg text-[#ffaa00] mt-1">${d.month_label}</div>
+            <div class="text-sm text-gray-400 mt-2">${d.rank?.icon||'✈️'} ${d.rank?.name||'파일럿'} · 비행 ${d.flight_count}회</div>
+            ${d.airline?.founded ? `<div class="text-sm mt-1">${d.airline.logo} ${d.airline.name} 항공사</div>` : ''}
+        </div>
+        <div class="grid grid-cols-3 gap-4 mb-6 text-center">
+            <div class="p-3 bg-black/40 rounded"><div class="text-xs text-gray-400">총 수입</div><div class="text-xl font-bold text-[#33ff33]">${fmt(d.total_income)}</div></div>
+            <div class="p-3 bg-black/40 rounded"><div class="text-xs text-gray-400">총 지출</div><div class="text-xl font-bold text-red-400">${fmt(d.total_expense)}</div></div>
+            <div class="p-3 bg-black/40 rounded"><div class="text-xs text-gray-400">순수입</div><div class="text-xl font-bold text-[#ffaa00]">${fmt(d.net)}</div></div>
+        </div>
+        <h3 class="font-bold mb-2">거래 내역</h3>
+        ${txs.length ? `<table class="w-full text-sm"><thead><tr class="text-gray-400 text-left"><th class="pb-2">날짜</th><th>내용</th><th class="text-right">금액</th></tr></thead>
+        <tbody>${txs.map(t => `<tr class="border-t border-gray-800"><td class="py-2">${t.date}</td><td>${t.detail}</td><td class="text-right ${t.amount>0?'text-[#33ff33]':'text-red-400'}">${t.amount>0?'+':''}${fmt(t.amount)}</td></tr>`).join('')}</tbody></table>`
+        : '<p class="text-gray-400">이번 달 거래가 없어요.</p>'}
+        <div class="mt-6 pt-4 border-t border-gray-600 text-right">
+            <span class="text-gray-400">현재 잔액: </span><span class="text-2xl font-bold text-[#ffaa00]">${fmt(d.balance)}</span>
+        </div>`;
+}
+loadPayslip();
+</script>
+{% endblock %}

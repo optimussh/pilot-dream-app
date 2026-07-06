@@ -1,0 +1,35 @@
+[
+  {
+    "id": "ms_quiz_flight",
+    "name": "오늘의 공부+비행 세트",
+    "desc": "오늘 퀴즈 80점 이상 + 비행 1회 기록",
+    "requirements": {"quiz_score_min": 80, "logbook_today": 1},
+    "shop_item_id": "ms_reward_quiz_flight",
+    "reward_item": "av_headset_pro",
+    "discount_price": 500000,
+    "original_price": 800000,
+    "icon": "🎯"
+  },
+  {
+    "id": "ms_flash_mission",
+    "name": "단어+미션 세트",
+    "desc": "오늘 플래시카드 3장 + 미션 1개 완료",
+    "requirements": {"flashcard_today": 3, "mission_today": 1},
+    "shop_item_id": "ms_reward_flash",
+    "reward_item": "av_acc_watch",
+    "discount_price": 600000,
+    "original_price": 800000,
+    "icon": "📇"
+  },
+  {
+    "id": "ms_scenario_flight",
+    "name": "훈련+비행 세트",
+    "desc": "오늘 시나리오 1개 + 비행 1회",
+    "requirements": {"scenario_today": 1, "logbook_today": 1},
+    "shop_item_id": "ms_reward_scenario",
+    "reward_item": "dc_ck_mascot",
+    "discount_price": 400000,
+    "original_price": 800000,
+    "icon": "🚨"
+  }
+]

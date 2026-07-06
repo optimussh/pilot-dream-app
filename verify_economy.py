@@ -81,7 +81,7 @@ with app.app_context():
         ))
     db.session.commit()
     result = process_salary(prog)
-    check(result is not None and result['amount'] == 10_000_000, 'salary at 20 flights')
+    check(result is not None and result['amount'] >= 10_000_000, 'salary at 20 flights')
 
     # Buy boost
     prog.wallet_balance = 5_000_000

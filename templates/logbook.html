@@ -506,6 +506,13 @@ function formatRewardAlert(result, baseMsg) {
         msg += '\n\n🎁 보너스 급여:';
         result.bonuses.forEach(b => msg += `\n  ${b.icon||'🎁'} ${b.title}: ₩${(b.amount_paid||b.amount).toLocaleString()}`);
     }
+    const ex = result.extras;
+    if (ex) {
+        if (ex.streak?.length) msg += '\n🔥 연속 비행 보너스!';
+        if (ex.routes?.length) ex.routes.forEach(r => msg += `\n🗺️ 노선 도전: ${r.name}!`);
+        if (ex.combos?.length) ex.combos.forEach(c => msg += `\n✈️ 콤보: ${c.name}!`);
+        if (ex.season?.length) msg += '\n☀️ 시즌 레벨 업!';
+    }
     return msg;
 }
 

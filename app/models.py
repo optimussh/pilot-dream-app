@@ -62,6 +62,7 @@ class UserProgress(db.Model):
     aircraft_loadouts = db.Column(db.Text, default='{}')
     transaction_log = db.Column(db.Text, default='[]')
     salary_bonuses_paid = db.Column(db.Text, default='[]')
+    pilot_meta = db.Column(db.Text, default='{}')
 
     def _json(self, field, default):
         try:

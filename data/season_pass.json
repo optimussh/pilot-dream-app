@@ -1,0 +1,33 @@
+{
+  "2026-07": {
+    "title": "여름 하늘 시즌",
+    "icon": "☀️",
+    "desc": "7월 한 달 동안 비행하고 공부하면 시즌 보상!",
+    "levels": [
+      {"level": 1, "xp": 5, "reward_money": 500000, "reward_item": null, "label": "시즌 시작"},
+      {"level": 2, "xp": 15, "reward_money": 800000, "reward_item": "lv_jeju_orange", "label": "오렌지 하늘"},
+      {"level": 3, "xp": 30, "reward_money": 1200000, "reward_item": null, "label": "구름 위 30"},
+      {"level": 4, "xp": 50, "reward_money": 2000000, "reward_item": "dc_trail_cyan", "label": "시원한 바람"},
+      {"level": 5, "xp": 75, "reward_money": 3000000, "reward_item": "lg_dash_sunset", "label": "석양 비행"},
+      {"level": 6, "xp": 100, "reward_money": 5000000, "reward_item": "av_uni_hawaiian", "label": "하와이안 데이"},
+      {"level": 7, "xp": 130, "reward_money": 6000000, "reward_item": null, "label": "열기구 구름"},
+      {"level": 8, "xp": 165, "reward_money": 8000000, "reward_item": "lg_dash_sunset", "label": "골든 아워"},
+      {"level": 9, "xp": 200, "reward_money": 10000000, "reward_item": null, "label": "여름 밤비행"},
+      {"level": 10, "xp": 250, "reward_money": 15000000, "reward_item": "av_wing_neon", "label": "시즌 마스터"}
+    ],
+    "xp_rules": {"logbook_flight": 3, "quiz_done": 2, "mission_done": 2, "flashcard": 1, "scenario_done": 2}
+  },
+  "default": {
+    "title": "파일럿 시즌",
+    "icon": "✈️",
+    "desc": "이번 달 활동으로 시즌 레벨을 올려보세요!",
+    "levels": [
+      {"level": 1, "xp": 5, "reward_money": 300000, "reward_item": null, "label": "레벨 1"},
+      {"level": 2, "xp": 20, "reward_money": 600000, "reward_item": null, "label": "레벨 2"},
+      {"level": 3, "xp": 40, "reward_money": 1000000, "reward_item": "dc_st_star", "label": "레벨 3"},
+      {"level": 4, "xp": 70, "reward_money": 1500000, "reward_item": null, "label": "레벨 4"},
+      {"level": 5, "xp": 100, "reward_money": 2500000, "reward_item": "av_cap_ke", "label": "레벨 5"}
+    ],
+    "xp_rules": {"logbook_flight": 3, "quiz_done": 2, "mission_done": 2, "flashcard": 1, "scenario_done": 2}
+  }
+}

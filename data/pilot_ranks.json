@@ -1,0 +1,8 @@
+[
+  {"id": "trainee", "name": "비행 학생", "icon": "📘", "min_hours": 0, "min_flights": 0, "salary_mult": 1.0, "desc": "꿈을 키우는 첫걸음!"},
+  {"id": "student", "name": "조종 학생", "icon": "🎓", "min_hours": 10, "min_flights": 3, "salary_mult": 1.05, "desc": "비행 연습을 쌓고 있어요"},
+  {"id": "private", "name": "개인 파일럿", "icon": "🛩️", "min_hours": 30, "min_flights": 10, "salary_mult": 1.1, "desc": "혼자 비행할 수 있어요!"},
+  {"id": "fo", "name": "부기장", "icon": "👨‍✈️", "min_hours": 100, "min_flights": 25, "salary_mult": 1.2, "desc": "항공사 부기장 승급!"},
+  {"id": "captain", "name": "기장", "icon": "👑", "min_hours": 300, "min_flights": 50, "salary_mult": 1.35, "desc": "비행의 주인!"},
+  {"id": "senior", "name": "최고 기장", "icon": "⭐", "min_hours": 800, "min_flights": 100, "salary_mult": 1.5, "desc": "전설의 파일럿!"}
+]

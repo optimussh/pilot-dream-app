@@ -114,9 +114,9 @@ function renderAircraftList(filter = null) {
     filtered.forEach(ac => {
         const card = document.createElement('div');
         card.className = 'info-card p-3 rounded-xl cursor-pointer hover:border-[#ffaa00] transition';
-        const badge = ac.owned ? '<span class="text-[10px] text-[#33ff33]">✓보유</span>'
-            : ac.unlocked ? '<span class="text-[10px] text-[#0A84FF]">해금가능</span>'
-            : `<span class="text-[10px] text-gray-500">${ac.progress_pct||0}%</span>`;
+        const badge = ac.owned ? '<span class="text-[10px] text-[#33ff33]">✓내 비행기</span>'
+            : (ac.unlocked||ac.ready) ? '<span class="text-[10px] text-[#0A84FF]">준비완료</span>'
+            : `<span class="text-[10px] text-gray-500">연습${ac.progress_pct||0}%</span>`;
         card.innerHTML = `
             <div class="flex justify-between items-start">
                 <div class="font-bold text-base">${ac.name}</div>
@@ -124,7 +124,7 @@ function renderAircraftList(filter = null) {
             </div>
             <div class="text-xs text-[#4da8da]">${ac.type}</div>
             <div class="text-xs mt-1 text-gray-400">${ac.typical_pax || ac.cap || ''}</div>
-            <div class="text-[10px] mt-1 text-gray-500">${ac.manufacturer||''} · 해금 ${ac.unlock_hours||0}h</div>
+            <div class="text-[10px] mt-1 text-gray-500">${ac.manufacturer||''} · 연습 ${ac.unlock_hours||ac.practice_hours||0}h</div>
         `;
         card.onclick = () => showAircraftDetail(ac);
         container.appendChild(card);
@@ -237,10 +237,10 @@ function showAircraftDetail(ac) {
             연료 소비: ${ac.fuel_burn} kg/km (대략)
         </div>
         <div class="mt-3 p-2 bg-black/40 rounded text-xs">
-            ${ac.owned ? '<span class="text-[#33ff33]">✓ 보유 중</span>' :
-              ac.unlocked ? `<a href="/hangar" class="text-[#ffaa00] hover:underline">행거에서 구매/해금 →</a>` :
-              `<span class="text-gray-400">해금 ${ac.unlock_hours}h 필요 (${ac.progress_pct||0}%)</span>
-               <a href="/hangar" class="text-[#0A84FF] ml-2 hover:underline">가속/구매 →</a>`}
+            ${ac.owned ? '<span class="text-[#33ff33]">✓ 내 비행기</span>' :
+              (ac.unlocked||ac.ready) ? `<a href="/hangar" class="text-[#ffaa00] hover:underline">비행기 창고에서 받기/사기 →</a>` :
+              `<span class="text-gray-400">연습 ${ac.unlock_hours||0}h 더 필요 (${ac.progress_pct||0}%)</span>
+               <a href="/hangar" class="text-[#0A84FF] ml-2 hover:underline">연습 채우기 →</a>`}
         </div>
     `;
 }

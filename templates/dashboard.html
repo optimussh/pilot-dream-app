@@ -14,6 +14,20 @@
         </div>
     </div>
 
+    <!-- 파일럿 등급 -->
+    <div id="dash-rank-banner" class="info-card p-4 mb-4 flex flex-wrap items-center gap-4 border border-[#0A84FF]/30 hidden">
+        <div class="text-4xl" id="dash-rank-icon">📘</div>
+        <div class="flex-1">
+            <div class="text-xs text-gray-400">나의 파일럿 등급</div>
+            <div class="font-bold text-lg" id="dash-rank-name">비행 학생</div>
+            <div class="text-[10px] text-gray-500" id="dash-rank-desc"></div>
+        </div>
+        <div class="text-right text-xs">
+            <div class="text-gray-400">연속 비행 기록</div>
+            <div class="font-bold text-[#ffaa00]" id="dash-logbook-streak">0일</div>
+        </div>
+    </div>
+
     <!-- 지갑 & 아바타 -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div class="info-card p-4 border border-[#ffaa00]/40 md:col-span-1">
@@ -40,7 +54,7 @@
         <div class="info-card p-4 md:col-span-1">
             <div class="text-xs text-gray-400">보유 기체</div>
             <div class="text-2xl font-bold text-[#33ff33]" id="dash-owned-count">0</div>
-            <a href="/hangar" class="text-[10px] text-[#0A84FF] hover:underline">행거에서 관리 →</a>
+            <a href="/hangar" class="text-[10px] text-[#0A84FF] hover:underline">비행기 창고 →</a>
         </div>
     </div>
 
@@ -137,10 +151,10 @@
             <div id="letter-content"></div>
         </div>
 
-        <!-- 해금 기종 -->
+        <!-- 준비 완료 기종 -->
         <div class="info-card p-6 rounded-2xl">
-            <h3 class="font-bold text-lg mb-2">🔓 해금된 기종</h3>
-            <p class="text-xs text-gray-500 mb-3">비행시간이 쌓이면 더 큰 기종이 열려요</p>
+            <h3 class="font-bold text-lg mb-2">✨ 준비 완료 비행기</h3>
+            <p class="text-xs text-gray-500 mb-3">연습 시간을 채우면 더 큰 비행기를 받을 수 있어요</p>
             <div id="unlocked-aircraft" class="flex flex-wrap gap-2 text-xs"></div>
         </div>
     </div>
@@ -187,6 +201,14 @@ async function loadDashboard() {
     const g = await gRes.json();
     const b = await bRes.json();
 
+    if (g.wallet?.features?.rank) {
+        const r = g.wallet.features.rank;
+        document.getElementById('dash-rank-banner').classList.remove('hidden');
+        document.getElementById('dash-rank-icon').textContent = r.icon;
+        document.getElementById('dash-rank-name').textContent = r.name;
+        document.getElementById('dash-rank-desc').textContent = r.desc + (r.salary_mult > 1 ? ` · 급여 ${Math.round((r.salary_mult-1)*100)}% 보너스` : '');
+        document.getElementById('dash-logbook-streak').textContent = (g.wallet.features.logbook_streak||0) + '일';
+    }
     if (g.wallet) {
         document.getElementById('dash-wallet').textContent = g.wallet.balance_formatted || '₩0';
         document.getElementById('dash-avatar').textContent = g.wallet.avatar_preview || '👨‍✈️';

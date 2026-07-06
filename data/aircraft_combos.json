@@ -1,0 +1,8 @@
+[
+  {"id": "combo_starter", "name": "스타터 콤보", "aircraft": ["b737", "a320"], "reward_money": 1000000, "reward_item": "av_cap_ke", "desc": "첫 두 기체를 모두 가지면 선물!"},
+  {"id": "combo_narrow", "name": "협동체 마스터", "aircraft": ["b737", "a320", "a321"], "reward_money": 3000000, "reward_item": "lv_jeju_orange", "desc": "국내선 3총사 콤보"},
+  {"id": "combo_dream", "name": "드림 라이너", "aircraft": ["b787", "a350"], "reward_money": 5000000, "reward_item": "lv_singapore", "desc": "꿈의 장거리 2종"},
+  {"id": "combo_cargo", "name": "카고 팀", "aircraft": ["b777f", "b747f"], "reward_money": 4000000, "reward_item": "lv_cargo_red", "desc": "화물기 듀오"},
+  {"id": "combo_jumbo", "name": "거대기 콤보", "aircraft": ["a380", "b747"], "reward_money": 10000000, "reward_item": "lv_emirates", "desc": "슈퍼 점보 2종"},
+  {"id": "combo_world", "name": "세계 일주", "aircraft": ["b737", "a330", "b777", "a380"], "reward_money": 15000000, "reward_item": "lv_rainbow", "desc": "소형→대형 4단계"}
+]

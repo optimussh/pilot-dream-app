@@ -52,6 +52,7 @@ def create_app():
                     ('aircraft_loadouts', "TEXT DEFAULT '{}'"),
                     ('transaction_log', "TEXT DEFAULT '[]'"),
                     ('salary_bonuses_paid', "TEXT DEFAULT '[]'"),
+                    ('pilot_meta', "TEXT DEFAULT '{}'"),
                 ]
                 with db.engine.connect() as conn:
                     for col_name, col_def in migrations:

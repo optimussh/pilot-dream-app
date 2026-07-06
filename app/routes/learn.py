@@ -122,6 +122,11 @@ def mission_complete():
     if hours is None:
         return jsonify({'error': msg}), 400
     bonuses, bonus_total = process_salary_bonuses(prog)
+    try:
+        from app.services.pilot_features import add_season_xp
+        add_season_xp(prog, 'mission_done')
+    except Exception:
+        pass
     return jsonify({
         'status': 'ok', 'message': msg, 'virtual_hours': hours,
         'money_earned': money + bonus_total, 'bonuses': bonuses,
@@ -215,6 +220,11 @@ def quiz_submit():
     try_unlock_badges(prog)
     bonus_extra = {'quiz_perfect': score >= 100}
     bonuses, bonus_total = process_salary_bonuses(prog, bonus_extra)
+    try:
+        from app.services.pilot_features import add_season_xp
+        season_rewards = add_season_xp(prog, 'quiz_done')
+    except Exception:
+        season_rewards = []
     db.session.commit()
     return jsonify({
         'score': score, 'correct': correct, 'total': len(questions),
@@ -254,6 +264,13 @@ def flashcard_learn():
     log_activity(prog, 'flashcard', f'learned={len(card_ids)}')
     try_unlock_badges(prog)
     bonuses, bonus_total = process_salary_bonuses(prog)
+    season_rewards = []
+    if new_count > 0:
+        try:
+            from app.services.pilot_features import add_season_xp
+            season_rewards = add_season_xp(prog, 'flashcard', new_count)
+        except Exception:
+            pass
     db.session.commit()
     return jsonify({
         'learned_total': len(learned),
@@ -261,6 +278,7 @@ def flashcard_learn():
         'streak': prog.flashcard_streak,
         'money_earned': flash_money + bonus_total,
         'bonuses': bonuses,
+        'season_rewards': season_rewards,
         'wallet_balance': prog.wallet_balance or 0,
     })
 
@@ -329,6 +347,12 @@ def scenario_complete():
 
     try_unlock_badges(prog)
     bonuses, bonus_total = process_salary_bonuses(prog)
+    season_rewards = []
+    try:
+        from app.services.pilot_features import add_season_xp
+        season_rewards = add_season_xp(prog, 'scenario_done')
+    except Exception:
+        pass
     db.session.commit()
     return jsonify({
         'status': 'ok',
@@ -338,6 +362,7 @@ def scenario_complete():
         'daily_done': sc_day.get('all_done', False),
         'money_earned': scenario_money + bonus_money + bonus_total,
         'bonuses': bonuses,
+        'season_rewards': season_rewards,
         'wallet_balance': prog.wallet_balance or 0,
     })
 

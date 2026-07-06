@@ -83,6 +83,15 @@ def add_logbook_entry():
         prog = get_or_create_progress()
         log_activity(prog, 'logbook', data.get('flight_number', ''))
         rewards_result = process_all_rewards(prog)
+        try:
+            from app.services.pilot_features import process_logbook_extras
+            entry = LogbookEntry.query.order_by(LogbookEntry.id.desc()).first()
+            extras = process_logbook_extras(prog, entry)
+            if rewards_result is None:
+                rewards_result = {}
+            rewards_result['extras'] = extras
+        except Exception:
+            pass
     except Exception:
         pass
     
@@ -150,6 +159,8 @@ def add_logbook_entry():
         if rewards_result.get('bonuses'):
             resp["bonuses"] = rewards_result['bonuses']
             resp["bonus_total"] = rewards_result.get('bonus_total', 0)
+        if rewards_result.get('extras'):
+            resp["extras"] = rewards_result['extras']
         prog = UserProgress.query.first()
         resp["wallet_balance"] = (prog.wallet_balance or 0) if prog else 0
     return jsonify(resp)

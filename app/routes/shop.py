@@ -188,11 +188,17 @@ def hangar_buy():
     if not ok:
         return jsonify({'error': msg}), 400
     bonuses, bonus_total = process_salary_bonuses(prog)
+    try:
+        from app.services.pilot_features import check_aircraft_combos
+        combos = check_aircraft_combos(prog)
+    except Exception:
+        combos = []
     return jsonify({
         'status': 'ok',
         'message': msg,
         'bonuses': bonuses,
         'bonus_total': bonus_total,
+        'combos': combos,
         'wallet': get_wallet_summary(prog),
     })
 
@@ -245,3 +251,110 @@ def hangar_equip_deco():
     if not ok:
         return jsonify({'error': msg}), 400
     return jsonify({'status': 'ok', 'message': msg})
+
+
+@bp.route('/payslip')
+def payslip_page():
+    return render_template('payslip.html')
+
+
+@bp.route('/api/features/summary')
+def features_summary_api():
+    from app.services.pilot_features import get_features_summary
+    return jsonify(get_features_summary(get_or_create_progress()))
+
+
+@bp.route('/api/features/season')
+def season_api():
+    from app.services.pilot_features import get_season_status
+    return jsonify(get_season_status(get_or_create_progress()))
+
+
+@bp.route('/api/features/daily-shop')
+def daily_shop_api():
+    from app.services.pilot_features import get_daily_shop
+    return jsonify({'items': get_daily_shop(get_or_create_progress())})
+
+
+@bp.route('/api/features/daily-shop/buy', methods=['POST'])
+def daily_shop_buy():
+    from app.services.pilot_features import get_daily_shop
+    from app.services.economy import spend_money
+    data = request.get_json() or {}
+    item_id = data.get('item_id')
+    prog = get_or_create_progress()
+    daily = {i['id']: i for i in get_daily_shop(prog)}
+    if item_id not in daily:
+        return jsonify({'error': '오늘의 특가 상품이 아니에요!'}), 400
+    item = daily[item_id]
+    price = item.get('sale_price', item['price'])
+    inv = prog._json('inventory', [])
+    if item_id in inv:
+        return jsonify({'error': '이미 가지고 있어요!'}), 400
+    ok, msg = spend_money(prog, price, f"오늘의 특가: {item['name']}")
+    if not ok:
+        return jsonify({'error': msg}), 400
+    inv.append(item_id)
+    prog.set_json('inventory', inv)
+    db.session.commit()
+    return jsonify({'status': 'ok', 'message': f"{item['name']} 특가 구매 완료!"})
+
+
+@bp.route('/api/features/mission-shop')
+def mission_shop_api():
+    from app.services.pilot_features import get_mission_shop_status
+    return jsonify({'items': get_mission_shop_status(get_or_create_progress())})
+
+
+@bp.route('/api/features/mission-shop/buy', methods=['POST'])
+def mission_shop_buy_api():
+    from app.services.pilot_features import buy_mission_shop_item
+    prog = get_or_create_progress()
+    ok, msg = buy_mission_shop_item(prog, (request.get_json() or {}).get('mission_id'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({'status': 'ok', 'message': msg, 'wallet': get_wallet_summary(prog)})
+
+
+@bp.route('/api/features/routes')
+def routes_api():
+    from app.services.pilot_features import get_route_challenge_status
+    return jsonify({'challenges': get_route_challenge_status(get_or_create_progress())})
+
+
+@bp.route('/api/features/airline', methods=['GET', 'POST'])
+def airline_api():
+    from app.services.pilot_features import get_airline_info, found_airline
+    prog = get_or_create_progress()
+    if request.method == 'GET':
+        return jsonify(get_airline_info(prog))
+    data = request.get_json() or {}
+    ok, msg = found_airline(prog, data.get('name'), data.get('logo', '✈️'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({'status': 'ok', 'message': msg, 'airline': get_airline_info(prog)})
+
+
+@bp.route('/api/features/gift/create', methods=['POST'])
+def gift_create_api():
+    from app.services.pilot_features import create_gift_code
+    data = request.get_json() or {}
+    ok, result = create_gift_code(get_or_create_progress(), data.get('item_id'), data.get('message', ''), data.get('from_name', '파일럿'))
+    if not ok:
+        return jsonify({'error': result}), 400
+    return jsonify({'status': 'ok', **result})
+
+
+@bp.route('/api/features/gift/redeem', methods=['POST'])
+def gift_redeem_api():
+    from app.services.pilot_features import redeem_gift_code
+    ok, msg = redeem_gift_code(get_or_create_progress(), (request.get_json() or {}).get('code'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({'status': 'ok', 'message': msg, 'wallet': get_wallet_summary(get_or_create_progress())})
+
+
+@bp.route('/api/economy/payslip')
+def payslip_api():
+    from app.services.pilot_features import get_payslip
+    return jsonify(get_payslip(get_or_create_progress(), request.args.get('month')))
