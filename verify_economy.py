@@ -6,7 +6,7 @@ from app.services.gamification import get_or_create_progress
 from app.services.gamification import load_json
 from app.services.economy import (
     award_money, buy_item, sell_item, process_salary, process_salary_bonuses,
-    get_wallet_summary, get_all_aircraft_status,
+    get_wallet_summary, get_all_aircraft_status, get_bonus_progress, claim_salary_bonus,
 )
 
 app = create_app()
@@ -52,6 +52,16 @@ with app.app_context():
     check(len(bonuses) >= 20, f'salary bonuses: {len(bonuses)}')
     newly, total = process_salary_bonuses(prog)
     check(isinstance(newly, list), 'bonus check runs')
+
+    progress = get_bonus_progress(prog)
+    claimable = [b for b in progress if b.get('claimable')]
+    if claimable:
+        bid = claimable[0]['id']
+        bal_before = prog.wallet_balance or 0
+        ok, result = claim_salary_bonus(prog, bid)
+        check(ok and result['amount_paid'] > 0, f'claim bonus: {bid}')
+        check(bid not in [b['id'] for b in get_bonus_progress(prog) if b.get('claimable')], 'bonus no longer claimable')
+        check((prog.wallet_balance or 0) > bal_before, 'wallet increased after claim')
 
     aircraft = load_json('aircraft.json')
     check(len(aircraft) >= 40, f'aircraft catalog has {len(aircraft)} types')

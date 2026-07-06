@@ -74,6 +74,8 @@
 .hangar-card { background: #0a0a0a; border: 1px solid #2c2c2e; border-radius: 12px; padding: 16px; }
 .hangar-card.owned { border-color: #33ff33/50; }
 .hangar-card.active-ac { border-color: #ffaa00; box-shadow: 0 0 12px #ffaa0033; }
+.bonus-claimed { opacity: 0.55; background: #141414 !important; border-color: #333 !important; filter: grayscale(0.65); }
+.bonus-claimable { border-color: #33ff33 !important; box-shadow: 0 0 8px #33ff3322; }
 </style>
 {% endblock %}
 
@@ -150,7 +152,10 @@ function updateTabCounts() {
     document.querySelectorAll('.shop-tab').forEach(t => {
         const tab = t.dataset.tab;
         const base = TAB_BASE[tab] || tab;
-        if (tab === 'bonuses') t.textContent = `${base} (${bonusData.achieved||0}/${bonusData.total||0})`;
+        if (tab === 'bonuses') {
+            const claim = bonusData.claimable ? ` · ${bonusData.claimable}받기` : '';
+            t.textContent = `${base} (${bonusData.achieved||0}/${bonusData.total||0}${claim})`;
+        }
         else if (cats[tab]) t.textContent = `${base} (${cats[tab].length})`;
         else t.textContent = base;
     });
@@ -188,29 +193,48 @@ function renderTab(tab) {
 
 function renderBonuses() {
     const byCat = bonusData.by_category || {};
+    const claimable = bonusData.claimable || 0;
     let html = `<div class="mb-4 p-3 bg-[#001a00] rounded-lg text-sm">
-        달성 <b class="text-[#33ff33]">${bonusData.achieved||0}</b> / ${bonusData.total||0} 보너스 급여
+        받은 보너스 <b class="text-[#33ff33]">${bonusData.achieved||0}</b> / ${bonusData.total||0}
+        ${claimable ? ` · <b class="text-[#ffaa00]">받을 수 있어요 ${claimable}개!</b>` : ''}
     </div>`;
     for (const [cat, list] of Object.entries(byCat)) {
         html += `<h3 class="font-bold text-sm mb-2 mt-4 text-[#88aa88]">${cat}</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">`;
         for (const b of list) {
             const done = b.achieved;
-            const pct = b.target > 0 ? Math.min(100, Math.round(b.current / b.target * 100)) : (done ? 100 : 0);
-            html += `<div class="item-card ${done?'owned':''}">
+            const canClaim = b.claimable;
+            const pct = b.target > 0 ? Math.min(100, Math.round(b.current / b.target * 100)) : (done || canClaim ? 100 : 0);
+            const cardCls = done ? 'bonus-claimed' : (canClaim ? 'bonus-claimable' : '');
+            html += `<div class="item-card ${cardCls}">
                 <div class="flex justify-between items-start">
                     <span class="text-2xl">${b.icon||'🎁'}</span>
-                    <span class="text-[10px] ${done?'text-[#33ff33]':'text-[#ffaa00]'}">${done?'✓ 수령완료':b.amount_formatted}</span>
+                    <span class="text-[10px] ${done?'text-gray-500':canClaim?'text-[#33ff33]':'text-[#ffaa00]'}">${done?'✓ 받음':b.amount_formatted}</span>
                 </div>
                 <div class="font-bold text-sm">${b.title}</div>
                 <div class="text-[10px] text-gray-500">${b.desc}</div>
-                ${!done ? `<div class="h-1 bg-black rounded mt-2"><div class="h-1 bg-[#0A84FF] rounded" style="width:${pct}%"></div></div>
+                ${canClaim ? `<button onclick="claimBonus('${b.id}')" class="mt-3 w-full py-2 bg-[#33ff33] text-black rounded font-bold text-xs hover:bg-white transition">🎁 보너스 받기 ${b.amount_formatted}</button>` : ''}
+                ${done ? '<div class="text-[10px] text-gray-500 mt-2">✓ 보너스를 받았어요</div>' : ''}
+                ${!done && !canClaim ? `<div class="h-1 bg-black rounded mt-2"><div class="h-1 bg-[#0A84FF] rounded" style="width:${pct}%"></div></div>
                 <div class="text-[10px] text-gray-400 mt-1">${b.current} / ${b.target}</div>` : ''}
             </div>`;
         }
         html += '</div>';
     }
     return html;
+}
+
+async function claimBonus(id) {
+    const res = await fetch('/api/economy/bonuses/claim', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bonus_id: id }),
+    });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    alert(d.message);
+    await loadAll();
+    renderTab('bonuses');
 }
 
 function renderItemCard(item, tab) {

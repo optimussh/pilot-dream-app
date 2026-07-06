@@ -6,7 +6,7 @@ from app.services.economy import (
     buy_item, sell_item, equip_avatar, buy_aircraft, accelerate_unlock,
     set_active_aircraft, equip_aircraft_deco, get_aircraft_catalog,
     format_krw, SELL_RATIO, get_effective_hours, get_bonus_progress,
-    process_salary_bonuses,
+    process_salary_bonuses, claim_salary_bonus,
 )
 
 bp = Blueprint('shop', __name__)
@@ -39,7 +39,26 @@ def bonuses_api():
         'bonuses': bonuses,
         'by_category': by_cat,
         'achieved': sum(1 for b in bonuses if b['achieved']),
+        'claimable': sum(1 for b in bonuses if b.get('claimable')),
         'total': len(bonuses),
+    })
+
+
+@bp.route('/api/economy/bonuses/claim', methods=['POST'])
+def bonus_claim_api():
+    data = request.get_json() or {}
+    bonus_id = data.get('bonus_id')
+    if not bonus_id:
+        return jsonify({'error': 'bonus_id 필요'}), 400
+    prog = get_or_create_progress()
+    ok, result = claim_salary_bonus(prog, bonus_id)
+    if not ok:
+        return jsonify({'error': result}), 400
+    return jsonify({
+        'status': 'ok',
+        'message': f"{result['icon']} {result['title']} 보너스 {result['amount_formatted']} 받았어요!",
+        'bonus': result,
+        'wallet': get_wallet_summary(prog),
     })
 
 

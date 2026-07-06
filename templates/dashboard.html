@@ -223,15 +223,24 @@ async function loadDashboard() {
         document.getElementById('dash-salary-bar').style.width = pct + '%';
     }
     if (g.wallet?.bonuses) {
-        const pending = g.wallet.bonuses.filter(b => !b.achieved).slice(0, 6);
+        const claimable = g.wallet.bonuses.filter(b => b.claimable);
+        const pending = claimable.length
+            ? claimable.slice(0, 6)
+            : g.wallet.bonuses.filter(b => !b.achieved && !b.claimable).slice(0, 6);
         document.getElementById('dash-bonuses').innerHTML = pending.length ? pending.map(b => {
+            if (b.claimable) {
+                return `<a href="/shop" onclick="setTimeout(()=>document.querySelector('[data-tab=bonuses]')?.click(),500)" class="block p-2 bg-[#001a00] border border-[#33ff33]/40 rounded-lg hover:border-[#33ff33]">
+                    <div class="flex justify-between"><span>${b.icon} ${b.title}</span><span class="text-[#33ff33] font-bold">받기!</span></div>
+                    <div class="text-[10px] text-[#ffaa00] mt-0.5">${b.amount_formatted} · 상점 보너스 탭에서 받으세요</div>
+                </a>`;
+            }
             const pct = b.target > 0 ? Math.min(100, Math.round(b.current / b.target * 100)) : 0;
             return `<div class="p-2 bg-black/40 rounded-lg">
                 <div class="flex justify-between"><span>${b.icon} ${b.title}</span><span class="text-[#ffaa00]">${b.amount_formatted}</span></div>
                 <div class="h-1 bg-black rounded mt-1"><div class="h-1 bg-[#0A84FF] rounded" style="width:${pct}%"></div></div>
                 <div class="text-[10px] text-gray-500 mt-0.5">${b.current}/${b.target}</div>
             </div>`;
-        }).join('') : '<p class="text-gray-400">모든 보너스를 달성했어요! 🎉</p>';
+        }).join('') : '<p class="text-gray-400">모든 보너스를 받았어요! 🎉</p>';
     }
     document.getElementById('dash-total-hours').textContent = g.total_hours;
     document.getElementById('dash-virtual').textContent = '+' + g.virtual_hours;

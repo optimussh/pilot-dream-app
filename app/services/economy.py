@@ -260,17 +260,36 @@ def get_bonus_progress(prog):
     for bonus in get_salary_bonuses():
         bid = bonus['id']
         achieved = bid in paid
-        met = achieved or _bonus_met(prog, bonus, stats)
+        condition_met = _bonus_met(prog, bonus, stats)
         current = _bonus_current(prog, bonus, stats)
         result.append({
             **bonus,
             'achieved': achieved,
-            'met': met,
+            'met': condition_met,
+            'claimable': condition_met and not achieved,
             'current': current,
             'target': bonus['value'],
             'amount_formatted': format_krw(bonus['amount']),
         })
     return result
+
+
+def claim_salary_bonus(prog, bonus_id):
+    """달성했지만 미수령 보너스를 수동으로 받기"""
+    paid = _bonus_paid_set(prog)
+    if bonus_id in paid:
+        return False, '이미 받은 보너스예요.'
+    bonus = next((b for b in get_salary_bonuses() if b['id'] == bonus_id), None)
+    if not bonus:
+        return False, '보너스를 찾을 수 없어요.'
+    stats = _logbook_stats()
+    if not _bonus_met(prog, bonus, stats):
+        return False, '아직 조건을 달성하지 못했어요.'
+    amount = bonus['amount']
+    award_money(prog, amount, f"보너스: {bonus['title']}", 'bonus')
+    _mark_bonus_paid(prog, bonus_id)
+    db.session.commit()
+    return True, {**bonus, 'amount_paid': amount, 'amount_formatted': format_krw(amount)}
 
 
 def _bonus_current(prog, bonus, stats):
