@@ -81,7 +81,6 @@ def create_app():
         career,
         learn,
         shop,
-        games,
     )
 
     app.register_blueprint(main.bp)
@@ -94,6 +93,10 @@ def create_app():
     app.register_blueprint(career.bp)
     app.register_blueprint(learn.bp)
     app.register_blueprint(shop.bp)
-    app.register_blueprint(games.bp)
+
+    from app.services.game_bridge import GAMES_ENABLED
+    if GAMES_ENABLED:
+        from app.routes import games
+        app.register_blueprint(games.bp)
 
     return app

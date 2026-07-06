@@ -1,4 +1,7 @@
 """비행 게임 허브: 세션, 보상, 런처 생성"""
+# False = 메뉴·URL 모두 차단 (학습 집중 모드)
+GAMES_ENABLED = False
+
 from datetime import datetime
 from app.models import db
 from app.services.gamification import load_json, log_activity, today_str, award_virtual_hours

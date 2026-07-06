@@ -1,6 +1,6 @@
 """비행 게임 허브 스모크 테스트"""
 from app import create_app
-from app.services.game_bridge import get_games, build_launcher_bat
+from app.services.game_bridge import GAMES_ENABLED, get_games, build_launcher_bat
 
 app = create_app()
 client = app.test_client()
@@ -20,6 +20,21 @@ def check(cond, msg):
 
 with app.app_context():
     print('=== Games Hub Verification ===')
+    print(f'  GAMES_ENABLED = {GAMES_ENABLED}')
+
+    if not GAMES_ENABLED:
+        for path in ['/games', '/games/flightgear', '/api/games/catalog']:
+            r = client.get(path)
+            check(r.status_code == 404, f'blocked GET {path} → 404')
+        check(len(get_games()) >= 2, 'catalog data still on disk')
+        print(f'\n=== Results: {passed} passed, {len(errors)} failed ===')
+        if errors:
+            for e in errors:
+                print(f'  - {e}')
+            raise SystemExit(1)
+        print('Games disabled — all routes blocked!')
+        raise SystemExit(0)
+
     check(len(get_games()) >= 2, 'flight_games.json has 2+ games')
     bat = build_launcher_bat()
     check('fgfs' in bat and 'RKSI' in bat, 'launcher bat contains fgfs and airport')
