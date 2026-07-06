@@ -1,0 +1,101 @@
+[
+  {
+    "code": "KE",
+    "name": "대한항공",
+    "name_en": "Korean Air",
+    "type": "FSC",
+    "alliance": "SkyTeam",
+    "hub": "ICN, GMP",
+    "fleet": ["Boeing 777-300ER", "Boeing 787-9 Dreamliner", "Airbus A380-800", "Airbus A350-900", "Airbus A330-300", "Boeing 737-800"],
+    "desc": "대한민국 국적기 1호 항공사. 1969년 설립, 인천·김포를 거점으로 아시아·유럽·미주·대양주 장거리 노선을 운항합니다. SkyTeam 얼라이언스 멤버이며, 2020년대 들어 A350·B787 등 차세대 기종으로 연료 효율을 높였습니다.",
+    "major_flights": ["KE001", "KE031", "KE044", "KE061"]
+  },
+  {
+    "code": "OZ",
+    "name": "아시아나항공",
+    "name_en": "Asiana Airlines",
+    "type": "FSC",
+    "alliance": "Star Alliance",
+    "hub": "ICN, GMP",
+    "fleet": ["Airbus A350-900", "Airbus A330-300", "Airbus A321-200", "Airbus A320-200", "Boeing 777-200ER"],
+    "desc": "1988년 설립된 대한민국 2대 FSC. Star Alliance 멤버로 유럽·미주·동남아 노선에 강점이 있으며, 에어서울·에어인천 등 자회사를 두고 있습니다. 2020년대 대한항공과의 통합이 진행 중입니다.",
+    "major_flights": ["OZ201", "OZ221", "OZ501", "OZ741"]
+  },
+  {
+    "code": "7C",
+    "name": "제주항공",
+    "name_en": "Jeju Air",
+    "type": "LCC",
+    "alliance": null,
+    "hub": "ICN, CJU, GMP",
+    "fleet": ["Boeing 737-800", "Boeing 737-900", "Airbus A321neo"],
+    "desc": "2005년 설립된 국내 최초·최대 LCC. 제주 노선을 기반으로 일본·동남아·대만 등 단거리 국제선을 확대했습니다. B737-800이 주력이며, A321neo로 국제선 수익성을 높이고 있습니다.",
+    "major_flights": ["7C1101", "7C1102", "7C1401", "7C2401"]
+  },
+  {
+    "code": "LJ",
+    "name": "진에어",
+    "name_en": "Jin Air",
+    "type": "LCC",
+    "alliance": null,
+    "hub": "ICN, GMP",
+    "fleet": ["Boeing 737-800", "Boeing 737-900"],
+    "desc": "대한항공 그룹 소속 LCC. 2008년 설립, 인천·김포를 거점으로 국내선·일본·동남아·괌 등을 운항합니다. 대한항공과의 네트워크 연계가 강점입니다.",
+    "major_flights": ["LJ111", "LJ201", "LJ221", "LJ501"]
+  },
+  {
+    "code": "TW",
+    "name": "티웨이항공",
+    "name_en": "T'way Air",
+    "type": "LCC",
+    "alliance": null,
+    "hub": "ICN, GMP",
+    "fleet": ["Boeing 737-800", "Airbus A330-200"],
+    "desc": "2010년대 재출범한 LCC. 제주·인천·김포를 거점으로 국내선과 일본·동남아·괌 노선을 운영합니다. A330을 투입해 중장거리 국제선도 확대 중입니다.",
+    "major_flights": ["TW101", "TW301", "TW303", "TW405"]
+  },
+  {
+    "code": "BX",
+    "name": "에어부산",
+    "name_en": "Air Busan",
+    "type": "LCC",
+    "alliance": null,
+    "hub": "PUS, GMP",
+    "fleet": ["Airbus A321-200", "Airbus A320-200", "Boeing 737-800"],
+    "desc": "아시아나항공 그룹 소속 LCC. 부산 김해공항(PUS)을 거점으로 국내선·일본·동남아·대만 노선을 운항합니다. 부산 지역 승객에게 강한 브랜드 인지도를 가집니다.",
+    "major_flights": ["BX813", "BX814", "BX748", "BX791"]
+  },
+  {
+    "code": "RS",
+    "name": "에어서울",
+    "name_en": "Air Seoul",
+    "type": "LCC",
+    "alliance": null,
+    "hub": "ICN",
+    "fleet": ["Airbus A321-200", "Airbus A320-200"],
+    "desc": "아시아나항공 그룹 소속 LCC. 2016년 설립, 인천을 거점으로 일본·동남아·대만 등 중단거리 국제선에 특화했습니다. A321이 주력 기종입니다.",
+    "major_flights": ["RS801", "RS811", "RS901", "RS711"]
+  },
+  {
+    "code": "YP",
+    "name": "에어프레미아",
+    "name_en": "Air Premia",
+    "type": "LCC",
+    "alliance": null,
+    "hub": "ICN",
+    "fleet": ["Boeing 787-9 Dreamliner"],
+    "desc": "2020년 설립된 장거리 LCC. B787-9만 운용하며 미주·동남아 장거리 노선에 특화했습니다. 프리미엄 이코노미 좌석으로 차별화를 꾀하는 신생 항공사입니다.",
+    "major_flights": ["YP601", "YP651", "YP701", "YP751"]
+  },
+  {
+    "code": "JQ",
+    "name": "제스타항공",
+    "name_en": "Jetstar Airways",
+    "type": "LCC",
+    "alliance": null,
+    "hub": "SYD, MEL, BNE",
+    "fleet": ["Airbus A320-200", "Airbus A321neo", "Boeing 787-8 Dreamliner"],
+    "desc": "2003년 설립된 호주 저비용 항공사. 콴타스 그룹 소속으로 시드니·멜버른·브리즈번을 거점으로 호주 국내선과 아시아·태평양 국제선을 운항합니다. A320·A321neo가 국내·단거리 노선, B787-8이 장거리 국제선을 담당합니다.",
+    "major_flights": ["JQ401", "JQ402", "JQ801", "JQ570", "JQ15"]
+  }
+]

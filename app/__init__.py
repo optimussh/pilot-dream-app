@@ -13,18 +13,46 @@ def create_app():
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'pilot-dream-dev-key')
     app.config['DEBUG'] = os.environ.get('FLASK_ENV') != 'production'
     
-    # Ensure instance folder exists (important for SQLite)
-    os.makedirs(app.instance_path, exist_ok=True)
+    # Database 설정 (Supabase PostgreSQL 우선, 없으면 로컬 SQLite)
+    database_url = os.environ.get('DATABASE_URL')
     
-    # SQLite database (persistent via Docker volume)
-    db_path = os.path.join(app.instance_path, 'pilot_dream.db')
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+    if database_url:
+        # Supabase / PostgreSQL 사용
+        # Supabase가 가끔 'postgres://'로 주는데 SQLAlchemy는 'postgresql://'을 선호
+        if database_url.startswith("postgres://"):
+            database_url = database_url.replace("postgres://", "postgresql://", 1)
+        
+        app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+    else:
+        # 로컬 개발용 SQLite
+        os.makedirs(app.instance_path, exist_ok=True)
+        db_path = os.path.join(app.instance_path, 'pilot_dream.db')
+        app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
+    
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
 
     with app.app_context():
         db.create_all()
+        try:
+            from sqlalchemy import inspect, text
+            inspector = inspect(db.engine)
+            if inspector.has_table('user_progress'):
+                cols = {c['name'] for c in inspector.get_columns('user_progress')}
+                if 'daily_learning' not in cols:
+                    with db.engine.connect() as conn:
+                        conn.execute(text(
+                            "ALTER TABLE user_progress ADD COLUMN daily_learning TEXT DEFAULT '{}'"
+                        ))
+                        conn.commit()
+        except Exception:
+            pass
+        try:
+            from app.services.content_bank import ensure_all_banks
+            ensure_all_banks()
+        except Exception:
+            pass
 
     # Register all blueprints
     from app.routes import (
@@ -35,7 +63,8 @@ def create_app():
         logbook,
         badges,
         atc,
-        career
+        career,
+        learn
     )
 
     app.register_blueprint(main.bp)
@@ -46,5 +75,6 @@ def create_app():
     app.register_blueprint(badges.bp)
     app.register_blueprint(atc.bp)
     app.register_blueprint(career.bp)
+    app.register_blueprint(learn.bp)
 
     return app

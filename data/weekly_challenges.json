@@ -1,0 +1,10 @@
+[
+  {"id": "w_atc_15", "title": "ATC 마스터", "desc": "이번 주 ATC 영어 15문장 이상 듣기", "reward_hours": 2.0, "type": "atc", "target": 15, "icon": "🎧"},
+  {"id": "w_quiz_80", "title": "퀴즈 에이스", "desc": "퀴즈에서 80점 이상 1회 달성", "reward_hours": 2.5, "type": "quiz", "target": 80, "icon": "🧠"},
+  {"id": "w_logbook_5", "title": "비행 일지왕", "desc": "이번 주 로그북에 5회 기록", "reward_hours": 3.0, "type": "logbook", "target": 5, "icon": "📖"},
+  {"id": "w_flash_25", "title": "용어 박사", "desc": "플래시카드 25개 학습 완료", "reward_hours": 2.0, "type": "flashcard", "target": 25, "icon": "📇"},
+  {"id": "w_scenario_2", "title": "위기관리 파일럿", "desc": "시나리오 2개 완료", "reward_hours": 3.0, "type": "scenario", "target": 2, "icon": "🚨"},
+  {"id": "w_mission_5d", "title": "미션 헌터", "desc": "5일 연속 오늘의 미션 완료", "reward_hours": 4.0, "type": "mission_streak", "target": 5, "icon": "🎯"},
+  {"id": "w_planner_3", "title": "플래너 프로", "desc": "비행 계획 3회 계산하기", "reward_hours": 2.0, "type": "planner", "target": 3, "icon": "✈️"},
+  {"id": "w_aircraft_5", "title": "기종 컬렉터", "desc": "서로 다른 기종 5종 비행 기록", "reward_hours": 3.5, "type": "aircraft_variety", "target": 5, "icon": "🛩️"}
+]

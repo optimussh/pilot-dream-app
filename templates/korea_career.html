@@ -95,6 +95,17 @@
         </div>
     </div>
 
+    <div class="mt-8 info-card p-8 rounded-2xl border border-[#33ff33]/30">
+        <div class="flex items-center gap-3 mb-6">
+            <span class="text-3xl">🇰🇷</span>
+            <h2 class="text-2xl font-bold text-[#33ff33]">한국 항공사 정보</h2>
+        </div>
+        <p class="text-sm text-gray-400 mb-6">FSC·LCC 포함 주요 한국 항공사 8곳 · 각 항공사 주요 항공편 4개 (flights_db.json 연동)</p>
+        <div id="korean-airlines-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <p class="text-gray-400 text-sm">항공사 정보 로딩 중...</p>
+        </div>
+    </div>
+
     <div class="mt-8 info-card p-6 rounded-xl">
         <h3 class="font-bold mb-3">📊 실제 참고 데이터 (2026년 기준, 대략적)</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -117,4 +128,49 @@
         가장 정확한 정보는 <strong>한국항공대학교</strong>, <strong>한서대학교 비행교육원</strong>, <strong>공군사관학교</strong> 공식 모집요강에서 확인하세요.
     </div>
 </div>
+
+<script src="/static/js/gamification.js"></script>
+<script>
+async function loadKoreanAirlines() {
+    const grid = document.getElementById('korean-airlines-grid');
+    if (!grid) return;
+
+    try {
+        const res = await fetch('/api/airlines');
+        const airlines = await res.json();
+
+        grid.innerHTML = airlines.map(a => {
+            const typeLabel = a.type === 'FSC' ? '전통 항공사 (FSC)' : '저비용 항공사 (LCC)';
+            const typeColor = a.type === 'FSC' ? 'text-[#0A84FF]' : 'text-[#ffaa00]';
+            const flights = (a.major_flights || []).map(f => `<span class="inline-block bg-black/50 px-2 py-0.5 rounded text-[10px] mr-1 mb-1">${f}</span>`).join('');
+            const fleet = (a.fleet || []).slice(0, 3).join(', ');
+
+            return `
+                <div class="border border-[#33ff33]/20 rounded-xl p-4 bg-black/30">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <div class="font-bold text-lg">${a.name} <span class="text-sm text-gray-400">(${a.code})</span></div>
+                            <div class="text-xs text-gray-500">${a.name_en}</div>
+                        </div>
+                        <span class="text-xs font-semibold ${typeColor}">${typeLabel}</span>
+                    </div>
+                    <p class="text-xs text-gray-300 leading-relaxed mb-3">${a.desc}</p>
+                    <div class="text-[10px] text-gray-500 mb-1">거점: ${a.hub} · 기종: ${fleet}</div>
+                    <div class="mt-2">
+                        <div class="text-[10px] text-[#33ff33] font-semibold mb-1">주요 항공편</div>
+                        <div>${flights}</div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    } catch (e) {
+        grid.innerHTML = '<p class="text-red-400 text-sm">항공사 정보를 불러오지 못했습니다.</p>';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadKoreanAirlines();
+    if (typeof trackActivity === 'function') trackActivity('career', 'visited');
+});
+</script>
 {% endblock %}

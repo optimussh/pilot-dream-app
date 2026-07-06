@@ -1336,5 +1336,77 @@
       "type": "special",
       "id": "true_captain_2"
     }
+  },
+  {
+    "id": "first_flight_complete",
+    "category": "학습 & 모험",
+    "name": "첫 비행 완료",
+    "description": "첫 비행 튜토리얼을 끝까지 완료",
+    "icon": "🛫",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "first_flight_complete"
+    }
+  },
+  {
+    "id": "quiz_captain",
+    "category": "학습 & 모험",
+    "name": "기장 지식인",
+    "description": "퀴즈 80점 이상 달성",
+    "icon": "🧠",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "quiz_captain"
+    }
+  },
+  {
+    "id": "scenario_hero",
+    "category": "학습 & 모험",
+    "name": "위기관리 영웅",
+    "description": "비상 시나리오 1개 완료",
+    "icon": "🚨",
+    "rarity": "epic",
+    "requirement": {
+      "type": "special",
+      "id": "scenario_hero"
+    }
+  },
+  {
+    "id": "mission_streak_7",
+    "category": "학습 & 모험",
+    "name": "미션 마스터",
+    "description": "7일 연속 오늘의 미션 완료",
+    "icon": "🎯",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "special",
+      "id": "mission_streak_7"
+    }
+  },
+  {
+    "id": "weekly_champion",
+    "category": "학습 & 모험",
+    "name": "주간 챔피언",
+    "description": "주간 챌린지 2개 완료",
+    "icon": "🏆",
+    "rarity": "epic",
+    "requirement": {
+      "type": "special",
+      "id": "weekly_champion"
+    }
+  },
+  {
+    "id": "word_pilot",
+    "category": "학습 & 모험",
+    "name": "용어 파일럿",
+    "description": "항공 용어 플래시카드 20개 학습",
+    "icon": "📇",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "word_pilot"
+    }
   }
 ]

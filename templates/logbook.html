@@ -18,7 +18,7 @@
                     <span class="text-2xl">✈️</span>
                     <span class="font-bold text-lg text-[#33ff33]">스마트 입력 (추천)</span>
                 </div>
-                <p class="text-xs text-gray-400 mb-4 pl-8">flights_db.json의 실제 94편 항공편 • 항공사/편명 선택 시 자동 입력</p>
+                <p class="text-xs text-gray-400 mb-4 pl-8" id="flights-db-count">flights_db.json 항공편 로딩 중...</p>
                 
                 <form id="smart-form" class="space-y-3">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -151,9 +151,16 @@
         <div class="flex justify-between items-center mb-4">
             <div>
                 <h3 class="font-semibold text-xl">비행 기록</h3>
-                <p class="text-xs text-gray-400">당신의 하늘을 향한 여정</p>
+                <p class="text-xs text-gray-400">
+                    당신의 하늘을 향한 여정 ·
+                    <span id="flight-count" class="text-[#33ff33]">0</span>회 비행
+                </p>
             </div>
             <div class="flex items-center gap-4">
+                <button type="button" onclick="loadLogbook()"
+                        class="px-3 py-1.5 text-xs bg-[#002200] hover:bg-[#003300] text-[#33ff33] border border-[#33ff33]/40 rounded-lg transition">
+                    ↻ 새로고침
+                </button>
                 <div class="text-right">
                     <div class="text-2xl font-bold text-[#33ff33]" id="total-hours">0</div>
                     <div class="text-[10px] text-gray-400">총 비행 시간</div>
@@ -167,63 +174,386 @@
             </div>
         </div>
 
-        <div id="logbook-entries" class="space-y-3 max-h-[420px] overflow-y-auto pr-2">
+        <!-- Period filter: day / month -->
+        <div id="logbook-filter-panel" class="mb-4 p-4 bg-black/40 rounded-xl border border-[#33ff33]/20 hidden">
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-gray-400">보기 방식</span>
+                    <button type="button" id="filter-mode-day"
+                            class="logbook-filter-mode px-3 py-1 text-xs rounded-lg border border-[#33ff33] bg-[#33ff33] text-black font-semibold transition">
+                        일별
+                    </button>
+                    <button type="button" id="filter-mode-month"
+                            class="logbook-filter-mode px-3 py-1 text-xs rounded-lg border border-[#33ff33]/40 text-[#33ff33] hover:bg-[#002200] transition">
+                        월별
+                    </button>
+                </div>
+                <p id="period-summary" class="text-xs text-[#88ddff]"></p>
+            </div>
+
+            <div id="filter-day-controls" class="flex flex-wrap items-center gap-2">
+                <button type="button" id="prev-period"
+                        class="px-2.5 py-1.5 text-xs rounded-lg border border-[#33ff33]/40 text-[#33ff33] hover:bg-[#002200] transition">◀</button>
+                <input type="date" id="logbook-filter-date"
+                       class="date-input flex-1 min-w-[140px] bg-black border border-[#33ff33]/50 p-2 rounded text-sm">
+                <button type="button" id="next-period"
+                        class="px-2.5 py-1.5 text-xs rounded-lg border border-[#33ff33]/40 text-[#33ff33] hover:bg-[#002200] transition">▶</button>
+            </div>
+
+            <div id="filter-month-controls" class="hidden flex flex-wrap items-center gap-2">
+                <button type="button" id="prev-period-month"
+                        class="px-2.5 py-1.5 text-xs rounded-lg border border-[#33ff33]/40 text-[#33ff33] hover:bg-[#002200] transition">◀</button>
+                <input type="month" id="logbook-filter-month"
+                       class="date-input flex-1 min-w-[140px] bg-black border border-[#33ff33]/50 p-2 rounded text-sm">
+                <button type="button" id="next-period-month"
+                        class="px-2.5 py-1.5 text-xs rounded-lg border border-[#33ff33]/40 text-[#33ff33] hover:bg-[#002200] transition">▶</button>
+            </div>
+
+            <div class="mt-3">
+                <div id="period-chips-label" class="text-[10px] text-gray-500 mb-1.5">기록이 있는 날짜</div>
+                <div id="period-chips" class="flex flex-wrap gap-1.5 max-h-28 overflow-y-auto pr-1"></div>
+            </div>
+        </div>
+
+        <div id="logbook-entries" class="space-y-3 min-h-[120px]">
             <p class="text-gray-400 text-sm">아직 기록이 없습니다. Flight Planner에서 계획을 세우고 기록해보세요.</p>
         </div>
     </div>
 </div>
 
 <script>
-async function loadLogbook() {
-    const res = await fetch('/api/logbook');
-    const entries = await res.json();
-    
-    // 공항 데이터 먼저 로드 (노선 한글 표시용)
-    await loadAirportsForLogbook();
-    
-    const container = document.getElementById('logbook-entries');
-    container.innerHTML = '';
-    
-    let total = 0;
-    
-    if (entries.length === 0) {
-        container.innerHTML = '<p class="text-gray-400 text-sm">아직 기록이 없습니다. Flight Planner에서 계획을 세우고 기록해보세요.</p>';
-        document.getElementById('total-hours').innerText = '0';
+let logbookAllEntries = [];
+let logbookFilterMode = 'day';
+let logbookSelectedDate = '';
+let logbookSelectedMonth = '';
+let logbookFilterInitialized = false;
+
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function getEntryDate(entry) {
+    return (entry.date || '').slice(0, 10);
+}
+
+function getEntryMonth(entry) {
+    return getEntryDate(entry).slice(0, 7);
+}
+
+function getUniqueDates(entries) {
+    return [...new Set(entries.map(getEntryDate).filter(Boolean))].sort((a, b) => b.localeCompare(a));
+}
+
+function getUniqueMonths(entries) {
+    return [...new Set(entries.map(getEntryMonth).filter(Boolean))].sort((a, b) => b.localeCompare(a));
+}
+
+function formatMonthLabel(monthStr) {
+    const [year, month] = monthStr.split('-');
+    return `${year}년 ${Number(month)}월`;
+}
+
+function formatDayLabel(dateStr) {
+    const [year, month, day] = dateStr.split('-');
+    return `${year}.${month}.${day}`;
+}
+
+function getFilteredLogbookEntries() {
+    if (logbookFilterMode === 'month') {
+        if (!logbookSelectedMonth) return [];
+        return logbookAllEntries.filter(e => getEntryMonth(e) === logbookSelectedMonth);
+    }
+    if (!logbookSelectedDate) return [];
+    return logbookAllEntries.filter(e => getEntryDate(e) === logbookSelectedDate);
+}
+
+function updateFilterModeButtons() {
+    const dayBtn = document.getElementById('filter-mode-day');
+    const monthBtn = document.getElementById('filter-mode-month');
+    const dayControls = document.getElementById('filter-day-controls');
+    const monthControls = document.getElementById('filter-month-controls');
+    const chipsLabel = document.getElementById('period-chips-label');
+
+    const isDay = logbookFilterMode === 'day';
+    if (dayBtn) {
+        dayBtn.className = isDay
+            ? 'logbook-filter-mode px-3 py-1 text-xs rounded-lg border border-[#33ff33] bg-[#33ff33] text-black font-semibold transition'
+            : 'logbook-filter-mode px-3 py-1 text-xs rounded-lg border border-[#33ff33]/40 text-[#33ff33] hover:bg-[#002200] transition';
+    }
+    if (monthBtn) {
+        monthBtn.className = !isDay
+            ? 'logbook-filter-mode px-3 py-1 text-xs rounded-lg border border-[#33ff33] bg-[#33ff33] text-black font-semibold transition'
+            : 'logbook-filter-mode px-3 py-1 text-xs rounded-lg border border-[#33ff33]/40 text-[#33ff33] hover:bg-[#002200] transition';
+    }
+    if (dayControls) dayControls.classList.toggle('hidden', !isDay);
+    if (monthControls) monthControls.classList.toggle('hidden', isDay);
+    if (chipsLabel) chipsLabel.textContent = isDay ? '기록이 있는 날짜' : '기록이 있는 월';
+}
+
+function renderPeriodChips() {
+    const chipsEl = document.getElementById('period-chips');
+    if (!chipsEl) return;
+
+    const periods = logbookFilterMode === 'month'
+        ? getUniqueMonths(logbookAllEntries)
+        : getUniqueDates(logbookAllEntries);
+
+    if (periods.length === 0) {
+        chipsEl.innerHTML = '<span class="text-xs text-gray-500">표시할 기간이 없습니다.</span>';
         return;
     }
-    
-    entries.forEach(entry => {
-        total += parseFloat(entry.hours) || 0;
-        
-        const routeDisplay = getRouteDisplay(entry.route);
-        
-        const div = document.createElement('div');
-        div.className = 'bg-[#1c1c1e] border border-[#2c2c2e] p-4 rounded-2xl hover:border-[#3a3a3c] transition';
-        div.innerHTML = `
-            <div class="flex justify-between items-start">
-                <div class="flex-1">
-                    <div class="font-bold">${entry.date} · <span class="text-[#4da8da]">${entry.flight_number}</span></div>
-                    
-                    <div class="mt-1">
-                        <div class="text-sm font-medium">${entry.route}</div>
-                        <div class="text-xs text-[#88ddff]">${routeDisplay}</div>
-                    </div>
-                    
-                    <div class="text-sm text-gray-300 mt-1">${entry.aircraft}</div>
-                </div>
-                
-                <div class="text-right ml-4">
-                    <div class="text-lg font-bold text-[#33ff33]">${entry.hours}</div>
-                    <div class="text-[10px] text-gray-400">hours</div>
-                </div>
-            </div>
-            
-            ${entry.notes ? `<div class="text-xs text-gray-400 mt-3 pl-2 border-l-2 border-[#33ff33]/30">${entry.notes}</div>` : ''}
-        `;
-        container.appendChild(div);
+
+    chipsEl.innerHTML = periods.map(period => {
+        const isActive = logbookFilterMode === 'month'
+            ? period === logbookSelectedMonth
+            : period === logbookSelectedDate;
+        const label = logbookFilterMode === 'month' ? formatMonthLabel(period) : formatDayLabel(period);
+        const count = logbookAllEntries.filter(e =>
+            logbookFilterMode === 'month' ? getEntryMonth(e) === period : getEntryDate(e) === period
+        ).length;
+        const activeClass = isActive
+            ? 'bg-[#33ff33] text-black border-[#33ff33] font-semibold'
+            : 'bg-black/50 text-gray-300 border-[#33ff33]/30 hover:border-[#33ff33]/60';
+        return `<button type="button" data-period="${period}"
+                class="period-chip px-2.5 py-1 text-[11px] rounded-full border transition ${activeClass}">
+            ${escapeHtml(label)} <span class="opacity-70">(${count})</span>
+        </button>`;
+    }).join('');
+
+    chipsEl.querySelectorAll('.period-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const period = btn.getAttribute('data-period');
+            if (logbookFilterMode === 'month') {
+                selectLogbookMonth(period);
+            } else {
+                selectLogbookDate(period);
+            }
+        });
     });
-    
-    document.getElementById('total-hours').innerText = total.toFixed(1);
+}
+
+function updatePeriodSummary(filtered) {
+    const summaryEl = document.getElementById('period-summary');
+    if (!summaryEl) return;
+
+    const hours = filtered.reduce((sum, e) => sum + (parseFloat(e.hours) || 0), 0);
+    if (logbookFilterMode === 'month') {
+        summaryEl.textContent = logbookSelectedMonth
+            ? `선택: ${formatMonthLabel(logbookSelectedMonth)} · ${filtered.length}회 · ${hours.toFixed(1)}시간`
+            : '';
+        return;
+    }
+    summaryEl.textContent = logbookSelectedDate
+        ? `선택: ${formatDayLabel(logbookSelectedDate)} · ${filtered.length}회 · ${hours.toFixed(1)}시간`
+        : '';
+}
+
+function renderLogbookEntryCard(entry) {
+    const hours = parseFloat(entry.hours) || 0;
+    const routeDisplay = getRouteDisplay(entry.route);
+    const div = document.createElement('div');
+    div.className = 'bg-[#1c1c1e] border border-[#2c2c2e] p-4 rounded-2xl hover:border-[#3a3a3c] transition';
+    div.innerHTML = `
+        <div class="flex justify-between items-start gap-3">
+            <div class="flex-1 min-w-0">
+                <div class="font-bold">
+                    <span class="text-[#4da8da]">${escapeHtml(entry.flight_number)}</span>
+                    ${logbookFilterMode === 'month' ? `<span class="text-gray-500 text-sm font-normal"> · ${escapeHtml(formatDayLabel(getEntryDate(entry)))}</span>` : ''}
+                </div>
+                <div class="mt-1">
+                    <div class="text-sm font-medium">${escapeHtml(entry.route || '-')}</div>
+                    <div class="text-xs text-[#88ddff]">${escapeHtml(routeDisplay)}</div>
+                </div>
+                <div class="text-sm text-gray-300 mt-1">${escapeHtml(entry.aircraft || '-')}</div>
+            </div>
+            <div class="text-right shrink-0">
+                <div class="text-lg font-bold text-[#33ff33]">${hours.toFixed(1)}</div>
+                <div class="text-[10px] text-gray-400">hours</div>
+                ${entry.id ? `<button type="button" onclick="deleteLogbookEntry(${entry.id})" class="mt-2 text-[10px] text-red-400 hover:text-red-300">삭제</button>` : ''}
+            </div>
+        </div>
+        ${entry.notes ? `<div class="text-xs text-gray-400 mt-3 pl-2 border-l-2 border-[#33ff33]/30">${escapeHtml(entry.notes)}</div>` : ''}
+    `;
+    return div;
+}
+
+function renderFilteredLogbook() {
+    const container = document.getElementById('logbook-entries');
+    const filterPanel = document.getElementById('logbook-filter-panel');
+    const dateInput = document.getElementById('logbook-filter-date');
+    const monthInput = document.getElementById('logbook-filter-month');
+
+    updateFilterModeButtons();
+
+    if (logbookAllEntries.length === 0) {
+        if (filterPanel) filterPanel.classList.add('hidden');
+        container.innerHTML = '<p class="text-gray-400 text-sm">아직 기록이 없습니다. 위에서 스마트 입력 또는 수동 입력으로 비행을 기록해보세요.</p>';
+        updatePeriodSummary([]);
+        return;
+    }
+
+    if (filterPanel) filterPanel.classList.remove('hidden');
+    if (dateInput) dateInput.value = logbookSelectedDate;
+    if (monthInput) monthInput.value = logbookSelectedMonth;
+
+    const filtered = getFilteredLogbookEntries();
+    renderPeriodChips();
+    updatePeriodSummary(filtered);
+
+    container.innerHTML = '';
+    if (filtered.length === 0) {
+        const emptyMsg = logbookFilterMode === 'month'
+            ? `${formatMonthLabel(logbookSelectedMonth)}에는 비행 기록이 없습니다. 다른 월을 선택해주세요.`
+            : `${formatDayLabel(logbookSelectedDate)}에는 비행 기록이 없습니다. 다른 날짜를 선택해주세요.`;
+        container.innerHTML = `<p class="text-gray-400 text-sm">${escapeHtml(emptyMsg)}</p>`;
+        return;
+    }
+
+    filtered.forEach(entry => container.appendChild(renderLogbookEntryCard(entry)));
+}
+
+function ensureLogbookPeriodSelection() {
+    const dates = getUniqueDates(logbookAllEntries);
+    const months = getUniqueMonths(logbookAllEntries);
+
+    if (logbookFilterMode === 'month') {
+        if (!logbookSelectedMonth || !months.includes(logbookSelectedMonth)) {
+            logbookSelectedMonth = months[0] || '';
+        }
+        return;
+    }
+
+    if (!logbookSelectedDate || !dates.includes(logbookSelectedDate)) {
+        logbookSelectedDate = dates[0] || '';
+    }
+}
+
+function selectLogbookDate(dateStr) {
+    logbookSelectedDate = dateStr;
+    const dateInput = document.getElementById('logbook-filter-date');
+    if (dateInput) dateInput.value = dateStr;
+    renderFilteredLogbook();
+}
+
+function selectLogbookMonth(monthStr) {
+    logbookSelectedMonth = monthStr;
+    const monthInput = document.getElementById('logbook-filter-month');
+    if (monthInput) monthInput.value = monthStr;
+    renderFilteredLogbook();
+}
+
+function setLogbookFilterMode(mode) {
+    logbookFilterMode = mode === 'month' ? 'month' : 'day';
+    ensureLogbookPeriodSelection();
+    renderFilteredLogbook();
+}
+
+function navigateLogbookPeriod(direction) {
+    const periods = logbookFilterMode === 'month'
+        ? getUniqueMonths(logbookAllEntries)
+        : getUniqueDates(logbookAllEntries);
+
+    if (periods.length === 0) return;
+
+    const current = logbookFilterMode === 'month' ? logbookSelectedMonth : logbookSelectedDate;
+    let idx = periods.indexOf(current);
+
+    if (idx === -1) {
+        ensureLogbookPeriodSelection();
+        renderFilteredLogbook();
+        return;
+    }
+
+    idx += direction;
+    if (idx < 0 || idx >= periods.length) return;
+
+    if (logbookFilterMode === 'month') {
+        selectLogbookMonth(periods[idx]);
+    } else {
+        selectLogbookDate(periods[idx]);
+    }
+}
+
+function initLogbookFilterControls() {
+    if (logbookFilterInitialized) return;
+    logbookFilterInitialized = true;
+
+    document.getElementById('filter-mode-day')?.addEventListener('click', () => setLogbookFilterMode('day'));
+    document.getElementById('filter-mode-month')?.addEventListener('click', () => setLogbookFilterMode('month'));
+
+    document.getElementById('logbook-filter-date')?.addEventListener('change', (e) => {
+        if (e.target.value) selectLogbookDate(e.target.value);
+    });
+    document.getElementById('logbook-filter-month')?.addEventListener('change', (e) => {
+        if (e.target.value) selectLogbookMonth(e.target.value);
+    });
+
+    document.getElementById('prev-period')?.addEventListener('click', () => navigateLogbookPeriod(1));
+    document.getElementById('next-period')?.addEventListener('click', () => navigateLogbookPeriod(-1));
+    document.getElementById('prev-period-month')?.addEventListener('click', () => navigateLogbookPeriod(1));
+    document.getElementById('next-period-month')?.addEventListener('click', () => navigateLogbookPeriod(-1));
+}
+
+async function loadLogbook() {
+    const container = document.getElementById('logbook-entries');
+    const totalHoursEl = document.getElementById('total-hours');
+    const flightCountEl = document.getElementById('flight-count');
+
+    try {
+        const res = await fetch('/api/logbook');
+        if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+        }
+
+        const entries = await res.json();
+        if (!Array.isArray(entries)) {
+            throw new Error('Invalid logbook response');
+        }
+
+        await loadAirportsForLogbook();
+        initLogbookFilterControls();
+
+        logbookAllEntries = entries;
+        const totalHours = entries.reduce((sum, e) => sum + (parseFloat(e.hours) || 0), 0);
+
+        totalHoursEl.innerText = totalHours.toFixed(1);
+        if (flightCountEl) flightCountEl.innerText = String(entries.length);
+
+        ensureLogbookPeriodSelection();
+        renderFilteredLogbook();
+    } catch (error) {
+        console.error('Failed to load logbook:', error);
+        container.innerHTML = '<p class="text-red-400 text-sm">비행 기록을 불러오지 못했습니다. 새로고침 버튼을 눌러 다시 시도해주세요.</p>';
+        totalHoursEl.innerText = '0';
+        if (flightCountEl) flightCountEl.innerText = '0';
+        document.getElementById('logbook-filter-panel')?.classList.add('hidden');
+    }
+}
+
+async function deleteLogbookEntry(entryId) {
+    if (!confirm('이 비행 기록을 삭제할까요?')) {
+        return;
+    }
+
+    try {
+        const res = await fetch(`/api/logbook/${entryId}`, { method: 'DELETE' });
+        const result = await res.json().catch(() => ({}));
+
+        if (res.ok && result.status === 'success') {
+            loadLogbook();
+            return;
+        }
+
+        alert(result.message || '비행 기록 삭제에 실패했습니다.');
+    } catch (error) {
+        console.error('Delete logbook entry failed:', error);
+        alert('서버와 통신 중 오류가 발생했습니다.');
+    }
 }
 
 // 비행 기록 전체 초기화
@@ -264,6 +594,7 @@ async function resetLogbook() {
 }
 
 let flightsDB = [];
+let airlinesMeta = {};
 let airportsData = [];
 
 async function loadAirportsForLogbook() {
@@ -304,7 +635,9 @@ function getRouteDisplay(route) {
         'NRT': '도쿄(나리타)',
         'HND': '도쿄(하네다)',
         'BKK': '방콕',
-        'SYD': '시드니'
+        'SYD': '시드니',
+        'BNE': '브리즈번',
+        'MEL': '멜버른'
     };
     
     let fromName = cityMap[fromCode] || (from ? from.name.replace('국제공항', '').replace('공항', '').trim() : fromCode);
@@ -315,45 +648,136 @@ function getRouteDisplay(route) {
 
 
 async function loadFlightsDB() {
-    const res = await fetch('/api/flights');
-    flightsDB = await res.json();
+    const [flightsRes, airlinesRes] = await Promise.all([
+        fetch('/api/flights'),
+        fetch('/api/airlines')
+    ]);
+    flightsDB = await flightsRes.json();
+    const airlines = await airlinesRes.json();
+    airlinesMeta = {};
+    airlines.forEach(a => { airlinesMeta[a.code] = a; });
+
+    const countEl = document.getElementById('flights-db-count');
+    if (countEl) {
+        const knownCodes = airlines.map(a => a.code);
+        const knownCount = flightsDB.filter(f => knownCodes.includes(f.airline)).length;
+        countEl.innerText = `flights_db.json 실제 ${flightsDB.length}편 항공편 (등록 항공사 ${knownCount}편) • 항공사 선택 시 편명/노선 자동 입력`;
+    }
 
     const airlineSelect = document.getElementById('airline');
-    const uniqueAirlines = [...new Set(flightsDB.map(f => f.airline))];
+    airlineSelect.innerHTML = '<option value="">항공사 선택</option>';
 
-    uniqueAirlines.forEach(code => {
-        const flight = flightsDB.find(f => f.airline === code);
-        const opt = new Option(`${code} - ${flight.airline_name}`, code);
-        airlineSelect.add(opt);
+    const flightCodes = [...new Set(flightsDB.map(f => f.airline))];
+    const orderedCodes = [
+        ...airlines.map(a => a.code).filter(code => flightCodes.includes(code)),
+        ...flightCodes.filter(code => !airlinesMeta[code]).sort()
+    ];
+
+    orderedCodes.forEach(code => {
+        const meta = airlinesMeta[code];
+        const sample = flightsDB.find(f => f.airline === code);
+        const name = meta?.name || sample?.airline_name || code;
+        airlineSelect.add(new Option(`${code} - ${name}`, code));
     });
 
-    airlineSelect.onchange = () => {
-        populateFlightNumbers(airlineSelect.value);
-    };
+    airlineSelect.onchange = () => populateFlightNumbers(airlineSelect.value);
+}
+
+function getFlightRecord(airlineCode, flightNumber) {
+    if (!airlineCode || !flightNumber) return null;
+    return flightsDB.find(f =>
+        String(f.airline) === String(airlineCode) &&
+        String(f.flight_number) === String(flightNumber)
+    ) || null;
+}
+
+function applySelectedFlight(airlineCode, flightNumber) {
+    const selected = getFlightRecord(airlineCode, flightNumber);
+    const routeEl = document.getElementById('route');
+    const aircraftEl = document.getElementById('aircraft');
+    const hoursEl = document.getElementById('hours');
+
+    if (!selected) {
+        routeEl.value = '';
+        aircraftEl.value = '';
+        hoursEl.value = '';
+        return false;
+    }
+
+    routeEl.value = selected.route || '';
+    aircraftEl.value = selected.aircraft || '';
+    hoursEl.value = selected.typical_duration != null ? selected.typical_duration : '';
+    return true;
 }
 
 function populateFlightNumbers(airlineCode) {
     const flightSelect = document.getElementById('flight_number');
     flightSelect.innerHTML = '<option value="">편명 선택</option>';
+    applySelectedFlight('', '');
+
+    if (!airlineCode) {
+        flightSelect.disabled = true;
+        flightSelect.innerHTML = '<option value="">항공사 먼저 선택</option>';
+        return;
+    }
+
+    const filtered = flightsDB
+        .filter(f => String(f.airline) === String(airlineCode))
+        .sort((a, b) => String(a.flight_number).localeCompare(String(b.flight_number)));
+
+    if (filtered.length === 0) {
+        flightSelect.disabled = true;
+        flightSelect.innerHTML = '<option value="">등록된 편명 없음</option>';
+        return;
+    }
+
     flightSelect.disabled = false;
-
-    const filtered = flightsDB.filter(f => f.airline === airlineCode);
-
     filtered.forEach(f => {
-        const opt = new Option(f.flight_number, f.flight_number);
-        flightSelect.add(opt);
+        flightSelect.add(new Option(`${f.flight_number} (${f.route})`, f.flight_number));
     });
 
+    flightSelect.selectedIndex = 1;
+    applySelectedFlight(airlineCode, flightSelect.value);
+
     flightSelect.onchange = () => {
-        const selected = flightsDB.find(f => 
-            f.airline === airlineCode && f.flight_number === flightSelect.value
-        );
-        if (selected) {
-            document.getElementById('route').value = selected.route;
-            document.getElementById('aircraft').value = selected.aircraft;
-            document.getElementById('hours').value = selected.typical_duration;
-        }
+        applySelectedFlight(airlineCode, flightSelect.value);
     };
+}
+
+function validateSmartEntry() {
+    const airline = document.getElementById('airline').value;
+    const flightNumber = document.getElementById('flight_number').value;
+    const route = document.getElementById('route').value.trim();
+    const aircraft = document.getElementById('aircraft').value.trim();
+    const hours = parseFloat(document.getElementById('hours').value);
+    const date = document.getElementById('smart-date').value;
+
+    if (!airline) return '항공사를 선택해주세요.';
+    if (!flightNumber || flightSelectDisabled()) return '편명을 선택해주세요.';
+    if (!route) return '노선 정보가 없습니다. 다른 편명을 선택해주세요.';
+    if (!aircraft) return '기종 정보가 없습니다.';
+    if (!hours || hours <= 0) return '비행시간 정보가 없습니다.';
+    if (!date) return '날짜를 선택해주세요.';
+    return null;
+}
+
+function flightSelectDisabled() {
+    const flightSelect = document.getElementById('flight_number');
+    return flightSelect.disabled || flightSelect.value === '';
+}
+
+function resetSmartForm() {
+    document.getElementById('airline').value = '';
+    populateFlightNumbers('');
+    document.getElementById('smart-date').value = new Date().toISOString().split('T')[0];
+
+    const remark = document.getElementById('smart-remark');
+    const extra = document.getElementById('smart-notes-extra');
+    if (remark) remark.value = '';
+    if (extra) {
+        extra.value = '';
+        extra.classList.add('hidden');
+    }
 }
 
 // === Logbook Enhancements: Default date + visible calendar + remark dropdown + notes combination ===
@@ -428,46 +852,46 @@ function initLogbookEnhancements() {
         const newSmartHandler = async function(e) {
             e.preventDefault();
 
+            const validationError = validateSmartEntry();
+            if (validationError) {
+                alert(validationError);
+                return;
+            }
+
             const combinedNotes = getCombinedNotes('smart-remark', 'smart-notes-extra');
             const hiddenNotes = document.getElementById('smart-notes');
             if (hiddenNotes) hiddenNotes.value = combinedNotes;
 
             const data = {
                 date: document.getElementById('smart-date').value,
-                flight_number: document.getElementById('flight_number').value || 'SMART-ENTRY',
-                aircraft: document.getElementById('aircraft').value,
-                route: document.getElementById('route').value,
-                hours: parseFloat(document.getElementById('hours').value) || 0,
+                flight_number: document.getElementById('flight_number').value,
+                aircraft: document.getElementById('aircraft').value.trim(),
+                route: document.getElementById('route').value.trim(),
+                hours: parseFloat(document.getElementById('hours').value),
                 notes: combinedNotes
             };
 
-            const res = await fetch('/api/logbook/add', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            });
+            try {
+                const res = await fetch('/api/logbook/add', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json().catch(() => ({}));
 
-            if (res.ok) {
-                alert('스마트 입력으로 비행이 기록되었습니다!');
-                this.reset();
-                // reset extra fields
-                document.getElementById('route').value = '';
-                document.getElementById('aircraft').value = '';
-                document.getElementById('hours').value = '';
-                document.getElementById('flight_number').innerHTML = '<option value="">항공사 먼저 선택</option>';
-                document.getElementById('flight_number').disabled = true;
-
-                // Reset remark and extra
-                const r = document.getElementById('smart-remark');
-                const ex = document.getElementById('smart-notes-extra');
-                if (r) r.value = '';
-                if (ex) ex.classList.add('hidden');
-
-                // Re-apply today's date after reset
-                if (document.getElementById('smart-date')) {
-                    document.getElementById('smart-date').value = new Date().toISOString().split('T')[0];
+                if (res.ok && result.status === 'success') {
+                    alert('스마트 입력으로 비행이 기록되었습니다!');
+                    logbookFilterMode = 'day';
+                    logbookSelectedDate = data.date;
+                    resetSmartForm();
+                    loadLogbook();
+                    return;
                 }
-                loadLogbook();
+
+                alert(result.message || '비행 기록 저장에 실패했습니다. 입력값을 확인해주세요.');
+            } catch (error) {
+                console.error('Smart logbook save failed:', error);
+                alert('서버와 통신 중 오류가 발생했습니다.');
             }
         };
 
@@ -490,27 +914,42 @@ function initLogbookEnhancements() {
             const formData = new FormData(this);
             const data = Object.fromEntries(formData);
 
-            const res = await fetch('/api/logbook/add', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data)
-            });
+            const hours = parseFloat(data.hours);
+            if (!data.date || !data.flight_number || !data.route || !data.aircraft || !hours || hours <= 0) {
+                alert('날짜, 편명, 노선, 기종, 비행시간을 모두 입력해주세요.');
+                return;
+            }
 
-            if (res.ok) {
-                alert('수동 입력으로 비행이 기록되었습니다!');
-                this.reset();
+            try {
+                const res = await fetch('/api/logbook/add', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ ...data, hours })
+                });
+                const result = await res.json().catch(() => ({}));
 
-                // Reset remark/extra visibility
-                const r = document.getElementById('manual-remark');
-                const ex = document.getElementById('manual-notes-extra');
-                if (r) r.value = '';
-                if (ex) ex.classList.add('hidden');
+                if (res.ok && result.status === 'success') {
+                    alert('수동 입력으로 비행이 기록되었습니다!');
+                    logbookFilterMode = 'day';
+                    logbookSelectedDate = data.date;
+                    this.reset();
 
-                // Re-apply today's date
-                if (document.getElementById('manual-date')) {
-                    document.getElementById('manual-date').value = new Date().toISOString().split('T')[0];
+                    const r = document.getElementById('manual-remark');
+                    const ex = document.getElementById('manual-notes-extra');
+                    if (r) r.value = '';
+                    if (ex) ex.classList.add('hidden');
+
+                    if (document.getElementById('manual-date')) {
+                        document.getElementById('manual-date').value = new Date().toISOString().split('T')[0];
+                    }
+                    loadLogbook();
+                    return;
                 }
-                loadLogbook();
+
+                alert(result.message || '비행 기록 저장에 실패했습니다.');
+            } catch (error) {
+                console.error('Manual logbook save failed:', error);
+                alert('서버와 통신 중 오류가 발생했습니다.');
             }
         };
 

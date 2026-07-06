@@ -1,42 +1,2562 @@
 [
-  {"id": "ICN", "name": "인천국제공항", "lat": 37.46, "lng": 126.44, "region": "Asia"},
-  {"id": "GMP", "name": "김포국제공항", "lat": 37.56, "lng": 126.8, "region": "Asia"},
-  {"id": "HND", "name": "하네다공항", "lat": 35.55, "lng": 139.78, "region": "Asia"},
-  {"id": "NRT", "name": "나리타공항", "lat": 35.76, "lng": 140.38, "region": "Asia"},
-  {"id": "PEK", "name": "베이징서우두", "lat": 40.08, "lng": 116.58, "region": "Asia"},
-  {"id": "PVG", "name": "상하이푸둥", "lat": 31.14, "lng": 121.8, "region": "Asia"},
-  {"id": "SIN", "name": "싱가포르창이", "lat": 1.36, "lng": 103.99, "region": "Asia"},
-  {"id": "BKK", "name": "방콕수완나품", "lat": 13.68, "lng": 100.75, "region": "Asia"},
-  {"id": "KUL", "name": "쿠알라룸푸르", "lat": 2.74, "lng": 101.71, "region": "Asia"},
-  {"id": "HKG", "name": "홍콩국제", "lat": 22.31, "lng": 113.91, "region": "Asia"},
-  {"id": "DEL", "name": "델리인디라간디", "lat": 28.55, "lng": 77.1, "region": "Asia"},
-  {"id": "DXB", "name": "두바이국제", "lat": 25.25, "lng": 55.36, "region": "Middle East"},
-  {"id": "DOH", "name": "도하하마드", "lat": 25.27, "lng": 51.61, "region": "Middle East"},
-  {"id": "LHR", "name": "런던히드로", "lat": 51.47, "lng": -0.45, "region": "Europe"},
-  {"id": "CDG", "name": "파리샤를드골", "lat": 49.01, "lng": 2.55, "region": "Europe"},
-  {"id": "FRA", "name": "프랑크푸르트", "lat": 50.03, "lng": 8.57, "region": "Europe"},
-  {"id": "AMS", "name": "암스테르담스히폴", "lat": 52.31, "lng": 4.76, "region": "Europe"},
-  {"id": "MAD", "name": "마드리드바라하스", "lat": 40.47, "lng": -3.57, "region": "Europe"},
-  {"id": "FCO", "name": "로마피우미치노", "lat": 41.8, "lng": 12.24, "region": "Europe"},
-  {"id": "IST", "name": "이스탄불", "lat": 41.27, "lng": 28.73, "region": "Europe"},
-  {"id": "JFK", "name": "뉴욕JFK", "lat": 40.64, "lng": -73.78, "region": "North America"},
-  {"id": "LAX", "name": "로스앤젤레스", "lat": 33.94, "lng": -118.4, "region": "North America"},
-  {"id": "ORD", "name": "시카고오헤어", "lat": 41.98, "lng": -87.9, "region": "North America"},
-  {"id": "ATL", "name": "애틀랜타", "lat": 33.64, "lng": -84.42, "region": "North America"},
-  {"id": "SFO", "name": "샌프란시스코", "lat": 37.62, "lng": -122.38, "region": "North America"},
-  {"id": "MIA", "name": "마이애미", "lat": 25.79, "lng": -80.29, "region": "North America"},
-  {"id": "YYZ", "name": "토론토피어슨", "lat": 43.68, "lng": -79.62, "region": "North America"},
-  {"id": "YVR", "name": "밴쿠버", "lat": 49.19, "lng": -123.18, "region": "North America"},
-  {"id": "MEX", "name": "멕시코시티", "lat": 19.43, "lng": -99.07, "region": "North America"},
-  {"id": "GRU", "name": "상파울루구아룰류스", "lat": -23.43, "lng": -46.47, "region": "South America"},
-  {"id": "EZE", "name": "부에노스아이레스에세이사", "lat": -34.82, "lng": -58.53, "region": "South America"},
-  {"id": "BOG", "name": "보고타엘도라도", "lat": 4.7, "lng": -74.14, "region": "South America"},
-  {"id": "LIM", "name": "리마호르헤차베스", "lat": -12.02, "lng": -77.11, "region": "South America"},
-  {"id": "SYD", "name": "시드니", "lat": -33.94, "lng": 151.18, "region": "Oceania"},
-  {"id": "MEL", "name": "멜버른", "lat": -37.67, "lng": 144.84, "region": "Oceania"},
-  {"id": "AKL", "name": "오클랜드", "lat": -37.01, "lng": 174.79, "region": "Oceania"},
-  {"id": "PER", "name": "퍼스", "lat": -31.94, "lng": 115.97, "region": "Oceania"},
-  {"id": "JNB", "name": "요하네스버그", "lat": -26.13, "lng": 28.24, "region": "Africa"},
-  {"id": "CPT", "name": "케이프타운", "lat": -33.97, "lng": 18.6, "region": "Africa"},
-  {"id": "ADD", "name": "아디스아바바", "lat": 8.98, "lng": 38.8, "region": "Africa"}
+  {
+    "id": "ICN",
+    "name": "인천국제공항",
+    "lat": 37.46,
+    "lng": 126.44,
+    "region": "Asia",
+    "country": "대한민국"
+  },
+  {
+    "id": "GMP",
+    "name": "김포국제공항",
+    "lat": 37.56,
+    "lng": 126.8,
+    "region": "Asia",
+    "country": "대한민국"
+  },
+  {
+    "id": "CJU",
+    "name": "제주국제공항",
+    "lat": 33.51,
+    "lng": 126.49,
+    "region": "Asia",
+    "country": "대한민국"
+  },
+  {
+    "id": "PUS",
+    "name": "부산김해국제공항",
+    "lat": 35.18,
+    "lng": 128.94,
+    "region": "Asia",
+    "country": "대한민국"
+  },
+  {
+    "id": "TAE",
+    "name": "대구국제공항",
+    "lat": 35.89,
+    "lng": 128.66,
+    "region": "Asia",
+    "country": "대한민국"
+  },
+  {
+    "id": "NRT",
+    "name": "나리타공항",
+    "lat": 35.76,
+    "lng": 140.38,
+    "region": "Asia",
+    "country": "일본"
+  },
+  {
+    "id": "HND",
+    "name": "하네다공항",
+    "lat": 35.55,
+    "lng": 139.78,
+    "region": "Asia",
+    "country": "일본"
+  },
+  {
+    "id": "KIX",
+    "name": "오사카간사이",
+    "lat": 34.43,
+    "lng": 135.24,
+    "region": "Asia",
+    "country": "일본"
+  },
+  {
+    "id": "FUK",
+    "name": "후쿠오카공항",
+    "lat": 33.59,
+    "lng": 130.45,
+    "region": "Asia",
+    "country": "일본"
+  },
+  {
+    "id": "NGO",
+    "name": "나고야중부",
+    "lat": 34.85,
+    "lng": 136.81,
+    "region": "Asia",
+    "country": "일본"
+  },
+  {
+    "id": "PEK",
+    "name": "베이징서우두",
+    "lat": 40.08,
+    "lng": 116.58,
+    "region": "Asia",
+    "country": "중국"
+  },
+  {
+    "id": "PVG",
+    "name": "상하이푸둥",
+    "lat": 31.14,
+    "lng": 121.8,
+    "region": "Asia",
+    "country": "중국"
+  },
+  {
+    "id": "CAN",
+    "name": "광저우바이윈",
+    "lat": 23.39,
+    "lng": 113.3,
+    "region": "Asia",
+    "country": "중국"
+  },
+  {
+    "id": "CTU",
+    "name": "청두솽류",
+    "lat": 30.58,
+    "lng": 103.95,
+    "region": "Asia",
+    "country": "중국"
+  },
+  {
+    "id": "SZX",
+    "name": "선전바오안",
+    "lat": 22.64,
+    "lng": 113.81,
+    "region": "Asia",
+    "country": "중국"
+  },
+  {
+    "id": "TPE",
+    "name": "타오위안",
+    "lat": 25.08,
+    "lng": 121.23,
+    "region": "Asia",
+    "country": "대만"
+  },
+  {
+    "id": "KHH",
+    "name": "가오슝",
+    "lat": 22.58,
+    "lng": 120.35,
+    "region": "Asia",
+    "country": "대만"
+  },
+  {
+    "id": "TSA",
+    "name": "송산",
+    "lat": 25.07,
+    "lng": 121.55,
+    "region": "Asia",
+    "country": "대만"
+  },
+  {
+    "id": "RMQ",
+    "name": "타이중",
+    "lat": 24.26,
+    "lng": 120.62,
+    "region": "Asia",
+    "country": "대만"
+  },
+  {
+    "id": "TNN",
+    "name": "타이난",
+    "lat": 22.95,
+    "lng": 120.21,
+    "region": "Asia",
+    "country": "대만"
+  },
+  {
+    "id": "HKG",
+    "name": "홍콩국제",
+    "lat": 22.31,
+    "lng": 113.91,
+    "region": "Asia",
+    "country": "홍콩"
+  },
+  {
+    "id": "HHP",
+    "name": "홍콩헬리포트",
+    "lat": 22.29,
+    "lng": 114.15,
+    "region": "Asia",
+    "country": "홍콩"
+  },
+  {
+    "id": "ZJK",
+    "name": "주하이진",
+    "lat": 22.37,
+    "lng": 113.58,
+    "region": "Asia",
+    "country": "홍콩"
+  },
+  {
+    "id": "SZX_HK",
+    "name": "선전연계",
+    "lat": 22.64,
+    "lng": 113.81,
+    "region": "Asia",
+    "country": "홍콩"
+  },
+  {
+    "id": "MFM",
+    "name": "마카오",
+    "lat": 22.16,
+    "lng": 113.59,
+    "region": "Asia",
+    "country": "홍콩"
+  },
+  {
+    "id": "SIN",
+    "name": "창이",
+    "lat": 1.36,
+    "lng": 103.99,
+    "region": "Asia",
+    "country": "싱가포르"
+  },
+  {
+    "id": "XSP",
+    "name": "세letar",
+    "lat": 1.42,
+    "lng": 103.87,
+    "region": "Asia",
+    "country": "싱가포르"
+  },
+  {
+    "id": "QPG",
+    "name": "Paya Lebar",
+    "lat": 1.36,
+    "lng": 103.91,
+    "region": "Asia",
+    "country": "싱가포르"
+  },
+  {
+    "id": "TGA",
+    "name": "Tengah",
+    "lat": 1.39,
+    "lng": 103.71,
+    "region": "Asia",
+    "country": "싱가포르"
+  },
+  {
+    "id": "WSS",
+    "name": "서부싱가포르",
+    "lat": 1.3,
+    "lng": 103.7,
+    "region": "Asia",
+    "country": "싱가포르"
+  },
+  {
+    "id": "BKK",
+    "name": "수완나품",
+    "lat": 13.68,
+    "lng": 100.75,
+    "region": "Asia",
+    "country": "태국"
+  },
+  {
+    "id": "DMK",
+    "name": "돈므앙",
+    "lat": 13.91,
+    "lng": 100.6,
+    "region": "Asia",
+    "country": "태국"
+  },
+  {
+    "id": "HKT",
+    "name": "푸켓",
+    "lat": 8.11,
+    "lng": 98.32,
+    "region": "Asia",
+    "country": "태국"
+  },
+  {
+    "id": "CNX",
+    "name": "치앙마이",
+    "lat": 18.77,
+    "lng": 98.96,
+    "region": "Asia",
+    "country": "태국"
+  },
+  {
+    "id": "USM",
+    "name": "사무이",
+    "lat": 9.55,
+    "lng": 100.06,
+    "region": "Asia",
+    "country": "태국"
+  },
+  {
+    "id": "KUL",
+    "name": "쿠알라룸푸르",
+    "lat": 2.74,
+    "lng": 101.71,
+    "region": "Asia",
+    "country": "말레이시아"
+  },
+  {
+    "id": "PEN",
+    "name": "페낭",
+    "lat": 5.3,
+    "lng": 100.28,
+    "region": "Asia",
+    "country": "말레이시아"
+  },
+  {
+    "id": "BKI",
+    "name": "코타키나발루",
+    "lat": 5.94,
+    "lng": 116.05,
+    "region": "Asia",
+    "country": "말레이시아"
+  },
+  {
+    "id": "KCH",
+    "name": "쿠칭",
+    "lat": 1.48,
+    "lng": 110.35,
+    "region": "Asia",
+    "country": "말레이시아"
+  },
+  {
+    "id": "LGK",
+    "name": "랑카위",
+    "lat": 6.33,
+    "lng": 99.73,
+    "region": "Asia",
+    "country": "말레이시아"
+  },
+  {
+    "id": "SGN",
+    "name": "호치민",
+    "lat": 10.82,
+    "lng": 106.65,
+    "region": "Asia",
+    "country": "베트남"
+  },
+  {
+    "id": "HAN",
+    "name": "하노이",
+    "lat": 21.22,
+    "lng": 105.81,
+    "region": "Asia",
+    "country": "베트남"
+  },
+  {
+    "id": "DAD",
+    "name": "다낭",
+    "lat": 16.04,
+    "lng": 108.2,
+    "region": "Asia",
+    "country": "베트남"
+  },
+  {
+    "id": "CXR",
+    "name": "나트랑",
+    "lat": 11.99,
+    "lng": 109.22,
+    "region": "Asia",
+    "country": "베트남"
+  },
+  {
+    "id": "PQC",
+    "name": "푸꾸옥",
+    "lat": 10.23,
+    "lng": 103.97,
+    "region": "Asia",
+    "country": "베트남"
+  },
+  {
+    "id": "CGK",
+    "name": "자카르타",
+    "lat": -6.13,
+    "lng": 106.65,
+    "region": "Asia",
+    "country": "인도네시아"
+  },
+  {
+    "id": "DPS",
+    "name": "발리",
+    "lat": -8.75,
+    "lng": 115.17,
+    "region": "Asia",
+    "country": "인도네시아"
+  },
+  {
+    "id": "SUB",
+    "name": "수라바야",
+    "lat": -7.38,
+    "lng": 112.79,
+    "region": "Asia",
+    "country": "인도네시아"
+  },
+  {
+    "id": "KNO",
+    "name": "메단",
+    "lat": 3.64,
+    "lng": 98.67,
+    "region": "Asia",
+    "country": "인도네시아"
+  },
+  {
+    "id": "YIA",
+    "name": "욕야카르타",
+    "lat": -7.9,
+    "lng": 110.06,
+    "region": "Asia",
+    "country": "인도네시아"
+  },
+  {
+    "id": "MNL",
+    "name": "마닐라",
+    "lat": 14.51,
+    "lng": 121.02,
+    "region": "Asia",
+    "country": "필리핀"
+  },
+  {
+    "id": "CEB",
+    "name": "세부",
+    "lat": 10.31,
+    "lng": 123.98,
+    "region": "Asia",
+    "country": "필리핀"
+  },
+  {
+    "id": "CRK",
+    "name": "클락",
+    "lat": 15.19,
+    "lng": 120.56,
+    "region": "Asia",
+    "country": "필리핀"
+  },
+  {
+    "id": "DVO",
+    "name": "다바오",
+    "lat": 7.13,
+    "lng": 125.65,
+    "region": "Asia",
+    "country": "필리핀"
+  },
+  {
+    "id": "PPS",
+    "name": "팔라완",
+    "lat": 9.74,
+    "lng": 118.76,
+    "region": "Asia",
+    "country": "필리핀"
+  },
+  {
+    "id": "DEL",
+    "name": "델리",
+    "lat": 28.55,
+    "lng": 77.1,
+    "region": "Asia",
+    "country": "인도"
+  },
+  {
+    "id": "BOM",
+    "name": "뭄바이",
+    "lat": 19.09,
+    "lng": 72.87,
+    "region": "Asia",
+    "country": "인도"
+  },
+  {
+    "id": "BLR",
+    "name": "방갈로르",
+    "lat": 13.2,
+    "lng": 77.71,
+    "region": "Asia",
+    "country": "인도"
+  },
+  {
+    "id": "MAA",
+    "name": "첸나이",
+    "lat": 12.99,
+    "lng": 80.17,
+    "region": "Asia",
+    "country": "인도"
+  },
+  {
+    "id": "CCU",
+    "name": "콜카타",
+    "lat": 22.65,
+    "lng": 88.45,
+    "region": "Asia",
+    "country": "인도"
+  },
+  {
+    "id": "DXB",
+    "name": "두바이",
+    "lat": 25.25,
+    "lng": 55.36,
+    "region": "Middle East",
+    "country": "아랍에미리트"
+  },
+  {
+    "id": "AUH",
+    "name": "아부다비",
+    "lat": 24.43,
+    "lng": 54.65,
+    "region": "Middle East",
+    "country": "아랍에미리트"
+  },
+  {
+    "id": "SHJ",
+    "name": "샤르자",
+    "lat": 25.33,
+    "lng": 55.52,
+    "region": "Middle East",
+    "country": "아랍에미리트"
+  },
+  {
+    "id": "DWC",
+    "name": "두바이월드센트럴",
+    "lat": 24.9,
+    "lng": 55.16,
+    "region": "Middle East",
+    "country": "아랍에미리트"
+  },
+  {
+    "id": "RKT",
+    "name": "라스알카이마",
+    "lat": 25.61,
+    "lng": 55.94,
+    "region": "Middle East",
+    "country": "아랍에미리트"
+  },
+  {
+    "id": "DOH",
+    "name": "도하",
+    "lat": 25.27,
+    "lng": 51.61,
+    "region": "Middle East",
+    "country": "카타르"
+  },
+  {
+    "id": "XOZ",
+    "name": "도하서부",
+    "lat": 25.12,
+    "lng": 51.32,
+    "region": "Middle East",
+    "country": "카타르"
+  },
+  {
+    "id": "DIA",
+    "name": "도하국제보조",
+    "lat": 25.33,
+    "lng": 51.48,
+    "region": "Middle East",
+    "country": "카타르"
+  },
+  {
+    "id": "QAR",
+    "name": "알코르",
+    "lat": 25.68,
+    "lng": 51.5,
+    "region": "Middle East",
+    "country": "카타르"
+  },
+  {
+    "id": "UTD",
+    "name": "우데이드",
+    "lat": 25.2,
+    "lng": 51.4,
+    "region": "Middle East",
+    "country": "카타르"
+  },
+  {
+    "id": "RUH",
+    "name": "리야드",
+    "lat": 24.96,
+    "lng": 46.7,
+    "region": "Middle East",
+    "country": "사우디아라비아"
+  },
+  {
+    "id": "JED",
+    "name": "제다",
+    "lat": 21.68,
+    "lng": 39.16,
+    "region": "Middle East",
+    "country": "사우디아라비아"
+  },
+  {
+    "id": "DMM",
+    "name": "담맘",
+    "lat": 26.47,
+    "lng": 49.8,
+    "region": "Middle East",
+    "country": "사우디아라비아"
+  },
+  {
+    "id": "MED",
+    "name": "메디나",
+    "lat": 24.55,
+    "lng": 39.71,
+    "region": "Middle East",
+    "country": "사우디아라비아"
+  },
+  {
+    "id": "AHB",
+    "name": "아비하",
+    "lat": 18.24,
+    "lng": 42.66,
+    "region": "Middle East",
+    "country": "사우디아라비아"
+  },
+  {
+    "id": "TLV",
+    "name": "텔아비브",
+    "lat": 32.01,
+    "lng": 34.89,
+    "region": "Middle East",
+    "country": "이스라엘"
+  },
+  {
+    "id": "ETM",
+    "name": "에일랏",
+    "lat": 29.56,
+    "lng": 34.96,
+    "region": "Middle East",
+    "country": "이스라엘"
+  },
+  {
+    "id": "HFA",
+    "name": "하이파",
+    "lat": 32.81,
+    "lng": 35.04,
+    "region": "Middle East",
+    "country": "이스라엘"
+  },
+  {
+    "id": "BEV",
+    "name": "베르셰바",
+    "lat": 31.25,
+    "lng": 34.72,
+    "region": "Middle East",
+    "country": "이스라엘"
+  },
+  {
+    "id": "RPN",
+    "name": "로쉬핀아",
+    "lat": 32.08,
+    "lng": 34.87,
+    "region": "Middle East",
+    "country": "이스라엘"
+  },
+  {
+    "id": "IST",
+    "name": "이스탄불",
+    "lat": 41.27,
+    "lng": 28.73,
+    "region": "Europe",
+    "country": "터키"
+  },
+  {
+    "id": "SAW",
+    "name": "사비하",
+    "lat": 40.9,
+    "lng": 29.31,
+    "region": "Europe",
+    "country": "터키"
+  },
+  {
+    "id": "ADB",
+    "name": "이즈미르",
+    "lat": 38.29,
+    "lng": 27.15,
+    "region": "Europe",
+    "country": "터키"
+  },
+  {
+    "id": "AYT",
+    "name": "안탈리아",
+    "lat": 36.9,
+    "lng": 30.8,
+    "region": "Europe",
+    "country": "터키"
+  },
+  {
+    "id": "ESB",
+    "name": "앙카라",
+    "lat": 40.13,
+    "lng": 32.99,
+    "region": "Europe",
+    "country": "터키"
+  },
+  {
+    "id": "LHR",
+    "name": "런던히드로",
+    "lat": 51.47,
+    "lng": -0.45,
+    "region": "Europe",
+    "country": "영국"
+  },
+  {
+    "id": "LGW",
+    "name": "런던개트윅",
+    "lat": 51.15,
+    "lng": -0.19,
+    "region": "Europe",
+    "country": "영국"
+  },
+  {
+    "id": "MAN",
+    "name": "맨체스터",
+    "lat": 53.35,
+    "lng": -2.27,
+    "region": "Europe",
+    "country": "영국"
+  },
+  {
+    "id": "EDI",
+    "name": "에든버러",
+    "lat": 55.95,
+    "lng": -3.37,
+    "region": "Europe",
+    "country": "영국"
+  },
+  {
+    "id": "BHX",
+    "name": "버밍엄",
+    "lat": 52.45,
+    "lng": -1.75,
+    "region": "Europe",
+    "country": "영국"
+  },
+  {
+    "id": "CDG",
+    "name": "파리CDG",
+    "lat": 49.01,
+    "lng": 2.55,
+    "region": "Europe",
+    "country": "프랑스"
+  },
+  {
+    "id": "ORY",
+    "name": "파리오를리",
+    "lat": 48.73,
+    "lng": 2.37,
+    "region": "Europe",
+    "country": "프랑스"
+  },
+  {
+    "id": "NCE",
+    "name": "니스",
+    "lat": 43.66,
+    "lng": 7.22,
+    "region": "Europe",
+    "country": "프랑스"
+  },
+  {
+    "id": "LYS",
+    "name": "리옹",
+    "lat": 45.73,
+    "lng": 5.09,
+    "region": "Europe",
+    "country": "프랑스"
+  },
+  {
+    "id": "MRS",
+    "name": "마르세유",
+    "lat": 43.44,
+    "lng": 5.22,
+    "region": "Europe",
+    "country": "프랑스"
+  },
+  {
+    "id": "FRA",
+    "name": "프랑크푸르트",
+    "lat": 50.03,
+    "lng": 8.57,
+    "region": "Europe",
+    "country": "독일"
+  },
+  {
+    "id": "MUC",
+    "name": "뮌헨",
+    "lat": 48.35,
+    "lng": 11.79,
+    "region": "Europe",
+    "country": "독일"
+  },
+  {
+    "id": "BER",
+    "name": "베를린",
+    "lat": 52.37,
+    "lng": 13.52,
+    "region": "Europe",
+    "country": "독일"
+  },
+  {
+    "id": "DUS",
+    "name": "뒤셀도르프",
+    "lat": 51.28,
+    "lng": 6.78,
+    "region": "Europe",
+    "country": "독일"
+  },
+  {
+    "id": "HAM",
+    "name": "함부르크",
+    "lat": 53.63,
+    "lng": 9.99,
+    "region": "Europe",
+    "country": "독일"
+  },
+  {
+    "id": "AMS",
+    "name": "암스테르담",
+    "lat": 52.31,
+    "lng": 4.76,
+    "region": "Europe",
+    "country": "네덜란드"
+  },
+  {
+    "id": "RTM",
+    "name": "로테르담",
+    "lat": 51.95,
+    "lng": 4.44,
+    "region": "Europe",
+    "country": "네덜란드"
+  },
+  {
+    "id": "EIN",
+    "name": "에인트호번",
+    "lat": 51.45,
+    "lng": 5.37,
+    "region": "Europe",
+    "country": "네덜란드"
+  },
+  {
+    "id": "GRQ",
+    "name": "흐로닝언",
+    "lat": 53.12,
+    "lng": 6.58,
+    "region": "Europe",
+    "country": "네덜란드"
+  },
+  {
+    "id": "MST",
+    "name": "마스트리흐트",
+    "lat": 50.91,
+    "lng": 5.77,
+    "region": "Europe",
+    "country": "네덜란드"
+  },
+  {
+    "id": "MAD",
+    "name": "마드리드",
+    "lat": 40.47,
+    "lng": -3.57,
+    "region": "Europe",
+    "country": "스페인"
+  },
+  {
+    "id": "BCN",
+    "name": "바르셀로나",
+    "lat": 41.3,
+    "lng": 2.08,
+    "region": "Europe",
+    "country": "스페인"
+  },
+  {
+    "id": "PMI",
+    "name": "팔마",
+    "lat": 39.55,
+    "lng": 2.73,
+    "region": "Europe",
+    "country": "스페인"
+  },
+  {
+    "id": "AGP",
+    "name": "말라가",
+    "lat": 36.67,
+    "lng": -4.5,
+    "region": "Europe",
+    "country": "스페인"
+  },
+  {
+    "id": "TFS",
+    "name": "테네리페",
+    "lat": 28.04,
+    "lng": -16.57,
+    "region": "Europe",
+    "country": "스페인"
+  },
+  {
+    "id": "FCO",
+    "name": "로마피우미치노",
+    "lat": 41.8,
+    "lng": 12.24,
+    "region": "Europe",
+    "country": "이탈리아"
+  },
+  {
+    "id": "MXP",
+    "name": "밀라노말펜사",
+    "lat": 45.63,
+    "lng": 8.72,
+    "region": "Europe",
+    "country": "이탈리아"
+  },
+  {
+    "id": "VCE",
+    "name": "베니스",
+    "lat": 45.51,
+    "lng": 12.35,
+    "region": "Europe",
+    "country": "이탈리아"
+  },
+  {
+    "id": "NAP",
+    "name": "나폴리",
+    "lat": 40.88,
+    "lng": 14.29,
+    "region": "Europe",
+    "country": "이탈리아"
+  },
+  {
+    "id": "CTA",
+    "name": "카타니아",
+    "lat": 37.47,
+    "lng": 15.07,
+    "region": "Europe",
+    "country": "이탈리아"
+  },
+  {
+    "id": "ZRH",
+    "name": "취리히",
+    "lat": 47.46,
+    "lng": 8.55,
+    "region": "Europe",
+    "country": "스위스"
+  },
+  {
+    "id": "GVA",
+    "name": "제네바",
+    "lat": 46.24,
+    "lng": 6.11,
+    "region": "Europe",
+    "country": "스위스"
+  },
+  {
+    "id": "BSL",
+    "name": "바젤",
+    "lat": 47.59,
+    "lng": 7.53,
+    "region": "Europe",
+    "country": "스위스"
+  },
+  {
+    "id": "BRN",
+    "name": "베른",
+    "lat": 46.91,
+    "lng": 7.5,
+    "region": "Europe",
+    "country": "스위스"
+  },
+  {
+    "id": "LUG",
+    "name": "루가노",
+    "lat": 46.0,
+    "lng": 8.91,
+    "region": "Europe",
+    "country": "스위스"
+  },
+  {
+    "id": "SVO",
+    "name": "모스크바셰레메티예보",
+    "lat": 55.97,
+    "lng": 37.41,
+    "region": "Europe",
+    "country": "러시아"
+  },
+  {
+    "id": "DME",
+    "name": "도모데도보",
+    "lat": 55.41,
+    "lng": 37.91,
+    "region": "Europe",
+    "country": "러시아"
+  },
+  {
+    "id": "LED",
+    "name": "상트페테르부르크",
+    "lat": 59.8,
+    "lng": 30.26,
+    "region": "Europe",
+    "country": "러시아"
+  },
+  {
+    "id": "VKO",
+    "name": "브누코보",
+    "lat": 55.59,
+    "lng": 37.26,
+    "region": "Europe",
+    "country": "러시아"
+  },
+  {
+    "id": "KRR",
+    "name": "크라스노다르",
+    "lat": 45.04,
+    "lng": 39.17,
+    "region": "Europe",
+    "country": "러시아"
+  },
+  {
+    "id": "WAW",
+    "name": "바르샤바",
+    "lat": 52.17,
+    "lng": 20.97,
+    "region": "Europe",
+    "country": "폴란드"
+  },
+  {
+    "id": "KRK",
+    "name": "크라쿠프",
+    "lat": 50.08,
+    "lng": 19.78,
+    "region": "Europe",
+    "country": "폴란드"
+  },
+  {
+    "id": "GDN",
+    "name": "그단스크",
+    "lat": 54.38,
+    "lng": 18.47,
+    "region": "Europe",
+    "country": "폴란드"
+  },
+  {
+    "id": "WRO",
+    "name": "브로츠와프",
+    "lat": 51.1,
+    "lng": 16.89,
+    "region": "Europe",
+    "country": "폴란드"
+  },
+  {
+    "id": "POZ",
+    "name": "포즈난",
+    "lat": 52.42,
+    "lng": 16.83,
+    "region": "Europe",
+    "country": "폴란드"
+  },
+  {
+    "id": "ATH",
+    "name": "아테네",
+    "lat": 37.94,
+    "lng": 23.94,
+    "region": "Europe",
+    "country": "그리스"
+  },
+  {
+    "id": "SKG",
+    "name": "테살로니키",
+    "lat": 40.52,
+    "lng": 22.97,
+    "region": "Europe",
+    "country": "그리스"
+  },
+  {
+    "id": "HER",
+    "name": "크레타",
+    "lat": 35.34,
+    "lng": 25.18,
+    "region": "Europe",
+    "country": "그리스"
+  },
+  {
+    "id": "RHO",
+    "name": "로도스",
+    "lat": 36.41,
+    "lng": 28.09,
+    "region": "Europe",
+    "country": "그리스"
+  },
+  {
+    "id": "CFU",
+    "name": "코르푸",
+    "lat": 39.6,
+    "lng": 19.91,
+    "region": "Europe",
+    "country": "그리스"
+  },
+  {
+    "id": "ARN",
+    "name": "스톡홀름",
+    "lat": 59.65,
+    "lng": 17.92,
+    "region": "Europe",
+    "country": "스웨덴"
+  },
+  {
+    "id": "GOT",
+    "name": "예테보리",
+    "lat": 57.66,
+    "lng": 12.29,
+    "region": "Europe",
+    "country": "스웨덴"
+  },
+  {
+    "id": "MMX",
+    "name": "말뫼",
+    "lat": 55.54,
+    "lng": 13.38,
+    "region": "Europe",
+    "country": "스웨덴"
+  },
+  {
+    "id": "UME",
+    "name": "우메오",
+    "lat": 63.79,
+    "lng": 20.28,
+    "region": "Europe",
+    "country": "스웨덴"
+  },
+  {
+    "id": "LLA",
+    "name": "룰레오",
+    "lat": 65.54,
+    "lng": 22.12,
+    "region": "Europe",
+    "country": "스웨덴"
+  },
+  {
+    "id": "OSL",
+    "name": "오슬로",
+    "lat": 60.19,
+    "lng": 11.1,
+    "region": "Europe",
+    "country": "노르웨이"
+  },
+  {
+    "id": "BGO",
+    "name": "베르겐",
+    "lat": 60.29,
+    "lng": 5.22,
+    "region": "Europe",
+    "country": "노르웨이"
+  },
+  {
+    "id": "TRD",
+    "name": "트론헤임",
+    "lat": 63.46,
+    "lng": 10.92,
+    "region": "Europe",
+    "country": "노르웨이"
+  },
+  {
+    "id": "SVG",
+    "name": "스타방에르",
+    "lat": 58.88,
+    "lng": 5.64,
+    "region": "Europe",
+    "country": "노르웨이"
+  },
+  {
+    "id": "TOS",
+    "name": "트롬쇠",
+    "lat": 69.68,
+    "lng": 18.92,
+    "region": "Europe",
+    "country": "노르웨이"
+  },
+  {
+    "id": "CPH",
+    "name": "코펜하겐",
+    "lat": 55.62,
+    "lng": 12.66,
+    "region": "Europe",
+    "country": "덴마크"
+  },
+  {
+    "id": "BLL",
+    "name": "빌룬드",
+    "lat": 55.74,
+    "lng": 9.15,
+    "region": "Europe",
+    "country": "덴마크"
+  },
+  {
+    "id": "AAL",
+    "name": "올보르",
+    "lat": 57.09,
+    "lng": 9.85,
+    "region": "Europe",
+    "country": "덴마크"
+  },
+  {
+    "id": "EBJ",
+    "name": "에스비에르",
+    "lat": 55.53,
+    "lng": 8.55,
+    "region": "Europe",
+    "country": "덴마크"
+  },
+  {
+    "id": "RNN",
+    "name": "보른홀름",
+    "lat": 55.06,
+    "lng": 14.76,
+    "region": "Europe",
+    "country": "덴마크"
+  },
+  {
+    "id": "JFK",
+    "name": "뉴욕JFK",
+    "lat": 40.64,
+    "lng": -73.78,
+    "region": "North America",
+    "country": "미국"
+  },
+  {
+    "id": "LAX",
+    "name": "로스앤젤레스",
+    "lat": 33.94,
+    "lng": -118.4,
+    "region": "North America",
+    "country": "미국"
+  },
+  {
+    "id": "ORD",
+    "name": "시카고",
+    "lat": 41.98,
+    "lng": -87.9,
+    "region": "North America",
+    "country": "미국"
+  },
+  {
+    "id": "ATL",
+    "name": "애틀랜타",
+    "lat": 33.64,
+    "lng": -84.42,
+    "region": "North America",
+    "country": "미국"
+  },
+  {
+    "id": "SFO",
+    "name": "샌프란시스코",
+    "lat": 37.62,
+    "lng": -122.38,
+    "region": "North America",
+    "country": "미국"
+  },
+  {
+    "id": "YYZ",
+    "name": "토론토",
+    "lat": 43.68,
+    "lng": -79.62,
+    "region": "North America",
+    "country": "캐나다"
+  },
+  {
+    "id": "YVR",
+    "name": "밴쿠버",
+    "lat": 49.19,
+    "lng": -123.18,
+    "region": "North America",
+    "country": "캐나다"
+  },
+  {
+    "id": "YUL",
+    "name": "몬트리올",
+    "lat": 45.47,
+    "lng": -73.75,
+    "region": "North America",
+    "country": "캐나다"
+  },
+  {
+    "id": "YYC",
+    "name": "캘거리",
+    "lat": 51.12,
+    "lng": -114.01,
+    "region": "North America",
+    "country": "캐나다"
+  },
+  {
+    "id": "YEG",
+    "name": "에드먼턴",
+    "lat": 53.31,
+    "lng": -113.58,
+    "region": "North America",
+    "country": "캐나다"
+  },
+  {
+    "id": "MEX",
+    "name": "멕시코시티",
+    "lat": 19.43,
+    "lng": -99.07,
+    "region": "North America",
+    "country": "멕시코"
+  },
+  {
+    "id": "CUN",
+    "name": "칸쿤",
+    "lat": 21.04,
+    "lng": -86.87,
+    "region": "North America",
+    "country": "멕시코"
+  },
+  {
+    "id": "GDL",
+    "name": "과달라하라",
+    "lat": 20.52,
+    "lng": -103.31,
+    "region": "North America",
+    "country": "멕시코"
+  },
+  {
+    "id": "MTY",
+    "name": "몬테레이",
+    "lat": 25.78,
+    "lng": -100.11,
+    "region": "North America",
+    "country": "멕시코"
+  },
+  {
+    "id": "CJS",
+    "name": "시우다드후아레스",
+    "lat": 31.64,
+    "lng": -106.43,
+    "region": "North America",
+    "country": "멕시코"
+  },
+  {
+    "id": "GRU",
+    "name": "상파울루",
+    "lat": -23.43,
+    "lng": -46.47,
+    "region": "South America",
+    "country": "브라질"
+  },
+  {
+    "id": "GIG",
+    "name": "리오데자네이로",
+    "lat": -22.81,
+    "lng": -43.25,
+    "region": "South America",
+    "country": "브라질"
+  },
+  {
+    "id": "BSB",
+    "name": "브라질리아",
+    "lat": -15.87,
+    "lng": -47.92,
+    "region": "South America",
+    "country": "브라질"
+  },
+  {
+    "id": "SSA",
+    "name": "사우바도르",
+    "lat": -12.91,
+    "lng": -38.33,
+    "region": "South America",
+    "country": "브라질"
+  },
+  {
+    "id": "REC",
+    "name": "레시페",
+    "lat": -8.13,
+    "lng": -34.92,
+    "region": "South America",
+    "country": "브라질"
+  },
+  {
+    "id": "EZE",
+    "name": "부에노스아이레스",
+    "lat": -34.82,
+    "lng": -58.53,
+    "region": "South America",
+    "country": "아르헨티나"
+  },
+  {
+    "id": "AEP",
+    "name": "부에노스아이레스시내",
+    "lat": -34.56,
+    "lng": -58.42,
+    "region": "South America",
+    "country": "아르헨티나"
+  },
+  {
+    "id": "COR",
+    "name": "코르도바",
+    "lat": -31.32,
+    "lng": -64.21,
+    "region": "South America",
+    "country": "아르헨티나"
+  },
+  {
+    "id": "MDZ",
+    "name": "멘도사",
+    "lat": -32.83,
+    "lng": -68.79,
+    "region": "South America",
+    "country": "아르헨티나"
+  },
+  {
+    "id": "BRC",
+    "name": "바릴로체",
+    "lat": -41.15,
+    "lng": -71.16,
+    "region": "South America",
+    "country": "아르헨티나"
+  },
+  {
+    "id": "SCL",
+    "name": "산티아고",
+    "lat": -33.39,
+    "lng": -70.79,
+    "region": "South America",
+    "country": "칠레"
+  },
+  {
+    "id": "ANF",
+    "name": "안토파가스타",
+    "lat": -23.45,
+    "lng": -70.44,
+    "region": "South America",
+    "country": "칠레"
+  },
+  {
+    "id": "IQQ",
+    "name": "이키케",
+    "lat": -20.22,
+    "lng": -70.14,
+    "region": "South America",
+    "country": "칠레"
+  },
+  {
+    "id": "CCP",
+    "name": "콘셉시온",
+    "lat": -36.77,
+    "lng": -73.0,
+    "region": "South America",
+    "country": "칠레"
+  },
+  {
+    "id": "PMC",
+    "name": "푸에르토몬트",
+    "lat": -41.44,
+    "lng": -73.09,
+    "region": "South America",
+    "country": "칠레"
+  },
+  {
+    "id": "BOG",
+    "name": "보고타",
+    "lat": 4.7,
+    "lng": -74.14,
+    "region": "South America",
+    "country": "콜롬비아"
+  },
+  {
+    "id": "MDE",
+    "name": "메데인",
+    "lat": 6.17,
+    "lng": -75.43,
+    "region": "South America",
+    "country": "콜롬비아"
+  },
+  {
+    "id": "CTG",
+    "name": "카르타헤나",
+    "lat": 10.44,
+    "lng": -75.51,
+    "region": "South America",
+    "country": "콜롬비아"
+  },
+  {
+    "id": "CLO",
+    "name": "칼리",
+    "lat": 3.54,
+    "lng": -76.38,
+    "region": "South America",
+    "country": "콜롬비아"
+  },
+  {
+    "id": "BAQ",
+    "name": "바랑키야",
+    "lat": 10.89,
+    "lng": -74.78,
+    "region": "South America",
+    "country": "콜롬비아"
+  },
+  {
+    "id": "LIM",
+    "name": "리마",
+    "lat": -12.02,
+    "lng": -77.11,
+    "region": "South America",
+    "country": "페루"
+  },
+  {
+    "id": "CUZ",
+    "name": "쿠스코",
+    "lat": -13.54,
+    "lng": -71.94,
+    "region": "South America",
+    "country": "페루"
+  },
+  {
+    "id": "AQP",
+    "name": "아레키파",
+    "lat": -16.34,
+    "lng": -71.58,
+    "region": "South America",
+    "country": "페루"
+  },
+  {
+    "id": "TRU",
+    "name": "트루히요",
+    "lat": -8.08,
+    "lng": -79.11,
+    "region": "South America",
+    "country": "페루"
+  },
+  {
+    "id": "IQT",
+    "name": "이키토스",
+    "lat": -3.79,
+    "lng": -73.31,
+    "region": "South America",
+    "country": "페루"
+  },
+  {
+    "id": "SYD",
+    "name": "시드니",
+    "lat": -33.94,
+    "lng": 151.18,
+    "region": "Oceania",
+    "country": "호주"
+  },
+  {
+    "id": "MEL",
+    "name": "멜버른",
+    "lat": -37.67,
+    "lng": 144.84,
+    "region": "Oceania",
+    "country": "호주"
+  },
+  {
+    "id": "BNE",
+    "name": "브리즈번",
+    "lat": -27.38,
+    "lng": 153.12,
+    "region": "Oceania",
+    "country": "호주"
+  },
+  {
+    "id": "PER",
+    "name": "퍼스",
+    "lat": -31.94,
+    "lng": 115.97,
+    "region": "Oceania",
+    "country": "호주"
+  },
+  {
+    "id": "ADL",
+    "name": "애들레이드",
+    "lat": -34.95,
+    "lng": 138.53,
+    "region": "Oceania",
+    "country": "호주"
+  },
+  {
+    "id": "AKL",
+    "name": "오클랜드",
+    "lat": -37.01,
+    "lng": 174.79,
+    "region": "Oceania",
+    "country": "뉴질랜드"
+  },
+  {
+    "id": "CHC",
+    "name": "크라이스트처치",
+    "lat": -43.49,
+    "lng": 172.53,
+    "region": "Oceania",
+    "country": "뉴질랜드"
+  },
+  {
+    "id": "WLG",
+    "name": "웰링턴",
+    "lat": -41.33,
+    "lng": 174.81,
+    "region": "Oceania",
+    "country": "뉴질랜드"
+  },
+  {
+    "id": "ZQN",
+    "name": "퀸스타운",
+    "lat": -45.02,
+    "lng": 168.74,
+    "region": "Oceania",
+    "country": "뉴질랜드"
+  },
+  {
+    "id": "DUD",
+    "name": "더니딘",
+    "lat": -45.93,
+    "lng": 170.2,
+    "region": "Oceania",
+    "country": "뉴질랜드"
+  },
+  {
+    "id": "JNB",
+    "name": "요하네스버그",
+    "lat": -26.13,
+    "lng": 28.24,
+    "region": "Africa",
+    "country": "남아프리카"
+  },
+  {
+    "id": "CPT",
+    "name": "케이프타운",
+    "lat": -33.97,
+    "lng": 18.6,
+    "region": "Africa",
+    "country": "남아프리카"
+  },
+  {
+    "id": "DUR",
+    "name": "더반",
+    "lat": -29.62,
+    "lng": 31.12,
+    "region": "Africa",
+    "country": "남아프리카"
+  },
+  {
+    "id": "PLZ",
+    "name": "포트엘리자베스",
+    "lat": -33.98,
+    "lng": 25.62,
+    "region": "Africa",
+    "country": "남아프리카"
+  },
+  {
+    "id": "ELS",
+    "name": "이스트런던",
+    "lat": -33.04,
+    "lng": 27.83,
+    "region": "Africa",
+    "country": "남아프리카"
+  },
+  {
+    "id": "CAI",
+    "name": "카이로",
+    "lat": 30.12,
+    "lng": 31.41,
+    "region": "Africa",
+    "country": "이집트"
+  },
+  {
+    "id": "HRG",
+    "name": "후르가다",
+    "lat": 27.18,
+    "lng": 33.8,
+    "region": "Africa",
+    "country": "이집트"
+  },
+  {
+    "id": "SSH",
+    "name": "샤름엘셰이크",
+    "lat": 27.98,
+    "lng": 34.39,
+    "region": "Africa",
+    "country": "이집트"
+  },
+  {
+    "id": "LXR",
+    "name": "룩소르",
+    "lat": 25.67,
+    "lng": 32.71,
+    "region": "Africa",
+    "country": "이집트"
+  },
+  {
+    "id": "ASW",
+    "name": "아스완",
+    "lat": 23.96,
+    "lng": 32.82,
+    "region": "Africa",
+    "country": "이집트"
+  },
+  {
+    "id": "CMN",
+    "name": "카사블랑카",
+    "lat": 33.37,
+    "lng": -7.59,
+    "region": "Africa",
+    "country": "모로코"
+  },
+  {
+    "id": "RAK",
+    "name": "마라케시",
+    "lat": 31.61,
+    "lng": -8.04,
+    "region": "Africa",
+    "country": "모로코"
+  },
+  {
+    "id": "AGA",
+    "name": "아가디르",
+    "lat": 30.33,
+    "lng": -9.41,
+    "region": "Africa",
+    "country": "모로코"
+  },
+  {
+    "id": "FEZ",
+    "name": "페스",
+    "lat": 33.93,
+    "lng": -4.98,
+    "region": "Africa",
+    "country": "모로코"
+  },
+  {
+    "id": "TNG",
+    "name": "탕헤르",
+    "lat": 35.73,
+    "lng": -5.92,
+    "region": "Africa",
+    "country": "모로코"
+  },
+  {
+    "id": "NBO",
+    "name": "나이로비",
+    "lat": -1.32,
+    "lng": 36.93,
+    "region": "Africa",
+    "country": "케냐"
+  },
+  {
+    "id": "MBA",
+    "name": "몸바사",
+    "lat": -4.03,
+    "lng": 39.6,
+    "region": "Africa",
+    "country": "케냐"
+  },
+  {
+    "id": "KIS",
+    "name": "키수무",
+    "lat": -0.09,
+    "lng": 34.73,
+    "region": "Africa",
+    "country": "케냐"
+  },
+  {
+    "id": "EDL",
+    "name": "엘도렛",
+    "lat": 0.4,
+    "lng": 35.24,
+    "region": "Africa",
+    "country": "케냐"
+  },
+  {
+    "id": "WIL",
+    "name": "윌슨",
+    "lat": -1.32,
+    "lng": 36.81,
+    "region": "Africa",
+    "country": "케냐"
+  },
+  {
+    "id": "ADD",
+    "name": "아디스아바바",
+    "lat": 8.98,
+    "lng": 38.8,
+    "region": "Africa",
+    "country": "에티오피아"
+  },
+  {
+    "id": "DIR",
+    "name": "디레다와",
+    "lat": 9.62,
+    "lng": 41.85,
+    "region": "Africa",
+    "country": "에티오피아"
+  },
+  {
+    "id": "BJR",
+    "name": "바하르다르",
+    "lat": 11.61,
+    "lng": 37.32,
+    "region": "Africa",
+    "country": "에티오피아"
+  },
+  {
+    "id": "GMB",
+    "name": "감벨라",
+    "lat": 8.13,
+    "lng": 34.56,
+    "region": "Africa",
+    "country": "에티오피아"
+  },
+  {
+    "id": "AWA",
+    "name": "아와사",
+    "lat": 7.07,
+    "lng": 38.5,
+    "region": "Africa",
+    "country": "에티오피아"
+  },
+  {
+    "id": "LOS",
+    "name": "라고스",
+    "lat": 6.58,
+    "lng": 3.32,
+    "region": "Africa",
+    "country": "나이지리아"
+  },
+  {
+    "id": "ABV",
+    "name": "아부자",
+    "lat": 9.01,
+    "lng": 7.26,
+    "region": "Africa",
+    "country": "나이지리아"
+  },
+  {
+    "id": "PHC",
+    "name": "포트하커트",
+    "lat": 5.02,
+    "lng": 6.95,
+    "region": "Africa",
+    "country": "나이지리아"
+  },
+  {
+    "id": "KAN",
+    "name": "카노",
+    "lat": 12.05,
+    "lng": 8.52,
+    "region": "Africa",
+    "country": "나이지리아"
+  },
+  {
+    "id": "ENU",
+    "name": "에누구",
+    "lat": 6.47,
+    "lng": 7.56,
+    "region": "Africa",
+    "country": "나이지리아"
+  },
+  {
+    "id": "ACC",
+    "name": "아크라",
+    "lat": 5.61,
+    "lng": -0.17,
+    "region": "Africa",
+    "country": "가나"
+  },
+  {
+    "id": "KMS",
+    "name": "쿠마시",
+    "lat": 6.71,
+    "lng": -1.59,
+    "region": "Africa",
+    "country": "가나"
+  },
+  {
+    "id": "TML",
+    "name": "타말레",
+    "lat": 9.56,
+    "lng": -0.86,
+    "region": "Africa",
+    "country": "가나"
+  },
+  {
+    "id": "TAK",
+    "name": "타코라디",
+    "lat": 4.9,
+    "lng": -1.77,
+    "region": "Africa",
+    "country": "가나"
+  },
+  {
+    "id": "NYI",
+    "name": "써니아니",
+    "lat": 7.36,
+    "lng": -2.33,
+    "region": "Africa",
+    "country": "가나"
+  },
+  {
+    "id": "LIS",
+    "name": "리스본",
+    "lat": 38.77,
+    "lng": -9.13,
+    "region": "Europe",
+    "country": "포르투갈"
+  },
+  {
+    "id": "OPO",
+    "name": "포르토",
+    "lat": 41.24,
+    "lng": -8.68,
+    "region": "Europe",
+    "country": "포르투갈"
+  },
+  {
+    "id": "FAO",
+    "name": "파로",
+    "lat": 37.01,
+    "lng": -7.97,
+    "region": "Europe",
+    "country": "포르투갈"
+  },
+  {
+    "id": "FNC",
+    "name": "마데이라",
+    "lat": 32.69,
+    "lng": -16.77,
+    "region": "Europe",
+    "country": "포르투갈"
+  },
+  {
+    "id": "PDL",
+    "name": "아조레스",
+    "lat": 37.74,
+    "lng": -25.7,
+    "region": "Europe",
+    "country": "포르투갈"
+  },
+  {
+    "id": "BRU",
+    "name": "브뤼셀",
+    "lat": 50.9,
+    "lng": 4.48,
+    "region": "Europe",
+    "country": "벨기에"
+  },
+  {
+    "id": "CRL",
+    "name": "브뤼셀사우트",
+    "lat": 50.46,
+    "lng": 4.45,
+    "region": "Europe",
+    "country": "벨기에"
+  },
+  {
+    "id": "ANR",
+    "name": "안트베르펜",
+    "lat": 51.19,
+    "lng": 4.46,
+    "region": "Europe",
+    "country": "벨기에"
+  },
+  {
+    "id": "LGG",
+    "name": "리에주",
+    "lat": 50.64,
+    "lng": 5.44,
+    "region": "Europe",
+    "country": "벨기에"
+  },
+  {
+    "id": "OST",
+    "name": "오스텐드",
+    "lat": 51.2,
+    "lng": 2.87,
+    "region": "Europe",
+    "country": "벨기에"
+  },
+  {
+    "id": "VIE",
+    "name": "비엔나",
+    "lat": 48.11,
+    "lng": 16.57,
+    "region": "Europe",
+    "country": "오스트리아"
+  },
+  {
+    "id": "SZG",
+    "name": "잘츠부르크",
+    "lat": 47.79,
+    "lng": 13.0,
+    "region": "Europe",
+    "country": "오스트리아"
+  },
+  {
+    "id": "INN",
+    "name": "인스부르크",
+    "lat": 47.26,
+    "lng": 11.34,
+    "region": "Europe",
+    "country": "오스트리아"
+  },
+  {
+    "id": "GRZ",
+    "name": "그라츠",
+    "lat": 46.99,
+    "lng": 15.44,
+    "region": "Europe",
+    "country": "오스트리아"
+  },
+  {
+    "id": "LNZ",
+    "name": "린츠",
+    "lat": 48.23,
+    "lng": 14.19,
+    "region": "Europe",
+    "country": "오스트리아"
+  },
+  {
+    "id": "PRG",
+    "name": "프라하",
+    "lat": 50.1,
+    "lng": 14.26,
+    "region": "Europe",
+    "country": "체코"
+  },
+  {
+    "id": "BRQ",
+    "name": "브르노",
+    "lat": 49.15,
+    "lng": 16.69,
+    "region": "Europe",
+    "country": "체코"
+  },
+  {
+    "id": "OSR",
+    "name": "오스트라바",
+    "lat": 49.7,
+    "lng": 18.12,
+    "region": "Europe",
+    "country": "체코"
+  },
+  {
+    "id": "KLV",
+    "name": "카루비바리",
+    "lat": 50.2,
+    "lng": 12.91,
+    "region": "Europe",
+    "country": "체코"
+  },
+  {
+    "id": "PED",
+    "name": "파르두비체",
+    "lat": 50.01,
+    "lng": 15.74,
+    "region": "Europe",
+    "country": "체코"
+  },
+  {
+    "id": "DUB",
+    "name": "더블린",
+    "lat": 53.43,
+    "lng": -6.25,
+    "region": "Europe",
+    "country": "아일랜드"
+  },
+  {
+    "id": "ORK",
+    "name": "코크",
+    "lat": 51.85,
+    "lng": -8.49,
+    "region": "Europe",
+    "country": "아일랜드"
+  },
+  {
+    "id": "SNN",
+    "name": "섀넌",
+    "lat": 52.7,
+    "lng": -8.92,
+    "region": "Europe",
+    "country": "아일랜드"
+  },
+  {
+    "id": "NOC",
+    "name": "노크",
+    "lat": 53.91,
+    "lng": -8.82,
+    "region": "Europe",
+    "country": "아일랜드"
+  },
+  {
+    "id": "KIR",
+    "name": "케리",
+    "lat": 52.18,
+    "lng": -9.52,
+    "region": "Europe",
+    "country": "아일랜드"
+  },
+  {
+    "id": "HEL",
+    "name": "헬싱키",
+    "lat": 60.32,
+    "lng": 24.96,
+    "region": "Europe",
+    "country": "핀란드"
+  },
+  {
+    "id": "TMP",
+    "name": "탐페레",
+    "lat": 61.41,
+    "lng": 23.6,
+    "region": "Europe",
+    "country": "핀란드"
+  },
+  {
+    "id": "TKU",
+    "name": "투르쿠",
+    "lat": 60.51,
+    "lng": 22.26,
+    "region": "Europe",
+    "country": "핀란드"
+  },
+  {
+    "id": "OUL",
+    "name": "오ulu",
+    "lat": 64.93,
+    "lng": 25.35,
+    "region": "Europe",
+    "country": "핀란드"
+  },
+  {
+    "id": "RVN",
+    "name": "로바니에미",
+    "lat": 66.56,
+    "lng": 25.83,
+    "region": "Europe",
+    "country": "핀란드"
+  },
+  {
+    "id": "IKA",
+    "name": "테헤란",
+    "lat": 35.69,
+    "lng": 51.31,
+    "region": "Middle East",
+    "country": "이란"
+  },
+  {
+    "id": "MHD",
+    "name": "마시하드",
+    "lat": 36.23,
+    "lng": 59.64,
+    "region": "Middle East",
+    "country": "이란"
+  },
+  {
+    "id": "SYZ",
+    "name": "시라즈",
+    "lat": 29.54,
+    "lng": 52.59,
+    "region": "Middle East",
+    "country": "이란"
+  },
+  {
+    "id": "TBZ",
+    "name": "타브리즈",
+    "lat": 38.13,
+    "lng": 46.24,
+    "region": "Middle East",
+    "country": "이란"
+  },
+  {
+    "id": "IFN",
+    "name": "이스파한",
+    "lat": 32.75,
+    "lng": 51.86,
+    "region": "Middle East",
+    "country": "이란"
+  },
+  {
+    "id": "BGW",
+    "name": "바그다드",
+    "lat": 33.26,
+    "lng": 44.23,
+    "region": "Middle East",
+    "country": "이라크"
+  },
+  {
+    "id": "EBL",
+    "name": "에르빌",
+    "lat": 36.24,
+    "lng": 43.97,
+    "region": "Middle East",
+    "country": "이라크"
+  },
+  {
+    "id": "BSR",
+    "name": "바스라",
+    "lat": 30.56,
+    "lng": 47.66,
+    "region": "Middle East",
+    "country": "이라크"
+  },
+  {
+    "id": "NJF",
+    "name": "나자프",
+    "lat": 31.99,
+    "lng": 44.4,
+    "region": "Middle East",
+    "country": "이라크"
+  },
+  {
+    "id": "ISU",
+    "name": "술라이마니야",
+    "lat": 35.56,
+    "lng": 45.32,
+    "region": "Middle East",
+    "country": "이라크"
+  },
+  {
+    "id": "AMM",
+    "name": "암만",
+    "lat": 31.72,
+    "lng": 35.99,
+    "region": "Middle East",
+    "country": "요르단"
+  },
+  {
+    "id": "AQJ",
+    "name": "아카바",
+    "lat": 29.61,
+    "lng": 35.02,
+    "region": "Middle East",
+    "country": "요르단"
+  },
+  {
+    "id": "OMF",
+    "name": "마프라크",
+    "lat": 32.36,
+    "lng": 36.25,
+    "region": "Middle East",
+    "country": "요르단"
+  },
+  {
+    "id": "ADJ",
+    "name": "암만시빌",
+    "lat": 31.97,
+    "lng": 35.99,
+    "region": "Middle East",
+    "country": "요르단"
+  },
+  {
+    "id": "QMD",
+    "name": "마단",
+    "lat": 31.6,
+    "lng": 35.77,
+    "region": "Middle East",
+    "country": "요르단"
+  },
+  {
+    "id": "KWI",
+    "name": "쿠웨이트",
+    "lat": 29.24,
+    "lng": 47.97,
+    "region": "Middle East",
+    "country": "쿠웨이트"
+  },
+  {
+    "id": "XIJ",
+    "name": "아마다",
+    "lat": 29.35,
+    "lng": 47.52,
+    "region": "Middle East",
+    "country": "쿠웨이트"
+  },
+  {
+    "id": "OKV",
+    "name": "쿠웨이트서부",
+    "lat": 29.1,
+    "lng": 48.1,
+    "region": "Middle East",
+    "country": "쿠웨이트"
+  },
+  {
+    "id": "JBD",
+    "name": "제벨알리",
+    "lat": 29.05,
+    "lng": 48.0,
+    "region": "Middle East",
+    "country": "쿠웨이트"
+  },
+  {
+    "id": "KWI2",
+    "name": "쿠웨이트보조",
+    "lat": 29.2,
+    "lng": 47.9,
+    "region": "Middle East",
+    "country": "쿠웨이트"
+  },
+  {
+    "id": "MCT",
+    "name": "무스카트",
+    "lat": 23.59,
+    "lng": 58.28,
+    "region": "Middle East",
+    "country": "오만"
+  },
+  {
+    "id": "SLL",
+    "name": "살랄라",
+    "lat": 17.04,
+    "lng": 54.09,
+    "region": "Middle East",
+    "country": "오만"
+  },
+  {
+    "id": "OHS",
+    "name": "소하르",
+    "lat": 24.39,
+    "lng": 56.63,
+    "region": "Middle East",
+    "country": "오만"
+  },
+  {
+    "id": "DQM",
+    "name": "두쿰",
+    "lat": 19.5,
+    "lng": 57.63,
+    "region": "Middle East",
+    "country": "오만"
+  },
+  {
+    "id": "KHS",
+    "name": "카샵",
+    "lat": 17.51,
+    "lng": 52.49,
+    "region": "Middle East",
+    "country": "오만"
+  },
+  {
+    "id": "DAC",
+    "name": "다카",
+    "lat": 23.84,
+    "lng": 90.4,
+    "region": "Asia",
+    "country": "방글라데시"
+  },
+  {
+    "id": "CGP",
+    "name": "치타공",
+    "lat": 22.25,
+    "lng": 91.82,
+    "region": "Asia",
+    "country": "방글라데시"
+  },
+  {
+    "id": "ZYL",
+    "name": "실렛",
+    "lat": 24.96,
+    "lng": 91.87,
+    "region": "Asia",
+    "country": "방글라데시"
+  },
+  {
+    "id": "JSR",
+    "name": "제소르",
+    "lat": 23.18,
+    "lng": 89.16,
+    "region": "Asia",
+    "country": "방글라데시"
+  },
+  {
+    "id": "RJH",
+    "name": "라지샤히",
+    "lat": 24.44,
+    "lng": 88.62,
+    "region": "Asia",
+    "country": "방글라데시"
+  },
+  {
+    "id": "KHI",
+    "name": "카라치",
+    "lat": 24.91,
+    "lng": 67.16,
+    "region": "Asia",
+    "country": "파키스탄"
+  },
+  {
+    "id": "LHE",
+    "name": "라호르",
+    "lat": 31.52,
+    "lng": 74.4,
+    "region": "Asia",
+    "country": "파키스탄"
+  },
+  {
+    "id": "ISB",
+    "name": "이슬라마바드",
+    "lat": 33.62,
+    "lng": 73.1,
+    "region": "Asia",
+    "country": "파키스탄"
+  },
+  {
+    "id": "PEW",
+    "name": "페샤와르",
+    "lat": 33.99,
+    "lng": 71.51,
+    "region": "Asia",
+    "country": "파키스탄"
+  },
+  {
+    "id": "MUX",
+    "name": "멀탄",
+    "lat": 30.2,
+    "lng": 71.42,
+    "region": "Asia",
+    "country": "파키스탄"
+  },
+  {
+    "id": "CMB",
+    "name": "콜롬보",
+    "lat": 7.18,
+    "lng": 79.89,
+    "region": "Asia",
+    "country": "스리랑카"
+  },
+  {
+    "id": "HRI",
+    "name": "함반토타",
+    "lat": 6.28,
+    "lng": 81.12,
+    "region": "Asia",
+    "country": "스리랑카"
+  },
+  {
+    "id": "JAF",
+    "name": "자프나",
+    "lat": 9.79,
+    "lng": 80.07,
+    "region": "Asia",
+    "country": "스리랑카"
+  },
+  {
+    "id": "TRR",
+    "name": "트린코말리",
+    "lat": 8.54,
+    "lng": 81.18,
+    "region": "Asia",
+    "country": "스리랑카"
+  },
+  {
+    "id": "BTC",
+    "name": "바티칼로아",
+    "lat": 7.71,
+    "lng": 81.68,
+    "region": "Asia",
+    "country": "스리랑카"
+  },
+  {
+    "id": "RGN",
+    "name": "양곤",
+    "lat": 16.91,
+    "lng": 96.13,
+    "region": "Asia",
+    "country": "미얀마"
+  },
+  {
+    "id": "MDL",
+    "name": "만달레이",
+    "lat": 21.7,
+    "lng": 95.98,
+    "region": "Asia",
+    "country": "미얀마"
+  },
+  {
+    "id": "NYT",
+    "name": "네피도",
+    "lat": 19.77,
+    "lng": 96.12,
+    "region": "Asia",
+    "country": "미얀마"
+  },
+  {
+    "id": "HEH",
+    "name": "헤호",
+    "lat": 20.75,
+    "lng": 96.79,
+    "region": "Asia",
+    "country": "미얀마"
+  },
+  {
+    "id": "NYU",
+    "name": "바간",
+    "lat": 21.18,
+    "lng": 94.93,
+    "region": "Asia",
+    "country": "미얀마"
+  },
+  {
+    "id": "PNH",
+    "name": "프놈펜",
+    "lat": 11.55,
+    "lng": 104.85,
+    "region": "Asia",
+    "country": "캄보디아"
+  },
+  {
+    "id": "REP",
+    "name": "시엠립",
+    "lat": 13.41,
+    "lng": 103.81,
+    "region": "Asia",
+    "country": "캄보디아"
+  },
+  {
+    "id": "KOS",
+    "name": "시하누크빌",
+    "lat": 10.58,
+    "lng": 103.64,
+    "region": "Asia",
+    "country": "캄보디아"
+  },
+  {
+    "id": "BBM",
+    "name": "바탐방",
+    "lat": 13.1,
+    "lng": 103.22,
+    "region": "Asia",
+    "country": "캄보디아"
+  },
+  {
+    "id": "KZC",
+    "name": "캄퐁참",
+    "lat": 12.25,
+    "lng": 104.56,
+    "region": "Asia",
+    "country": "캄보디아"
+  },
+  {
+    "id": "VTE",
+    "name": "비엔티안",
+    "lat": 17.99,
+    "lng": 102.56,
+    "region": "Asia",
+    "country": "라오스"
+  },
+  {
+    "id": "LPQ",
+    "name": "루앙프라방",
+    "lat": 19.9,
+    "lng": 102.16,
+    "region": "Asia",
+    "country": "라오스"
+  },
+  {
+    "id": "PKZ",
+    "name": "파크세",
+    "lat": 15.13,
+    "lng": 105.78,
+    "region": "Asia",
+    "country": "라오스"
+  },
+  {
+    "id": "ZVK",
+    "name": "사반나켓",
+    "lat": 16.56,
+    "lng": 104.76,
+    "region": "Asia",
+    "country": "라오스"
+  },
+  {
+    "id": "LXG",
+    "name": "루앙남타",
+    "lat": 20.57,
+    "lng": 104.06,
+    "region": "Asia",
+    "country": "라오스"
+  }
 ]

@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import json
 
 db = SQLAlchemy()
 
@@ -29,3 +30,42 @@ class UserRadarFlight(db.Model):
     ac_name = db.Column(db.String(50))
     is_korea = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class UserProgress(db.Model):
+    """게이미피케이션 통합 진행 상태 (단일 사용자)"""
+    id = db.Column(db.Integer, primary_key=True)
+    virtual_hours = db.Column(db.Float, default=0.0)
+    streak_days = db.Column(db.Integer, default=0)
+    last_active_date = db.Column(db.String(10))
+    flashcard_streak = db.Column(db.Integer, default=0)
+    last_flashcard_date = db.Column(db.String(10))
+    flashcards_learned = db.Column(db.Text, default='[]')
+    first_flight_done = db.Column(db.Boolean, default=False)
+    first_flight_step = db.Column(db.Integer, default=0)
+    unlocked_content = db.Column(db.Text, default='[]')
+    completed_missions = db.Column(db.Text, default='{}')
+    completed_weekly = db.Column(db.Text, default='{}')
+    quiz_history = db.Column(db.Text, default='[]')
+    scenario_progress = db.Column(db.Text, default='{}')
+    activity_log = db.Column(db.Text, default='[]')
+    daily_mission_streak = db.Column(db.Integer, default=0)
+    last_all_missions_date = db.Column(db.String(10))
+    daily_learning = db.Column(db.Text, default='{}')
+
+    def _json(self, field, default):
+        try:
+            return json.loads(getattr(self, field) or json.dumps(default))
+        except (json.JSONDecodeError, TypeError):
+            return default
+
+    def set_json(self, field, value):
+        setattr(self, field, json.dumps(value, ensure_ascii=False))
+
+
+class FutureLetter(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    written_at = db.Column(db.DateTime, default=datetime.utcnow)
+    is_opened = db.Column(db.Boolean, default=False)
+    opened_at = db.Column(db.DateTime)

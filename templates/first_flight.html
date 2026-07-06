@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}나의 첫 비행 - Pilot Dream{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold mb-2">🛫 나의 첫 비행</h1>
+    <p class="text-gray-400 mb-6">기장의 꿈, 여기서 시작합니다</p>
+    <div class="h-2 bg-black rounded mb-6"><div id="ff-progress" class="h-2 bg-[#ffaa00] rounded transition-all" style="width:0%"></div></div>
+    <div id="ff-content" class="info-card p-8 rounded-2xl min-h-[300px]"></div>
+</div>
+<script src="/static/js/gamification.js"></script>
+<script>
+let steps = [], current = 0, done = false;
+
+async function load() {
+    const res = await fetch('/api/gamification/first-flight');
+    const data = await res.json();
+    steps = data.steps;
+    current = data.current_step || 0;
+    done = data.done;
+    if (done) {
+        document.getElementById('ff-content').innerHTML = `
+            <div class="text-center">
+                <div class="text-6xl mb-4">🎉</div>
+                <div class="font-bold text-xl">첫 비행 완료!</div>
+                <p class="text-gray-400 mt-2">이제 매일 미션과 퀴즈로 성장하세요.</p>
+                <a href="/" class="inline-block mt-4 px-6 py-2 bg-[#33ff33] text-black rounded font-bold">대시보드로</a>
+            </div>`;
+        document.getElementById('ff-progress').style.width = '100%';
+        return;
+    }
+    renderStep(Math.min(current, steps.length - 1));
+}
+
+function renderStep(idx) {
+    const s = steps[idx];
+    document.getElementById('ff-progress').style.width = ((idx + 1) / steps.length * 100) + '%';
+    let html = `<div class="text-4xl mb-4">${s.icon}</div><h2 class="text-xl font-bold mb-3">${s.title}</h2><p class="text-gray-300 mb-6 leading-relaxed">${s.story}</p>`;
+
+    if (s.choices) {
+        html += s.choices.map((c, i) => `
+            <button onclick="pickChoice(${idx},${i})" class="w-full text-left p-3 mb-2 bg-black/40 rounded hover:bg-black/60 text-sm">${c.text}</button>
+        `).join('');
+    } else if (s.link) {
+        html += `<a href="${s.link}" onclick="visitLink(${idx})" class="block w-full py-3 bg-[#0A84FF] text-white text-center rounded font-bold">${s.action}</a>`;
+    } else {
+        html += `<button onclick="nextStep(${idx})" class="w-full py-3 bg-[#33ff33] text-black rounded font-bold">${s.action || '다음 →'}</button>`;
+    }
+    document.getElementById('ff-content').innerHTML = html;
+}
+
+function pickChoice(idx, ci) {
+    const c = steps[idx].choices[ci];
+    alert(c.feedback);
+    if (c.correct) nextStep(idx);
+}
+
+function visitLink(idx) {
+    advanceStep(idx + 1);
+}
+
+async function nextStep(idx) {
+    await advanceStep(idx + 1);
+}
+
+async function advanceStep(step) {
+    await fetch('/api/gamification/first-flight/step', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ step })
+    });
+    if (step >= steps.length) { load(); return; }
+    current = step;
+    renderStep(step);
+}
+
+load();
+</script>
+{% endblock %}

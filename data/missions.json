@@ -1,0 +1,12 @@
+[
+  {"id": "m_logbook", "title": "오늘의 비행 기록하기", "desc": "로그북에 비행 1회를 기록하세요", "reward_hours": 0.5, "type": "logbook", "link": "/logbook", "icon": "📖"},
+  {"id": "m_atc", "title": "ATC 영어 3문장 듣기", "desc": "항공영어 페이지에서 문장 3개를 들어보세요", "reward_hours": 0.3, "type": "atc", "link": "/atc-english", "icon": "🎧"},
+  {"id": "m_radar", "title": "레이더에서 한국편 찾기", "desc": "레이더에서 주황색 한국 항공편 3대를 클릭해보세요", "reward_hours": 0.3, "type": "radar", "link": "/radar", "icon": "📡"},
+  {"id": "m_planner", "title": "비행 계획 세우기", "desc": "플래너에서 노선을 계산해보세요", "reward_hours": 0.4, "type": "planner", "link": "/flight-planner", "icon": "✈️"},
+  {"id": "m_quiz", "title": "기장 퀴즈 도전", "desc": "1000문항 은행에서 랜덤 10문제 풀기", "reward_hours": 0.5, "type": "quiz", "link": "/quiz", "icon": "🧠"},
+  {"id": "m_flashcard", "title": "항공 용어 10개 학습", "desc": "오늘의 항공용어 카드 10개 학습하기", "reward_hours": 0.4, "type": "flashcard", "link": "/flashcards", "icon": "📇"},
+  {"id": "m_aircraft", "title": "기종 탐험", "desc": "기종 페이지에서 항공기 1대 정보를 읽어보세요", "reward_hours": 0.3, "type": "aircraft", "link": "/aircraft", "icon": "🛩️"},
+  {"id": "m_scenario", "title": "비상 상황 훈련", "desc": "시나리오 모드에서 의사결정을 해보세요", "reward_hours": 0.6, "type": "scenario", "link": "/scenarios", "icon": "🚨"},
+  {"id": "m_career", "title": "커리어 로드맵 읽기", "desc": "한국 기장 되는 길을 확인해보세요", "reward_hours": 0.2, "type": "career", "link": "/korea-career", "icon": "🇰🇷"},
+  {"id": "m_captain_day", "title": "기장의 하루 체험", "desc": "기장이 하루 동안 하는 일을 따라가 보세요", "reward_hours": 0.3, "type": "captain_day", "link": "/captain-day", "icon": "⏰"}
+]

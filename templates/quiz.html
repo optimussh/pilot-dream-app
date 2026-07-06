@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}기장 퀴즈 - Pilot Dream{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <h1 class="text-3xl font-bold mb-2">🧠 내가 기장이라면?</h1>
+    <p class="text-gray-400 mb-2">
+        문제은행 <span id="pool-size" class="text-[#ffaa00] font-bold">1000</span>문항 중
+        오늘의 문제 <span class="text-[#33ff33] font-bold">5</span>개
+    </p>
+    <p class="text-xs text-gray-500 mb-6">매일 같은 5문제 · 제출 후 정답·해설 확인 · 완료 시 내일까지 잠금</p>
+
+    <div id="daily-done-banner" class="hidden mb-6 info-card p-5 rounded-2xl border border-[#33ff33]/50 text-center">
+        <div class="text-3xl mb-2">✅</div>
+        <div class="font-bold text-[#33ff33] text-lg">오늘의 퀴즈 완료!</div>
+        <p class="text-sm text-gray-400 mt-1">내일 새로운 5문제가 열립니다</p>
+    </div>
+
+    <div id="quiz-area" class="space-y-4"></div>
+    <div class="flex gap-3 mt-6">
+        <button id="submit-btn" onclick="submitQuiz()" class="flex-1 py-3 bg-[#0A84FF] text-white font-bold rounded-xl hidden">제출하기</button>
+    </div>
+    <div id="quiz-result" class="hidden mt-6 info-card p-6 rounded-2xl"></div>
+</div>
+<script>
+let questions = [];
+let answers = {};
+let poolSize = 1000;
+let dailyDone = false;
+
+async function loadQuiz() {
+    answers = {};
+    document.getElementById('quiz-result').classList.add('hidden');
+    const res = await fetch('/api/gamification/quiz');
+    const data = await res.json();
+    questions = data.questions || [];
+    poolSize = data.pool_size || 1000;
+    dailyDone = data.daily_done || false;
+    document.getElementById('pool-size').textContent = poolSize;
+
+    const banner = document.getElementById('daily-done-banner');
+    const area = document.getElementById('quiz-area');
+    const submitBtn = document.getElementById('submit-btn');
+
+    if (!questions.length) {
+        area.innerHTML = '<p class="text-gray-400">문제를 불러오지 못했습니다.</p>';
+        submitBtn.classList.add('hidden');
+        return;
+    }
+
+    if (dailyDone) {
+        banner.classList.remove('hidden');
+        submitBtn.classList.add('hidden');
+        renderQuestions(true);
+        showResults(data);
+        return;
+    }
+
+    banner.classList.add('hidden');
+    renderQuestions(false);
+    submitBtn.classList.remove('hidden');
+}
+
+function renderQuestions(reviewMode) {
+    const area = document.getElementById('quiz-area');
+    area.innerHTML = questions.map((q, i) => `
+        <div class="info-card p-5 rounded-xl" id="q-${q.id}">
+            <div class="text-[10px] text-gray-500 mb-1">${q.category || '항공'}</div>
+            <div class="font-semibold mb-3">Q${i+1}. ${q.question}</div>
+            <div class="choices space-y-2" id="choices-${q.id}">
+                ${q.choices.map((c, j) => `
+                    <label class="flex items-center gap-2 p-2 rounded hover:bg-black/40 cursor-pointer text-sm choice-label" data-qid="${q.id}" data-idx="${j}">
+                        <input type="radio" name="${q.id}" value="${j}" ${reviewMode ? 'disabled' : ''} onchange="answers['${q.id}']=${j}">
+                        ${c}
+                    </label>
+                `).join('')}
+            </div>
+            <div class="review hidden mt-3 p-3 rounded text-sm"></div>
+        </div>
+    `).join('');
+}
+
+function showResults(data) {
+    const result = document.getElementById('quiz-result');
+    result.classList.remove('hidden');
+    const score = data.score ?? 0;
+    const correct = data.correct ?? 0;
+    const total = data.total ?? questions.length;
+    const emoji = score >= 80 ? '🏆' : score >= 50 ? '👍' : '💪';
+    result.innerHTML = `
+        <div class="text-center mb-4">
+            <div class="text-5xl mb-2">${emoji}</div>
+            <div class="text-3xl font-bold text-[#0A84FF]">${score}점</div>
+            <div class="text-sm text-gray-400">${correct} / ${total} 정답</div>
+        </div>`;
+
+    (data.results || []).forEach(r => {
+        const card = document.getElementById('q-' + r.id);
+        if (!card) return;
+        const review = card.querySelector('.review');
+        review.classList.remove('hidden');
+
+        const labels = card.querySelectorAll('.choice-label');
+        labels.forEach(lbl => {
+            const idx = parseInt(lbl.dataset.idx);
+            lbl.classList.remove('bg-green-900/30', 'bg-red-900/30', 'border', 'border-green-500', 'border-red-500');
+            if (idx === r.correct_answer) {
+                lbl.classList.add('bg-green-900/30', 'border', 'border-green-500');
+            }
+            if (!r.correct && idx === r.user_answer) {
+                lbl.classList.add('bg-red-900/30', 'border', 'border-red-500');
+            }
+        });
+
+        if (r.correct) {
+            review.innerHTML = `<div class="text-[#33ff33] font-bold">✅ 정답!</div><div class="text-gray-300 mt-1">${r.explanation}</div>`;
+        } else {
+            review.innerHTML = `
+                <div class="text-red-400 font-bold">❌ 오답</div>
+                <div class="mt-2 text-gray-300">내 답: <span class="text-red-300">${r.user_choice || '(미응답)'}</span></div>
+                <div class="text-gray-300">정답: <span class="text-[#33ff33] font-semibold">${r.correct_choice}</span></div>
+                <div class="mt-2 text-[#ffaa00]">💡 ${r.explanation}</div>`;
+        }
+
+        const radio = card.querySelector(`input[value="${r.user_answer}"]`);
+        if (radio) radio.checked = true;
+    });
+}
+
+async function submitQuiz() {
+    if (Object.keys(answers).length < questions.length) {
+        alert('모든 문제에 답해주세요!');
+        return;
+    }
+    const res = await fetch('/api/gamification/quiz/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            answers,
+            question_ids: questions.map(q => q.id)
+        })
+    });
+    const data = await res.json();
+    if (data.error) { alert(data.error); return; }
+
+    dailyDone = true;
+    document.getElementById('daily-done-banner').classList.remove('hidden');
+    document.getElementById('submit-btn').classList.add('hidden');
+    renderQuestions(true);
+    showResults(data);
+}
+
+loadQuiz();
+</script>
+{% endblock %}

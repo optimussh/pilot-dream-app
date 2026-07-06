@@ -103,6 +103,7 @@
     </div>
 </div>
 
+<script src="/static/js/gamification.js"></script>
 <script>
 let airports = [];
 let aircraftList = [];
@@ -112,7 +113,9 @@ let airlineNames = {};
 
 // Realistic per-airline jet fuel prices (USD per kg) - for education/simulation
 const DEFAULT_FUEL_PRICES = {
-    "KE": 0.92, "OZ": 0.94,                    // Korean carriers
+    "KE": 0.92, "OZ": 0.94,                    // Korean FSC
+    "7C": 0.82, "LJ": 0.81, "TW": 0.80,       // Korean LCC
+    "BX": 0.81, "RS": 0.83, "YP": 0.88,       // Korean LCC / long-haul LCC
     "EK": 0.78, "QR": 0.81, "EY": 0.80,       // Middle East (cheaper fuel access)
     "SQ": 0.97, "CX": 0.95, "BR": 0.96,       // Premium Asian
     "JL": 0.99, "NH": 0.98,
@@ -195,6 +198,8 @@ function calculateAdvancedFlight() {
     const aircraft = aircraftList.find(a => a.id === acId);
 
     if (!from || !to || !aircraft) return alert("공항과 기종을 모두 선택해주세요.");
+
+    if (typeof trackActivity === 'function') trackActivity('planner', `${fromId}-${toId}`);
 
     // Great circle
     const R = 6371;

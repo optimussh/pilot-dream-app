@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request
-from app.models import db, UserBadge, LogbookEntry
+from app.models import db, UserBadge, LogbookEntry, UserProgress
 import json
 import os
 from collections import defaultdict
@@ -13,16 +13,21 @@ def load_badges():
             return json.load(f)
     return []
 
+def get_all_badges():
+    return load_badges()
+
 ALL_BADGES = load_badges()
 
 def get_unlocked_badge_ids():
     return [b.badge_id for b in UserBadge.query.all()]
 
 def compute_user_progress():
-    """Compute current user stats from logbook"""
+    """Compute current user stats from logbook + virtual hours"""
     entries = LogbookEntry.query.all()
+    prog = UserProgress.query.first()
+    virtual = (prog.virtual_hours or 0) if prog else 0
     
-    total_hours = sum(e.hours for e in entries)
+    total_hours = sum(e.hours for e in entries) + virtual
     flight_count = len(entries)
     
     # Per aircraft hours
@@ -73,13 +78,14 @@ def get_badge_progress(badge, progress):
 
 @bp.route('/')
 def index():
+    badges = get_all_badges()
     unlocked_ids = set(get_unlocked_badge_ids())
     progress = compute_user_progress()
     
     unlocked = []
     locked = []
     
-    for badge in ALL_BADGES:
+    for badge in badges:
         pct, current, target = get_badge_progress(badge, progress)
         badge_copy = badge.copy()
         badge_copy["progress"] = pct
@@ -103,12 +109,13 @@ def index():
         locked=locked, 
         locked_by_category=dict(locked_by_category),
         progress=progress,
-        all_badges=ALL_BADGES
+        all_badges=badges
     )
 
 @bp.route('/api/progress')
 def api_progress():
     """API for dashboard and other pages"""
+    badges = get_all_badges()
     progress = compute_user_progress()
     unlocked_ids = set(get_unlocked_badge_ids())
     
@@ -116,7 +123,7 @@ def api_progress():
     next_badge = None
     best_progress = -1
     
-    for badge in ALL_BADGES:
+    for badge in badges:
         if badge["id"] in unlocked_ids:
             continue
         pct, current, target = get_badge_progress(badge, progress)
@@ -130,7 +137,7 @@ def api_progress():
     return jsonify({
         "progress": progress,
         "unlocked_count": len(unlocked_ids),
-        "total_badges": len(ALL_BADGES),
+        "total_badges": len(badges),
         "next_badge": next_badge
     })
 
@@ -141,7 +148,7 @@ def unlock_badge():
     
     unlocked_ids = get_unlocked_badge_ids()
     
-    valid_ids = [b['id'] for b in ALL_BADGES]
+    valid_ids = [b['id'] for b in get_all_badges()]
     
     if badge_id in valid_ids and badge_id not in unlocked_ids:
         new_badge = UserBadge(badge_id=badge_id)

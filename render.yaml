@@ -11,4 +11,6 @@ services:
         value: production
       - key: SECRET_KEY
         generateValue: true
-    # disk 항목 삭제됨
+      # Supabase PostgreSQL 사용 시 아래 DATABASE_URL을 Render에서 설정하세요
+      # - key: DATABASE_URL
+      #   value: postgresql://... (Supabase에서 복사한 연결 문자열)

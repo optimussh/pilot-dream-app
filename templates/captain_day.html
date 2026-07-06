@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}기장의 하루 - Pilot Dream{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <h1 class="text-3xl font-bold mb-2">⏰ 기장의 하루</h1>
+    <p class="text-gray-400 mb-8">실제 기장이 하루 동안 하는 일을 따라가 보세요</p>
+    <div id="timeline" class="relative border-l-2 border-[#33ff33]/40 ml-4 space-y-6"></div>
+</div>
+<script src="/static/js/gamification.js"></script>
+<script>
+trackActivity('captain_day', 'visited');
+
+fetch('/api/gamification/captain-day').then(r=>r.json()).then(steps => {
+    document.getElementById('timeline').innerHTML = steps.map(s => `
+        <div class="relative pl-8">
+            <div class="absolute -left-[9px] w-4 h-4 bg-[#33ff33] rounded-full"></div>
+            <div class="info-card p-5 rounded-xl">
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-[#ffaa00] font-mono font-bold">${s.time}</span>
+                    <span class="text-2xl">${s.icon}</span>
+                </div>
+                <div class="font-bold mb-1">${s.title}</div>
+                <p class="text-sm text-gray-300 mb-3">${s.desc}</p>
+                <div class="text-xs text-[#0A84FF] mb-2">💡 ${s.tip}</div>
+                <a href="${s.link}" class="text-xs px-3 py-1 border border-[#33ff33] rounded inline-block hover:bg-[#003300]">체험하러 가기 →</a>
+            </div>
+        </div>
+    `).join('');
+});
+</script>
+{% endblock %}

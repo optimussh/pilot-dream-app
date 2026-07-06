@@ -1,0 +1,8 @@
+[
+  {"id": "student", "title": "항공 꿈나무", "icon": "🌱", "desc": "비행기를 좋아하는 학생", "requirement": {}, "app_tip": "첫 비행 튜토리얼을 시작해보세요!", "link": "/first-flight"},
+  {"id": "ppl", "title": "사설 조종사 (PPL)", "icon": "📘", "desc": "작은 비행기를 혼자 조종할 수 있는 단계", "requirement": {"hours": 5, "first_flight": true}, "app_tip": "로그북에 비행을 기록하고 미션을 완료하세요", "link": "/logbook"},
+  {"id": "cpl", "title": "사업용 조종사 (CPL)", "icon": "📗", "desc": "유료로 승객을 태울 수 있는 자격", "requirement": {"hours": 30, "badges": 2}, "app_tip": "퀴즈와 플래시카드로 지식을 쌓으세요", "link": "/quiz"},
+  {"id": "fo_b737", "title": "부기장 (B737)", "icon": "✈️", "desc": "항공사 입사 후 첫 직급", "requirement": {"hours": 100, "badges": 5, "quiz": true}, "app_tip": "플래너로 실제 노선을 계획해보세요", "link": "/flight-planner"},
+  {"id": "fo_a350", "title": "부기장 (A350)", "icon": "🌏", "desc": "장거리 국제선 부기장", "requirement": {"hours": 500, "badges": 10}, "app_tip": "시나리오로 비상 상황을 훈련하세요", "link": "/scenarios"},
+  {"id": "captain", "title": "기장 (Captain)", "icon": "👨‍✈️", "desc": "모든 비행의 최종 책임자", "requirement": {"hours": 2000, "badges": 20}, "app_tip": "5,000시간 목표를 향해 꾸준히 기록하세요!", "link": "/"}
+]

@@ -862,5 +862,293 @@
     "route": "LHR-ICN",
     "aircraft": "Boeing 777-300ER",
     "typical_duration": 11.2
+  },
+  {
+    "airline": "7C",
+    "airline_name": "제주항공",
+    "flight_number": "7C1101",
+    "route": "ICN-CJU",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 1.0
+  },
+  {
+    "airline": "7C",
+    "airline_name": "제주항공",
+    "flight_number": "7C1102",
+    "route": "CJU-ICN",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 1.0
+  },
+  {
+    "airline": "7C",
+    "airline_name": "제주항공",
+    "flight_number": "7C1401",
+    "route": "ICN-NRT",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 2.3
+  },
+  {
+    "airline": "7C",
+    "airline_name": "제주항공",
+    "flight_number": "7C2401",
+    "route": "ICN-BKK",
+    "aircraft": "Airbus A321-200",
+    "typical_duration": 5.5
+  },
+  {
+    "airline": "LJ",
+    "airline_name": "진에어",
+    "flight_number": "LJ111",
+    "route": "ICN-CJU",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 1.0
+  },
+  {
+    "airline": "LJ",
+    "airline_name": "진에어",
+    "flight_number": "LJ201",
+    "route": "ICN-NRT",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 2.3
+  },
+  {
+    "airline": "LJ",
+    "airline_name": "진에어",
+    "flight_number": "LJ221",
+    "route": "ICN-FUK",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 1.5
+  },
+  {
+    "airline": "LJ",
+    "airline_name": "진에어",
+    "flight_number": "LJ501",
+    "route": "ICN-TPE",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 2.5
+  },
+  {
+    "airline": "TW",
+    "airline_name": "티웨이항공",
+    "flight_number": "TW101",
+    "route": "ICN-CJU",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 1.0
+  },
+  {
+    "airline": "TW",
+    "airline_name": "티웨이항공",
+    "flight_number": "TW301",
+    "route": "ICN-NRT",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 2.3
+  },
+  {
+    "airline": "TW",
+    "airline_name": "티웨이항공",
+    "flight_number": "TW303",
+    "route": "ICN-KIX",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 2.0
+  },
+  {
+    "airline": "TW",
+    "airline_name": "티웨이항공",
+    "flight_number": "TW405",
+    "route": "ICN-BKK",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 5.5
+  },
+  {
+    "airline": "BX",
+    "airline_name": "에어부산",
+    "flight_number": "BX813",
+    "route": "PUS-ICN",
+    "aircraft": "Airbus A321-200",
+    "typical_duration": 0.8
+  },
+  {
+    "airline": "BX",
+    "airline_name": "에어부산",
+    "flight_number": "BX814",
+    "route": "ICN-PUS",
+    "aircraft": "Airbus A321-200",
+    "typical_duration": 0.8
+  },
+  {
+    "airline": "BX",
+    "airline_name": "에어부산",
+    "flight_number": "BX748",
+    "route": "PUS-NRT",
+    "aircraft": "Airbus A320-200",
+    "typical_duration": 1.8
+  },
+  {
+    "airline": "BX",
+    "airline_name": "에어부산",
+    "flight_number": "BX791",
+    "route": "PUS-CJU",
+    "aircraft": "Boeing 737-800",
+    "typical_duration": 0.7
+  },
+  {
+    "airline": "RS",
+    "airline_name": "에어서울",
+    "flight_number": "RS801",
+    "route": "ICN-NRT",
+    "aircraft": "Airbus A321-200",
+    "typical_duration": 2.3
+  },
+  {
+    "airline": "RS",
+    "airline_name": "에어서울",
+    "flight_number": "RS811",
+    "route": "ICN-KIX",
+    "aircraft": "Airbus A321-200",
+    "typical_duration": 2.0
+  },
+  {
+    "airline": "RS",
+    "airline_name": "에어서울",
+    "flight_number": "RS901",
+    "route": "ICN-CXR",
+    "aircraft": "Airbus A321-200",
+    "typical_duration": 5.0
+  },
+  {
+    "airline": "RS",
+    "airline_name": "에어서울",
+    "flight_number": "RS711",
+    "route": "ICN-TPE",
+    "aircraft": "Airbus A321-200",
+    "typical_duration": 2.5
+  },
+  {
+    "airline": "YP",
+    "airline_name": "에어프레미아",
+    "flight_number": "YP601",
+    "route": "ICN-EWR",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 13.5
+  },
+  {
+    "airline": "YP",
+    "airline_name": "에어프레미아",
+    "flight_number": "YP651",
+    "route": "ICN-SFO",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 11.0
+  },
+  {
+    "airline": "YP",
+    "airline_name": "에어프레미아",
+    "flight_number": "YP701",
+    "route": "ICN-LAX",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 11.5
+  },
+  {
+    "airline": "YP",
+    "airline_name": "에어프레미아",
+    "flight_number": "YP751",
+    "route": "ICN-SIN",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 6.5
+  },
+  {
+    "airline": "JQ",
+    "airline_name": "제스타항공",
+    "flight_number": "JQ401",
+    "route": "SYD-BNE",
+    "aircraft": "Airbus A320-200",
+    "typical_duration": 1.4
+  },
+  {
+    "airline": "JQ",
+    "airline_name": "제스타항공",
+    "flight_number": "JQ402",
+    "route": "BNE-SYD",
+    "aircraft": "Airbus A320-200",
+    "typical_duration": 1.4
+  },
+  {
+    "airline": "JQ",
+    "airline_name": "제스타항공",
+    "flight_number": "JQ801",
+    "route": "SYD-MEL",
+    "aircraft": "Airbus A320-200",
+    "typical_duration": 1.3
+  },
+  {
+    "airline": "JQ",
+    "airline_name": "제스타항공",
+    "flight_number": "JQ570",
+    "route": "BNE-MEL",
+    "aircraft": "Airbus A321neo",
+    "typical_duration": 2.2
+  },
+  {
+    "airline": "JQ",
+    "airline_name": "제스타항공",
+    "flight_number": "JQ15",
+    "route": "SYD-NRT",
+    "aircraft": "Boeing 787-8 Dreamliner",
+    "typical_duration": 9.5
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE503",
+    "route": "ICN-BNE",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 10.0
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE103",
+    "route": "ICN-SYD",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 10.5
+  },
+  {
+    "airline": "OZ",
+    "airline_name": "아시아나항공",
+    "flight_number": "OZ602",
+    "route": "ICN-SYD",
+    "aircraft": "Airbus A350-900",
+    "typical_duration": 10.5
+  },
+  {
+    "airline": "QF",
+    "airline_name": "Qantas",
+    "flight_number": "QF88",
+    "route": "ICN-SYD",
+    "aircraft": "Boeing 787-9 Dreamliner",
+    "typical_duration": 10.5
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE505",
+    "route": "ICN-BNE",
+    "aircraft": "Airbus A330-300",
+    "typical_duration": 10.0
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE504",
+    "route": "BNE-ICN",
+    "aircraft": "Boeing 777-300ER",
+    "typical_duration": 10.0
+  },
+  {
+    "airline": "KE",
+    "airline_name": "대한항공",
+    "flight_number": "KE506",
+    "route": "BNE-ICN",
+    "aircraft": "Airbus A330-300",
+    "typical_duration": 10.0
   }
 ]

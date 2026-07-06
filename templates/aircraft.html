@@ -30,6 +30,7 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="/static/js/gamification.js"></script>
 <script>
 let aircraftData = [];
 
@@ -184,6 +185,7 @@ function renderCargoDiagram(ac) {
 }
 
 function showAircraftDetail(ac) {
+    if (typeof trackActivity === 'function') trackActivity('aircraft', ac.name);
     const detail = document.getElementById('aircraft-details');
     
     // 사진 대신 기종 설계도 스타일 일러스트 사용

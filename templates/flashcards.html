@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}항공 용어 카드 - Pilot Dream{% endblock %}
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <h1 class="text-3xl font-bold mb-2">📇 항공 용어 카드</h1>
+    <p class="text-gray-400 mb-2">
+        용어 풀 <span id="pool-size" class="text-[#ffaa00] font-bold">1000</span>개 중
+        오늘의 카드 <span class="text-[#33ff33] font-bold">5</span>개
+    </p>
+    <div class="text-sm text-[#33ff33] mb-6">
+        스트릭: <span id="fc-streak">0</span>일 · 누적 학습: <span id="fc-total">0</span> / <span id="fc-pool">1000</span>개
+    </div>
+    <div id="cards" class="space-y-4"></div>
+    <button id="fc-done-btn" onclick="markLearned()" class="mt-6 w-full py-3 bg-[#33ff33] text-black font-bold rounded-xl">오늘의 5개 학습 완료!</button>
+</div>
+<script src="/static/js/gamification.js"></script>
+<script>
+let dailyCards = [];
+
+async function loadCards() {
+    const [cardsRes, statusRes] = await Promise.all([
+        fetch('/api/gamification/flashcard/daily'),
+        fetch('/api/gamification/status')
+    ]);
+    const data = await cardsRes.json();
+    dailyCards = data.cards || data;
+    const poolSize = data.pool_size || 1000;
+    document.getElementById('pool-size').textContent = poolSize;
+    document.getElementById('fc-pool').textContent = poolSize;
+
+    const status = await statusRes.json();
+    document.getElementById('fc-streak').textContent = status.flashcard_streak || 0;
+    document.getElementById('fc-total').textContent = status.flashcards_learned_count || 0;
+
+    document.getElementById('cards').innerHTML = dailyCards.map(c => `
+        <div class="info-card p-5 rounded-xl cursor-pointer ${c.already_learned ? 'opacity-60' : ''}" onclick="flip('${c.id}')">
+            <div id="front-${c.id}">
+                <div class="text-[10px] text-gray-500">${c.category || '항공'}</div>
+                <div class="text-2xl font-bold text-[#0A84FF]">${c.term}</div>
+                <div class="text-xs text-gray-500">${c.term_ko} · 탭해서 뜻 보기</div>
+            </div>
+            <div id="back-${c.id}" class="hidden">
+                <div class="text-sm mb-2">${c.definition}</div>
+                <div class="text-xs text-[#ffaa00]">예: ${c.example}</div>
+            </div>
+            ${c.already_learned ? '<div class="text-[10px] text-[#33ff33] mt-2">✓ 이미 학습함</div>' : ''}
+        </div>
+    `).join('');
+}
+
+function flip(id) {
+    document.getElementById('front-' + id).classList.toggle('hidden');
+    document.getElementById('back-' + id).classList.toggle('hidden');
+}
+
+async function markLearned() {
+    const ids = dailyCards.map(c => c.id);
+    const res = await fetch('/api/gamification/flashcard/learn', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ card_ids: ids })
+    });
+    const data = await res.json();
+    alert(`학습 완료! 총 ${data.learned_total}개 · 스트릭 ${data.streak}일`);
+    loadCards();
+}
+
+loadCards();
+</script>
+{% endblock %}
