@@ -7,6 +7,7 @@ from app.services.gamification import (
     get_unlocked_content, try_unlock_badges, today_str, week_key,
     get_daily_learning, save_daily_learning, quiz_public
 )
+from app.services.economy import get_wallet_summary, salary_progress
 from app.services.content_bank import (
     get_quiz_bank, get_flashcard_bank, get_scenario_bank,
     daily_sample, lookup_by_ids
@@ -82,6 +83,8 @@ def gamification_status():
         'has_letter': letter is not None,
         'letter_opened': letter.is_opened if letter else False,
         'growth_report': get_growth_report(prog, 30),
+        'wallet': get_wallet_summary(prog),
+        'salary': salary_progress(prog),
     })
 
 
@@ -115,10 +118,13 @@ def mission_complete():
                 'error': '먼저 해당 활동을 해보세요!',
                 'need_activity': activity_type
             }), 400
-    hours, msg = complete_mission(prog, mission_id)
+    hours, msg, money = complete_mission(prog, mission_id)
     if hours is None:
         return jsonify({'error': msg}), 400
-    return jsonify({'status': 'ok', 'message': msg, 'virtual_hours': hours})
+    return jsonify({
+        'status': 'ok', 'message': msg, 'virtual_hours': hours,
+        'money_earned': money, 'wallet_balance': prog.wallet_balance or 0,
+    })
 
 
 @bp.route('/api/gamification/weekly/complete', methods=['POST'])
@@ -126,10 +132,13 @@ def weekly_complete():
     data = request.get_json() or {}
     challenge_id = data.get('challenge_id')
     prog = get_or_create_progress()
-    hours, msg = complete_weekly(prog, challenge_id)
+    hours, msg, money = complete_weekly(prog, challenge_id)
     if hours is None:
         return jsonify({'error': msg}), 400
-    return jsonify({'status': 'ok', 'message': msg, 'virtual_hours': hours})
+    return jsonify({
+        'status': 'ok', 'message': msg, 'virtual_hours': hours,
+        'money_earned': money, 'wallet_balance': prog.wallet_balance or 0,
+    })
 
 
 def _quiz_result_item(q, answers):
@@ -192,12 +201,23 @@ def quiz_submit():
         award_virtual_hours(prog, 0.3, f'오늘의 퀴즈 {score}점')
     else:
         award_virtual_hours(prog, 0.1, f'오늘의 퀴즈 완료 ({score}점)')
+    from app.services.economy import award_money, LEARNING_REWARDS
+    if score >= 90:
+        quiz_money = award_money(prog, LEARNING_REWARDS['quiz_90'], f'퀴즈 {score}점')
+    elif score >= 80:
+        quiz_money = award_money(prog, LEARNING_REWARDS['quiz_80'], f'퀴즈 {score}점')
+    elif score >= 50:
+        quiz_money = award_money(prog, LEARNING_REWARDS['quiz_50'], f'퀴즈 {score}점')
+    else:
+        quiz_money = award_money(prog, LEARNING_REWARDS['quiz_done'], f'퀴즈 완료 ({score}점)')
     try_unlock_badges(prog)
     db.session.commit()
     return jsonify({
         'score': score, 'correct': correct, 'total': len(questions),
         'results': results, 'pool_size': len(bank),
         'daily_done': True,
+        'money_earned': quiz_money,
+        'wallet_balance': prog.wallet_balance or 0,
     })
 
 
@@ -221,15 +241,20 @@ def flashcard_learn():
     elif prog.last_flashcard_date != today:
         prog.flashcard_streak = 1
     prog.last_flashcard_date = today
+    flash_money = 0
     if new_count > 0:
         award_virtual_hours(prog, new_count * 0.1, f'플래시카드 {new_count}개 학습')
+        from app.services.economy import award_money, LEARNING_REWARDS
+        flash_money = award_money(prog, LEARNING_REWARDS['flashcard'] * new_count, f'플래시카드 {new_count}개')
     log_activity(prog, 'flashcard', f'learned={len(card_ids)}')
     try_unlock_badges(prog)
     db.session.commit()
     return jsonify({
         'learned_total': len(learned),
         'new_count': new_count,
-        'streak': prog.flashcard_streak
+        'streak': prog.flashcard_streak,
+        'money_earned': flash_money,
+        'wallet_balance': prog.wallet_balance or 0,
     })
 
 
@@ -282,10 +307,15 @@ def scenario_complete():
 
     reward = 1.5 if grade == 'A' else 0.8 if grade == 'B' else 0.3
     award_virtual_hours(prog, reward, f'시나리오 {scenario_id} ({grade})')
+    from app.services.economy import award_money, LEARNING_REWARDS
+    sc_key = f'scenario_{grade.lower()}'
+    scenario_money = award_money(prog, LEARNING_REWARDS.get(sc_key, LEARNING_REWARDS['scenario_c']), f'시나리오 {grade}')
     log_activity(prog, 'scenario', scenario_id)
 
+    bonus_money = 0
     if sc_day.get('all_done') and not sc_day.get('bonus_awarded'):
         award_virtual_hours(prog, 1.0, '오늘의 비상 훈련 4개 완료')
+        bonus_money = award_money(prog, LEARNING_REWARDS['scenario_all_bonus'], '비상 훈련 4개 완료')
         sc_day['bonus_awarded'] = True
         dl['scenarios'] = sc_day
         save_daily_learning(prog, dl)
@@ -298,6 +328,8 @@ def scenario_complete():
         'completed_count': len(completed_today),
         'total': len(daily_ids),
         'daily_done': sc_day.get('all_done', False),
+        'money_earned': scenario_money + bonus_money,
+        'wallet_balance': prog.wallet_balance or 0,
     })
 
 
@@ -309,16 +341,21 @@ def first_flight_step():
     steps = load_json('first_flight.json')
     max_step = len(steps)
     prog.first_flight_step = max(prog.first_flight_step or 0, step)
+    first_flight_money = 0
     if step >= max_step and not prog.first_flight_done:
         prog.first_flight_done = True
         award_virtual_hours(prog, 2.0, '첫 비행 튜토리얼 완료')
+        from app.services.economy import award_money, LEARNING_REWARDS
+        first_flight_money = award_money(prog, LEARNING_REWARDS['first_flight'], '첫 비행 튜토리얼 완료')
         try_unlock_badges(prog)
     log_activity(prog, 'first_flight', f'step={step}')
     db.session.commit()
     return jsonify({
         'step': prog.first_flight_step,
         'done': prog.first_flight_done,
-        'virtual_hours': prog.virtual_hours
+        'virtual_hours': prog.virtual_hours,
+        'money_earned': first_flight_money,
+        'wallet_balance': prog.wallet_balance or 0,
     })
 
 
@@ -337,8 +374,10 @@ def future_letter():
         prog = get_or_create_progress()
         log_activity(prog, 'letter', 'written')
         award_virtual_hours(prog, 0.5, '미래의 나에게 편지 작성')
+        from app.services.economy import award_money, LEARNING_REWARDS
+        letter_money = award_money(prog, LEARNING_REWARDS['letter'], '미래의 나에게 편지')
         db.session.commit()
-        return jsonify({'status': 'ok'})
+        return jsonify({'status': 'ok', 'money_earned': letter_money, 'wallet_balance': prog.wallet_balance or 0})
     letter = FutureLetter.query.first()
     if not letter:
         return jsonify({'exists': False})

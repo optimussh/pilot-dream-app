@@ -52,6 +52,15 @@ class UserProgress(db.Model):
     daily_mission_streak = db.Column(db.Integer, default=0)
     last_all_missions_date = db.Column(db.String(10))
     daily_learning = db.Column(db.Text, default='{}')
+    wallet_balance = db.Column(db.Integer, default=0)
+    salary_milestones_paid = db.Column(db.Integer, default=0)
+    hour_boosts = db.Column(db.Float, default=0.0)
+    inventory = db.Column(db.Text, default='[]')
+    equipped_avatar = db.Column(db.Text, default='{}')
+    owned_aircraft = db.Column(db.Text, default='["b737","a320"]')
+    active_aircraft = db.Column(db.String(30), default='b737')
+    aircraft_loadouts = db.Column(db.Text, default='{}')
+    transaction_log = db.Column(db.Text, default='[]')
 
     def _json(self, field, default):
         try:

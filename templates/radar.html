@@ -527,7 +527,7 @@ function buildFlightIcon(f) {
 
     let finalColor = '#33ff33';
     if (f.isUserFlight) {
-        finalColor = '#a855f7';
+        finalColor = pilotCosmetics.trail_color || '#a855f7';
     } else if (f.isKorea) {
         finalColor = '#ffaa00';
     } else {
@@ -589,7 +589,7 @@ function updateFlights() {
         if (f.hdg < 0) f.hdg += 360;
 
         let col = '#33ff33';
-        if (f.isUserFlight) col = '#a855f7';
+        if (f.isUserFlight) col = pilotCosmetics.trail_color || '#a855f7';
         else if (f.isKorea) col = '#ffaa00';
 
         const icon = buildFlightIcon(f);
@@ -620,7 +620,7 @@ function updateFlights() {
 
             if (f.trailLine) map.removeLayer(f.trailLine);
             const trailOptions = f.isUserFlight
-                ? { color: '#a855f7', weight: 3, opacity: 0.65, dashArray: '5,4' }
+                ? { color: pilotCosmetics.trail_color || '#a855f7', weight: 3, opacity: 0.65, dashArray: '5,4' }
                 : { color: col, weight: 1.8, opacity: 0.38, dashArray: '2,4' };
             f.trailLine = L.polyline(trails[f.id], trailOptions).addTo(map);
         } else if (f.trailLine) {
@@ -749,7 +749,8 @@ async function initRadar() {
         loadRadarReferenceData(),
         loadRadarAirports(),
         loadRadarAircraft(),
-        loadUserFlights()
+        loadUserFlights(),
+        loadCosmetics()
     ]);
     drawAirportMarkers();
     populateModalAircraftSelect();
@@ -840,6 +841,16 @@ function toggleFullRoutes() {
 // ==================== Custom Flight (User Radar Flights) ====================
 
 let userFlights = []; // DB에서 불러온 사용자 항공편
+let pilotCosmetics = { trail_color: '#a855f7' };
+
+async function loadCosmetics() {
+    try {
+        const res = await fetch('/api/economy/cosmetics');
+        pilotCosmetics = await res.json();
+    } catch (e) {
+        pilotCosmetics = { trail_color: '#a855f7' };
+    }
+}
 
 async function loadUserFlights() {
     try {
@@ -1055,7 +1066,10 @@ async function saveRadarFlightToLogbook(org, dest, aircraft) {
         });
 
         if (res.ok) {
-            alert('로그북에 기록되었습니다!');
+            const result = await res.json().catch(() => ({}));
+            let msg = '로그북에 기록되었습니다!';
+            if (result.salary) msg += `\n\n🎉 급여일! ₩${result.salary.amount.toLocaleString()} 입금!`;
+            alert(msg);
             // 선택적으로 로그북 페이지로 이동하거나 알림만
         } else {
             alert('로그북 기록 실패');

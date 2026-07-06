@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+
+{% block title %}파일럿 클럽 & 상점 - Pilot Dream{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <div class="flex flex-wrap justify-between items-start gap-4 mb-6">
+        <div>
+            <h1 class="text-3xl font-bold mb-1">🏪 파일럿 클럽 & 상점</h1>
+            <p class="text-gray-400 text-sm">비행하고, 공부하고, 꾸미세요! 기장의 꿈을 키워가요 ✈️</p>
+        </div>
+        <div class="info-card px-5 py-3 text-center border border-[#ffaa00]/40">
+            <div class="text-xs text-gray-400">내 지갑</div>
+            <div class="text-2xl font-bold text-[#ffaa00]" id="shop-balance">₩0</div>
+            <div class="text-[10px] text-gray-500" id="shop-hour-boost">가속 +0h</div>
+        </div>
+    </div>
+
+    <!-- 아바타 미리보기 -->
+    <div class="info-card p-5 mb-6 flex flex-wrap items-center gap-6 border border-purple-500/30">
+        <div class="text-6xl" id="avatar-preview">👨‍✈️</div>
+        <div class="flex-1 min-w-[200px]">
+            <div class="font-bold text-lg">내 파일럿 아바타</div>
+            <div class="text-xs text-gray-400 mt-1" id="avatar-slots">장착 슬롯: 머리 · 유니폼 · 악세서리 · 윙</div>
+            <div class="flex gap-2 mt-3 flex-wrap" id="avatar-equip-btns"></div>
+        </div>
+        <div class="text-right text-xs text-gray-500">
+            <div>주력 기체</div>
+            <div class="text-[#33ff33] font-bold" id="active-aircraft-name">—</div>
+        </div>
+    </div>
+
+    <!-- 탭 -->
+    <div class="flex gap-1 mb-4 flex-wrap" id="shop-tabs">
+        <button data-tab="avatar" class="shop-tab active px-4 py-2 rounded-lg text-sm font-bold">👤 아바타</button>
+        <button data-tab="livery" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🎨 리버리</button>
+        <button data-tab="deco" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">✨ 데코</button>
+        <button data-tab="lounge" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🏠 라운지</button>
+        <button data-tab="boost" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">⚡ 가속권</button>
+        <button data-tab="hangar" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">✈️ 행거</button>
+        <button data-tab="inventory" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🎒 인벤토리</button>
+        <button data-tab="wallet" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">💰 지갑</button>
+    </div>
+
+    <div id="shop-content" class="min-h-[400px]">
+        <p class="text-gray-400">로딩 중...</p>
+    </div>
+</div>
+
+<style>
+.shop-tab { background: #1c1c1e; border: 1px solid #2c2c2e; color: #8e8e93; transition: all .2s; }
+.shop-tab.active, .shop-tab:hover { background: #002200; border-color: #33ff33; color: #33ff33; }
+.item-card { background: #0a0a0a; border: 1px solid #2c2c2e; border-radius: 12px; padding: 14px; transition: border-color .2s; }
+.item-card:hover { border-color: #33ff33/50; }
+.item-card.owned { border-color: #0A84FF/40; }
+.rarity-common { color: #aaa; }
+.rarity-uncommon { color: #33ff33; }
+.rarity-rare { color: #0A84FF; }
+.rarity-epic { color: #a855f7; }
+.rarity-legendary { color: #ffaa00; }
+.hangar-card { background: #0a0a0a; border: 1px solid #2c2c2e; border-radius: 12px; padding: 16px; }
+.hangar-card.owned { border-color: #33ff33/50; }
+.hangar-card.active-ac { border-color: #ffaa00; box-shadow: 0 0 12px #ffaa0033; }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const DEFAULT_TAB = '{{ default_tab|default("avatar") }}';
+let shopData = {};
+let hangarData = {};
+let walletData = {};
+const CAT_LABELS = { avatar:'아바타', livery:'리버리', deco:'데코', lounge:'라운지', boost:'가속권' };
+const RARITY_LABELS = { common:'일반', uncommon:'고급', rare:'희귀', epic:'영웅', legendary:'전설' };
+
+function fmt(n) { return '₩' + (n||0).toLocaleString('ko-KR'); }
+
+async function loadAll() {
+    const [shopRes, hangarRes, walletRes] = await Promise.all([
+        fetch('/api/shop/items'), fetch('/api/hangar/aircraft'), fetch('/api/economy/wallet')
+    ]);
+    shopData = await shopRes.json();
+    hangarData = await hangarRes.json();
+    walletData = await walletRes.json();
+    document.getElementById('shop-balance').textContent = walletData.balance_formatted;
+    document.getElementById('shop-hour-boost').textContent = `가속 +${walletData.hour_boosts}h · 유효 ${walletData.effective_hours}h`;
+    document.getElementById('avatar-preview').textContent = walletData.avatar_preview || '👨‍✈️';
+    document.getElementById('active-aircraft-name').textContent = walletData.active_aircraft_name || '—';
+    renderAvatarBtns();
+}
+
+function renderAvatarBtns() {
+    const eq = walletData.equipped_avatar || {};
+    const slots = ['head','uniform','accessory','wings'];
+    const labels = {head:'머리',uniform:'유니폼',accessory:'악세서리',wings:'윙'};
+    document.getElementById('avatar-equip-btns').innerHTML = slots.map(s => {
+        const item = eq[s];
+        return `<button onclick="unequipSlot('${s}')" class="text-xs px-2 py-1 border border-gray-600 rounded hover:border-red-400" title="해제">
+            ${labels[s]}: ${item ? item.emoji || item.name : '없음'} ✕
+        </button>`;
+    }).join('');
+}
+
+async function unequipSlot(slot) {
+    const res = await fetch('/api/shop/equip', { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ slot, item_id: null }) });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    await loadAll();
+    renderTab(document.querySelector('.shop-tab.active')?.dataset.tab || 'avatar');
+}
+
+function renderTab(tab) {
+    document.querySelectorAll('.shop-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+    const el = document.getElementById('shop-content');
+    if (tab === 'hangar') { el.innerHTML = renderHangar(); return; }
+    if (tab === 'inventory') { el.innerHTML = renderInventory(); return; }
+    if (tab === 'wallet') { el.innerHTML = renderWallet(); return; }
+    const items = (shopData.categories || {})[tab] || [];
+    if (!items.length) { el.innerHTML = '<p class="text-gray-400">아이템이 없습니다.</p>'; return; }
+    el.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        ${items.map(item => renderItemCard(item, tab)).join('')}
+    </div>`;
+}
+
+function renderItemCard(item, tab) {
+    const owned = item.owned;
+    const rarity = item.rarity || 'common';
+    let actions = '';
+    if (tab === 'avatar') {
+        if (owned) actions = `<button onclick="equipItem('${item.slot}','${item.id}')" class="text-xs px-3 py-1 bg-purple-600 rounded font-bold">장착</button>
+            <button onclick="sellItem('${item.id}')" class="text-xs px-3 py-1 border border-gray-500 rounded">판매 ${fmt(item.sell_price)}</button>`;
+        else actions = `<button onclick="buyItem('${item.id}')" class="text-xs px-3 py-1 bg-[#ffaa00] text-black rounded font-bold">구매 ${fmt(item.price)}</button>`;
+    } else if (tab === 'boost') {
+        actions = `<button onclick="buyItem('${item.id}')" class="text-xs px-3 py-1 bg-[#ffaa00] text-black rounded font-bold">구매 ${fmt(item.price)}</button>`;
+    } else {
+        if (owned) actions = `<button onclick="sellItem('${item.id}')" class="text-xs px-3 py-1 border border-gray-500 rounded">판매 ${fmt(item.sell_price)}</button>`;
+        else actions = `<button onclick="buyItem('${item.id}')" class="text-xs px-3 py-1 bg-[#ffaa00] text-black rounded font-bold">구매 ${fmt(item.price)}</button>`;
+    }
+    return `<div class="item-card ${owned?'owned':''}">
+        <div class="flex justify-between items-start mb-2">
+            <span class="text-3xl">${item.emoji || item.icon || '📦'}</span>
+            <span class="text-[10px] rarity-${rarity}">${RARITY_LABELS[rarity]||rarity}</span>
+        </div>
+        <div class="font-bold text-sm">${item.name}</div>
+        <div class="text-[10px] text-gray-500 mt-1 line-clamp-2">${item.desc || ''}</div>
+        ${item.boost_hours ? `<div class="text-xs text-[#0A84FF] mt-1">+${item.boost_hours}h 가속</div>` : ''}
+        <div class="flex gap-2 mt-3 flex-wrap">${actions}</div>
+        ${owned ? '<div class="text-[10px] text-[#0A84FF] mt-1">✓ 보유중</div>' : ''}
+    </div>`;
+}
+
+function renderHangar() {
+    const acs = hangarData.aircraft || [];
+    const cats = [...new Set(acs.map(a => a.category))];
+    let html = `<div class="mb-4 p-3 bg-[#001a00] rounded-lg text-sm">
+        보유 <b class="text-[#33ff33]">${hangarData.owned_count}</b> / ${hangarData.total_count}기종
+        · 유효시간 <b>${hangarData.effective_hours}h</b> (가속 +${hangarData.hour_boosts}h)
+    </div>`;
+    for (const cat of cats) {
+        const group = acs.filter(a => a.category === cat);
+        html += `<h3 class="font-bold text-sm mb-2 mt-4 text-[#88aa88]">${cat} (${group.length})</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3 mb-4">
+        ${group.map(ac => renderHangarCard(ac)).join('')}</div>`;
+    }
+    return html;
+}
+
+function renderHangarCard(ac) {
+    const owned = ac.owned;
+    const unlocked = ac.unlocked;
+    const isActive = ac.is_active;
+    let status = '', actions = '';
+    if (owned) {
+        status = '<span class="text-[#33ff33] text-xs">✓ 보유</span>';
+        const decoItems = (walletData.inventory||[]).filter(i => ['livery','deco'].includes(i.category));
+        const decoBtns = decoItems.length ? `<div class="mt-2 text-[10px] text-gray-400">장식 적용:</div>
+            <div class="flex gap-1 flex-wrap mt-1">${decoItems.slice(0,6).map(i =>
+                `<button onclick="equipDeco('${ac.id}','${i.slot||'livery'}','${i.id}')" class="text-[10px] px-1.5 py-0.5 border border-purple-500/40 rounded">${i.emoji||''}${i.name}</button>`
+            ).join('')}</div>` : '';
+        actions = `<button onclick="setActive('${ac.id}')" class="text-xs px-2 py-1 ${isActive?'bg-[#ffaa00] text-black':'border border-[#ffaa00]'} rounded font-bold">${isActive?'★ 주력':'주력 설정'}</button>${decoBtns}`;
+    } else if (unlocked) {
+        status = '<span class="text-[#0A84FF] text-xs">해금 가능</span>';
+        const price = ac.discounted_price || ac.purchase_price || 0;
+        actions = price > 0
+            ? `<button onclick="buyAircraft('${ac.id}')" class="text-xs px-3 py-1 bg-[#ffaa00] text-black rounded font-bold">구매 ${fmt(price)}</button>`
+            : `<button onclick="buyAircraft('${ac.id}')" class="text-xs px-3 py-1 bg-[#33ff33] text-black rounded font-bold">무료 해금</button>`;
+    } else {
+        status = `<span class="text-gray-400 text-xs">${ac.progress_pct}% (${ac.hours_remaining}h 남음)</span>`;
+        const bar = `<div class="h-1.5 bg-black rounded mt-1"><div class="h-1.5 bg-[#0A84FF] rounded" style="width:${ac.progress_pct}%"></div></div>`;
+        status += bar;
+        actions = `<button onclick="accelAircraft('${ac.id}','${ac.name}')" class="text-xs px-2 py-1 border border-[#0A84FF] rounded">💰 가속 구매</button>
+            <button onclick="buyAircraft('${ac.id}')" class="text-xs px-2 py-1 bg-[#ffaa00] text-black rounded font-bold">${fmt(ac.discounted_price)}</button>`;
+    }
+    return `<div class="hangar-card ${owned?'owned':''} ${isActive?'active-ac':''}">
+        <div class="flex justify-between items-start">
+            <div>
+                <div class="font-bold">${ac.name}</div>
+                <div class="text-[10px] text-gray-500">${ac.manufacturer||''} · ${ac.region||''} · ${ac.engine||''}</div>
+            </div>
+            <span class="text-[10px] px-1.5 py-0.5 bg-black rounded">${ac.type||''}</span>
+        </div>
+        <div class="text-[10px] text-gray-400 mt-2 line-clamp-2">${ac.desc||''}</div>
+        <div class="text-[10px] mt-2">해금 ${ac.unlock_hours}h · 정가 ${fmt(ac.purchase_price)}</div>
+        <div class="mt-2">${status}</div>
+        <div class="flex gap-2 mt-3 flex-wrap">${actions}</div>
+    </div>`;
+}
+
+function renderInventory() {
+    const inv = walletData.inventory || [];
+    if (!inv.length) return '<p class="text-gray-400">인벤토리가 비어있어요. 상점에서 아이템을 구매해보세요!</p>';
+    return `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        ${inv.map(item => `<div class="item-card owned">
+            <div class="text-2xl mb-1">${item.emoji||'📦'}</div>
+            <div class="font-bold text-sm">${item.name}</div>
+            <div class="text-[10px] text-gray-500">${item.desc||''}</div>
+            <div class="flex gap-2 mt-2 flex-wrap">
+                ${item.category==='avatar' ? `<button onclick="equipItem('${item.slot}','${item.id}')" class="text-xs px-2 py-1 bg-purple-600 rounded">장착</button>` : ''}
+                ${item.sellable!==false ? `<button onclick="sellItem('${item.id}')" class="text-xs px-2 py-1 border border-gray-500 rounded">판매</button>` : ''}
+            </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function renderWallet() {
+    const txs = walletData.transactions || [];
+    const sal = walletData.salary || {};
+    return `<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="info-card p-5">
+            <h3 class="font-bold mb-3">💰 수입 가이드</h3>
+            <ul class="text-sm space-y-2 text-gray-300">
+                <li>✈️ 비행 <b>20회</b>마다 급여 <b>₩10,000,000</b></li>
+                <li>📝 퀴즈 80점+ → ₩500,000 · 90점+ → ₩800,000</li>
+                <li>🎯 미션 완료 → ₩250,000 (3개 완료 +₩500,000)</li>
+                <li>📇 플래시카드 1장 → ₩80,000</li>
+                <li>🚨 시나리오 A등급 → ₩600,000</li>
+                <li>🏆 주간 챌린지 → ₩1,500,000</li>
+            </ul>
+            <div class="mt-4 p-3 bg-black rounded-lg">
+                <div class="text-xs text-gray-400">다음 급여까지</div>
+                <div class="font-bold text-[#ffaa00]">${sal.flights_until_salary||'?'}비행 남음 (${sal.progress_in_cycle||0}/${sal.cycle_size||20})</div>
+            </div>
+        </div>
+        <div class="info-card p-5">
+            <h3 class="font-bold mb-3">📋 최근 거래</h3>
+            ${txs.length ? `<div class="space-y-2 max-h-80 overflow-y-auto">
+                ${txs.map(t => `<div class="text-xs flex justify-between p-2 bg-black/40 rounded">
+                    <span>${t.detail}</span>
+                    <span class="${t.amount>0?'text-[#33ff33]':'text-red-400'}">${t.amount>0?'+':''}${fmt(t.amount)}</span>
+                </div>`).join('')}
+            </div>` : '<p class="text-gray-400 text-sm">아직 거래 내역이 없어요.</p>'}
+        </div>
+    </div>`;
+}
+
+async function buyItem(id) {
+    const res = await fetch('/api/shop/buy', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({item_id:id}) });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    alert(d.message);
+    await loadAll();
+    renderTab(document.querySelector('.shop-tab.active').dataset.tab);
+}
+
+async function sellItem(id) {
+    if (!confirm('이 아이템을 판매할까요?')) return;
+    const res = await fetch('/api/shop/sell', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({item_id:id}) });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    alert(d.message);
+    await loadAll();
+    renderTab(document.querySelector('.shop-tab.active').dataset.tab);
+}
+
+async function equipItem(slot, id) {
+    const res = await fetch('/api/shop/equip', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({slot, item_id:id}) });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    await loadAll();
+    renderTab('avatar');
+}
+
+async function buyAircraft(id) {
+    const res = await fetch('/api/hangar/buy', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({aircraft_id:id}) });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    alert(d.message);
+    await loadAll();
+    const hangarRes = await fetch('/api/hangar/aircraft');
+    hangarData = await hangarRes.json();
+    renderTab('hangar');
+}
+
+async function setActive(id) {
+    const res = await fetch('/api/hangar/set-active', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({aircraft_id:id}) });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    await loadAll();
+    const hangarRes = await fetch('/api/hangar/aircraft');
+    hangarData = await hangarRes.json();
+    renderTab('hangar');
+}
+
+async function equipDeco(aircraftId, slot, itemId) {
+    const res = await fetch('/api/hangar/equip-deco', { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ aircraft_id: aircraftId, slot, item_id: itemId }) });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    alert(d.message || '장식 적용 완료!');
+    await loadAll();
+    const hangarRes = await fetch('/api/hangar/aircraft');
+    hangarData = await hangarRes.json();
+    renderTab('hangar');
+}
+
+async function accelAircraft(id, name) {
+    const amount = prompt(`${name} 해금 가속 — 투자 금액 (₩)\n₩250,000 = 1시간 가속`, '1000000');
+    if (!amount) return;
+    const res = await fetch('/api/hangar/accelerate', { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({aircraft_id:id, amount: parseInt(amount)}) });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    alert(d.message + (d.auto_unlocked ? '\n🎉 해금 조건 달성!' : ''));
+    await loadAll();
+    const hangarRes = await fetch('/api/hangar/aircraft');
+    hangarData = await hangarRes.json();
+    renderTab('hangar');
+}
+
+document.getElementById('shop-tabs').addEventListener('click', e => {
+    const tab = e.target.closest('.shop-tab');
+    if (tab) renderTab(tab.dataset.tab);
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadAll();
+    const hangarRes = await fetch('/api/hangar/aircraft');
+    hangarData = await hangarRes.json();
+    renderTab(DEFAULT_TAB);
+    if (typeof trackActivity === 'function') trackActivity('shop', 'visit');
+});
+</script>
+{% endblock %}

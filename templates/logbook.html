@@ -880,7 +880,9 @@ function initLogbookEnhancements() {
                 const result = await res.json().catch(() => ({}));
 
                 if (res.ok && result.status === 'success') {
-                    alert('스마트 입력으로 비행이 기록되었습니다!');
+                    let msg = '스마트 입력으로 비행이 기록되었습니다!';
+                    if (result.salary) msg += `\n\n🎉 급여일! ₩${result.salary.amount.toLocaleString()} 입금!`;
+                    alert(msg);
                     logbookFilterMode = 'day';
                     logbookSelectedDate = data.date;
                     resetSmartForm();
@@ -929,7 +931,9 @@ function initLogbookEnhancements() {
                 const result = await res.json().catch(() => ({}));
 
                 if (res.ok && result.status === 'success') {
-                    alert('수동 입력으로 비행이 기록되었습니다!');
+                    let msg = '수동 입력으로 비행이 기록되었습니다!';
+                    if (result.salary) msg += `\n\n🎉 급여일! ₩${result.salary.amount.toLocaleString()} 입금!`;
+                    alert(msg);
                     logbookFilterMode = 'day';
                     logbookSelectedDate = data.date;
                     this.reset();

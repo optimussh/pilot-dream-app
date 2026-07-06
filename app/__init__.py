@@ -40,12 +40,25 @@ def create_app():
             inspector = inspect(db.engine)
             if inspector.has_table('user_progress'):
                 cols = {c['name'] for c in inspector.get_columns('user_progress')}
-                if 'daily_learning' not in cols:
-                    with db.engine.connect() as conn:
-                        conn.execute(text(
-                            "ALTER TABLE user_progress ADD COLUMN daily_learning TEXT DEFAULT '{}'"
-                        ))
-                        conn.commit()
+                migrations = [
+                    ('daily_learning', "TEXT DEFAULT '{}'"),
+                    ('wallet_balance', 'INTEGER DEFAULT 0'),
+                    ('salary_milestones_paid', 'INTEGER DEFAULT 0'),
+                    ('hour_boosts', 'REAL DEFAULT 0.0'),
+                    ('inventory', "TEXT DEFAULT '[]'"),
+                    ('equipped_avatar', "TEXT DEFAULT '{}'"),
+                    ('owned_aircraft', 'TEXT DEFAULT \'["b737","a320"]\''),
+                    ('active_aircraft', "VARCHAR(30) DEFAULT 'b737'"),
+                    ('aircraft_loadouts', "TEXT DEFAULT '{}'"),
+                    ('transaction_log', "TEXT DEFAULT '[]'"),
+                ]
+                with db.engine.connect() as conn:
+                    for col_name, col_def in migrations:
+                        if col_name not in cols:
+                            conn.execute(text(
+                                f'ALTER TABLE user_progress ADD COLUMN {col_name} {col_def}'
+                            ))
+                    conn.commit()
         except Exception:
             pass
         try:
@@ -64,7 +77,8 @@ def create_app():
         badges,
         atc,
         career,
-        learn
+        learn,
+        shop,
     )
 
     app.register_blueprint(main.bp)
@@ -76,5 +90,6 @@ def create_app():
     app.register_blueprint(atc.bp)
     app.register_blueprint(career.bp)
     app.register_blueprint(learn.bp)
+    app.register_blueprint(shop.bp)
 
     return app

@@ -150,22 +150,24 @@ def get_daily_missions(prog):
 
 
 def complete_mission(prog, mission_id):
+    from app.services.economy import award_money, LEARNING_REWARDS
     pool = {m['id']: m for m in load_json('missions.json')}
     if mission_id not in pool:
-        return None, '미션을 찾을 수 없습니다.'
+        return None, '미션을 찾을 수 없습니다.', 0
     today = today_str()
     missions = prog._json('completed_missions', {})
     day_list = missions.get(today, [])
     if mission_id in day_list:
-        return prog.virtual_hours, '이미 완료한 미션입니다.'
+        return prog.virtual_hours, '이미 완료한 미션입니다.', 0
     daily = get_daily_missions(prog)
     if mission_id not in [m['id'] for m in daily]:
-        return None, '오늘의 미션이 아닙니다.'
+        return None, '오늘의 미션이 아닙니다.', 0
     day_list.append(mission_id)
     missions[today] = day_list
     prog.set_json('completed_missions', missions)
     reward = pool[mission_id].get('reward_hours', 0.5)
     award_virtual_hours(prog, reward, f"미션: {pool[mission_id]['title']}")
+    money = award_money(prog, LEARNING_REWARDS['mission'], f"미션: {pool[mission_id]['title']}")
     if len(day_list) >= 3:
         yesterday = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
         if prog.last_all_missions_date == yesterday:
@@ -174,8 +176,9 @@ def complete_mission(prog, mission_id):
             prog.daily_mission_streak = 1
         prog.last_all_missions_date = today
         award_virtual_hours(prog, 1.0, '오늘의 미션 전부 완료 보너스')
+        money += award_money(prog, LEARNING_REWARDS['mission_all_bonus'], '오늘의 미션 전부 완료 보너스')
     db.session.commit()
-    return prog.virtual_hours, '미션 완료!'
+    return prog.virtual_hours, '미션 완료!', money
 
 
 def get_weekly_challenges(prog):
@@ -189,24 +192,26 @@ def get_weekly_challenges(prog):
 
 
 def complete_weekly(prog, challenge_id):
+    from app.services.economy import award_money, LEARNING_REWARDS
     pool = {c['id']: c for c in load_json('weekly_challenges.json')}
     if challenge_id not in pool:
-        return None, '챌린지를 찾을 수 없습니다.'
+        return None, '챌린지를 찾을 수 없습니다.', 0
     wk = week_key()
     weekly = prog._json('completed_weekly', {})
     wk_list = weekly.get(wk, [])
     if challenge_id in wk_list:
-        return prog.virtual_hours, '이미 완료했습니다.'
+        return prog.virtual_hours, '이미 완료했습니다.', 0
     active = [c['id'] for c in get_weekly_challenges(prog)]
     if challenge_id not in active:
-        return None, '이번 주 챌린지가 아닙니다.'
+        return None, '이번 주 챌린지가 아닙니다.', 0
     wk_list.append(challenge_id)
     weekly[wk] = wk_list
     prog.set_json('completed_weekly', weekly)
     reward = pool[challenge_id].get('reward_hours', 2.0)
     award_virtual_hours(prog, reward, f"주간 챌린지: {pool[challenge_id]['title']}")
+    money = award_money(prog, LEARNING_REWARDS['weekly'], f"주간: {pool[challenge_id]['title']}")
     db.session.commit()
-    return prog.virtual_hours, '챌린지 완료!'
+    return prog.virtual_hours, '챌린지 완료!', money
 
 
 def get_career_tree(prog):
@@ -315,18 +320,9 @@ def quiz_public(q):
 
 
 def get_unlocked_content(prog):
-    base = ['B737-800', 'A320-200']
-    unlocked = prog._json('unlocked_content', [])
-    hours = get_total_hours(prog)
-    auto = list(base)
-    if hours >= 20:
-        auto.append('A321-200')
-    if hours >= 50:
-        auto.append('B787-9 Dreamliner')
-    if hours >= 100:
-        auto.append('A350-900')
-    if hours >= 200:
-        auto.append('B777-300ER')
-    if hours >= 500:
-        auto.append('A380-800')
-    return list(set(base + unlocked + auto))
+    try:
+        from app.services.economy import get_unlocked_aircraft_names
+        return get_unlocked_aircraft_names(prog)
+    except Exception:
+        base = ['Boeing 737-800', 'Airbus A320-200']
+        return base

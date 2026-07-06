@@ -76,10 +76,13 @@ def add_logbook_entry():
     db.session.add(entry)
     db.session.commit()
 
+    salary_result = None
     try:
         from app.services.gamification import get_or_create_progress, log_activity
+        from app.services.economy import process_salary
         prog = get_or_create_progress()
         log_activity(prog, 'logbook', data.get('flight_number', ''))
+        salary_result = process_salary(prog)
     except Exception:
         pass
     
@@ -127,7 +130,12 @@ def add_logbook_entry():
     except Exception as e:
         pass  # fail silently for now
     
-    return jsonify({"status": "success"})
+    resp = {"status": "success"}
+    if salary_result:
+        resp["salary"] = salary_result
+        prog = UserProgress.query.first()
+        resp["wallet_balance"] = (prog.wallet_balance or 0) if prog else 0
+    return jsonify(resp)
 
 @bp.route('/api/logbook')
 def get_logbook():
@@ -186,7 +194,20 @@ def get_airports():
 @bp.route('/api/aircraft')
 def get_aircraft():
     aircraft = load_json_data('aircraft.json')
-    return jsonify(aircraft)
+    try:
+        from app.services.gamification import get_or_create_progress
+        from app.services.economy import aircraft_unlock_status
+        prog = get_or_create_progress()
+        enriched = []
+        for ac in aircraft:
+            st = aircraft_unlock_status(prog, ac['id'])
+            enriched.append({**ac, **{k: st[k] for k in (
+                'owned', 'unlocked', 'progress_pct', 'hours_remaining',
+                'discounted_price', 'effective_hours'
+            ) if k in st}})
+        return jsonify(enriched)
+    except Exception:
+        return jsonify(aircraft)
 
 @bp.route('/api/flights')
 def get_flights():

@@ -3,12 +3,14 @@
 {% block content %}
 <div class="max-w-6xl mx-auto">
     <h1 class="text-3xl font-bold mb-2">🎓 학습 & 모험 허브</h1>
-    <p class="text-gray-400 mb-8">재미있게 배우고, 가상 비행시간을 모아 기장의 꿈에 다가가세요!</p>
+    <p class="text-gray-400 mb-8">재미있게 배우고, 돈을 모아 기체와 아이템을 구매하세요! 기장의 꿈을 키워가요 ✈️</p>
 
-    <div id="learn-status" class="info-card p-4 mb-8 flex flex-wrap gap-4 text-sm">
+    <div id="learn-status" class="info-card p-4 mb-8 flex flex-wrap gap-4 text-sm items-center">
+        <div><span class="text-gray-400">지갑</span> <span id="ls-wallet" class="font-bold text-[#ffaa00]">₩0</span></div>
         <div><span class="text-gray-400">가상 시간</span> <span id="ls-hours" class="font-bold text-[#ffaa00]">0</span>h</div>
         <div><span class="text-gray-400">연속 학습</span> <span id="ls-streak" class="font-bold text-[#33ff33]">0</span>일</div>
-        <div><span class="text-gray-400">해금 기종</span> <span id="ls-aircraft" class="font-bold">-</span></div>
+        <div><span class="text-gray-400">보유 기체</span> <span id="ls-aircraft" class="font-bold text-[#33ff33]">-</span></div>
+        <a href="/shop" class="ml-auto text-xs px-3 py-1.5 bg-[#ffaa00] text-black rounded font-bold">상점 →</a>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -20,17 +22,22 @@
         <a href="/quiz" class="info-card p-6 rounded-2xl hover:border-[#0A84FF] transition block">
             <div class="text-4xl mb-3">🧠</div>
             <div class="font-bold text-lg">내가 기장이라면?</div>
-            <p class="text-xs text-gray-400 mt-2">1000문항 은행 · 오늘의 5문제</p>
+            <p class="text-xs text-gray-400 mt-2">1000문항 은행 · 오늘의 5문제 · 최대 ₩800,000</p>
         </a>
         <a href="/flashcards" class="info-card p-6 rounded-2xl hover:border-[#33ff33] transition block">
             <div class="text-4xl mb-3">📇</div>
             <div class="font-bold text-lg">항공 용어 카드</div>
-            <p class="text-xs text-gray-400 mt-2">1000개 용어 풀 · 오늘의 5개</p>
+            <p class="text-xs text-gray-400 mt-2">1000개 용어 풀 · 카드당 ₩80,000</p>
         </a>
         <a href="/scenarios" class="info-card p-6 rounded-2xl hover:border-red-500/50 transition block">
             <div class="text-4xl mb-3">🚨</div>
             <div class="font-bold text-lg">비상 상황 시나리오</div>
-            <p class="text-xs text-gray-400 mt-2">100개 시나리오 · 오늘의 훈련 4개</p>
+            <p class="text-xs text-gray-400 mt-2">100개 시나리오 · A등급 ₩600,000</p>
+        </a>
+        <a href="/shop" class="info-card p-6 rounded-2xl hover:border-[#ffaa00] transition block border border-[#ffaa00]/30">
+            <div class="text-4xl mb-3">🏪</div>
+            <div class="font-bold text-lg">파일럿 클럽 & 상점</div>
+            <p class="text-xs text-gray-400 mt-2">아바타·리버리·기체 구매 · 행거</p>
         </a>
         <a href="/captain-day" class="info-card p-6 rounded-2xl hover:border-[#ffaa00] transition block">
             <div class="text-4xl mb-3">⏰</div>
@@ -49,7 +56,12 @@
 fetch('/api/gamification/status').then(r=>r.json()).then(d=>{
     document.getElementById('ls-hours').textContent = d.virtual_hours;
     document.getElementById('ls-streak').textContent = d.streak_days;
-    document.getElementById('ls-aircraft').textContent = (d.unlocked_aircraft||[]).length + '종';
+    if (d.wallet) {
+        document.getElementById('ls-wallet').textContent = d.wallet.balance_formatted || '₩0';
+        document.getElementById('ls-aircraft').textContent = (d.wallet.owned_aircraft||[]).length + '종';
+    } else {
+        document.getElementById('ls-aircraft').textContent = (d.unlocked_aircraft||[]).length + '종';
+    }
 });
 </script>
 {% endblock %}

@@ -117,6 +117,7 @@
             <a href="/atc-english" class="nav-link {{ 'active' if request.path == '/atc-english' else '' }}">항공영어</a>
             <a href="/flight-planner" class="nav-link {{ 'active' if request.path == '/flight-planner' else '' }}">플래너</a>
             <a href="/logbook" class="nav-link {{ 'active' if request.path == '/logbook' else '' }}">로그북</a>
+            <a href="/shop" class="nav-link {{ 'active' if request.path.startswith('/shop') or request.path.startswith('/hangar') else '' }}">상점</a>
             <a href="/badges" class="nav-link {{ 'active' if request.path == '/badges' else '' }}">뱃지</a>
             <a href="/korea-career" class="nav-link {{ 'active' if request.path == '/korea-career' else '' }}">커리어</a>
         </div>

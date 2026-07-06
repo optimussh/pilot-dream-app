@@ -14,6 +14,36 @@
         </div>
     </div>
 
+    <!-- 지갑 & 아바타 -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="info-card p-4 border border-[#ffaa00]/40 md:col-span-1">
+            <div class="flex justify-between items-center">
+                <div>
+                    <div class="text-xs text-gray-400">파일럿 지갑 💰</div>
+                    <div class="text-2xl font-bold text-[#ffaa00]" id="dash-wallet">₩0</div>
+                    <div class="text-[10px] text-gray-500 mt-1" id="dash-salary-progress">다음 급여까지 —</div>
+                </div>
+                <a href="/shop" class="text-xs px-3 py-2 bg-[#ffaa00] text-black rounded-lg font-bold">상점 →</a>
+            </div>
+            <div class="h-1.5 bg-black rounded-full mt-3 overflow-hidden">
+                <div id="dash-salary-bar" class="h-1.5 bg-[#ffaa00] rounded-full transition-all" style="width:0%"></div>
+            </div>
+        </div>
+        <div class="info-card p-4 flex items-center gap-4 border border-purple-500/30 md:col-span-1">
+            <div class="text-5xl" id="dash-avatar">👨‍✈️</div>
+            <div>
+                <div class="text-xs text-gray-400">내 파일럿</div>
+                <div class="font-bold text-sm" id="dash-active-ac">주력 기체 —</div>
+                <a href="/shop" class="text-[10px] text-purple-400 hover:underline">아바타 꾸미기 →</a>
+            </div>
+        </div>
+        <div class="info-card p-4 md:col-span-1">
+            <div class="text-xs text-gray-400">보유 기체</div>
+            <div class="text-2xl font-bold text-[#33ff33]" id="dash-owned-count">0</div>
+            <a href="/hangar" class="text-[10px] text-[#0A84FF] hover:underline">행거에서 관리 →</a>
+        </div>
+    </div>
+
     <!-- 가상 시간 & 스트릭 -->
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div class="info-card p-4 text-center">
@@ -148,6 +178,19 @@ async function loadDashboard() {
     const g = await gRes.json();
     const b = await bRes.json();
 
+    if (g.wallet) {
+        document.getElementById('dash-wallet').textContent = g.wallet.balance_formatted || '₩0';
+        document.getElementById('dash-avatar').textContent = g.wallet.avatar_preview || '👨‍✈️';
+        document.getElementById('dash-active-ac').textContent = g.wallet.active_aircraft_name || '—';
+        document.getElementById('dash-owned-count').textContent = (g.wallet.owned_aircraft || []).length;
+    }
+    if (g.salary) {
+        const s = g.salary;
+        document.getElementById('dash-salary-progress').textContent =
+            `다음 급여까지 ${s.flights_until_salary}비행 (${s.progress_in_cycle}/${s.cycle_size}) · ₩10,000,000`;
+        const pct = Math.round((s.progress_in_cycle / s.cycle_size) * 100);
+        document.getElementById('dash-salary-bar').style.width = pct + '%';
+    }
     document.getElementById('dash-total-hours').textContent = g.total_hours;
     document.getElementById('dash-virtual').textContent = '+' + g.virtual_hours;
     document.getElementById('dash-streak').textContent = g.streak_days;
@@ -165,7 +208,7 @@ async function loadDashboard() {
             <span class="text-xl">${m.icon}</span>
             <div class="flex-1">
                 <div class="font-semibold text-sm">${m.title}</div>
-                <div class="text-[10px] text-gray-500">${m.desc} · +${m.reward_hours}h</div>
+                <div class="text-[10px] text-gray-500">${m.desc} · +${m.reward_hours}h · +₩250,000</div>
             </div>
             ${m.completed
                 ? '<span class="text-[#33ff33] text-xs">✓</span>'
@@ -179,7 +222,7 @@ async function loadDashboard() {
             <span class="text-xl">${c.icon}</span>
             <div class="flex-1">
                 <div class="font-semibold text-sm">${c.title}</div>
-                <div class="text-[10px] text-gray-500">${c.desc} · +${c.reward_hours}h</div>
+                <div class="text-[10px] text-gray-500">${c.desc} · +${c.reward_hours}h · +₩1,500,000</div>
             </div>
             ${c.completed
                 ? '<span class="text-[#33ff33] text-xs">✓</span>'
@@ -257,7 +300,9 @@ async function completeMission(id) {
     });
     const data = await res.json();
     if (data.error) { alert(data.error); return; }
-    alert(data.message + ` (가상시간: ${data.virtual_hours}h)`);
+    let msg = data.message + ` (가상시간: ${data.virtual_hours}h)`;
+    if (data.money_earned) msg += ` +${(data.money_earned).toLocaleString()}원`;
+    alert(msg);
     loadDashboard();
 }
 
@@ -269,7 +314,9 @@ async function completeWeekly(id) {
     });
     const data = await res.json();
     if (data.error) { alert(data.error); return; }
-    alert(data.message);
+    let msg = data.message;
+    if (data.money_earned) msg += ` +₩${data.money_earned.toLocaleString()}`;
+    alert(msg);
     loadDashboard();
 }
 

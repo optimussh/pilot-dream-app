@@ -91,6 +91,7 @@ function showResults(data) {
             <div class="text-5xl mb-2">${emoji}</div>
             <div class="text-3xl font-bold text-[#0A84FF]">${score}점</div>
             <div class="text-sm text-gray-400">${correct} / ${total} 정답</div>
+            ${data.money_earned ? `<div class="text-sm text-[#ffaa00] mt-2 font-bold">💰 +₩${data.money_earned.toLocaleString()} 획득!</div>` : ''}
         </div>`;
 
     (data.results || []).forEach(r => {

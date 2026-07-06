@@ -141,9 +141,10 @@ async function finishScenario() {
     const data = await res.json();
     if (data.error) { alert(data.error); return; }
 
-    if (data.daily_done) {
-        alert('🎖️ 오늘의 비상 훈련 4개를 모두 완료했습니다! 보너스 가상 시간이 지급되었어요.');
-    }
+    let msg = `시나리오 완료! (+${data.reward_hours}h 가상시간)`;
+    if (data.money_earned) msg += `\n💰 +₩${data.money_earned.toLocaleString()} 획득!`;
+    if (data.daily_done) msg += '\n🎖️ 오늘의 비상 훈련 4개 전부 완료 보너스!';
+    alert(msg);
     loadScenarios();
 }
 
