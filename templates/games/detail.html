@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% block title %}{{ game.name }} - 직접 비행하기{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto" id="game-page" data-game-id="{{ game.id }}">
+    <a href="/games" class="text-sm text-[#0A84FF] hover:underline mb-4 inline-block">← 직접 비행하기 목록</a>
+
+    <div class="flex flex-wrap items-start gap-4 mb-8">
+        <span class="text-6xl">{{ game.icon }}</span>
+        <div class="flex-1 min-w-[200px]">
+            <h1 class="text-3xl font-bold">{{ game.name }}</h1>
+            <p class="text-gray-400 mt-1">{{ game.subtitle }}</p>
+            <p class="text-sm mt-2">{{ game.summary }}</p>
+            <div class="flex flex-wrap gap-2 mt-3 text-xs">
+                <span class="px-2 py-1 bg-[#001a00] rounded text-[#33ff33]">{{ game.license }}</span>
+                <span class="px-2 py-1 bg-black rounded text-[#ffaa00]">난이도: {{ game.difficulty }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. 설치 -->
+    {% if game.install_steps %}
+    <section class="info-card p-6 mb-6 rounded-2xl border-2 border-[#0A84FF]/40">
+        <h2 class="font-bold text-xl mb-4">📥 1단계: 프로그램 설치하기</h2>
+        <p class="text-sm text-gray-400 mb-4">아직 FlightGear가 없다면 먼저 이 단계를 해요. 이미 설치했으면 2단계로 넘어가도 돼요.</p>
+        <div class="space-y-4">
+            {% for s in game.install_steps %}
+            <div class="flex gap-4 p-4 bg-black/40 rounded-xl">
+                <div class="w-10 h-10 flex-shrink-0 rounded-full bg-[#0A84FF] flex items-center justify-center font-bold text-lg">{{ s.step }}</div>
+                <div>
+                    <div class="font-bold">{{ s.title }}</div>
+                    <p class="text-sm text-gray-300 mt-1">{{ s.desc }}</p>
+                    {% if s.tip %}<p class="text-xs text-[#ffaa00] mt-2">💡 {{ s.tip }}</p>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{{ game.download_url }}" target="_blank" rel="noopener"
+           class="mt-6 inline-block w-full sm:w-auto text-center px-8 py-4 bg-[#0A84FF] text-white rounded-xl font-bold text-lg hover:bg-[#409CFF] transition">
+            📥 FlightGear 설치 파일 받기 (공식 사이트)
+        </a>
+        <p class="text-xs text-gray-500 mt-2">새 탭이 열려요. 받은 뒤 이 페이지로 다시 돌아오세요.</p>
+    </section>
+    {% endif %}
+
+    <!-- 2. 실행 -->
+    <section class="info-card p-6 mb-6 rounded-2xl border-2 border-[#33ff33]/40">
+        <h2 class="font-bold text-xl mb-4">🚀 2단계: 비행 시작하기</h2>
+        <div class="space-y-4">
+            {% for s in game.start_steps %}
+            <div class="flex gap-4 p-4 bg-black/40 rounded-xl">
+                <div class="w-10 h-10 flex-shrink-0 rounded-full bg-[#33ff33] text-black flex items-center justify-center font-bold text-lg">{{ s.step }}</div>
+                <div>
+                    <div class="font-bold">{{ s.title }}</div>
+                    <p class="text-sm text-gray-300 mt-1">{{ s.desc }}</p>
+                    {% if s.tip %}<p class="text-xs text-[#ffaa00] mt-2">💡 {{ s.tip }}</p>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if game.id == 'flightgear' %}
+        <div class="mt-6 p-4 bg-[#001a00] rounded-xl text-sm">
+            <b class="text-[#33ff33]">이번 비행 설정</b>
+            <div class="mt-2 text-gray-300">
+                ✈️ 비행기: <b>{{ game.launcher.aircraft_label }}</b> ·
+                🛫 공항: <b>{{ game.launcher.airport_label }} ({{ game.launcher.airport }})</b>
+            </div>
+        </div>
+        <div class="mt-4 flex flex-wrap gap-3">
+            <a href="/api/games/flightgear/launcher.bat?aircraft={{ game.launcher.aircraft }}&airport={{ game.launcher.airport }}"
+               onclick="trackGameStart()"
+               class="flex-1 min-w-[200px] text-center px-6 py-4 bg-[#33ff33] text-black rounded-xl font-bold text-lg hover:bg-white transition">
+                🪟 Windows: 비행 시작 파일 받기
+            </a>
+            <a href="/api/games/flightgear/launcher.command?aircraft={{ game.launcher.aircraft }}&airport={{ game.launcher.airport }}"
+               onclick="trackGameStart()"
+               class="flex-1 min-w-[200px] text-center px-6 py-4 border-2 border-[#33ff33] text-[#33ff33] rounded-xl font-bold hover:bg-[#001a00] transition">
+                🍎 Mac: 비행 시작 파일 받기
+            </a>
+        </div>
+        <p class="text-xs text-gray-500 mt-3">
+            받은 파일을 <b>더블클릭</b>하면 FlightGear가 켜져요.
+            Windows에서 「알 수 없는 앱」경고가 나오면 → <b>추가 정보</b> → <b>실행</b>을 눌러요.
+        </p>
+        {% endif %}
+    </section>
+
+    <!-- 3. 조작법 -->
+    <section class="info-card p-6 mb-6 rounded-2xl">
+        <h2 class="font-bold text-xl mb-4">🎮 3단계: 조작 방법 (키보드)</h2>
+        <p class="text-sm text-gray-400 mb-4">키보드는 컴퓨터 앞 글자판이에요. 아래 키를 눌러 비행기를 움직여요.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {% for c in game.controls %}
+            <div class="p-3 bg-black/40 rounded-lg flex gap-3 items-start">
+                <span class="text-2xl">{{ c.emoji }}</span>
+                <div>
+                    <div class="font-mono text-[#ffaa00] font-bold text-sm">{{ c.keys }}</div>
+                    <div class="text-sm text-gray-300">{{ c.action }}</div>
+                    {% if c.alt %}<div class="text-[10px] text-gray-500">{{ c.alt }}</div>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- 4. 첫 비행 팁 -->
+    <section class="info-card p-6 mb-6 rounded-2xl border border-[#ffaa00]/30">
+        <h2 class="font-bold text-xl mb-4">🌟 첫 비행 꿀팁</h2>
+        <ul class="space-y-2 text-sm text-gray-300">
+            {% for tip in game.first_flight_tips %}
+            <li class="flex gap-2"><span class="text-[#ffaa00]">•</span><span>{{ tip }}</span></li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <!-- 5. 보상 -->
+    <section class="info-card p-6 mb-6 rounded-2xl border-2 border-[#ffaa00]/40 text-center">
+        <h2 class="font-bold text-xl mb-2">🎁 비행 끝나면 보상 받기!</h2>
+        <p class="text-sm text-gray-400 mb-4">
+            FlightGear에서 비행을 마친 뒤, 이 페이지로 돌아와서 아래 버튼을 눌러요.<br>
+            하루에 한 번 보상을 받을 수 있어요.
+        </p>
+        <div class="text-[#ffaa00] font-bold mb-4" id="reward-hint">
+            첫 완료 ₩{{ '{:,}'.format(game.rewards.first_complete) }} · 이후 ₩{{ '{:,}'.format(game.rewards.repeat_complete) }}
+        </div>
+        <button id="complete-btn" onclick="completeGame()"
+            class="px-10 py-4 bg-[#ffaa00] text-black rounded-xl font-bold text-lg hover:bg-white transition">
+            ✅ 비행 완료! 보상 받기
+        </button>
+        <p id="complete-msg" class="text-sm mt-3 text-gray-500"></p>
+    </section>
+
+    {% if game.repo_url %}
+    <p class="text-center text-xs text-gray-600">
+        오픈소스: <a href="{{ game.repo_url }}" target="_blank" class="text-[#0A84FF] hover:underline">GitHub</a>
+    </p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const GAME_ID = '{{ game.id }}';
+
+async function trackGameStart() {
+    await fetch('/api/games/session/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ game_id: GAME_ID }),
+    });
+}
+
+async function completeGame() {
+    const btn = document.getElementById('complete-btn');
+    const msg = document.getElementById('complete-msg');
+    btn.disabled = true;
+    btn.textContent = '처리 중...';
+    const res = await fetch('/api/games/session/complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ game_id: GAME_ID }),
+    });
+    const d = await res.json();
+    if (d.error) {
+        msg.textContent = d.error;
+        msg.className = 'text-sm mt-3 text-red-400';
+        btn.disabled = false;
+        btn.textContent = '✅ 비행 완료! 보상 받기';
+        return;
+    }
+    msg.textContent = d.message + (d.virtual_hours ? ` (+${d.virtual_hours}h)` : '');
+    msg.className = 'text-sm mt-3 text-[#33ff33] font-bold';
+    btn.textContent = '✓ 오늘 보상 받음';
+    btn.classList.add('opacity-50', 'cursor-not-allowed');
+}
+
+fetch('/api/games/' + GAME_ID).then(r => r.json()).then(d => {
+    if (d.progress?.today_complete) {
+        const btn = document.getElementById('complete-btn');
+        const msg = document.getElementById('complete-msg');
+        btn.disabled = true;
+        btn.textContent = '✓ 오늘 보상 받음';
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+        msg.textContent = '내일 다시 비행하면 보상을 받을 수 있어요!';
+    }
+});
+</script>
+{% endblock %}

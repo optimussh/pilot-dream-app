@@ -1,0 +1,97 @@
+[
+  {
+    "id": "flightgear",
+    "name": "직접 비행해보기",
+    "subtitle": "FlightGear · 진짜 조종석에서 날아요",
+    "icon": "🛫",
+    "type": "desktop",
+    "difficulty": "보통",
+    "difficulty_stars": 3,
+    "needs_install": true,
+    "platforms": ["windows", "mac", "linux"],
+    "download_url": "https://www.flightgear.org/download/",
+    "repo_url": "https://github.com/FlightGear/flightgear",
+    "license": "GPL-2.0 오픈소스 (무료)",
+    "tagline": "키보드와 마우스로 이륙·비행·착륙을 직접 해봐요!",
+    "summary": "세계에서 가장 유명한 무료 비행 시뮬레이터예요. 진짜 파일럿처럼 조종간에서 비행기를 움직일 수 있어요.",
+    "launcher": {
+      "aircraft": "c172p",
+      "aircraft_label": "세스나 172 (작은 연습기)",
+      "airport": "RKSI",
+      "airport_label": "인천국제공항"
+    },
+    "rewards": {
+      "first_complete": 500000,
+      "repeat_complete": 150000,
+      "virtual_hours": 0.5,
+      "season_xp": 3
+    },
+    "install_steps": [
+      {"step": 1, "title": "설치 파일 받기", "desc": "아래 파란 버튼을 눌러 FlightGear 설치 파일을 받아요.", "tip": "용량이 꽤 커요. 인터넷이 좋을 때 받는 게 좋아요."},
+      {"step": 2, "title": "설치하기", "desc": "받은 파일을 더블클릭(두 번 빠르게 클릭)해서 설치를 시작해요.", "tip": "「다음」버튼을 계속 누르면 돼요. 어려우면 부모님께 도움을 요청하세요."},
+      {"step": 3, "title": "설치 끝!", "desc": "바탕화면이나 시작 메뉴에 FlightGear 아이콘이 생겼는지 확인해요.", "tip": "처음엔 지도(Scenery) 다운로드가 잠깐 걸릴 수 있어요."}
+    ],
+    "start_steps": [
+      {"step": 1, "title": "비행 시작 파일 받기", "desc": "이 페이지 아래 「비행 시작 파일 받기」버튼을 눌러요.", "tip": "인천공항 + 세스나 연습기로 자동 설정된 파일이에요."},
+      {"step": 2, "title": "파일 실행하기", "desc": "다운로드 폴더에서 받은 파일을 더블클릭해요.", "tip": "Windows 보안 경고가 나오면 「추가 정보」→「실행」을 눌러요."},
+      {"step": 3, "title": "FlightGear가 켜져요", "desc": "화면이 로딩되면 비행기가 인천공항에 있어요. 이륙해 보세요!", "tip": "5~10분 기다려야 할 수도 있어요. 당황하지 마세요!"}
+    ],
+    "controls": [
+      {"keys": "↑ ↓", "action": "비행기 앞뒤 기울이기 (피치)", "emoji": "↕️"},
+      {"keys": "← →", "action": "비행기 좌우 기울이기 (롤)", "emoji": "↔️"},
+      {"keys": "Page Up / Page Down", "action": "속도 올리기·내리기 (스로틀)", "emoji": "⚡", "alt": "숫자 키패드 + / - 도 됩니다"},
+      {"keys": "V", "action": "시점 바꾸기 (조종석 ↔ 밖에서 보기)", "emoji": "👀"},
+      {"keys": "G", "action": "바퀴 내리기·넣기 (착륙할 때)", "emoji": "🛞"},
+      {"keys": "B", "action": "브레이크 (멈출 때)", "emoji": "🛑"},
+      {"keys": "마우스", "action": "마우스 움직이면 방향 조절 (조종간처럼)", "emoji": "🖱️"},
+      {"keys": "F1", "action": "도움말 보기", "emoji": "❓"}
+    ],
+    "first_flight_tips": [
+      "먼저 Page Up을 여러 번 눌러서 속도를 올려요.",
+      "활주로 중앙을 따라 앞으로 가다가, 살짝 ↑ 키로 기수를 들어 올려요.",
+      "땅에서 떨어지면 성공! 하늘을 즐기다가 천천히 착륙해 보세요.",
+      "어려우면 「세스나 튜토리얼」을 FlightGear 메뉴에서 찾아볼 수 있어요."
+    ]
+  },
+  {
+    "id": "geo-fs",
+    "name": "브라우저에서 가볍게 날기",
+    "subtitle": "GeoFS · 설치 없이 바로!",
+    "icon": "🌍",
+    "type": "iframe",
+    "difficulty": "쉬움",
+    "difficulty_stars": 1,
+    "needs_install": false,
+    "embed_url": "https://www.geo-fs.com/",
+    "open_url": "https://www.geo-fs.com/",
+    "license": "웹 비행 시뮬 (무료 체험)",
+    "tagline": "설치 없이 지구 위를 날아다녀요!",
+    "summary": "인터넷 브라우저만 있으면 바로 비행할 수 있어요. 전 세계 지도 위에서 비행기를 조종해요.",
+    "rewards": {
+      "first_complete": 200000,
+      "repeat_complete": 80000,
+      "virtual_hours": 0.2,
+      "season_xp": 2
+    },
+    "install_steps": [],
+    "start_steps": [
+      {"step": 1, "title": "「비행 시작」버튼 누르기", "desc": "아래 초록 버튼을 누르면 게임 화면이 나와요.", "tip": "화면이 작으면 전체화면 버튼을 눌러보세요."},
+      {"step": 2, "title": "비행기 고르기", "desc": "게임 안에서 비행기를 선택하고 「Fly」를 눌러요.", "tip": "Cessna 같은 작은 비행기가 쉬워요."},
+      {"step": 3, "title": "날아다니기!", "desc": "마우스와 키보드로 비행해 보세요.", "tip": "5분 이상 날았으면 「비행 완료」버튼으로 보상 받기!"}
+    ],
+    "controls": [
+      {"keys": "마우스 이동", "action": "비행기 방향 조절", "emoji": "🖱️"},
+      {"keys": "↑ / W", "action": "기수 올리기 (상승)", "emoji": "⬆️"},
+      {"keys": "↓ / S", "action": "기수 내리기 (하강)", "emoji": "⬇️"},
+      {"keys": "+ / -", "action": "속도 조절", "emoji": "⚡"},
+      {"keys": "C", "action": "조종석 시점", "emoji": "👀"},
+      {"keys": "G", "action": "착륙 장치", "emoji": "🛞"}
+    ],
+    "first_flight_tips": [
+      "처음엔 서울·인천 근처에서 시작해 보세요.",
+      "너무 빠르게 가지 말고 천천히 방향을 바꿔요.",
+      "화면이 안 보이면 「새 창에서 열기」버튼을 눌러보세요."
+    ],
+    "iframe_note": "일부 브라우저에서는 게임이 작은 창에 안 보일 수 있어요. 그때는 「새 창에서 열기」를 사용하세요."
+  }
+]

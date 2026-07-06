@@ -15,7 +15,7 @@
       {"level": 9, "xp": 200, "reward_money": 10000000, "reward_item": null, "label": "여름 밤비행"},
       {"level": 10, "xp": 250, "reward_money": 15000000, "reward_item": "av_wing_neon", "label": "시즌 마스터"}
     ],
-    "xp_rules": {"logbook_flight": 3, "quiz_done": 2, "mission_done": 2, "flashcard": 1, "scenario_done": 2}
+    "xp_rules": {"logbook_flight": 3, "quiz_done": 2, "mission_done": 2, "flashcard": 1, "scenario_done": 2, "game_done": 2}
   },
   "default": {
     "title": "파일럿 시즌",
@@ -28,6 +28,6 @@
       {"level": 4, "xp": 70, "reward_money": 1500000, "reward_item": null, "label": "레벨 4"},
       {"level": 5, "xp": 100, "reward_money": 2500000, "reward_item": "av_cap_ke", "label": "레벨 5"}
     ],
-    "xp_rules": {"logbook_flight": 3, "quiz_done": 2, "mission_done": 2, "flashcard": 1, "scenario_done": 2}
+    "xp_rules": {"logbook_flight": 3, "quiz_done": 2, "mission_done": 2, "flashcard": 1, "scenario_done": 2, "game_done": 2}
   }
 }
