@@ -85,11 +85,14 @@ def add_logbook_entry():
         rewards_result = process_all_rewards(prog)
         try:
             from app.services.pilot_features import process_logbook_extras
+            from app.services.pilot_extras import process_logbook_extras as process_pilot_extras
             entry = LogbookEntry.query.order_by(LogbookEntry.id.desc()).first()
-            extras = process_logbook_extras(prog, entry)
+            feat_extras = process_logbook_extras(prog, entry)
+            pilot_extras = process_pilot_extras(prog, entry)
             if rewards_result is None:
                 rewards_result = {}
-            rewards_result['extras'] = extras
+            rewards_result['extras'] = feat_extras
+            rewards_result['pilot_extras'] = pilot_extras
         except Exception:
             pass
     except Exception:
@@ -152,7 +155,7 @@ def add_logbook_entry():
     except Exception as e:
         pass  # fail silently for now
     
-    resp = {"status": "success"}
+    resp = {"status": "success", "entry_id": entry.id}
     if rewards_result:
         if rewards_result.get('salary'):
             resp["salary"] = rewards_result['salary']
@@ -161,6 +164,8 @@ def add_logbook_entry():
             resp["bonus_total"] = rewards_result.get('bonus_total', 0)
         if rewards_result.get('extras'):
             resp["extras"] = rewards_result['extras']
+        if rewards_result.get('pilot_extras'):
+            resp["pilot_extras"] = rewards_result['pilot_extras']
         prog = UserProgress.query.first()
         resp["wallet_balance"] = (prog.wallet_balance or 0) if prog else 0
     return jsonify(resp)

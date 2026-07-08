@@ -1,0 +1,18 @@
+[
+  {"id": "crew_trainee", "name": "민준이", "role": "비행 학생", "emoji": "📘", "unlock": {"type": "logbook_count", "value": 1}, "desc": "첫 비행을 꿈꾸는 친구", "bonus_tip": "로그북 1회 기록"},
+  {"id": "crew_student", "name": "서연", "role": "조종 학생", "emoji": "🎓", "unlock": {"type": "quiz_done", "value": 1}, "desc": "퀴즈를 좋아하는 공부벌레", "bonus_tip": "퀴즈 1회 완료"},
+  {"id": "crew_fo_lee", "name": "이부기장", "role": "부기장", "emoji": "👨‍✈️", "unlock": {"type": "flashcard_count", "value": 10}, "desc": "기장을 돕는 조종사", "bonus_tip": "플래시카드 10개"},
+  {"id": "crew_fo_park", "name": "박부기장", "role": "부기장", "emoji": "👩‍✔️", "unlock": {"type": "logbook_count", "value": 10}, "desc": "국내선 전문 부기장", "bonus_tip": "로그북 10회"},
+  {"id": "crew_captain_kim", "name": "김기장", "role": "기장", "emoji": "👑", "unlock": {"type": "rank_id", "value": "captain"}, "desc": "20년 경력 베테랑 기장", "bonus_tip": "기장 랭크 달성"},
+  {"id": "crew_captain_choi", "name": "최기장", "role": "기장", "emoji": "⭐", "unlock": {"type": "quiz_score", "value": 90}, "desc": "완벽한 점수를 좋아하는 기장", "bonus_tip": "퀴즈 90점+"},
+  {"id": "crew_fa_hana", "name": "하나", "role": "승무원", "emoji": "💁", "unlock": {"type": "mission_count", "value": 5}, "desc": "승객을 환하게 맞이해요", "bonus_tip": "미션 5회 완료"},
+  {"id": "crew_fa_jun", "name": "준호", "role": "승무원", "emoji": "🧑‍✈️", "unlock": {"type": "journal_count", "value": 3}, "desc": "비행 일기를 응원하는 승무원", "bonus_tip": "비행 일기 3개"},
+  {"id": "crew_mechanic", "name": "정비사 오", "role": "정비사", "emoji": "🔧", "unlock": {"type": "owned_aircraft", "value": 5}, "desc": "비행기를 건강하게 지켜요", "bonus_tip": "비행기 5대 보유"},
+  {"id": "crew_atc", "name": "관제사 이", "role": "관제사", "emoji": "📡", "unlock": {"type": "airport_quiz", "value": 5}, "desc": "안전한 이륙·착륙을 도와요", "bonus_tip": "공항 퀴즈 5회"},
+  {"id": "crew_dispatcher", "name": "운항관리 정", "role": "운항관리", "emoji": "📋", "unlock": {"type": "schedule_week", "value": 1}, "desc": "스케줄을 짜는 전문가", "bonus_tip": "스케줄 보드 1주 채우기"},
+  {"id": "crew_fuel", "name": "연료담당 한", "role": "연료사", "emoji": "⛽", "unlock": {"type": "fuel_quiz", "value": 3}, "desc": "연료 계산의 달인", "bonus_tip": "연료 퀴즈 3회"},
+  {"id": "crew_cargo", "name": "화물기장 강", "role": "화물기장", "emoji": "📦", "unlock": {"type": "demand_claim", "value": 1}, "desc": "화물을 실어 나르는 파일럿", "bonus_tip": "주간 이벤트 1회"},
+  {"id": "crew_intl", "name": "국제선 기장 윤", "role": "국제선 기장", "emoji": "🌏", "unlock": {"type": "intl_route", "value": 1}, "desc": "세계를 날아다녀요", "bonus_tip": "국제선 1회 비행"},
+  {"id": "crew_ontime", "name": "정시왕 배", "role": "정시 전문", "emoji": "⏰", "unlock": {"type": "on_time_week", "value": 3}, "desc": "정시 운항의 달인", "bonus_tip": "이번 주 정시 3회"},
+  {"id": "crew_senior", "name": "전설의 한", "role": "최고 기장", "emoji": "💫", "unlock": {"type": "crew_count", "value": 10}, "desc": "모든 승무원을 모은 전설", "bonus_tip": "승무원 카드 10장"}
+]

@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+{% block title %}기장 생활 - Pilot Dream{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold mb-1">👑 기장 생활</h1>
+        <p class="text-gray-400 text-sm">기장의 꿈을 키우는 특별 활동! 비행·학습과 함께 성장해요.</p>
+    </div>
+
+    <div class="flex gap-1 mb-6 flex-wrap" id="life-tabs">
+        <button data-tab="duty" class="life-tab active px-3 py-2 rounded-lg text-xs font-bold">출근</button>
+        <button data-tab="airport" class="life-tab px-3 py-2 rounded-lg text-xs font-bold">공항</button>
+        <button data-tab="crew" class="life-tab px-3 py-2 rounded-lg text-xs font-bold">승무원</button>
+        <button data-tab="codex" class="life-tab px-3 py-2 rounded-lg text-xs font-bold">도감</button>
+        <button data-tab="schedule" class="life-tab px-3 py-2 rounded-lg text-xs font-bold">스케줄</button>
+        <button data-tab="fuel" class="life-tab px-3 py-2 rounded-lg text-xs font-bold">연료퀴즈</button>
+        <button data-tab="ontime" class="life-tab px-3 py-2 rounded-lg text-xs font-bold">정시</button>
+        <button data-tab="demand" class="life-tab px-3 py-2 rounded-lg text-xs font-bold">이벤트</button>
+        <button data-tab="journal" class="life-tab px-3 py-2 rounded-lg text-xs font-bold">일기</button>
+    </div>
+
+    <div id="life-content" class="min-h-[400px]"><p class="text-gray-400">로딩 중...</p></div>
+</div>
+<style>
+.life-tab { background:#1c1c1e; border:1px solid #2c2c2e; color:#8e8e93; }
+.life-tab.active, .life-tab:hover { background:#001a33; border-color:#0A84FF; color:#0A84FF; }
+.crew-card { background:#0a0a0a; border:1px solid #2c2c2e; border-radius:12px; padding:12px; }
+.crew-card.unlocked { border-color:#33ff33/50; }
+.crew-card.locked { opacity:0.45; }
+.codex-stamp { width:48px; height:48px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:20px; background:#111; border:1px solid #333; }
+.codex-stamp.discovered { border-color:#0A84FF; background:#001a33; }
+.slot-cell { min-height:60px; }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let data = {};
+
+function fmt(n) { return '₩' + (n||0).toLocaleString('ko-KR'); }
+
+async function loadAll() {
+    const res = await fetch('/api/extras/summary');
+    data = await res.json();
+    renderTab(document.querySelector('.life-tab.active')?.dataset.tab || 'duty');
+}
+
+function renderTab(tab) {
+    document.querySelectorAll('.life-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+    const el = document.getElementById('life-content');
+    const r = {
+        duty: renderDuty, airport: renderAirport, crew: renderCrew, codex: renderCodex,
+        schedule: renderSchedule, fuel: renderFuel, ontime: renderOntime,
+        demand: renderDemand, journal: renderJournal,
+    };
+    el.innerHTML = (r[tab] || renderDuty)();
+}
+
+function renderDuty() {
+    const d = data.captain_duty || {};
+    return `<div class="info-card p-6 rounded-2xl border border-[#ffaa00]/40">
+        <h2 class="text-xl font-bold mb-2">👑 기장 출근 미션</h2>
+        <p class="text-sm text-gray-400 mb-4">${d.kid_desc || ''}</p>
+        <div class="text-3xl font-bold text-[#33ff33] mb-2">${d.flights_this_week||0} / ${d.need_flights||1} 비행</div>
+        <p class="text-[#ffaa00] text-sm mb-4">보상 ${fmt(d.reward_money)} + ${d.reward_hours}h</p>
+        ${d.claimed ? '<div class="text-[#0A84FF] font-bold">✓ 이번 주 출근 완료!</div>' :
+          d.done ? '<button onclick="claimDuty()" class="px-6 py-3 bg-[#ffaa00] text-black rounded-xl font-bold">출근 보상 받기!</button>' :
+          '<a href="/logbook" class="inline-block px-6 py-3 bg-[#0A84FF] text-white rounded-xl font-bold">로그북에 비행 기록하기 →</a>'}
+    </div>`;
+}
+
+function renderAirport() {
+    const a = data.daily_airport;
+    if (!a) return '<p class="text-gray-400">공항 정보 없음</p>';
+    const q = a.quiz || {};
+    if (a.quiz_done) {
+        return `<div class="info-card p-6 rounded-2xl">
+            <div class="text-4xl mb-2">${a.emoji||'🌍'}</div>
+            <h2 class="text-xl font-bold">${a.name} (${a.id})</h2>
+            <p class="text-sm text-gray-300 mt-3">${a.fact}</p>
+            <div class="mt-4 text-[#33ff33] font-bold">✓ 오늘 퀴즈 완료!</div>
+        </div>`;
+    }
+    return `<div class="info-card p-6 rounded-2xl border border-[#0A84FF]/30">
+        <div class="text-xs text-[#0A84FF] mb-1">오늘의 공항</div>
+        <div class="text-4xl mb-2">${a.emoji||'🌍'}</div>
+        <h2 class="text-xl font-bold">${a.name} · ${a.country}</h2>
+        <p class="text-sm text-gray-300 mt-3 p-3 bg-black/40 rounded-lg">${a.fact}</p>
+        <div class="mt-4 font-bold text-sm mb-2">📝 ${q.question}</div>
+        <div class="space-y-2" id="airport-choices">
+            ${(q.choices||[]).map((c,i) => `
+                <button onclick="submitAirportQuiz(${i})" class="w-full text-left p-3 bg-black/40 rounded-lg hover:border-[#0A84FF] border border-transparent text-sm">${i+1}. ${c}</button>
+            `).join('')}
+        </div>
+        <p class="text-xs text-gray-500 mt-2">정답 시 ${fmt(a.reward_money)}</p>
+    </div>`;
+}
+
+function renderCrew() {
+    const cards = data.crew_cards || [];
+    const n = data.crew_unlocked_count || 0;
+    return `<div class="mb-4 text-sm">수집 <b class="text-[#33ff33]">${n}</b> / ${cards.length}</div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+        ${cards.map(c => `
+            <div class="crew-card ${c.unlocked?'unlocked':'locked'}">
+                <div class="text-3xl">${c.emoji}</div>
+                <div class="font-bold text-sm mt-1">${c.name}</div>
+                <div class="text-[10px] text-gray-500">${c.role}</div>
+                ${c.unlocked ? '<div class="text-[10px] text-[#33ff33] mt-1">✓ 동료!</div>' :
+                  `<div class="text-[10px] text-[#ffaa00] mt-2">${c.bonus_tip}</div>`}
+            </div>`).join('')}
+    </div>`;
+}
+
+function renderCodex() {
+    const c = data.codex || {};
+    const list = (c.aircraft||[]).filter(a => a.discovered);
+    const locked = (c.aircraft||[]).filter(a => !a.discovered);
+    return `<div class="mb-4 text-sm">발견 <b class="text-[#0A84FF]">${c.discovered||0}</b> / ${c.total||0} · 내 비행기 ${c.owned||0}대</div>
+    <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 mb-6">
+        ${list.map(a => `
+            <div class="codex-stamp discovered text-center p-1" title="${a.name}">
+                <div class="text-lg">✈️</div>
+                <div class="text-[8px] truncate">${a.name}</div>
+                ${a.owned?'<div class="text-[8px] text-[#33ff33]">내것</div>':''}
+            </div>`).join('')}
+        ${locked.slice(0,12).map(() => `<div class="codex-stamp text-center text-gray-600">?</div>`).join('')}
+    </div>
+    <p class="text-xs text-gray-500">비행기를 모으고 연습하면 도감에 스탬프가 찍혀요!</p>`;
+}
+
+function renderSchedule() {
+    const s = data.schedule || {};
+    return `<div class="info-card p-5 rounded-2xl">
+        <h2 class="font-bold text-lg mb-2">📅 이번 주 비행 스케줄</h2>
+        <p class="text-xs text-gray-400 mb-4">내 비행기를 시간표에 배치해 보세요! (${s.filled||0}/${s.total_slots||14})</p>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+            ${(s.slots||[]).map(sl => `
+                <div class="slot-cell p-2 bg-black/40 rounded-lg border border-gray-800">
+                    <div class="text-[10px] text-gray-500">${sl.label}</div>
+                    <select class="w-full mt-1 text-xs bg-black border rounded p-1" onchange="setSlot('${sl.slot_id}', this.value)">
+                        <option value="">— 비움 —</option>
+                        ${(s.owned_aircraft||[]).map(ac => `
+                            <option value="${ac.id}" ${sl.aircraft_id===ac.id?'selected':''}>${ac.name||ac.id}</option>
+                        `).join('')}
+                    </select>
+                </div>`).join('')}
+        </div>
+        ${s.claimed ? '<div class="text-[#33ff33] font-bold">✓ 스케줄 보상 받음</div>' :
+          s.complete ? `<button onclick="claimSchedule()" class="px-5 py-2 bg-[#33ff33] text-black rounded-lg font-bold">스케줄 완성 보상 ${fmt(s.reward_money)}</button>` :
+          '<p class="text-gray-400 text-sm">모든 칸을 채우면 보상!</p>'}
+    </div>`;
+}
+
+function renderFuel() {
+    const rem = data.fuel_quiz_remaining ?? 3;
+    return `<div class="info-card p-5 rounded-2xl">
+        <h2 class="font-bold text-lg mb-2">⛽ 연료·좌석 계산 퀴즈</h2>
+        <p class="text-xs text-gray-400 mb-4">오늘 ${rem}문제 남음 · 플래너 노선과 비슷한 문제!</p>
+        <div id="fuel-quiz-area"><button onclick="loadFuelQuiz()" class="px-5 py-2 bg-[#0A84FF] rounded-lg font-bold text-sm">문제 받기</button></div>
+    </div>`;
+}
+
+function renderOntime() {
+    const o = data.on_time || {};
+    return `<div class="info-card p-5 rounded-2xl border border-[#33ff33]/30">
+        <h2 class="font-bold text-lg mb-2">⏰ 정시 운항 챌린지</h2>
+        <p class="text-xs text-gray-400 mb-3">${o.kid_tip||''}</p>
+        <div class="text-2xl font-bold text-[#33ff33] mb-4">이번 주 정시 ${o.count||0}회</div>
+        <div class="space-y-2">
+            ${(o.tiers||[]).map(t => `
+                <div class="flex justify-between items-center p-3 bg-black/40 rounded-lg text-sm">
+                    <span>${t.label}</span>
+                    <span class="text-[#ffaa00]">${fmt(t.money)}</span>
+                    ${t.claimed ? '<span class="text-gray-500">✓</span>' :
+                      t.reached ? `<button onclick="claimOntime(${t.need})" class="text-xs px-2 py-1 bg-[#33ff33] text-black rounded font-bold">받기</button>` :
+                      '<span class="text-gray-600 text-xs">미달성</span>'}
+                </div>`).join('')}
+        </div>
+    </div>`;
+}
+
+function renderDemand() {
+    const d = data.weekly_demand || {};
+    const e = d.event || {};
+    return `<div class="info-card p-5 rounded-2xl border border-purple-500/30">
+        <div class="text-xs text-purple-400 mb-1">이번 주 특별 이벤트</div>
+        <div class="text-4xl mb-2">${e.icon||'🎉'}</div>
+        <h2 class="font-bold text-lg">${e.name||''}</h2>
+        <p class="text-sm text-gray-400 mt-2">${e.desc||''}</p>
+        <div class="mt-3 text-sm">매칭 비행 <b class="text-[#33ff33]">${d.matches||0}</b>회</div>
+        <p class="text-[#ffaa00] text-sm mt-2">보상 ${fmt(e.bonus_money)}</p>
+        ${d.claimed ? '<div class="mt-4 text-[#33ff33] font-bold">✓ 보상 받음</div>' :
+          d.can_claim ? '<button onclick="claimDemand()" class="mt-4 px-5 py-2 bg-purple-600 rounded-lg font-bold">이벤트 보상 받기!</button>' :
+          '<a href="/logbook" class="mt-4 inline-block text-sm text-[#0A84FF]">로그북에 맞는 비행 기록하기 →</a>'}
+    </div>`;
+}
+
+function renderJournal() {
+    const journals = data.journals || [];
+    return `<div class="info-card p-5 rounded-2xl">
+        <h2 class="font-bold text-lg mb-2">📝 비행 일기</h2>
+        <p class="text-xs text-gray-400 mb-4">로그북 기록 후, 그 비행에 대한 느낌을 써보세요! (+₩100,000)</p>
+        <div class="flex gap-2 mb-4">
+            <input id="journal-entry-id" type="number" placeholder="비행 기록 번호 (ID)" class="flex-1 px-3 py-2 bg-black border rounded text-sm">
+            <input id="journal-text" type="text" placeholder="오늘 비행은 어땠나요?" class="flex-[2] px-3 py-2 bg-black border rounded text-sm">
+            <button onclick="submitJournal()" class="px-4 py-2 bg-[#ffaa00] text-black rounded font-bold text-sm">저장</button>
+        </div>
+        ${journals.length ? `<div class="space-y-2">${journals.map(j => `
+            <div class="p-3 bg-black/40 rounded text-sm">
+                <div class="text-[10px] text-gray-500">${j.date} · ${j.route||''} · #${j.entry_id}</div>
+                <div class="mt-1">${j.text}</div>
+            </div>`).join('')}</div>` : '<p class="text-gray-500 text-sm">아직 일기가 없어요.</p>'}
+    </div>`;
+}
+
+async function claimDuty() {
+    const res = await fetch('/api/extras/captain-duty/claim', {method:'POST'});
+    const d = await res.json();
+    alert(d.error || d.message); await loadAll();
+}
+async function submitAirportQuiz(ans) {
+    const res = await fetch('/api/extras/daily-airport/quiz', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({answer:ans})});
+    const d = await res.json();
+    alert(d.error || d.message); await loadAll();
+}
+async function setSlot(slot_id, aircraft_id) {
+    await fetch('/api/extras/schedule', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({slot_id, aircraft_id: aircraft_id||null})});
+    await loadAll(); renderTab('schedule');
+}
+async function claimSchedule() {
+    const res = await fetch('/api/extras/schedule/claim', {method:'POST'});
+    const d = await res.json();
+    alert(d.error || d.message); await loadAll();
+}
+async function loadFuelQuiz() {
+    const res = await fetch('/api/extras/fuel-quiz');
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    const q = d.quiz;
+    document.getElementById('fuel-quiz-area').innerHTML = `
+        <div class="p-4 bg-black/40 rounded-lg mb-3">
+            <div class="text-[10px] text-gray-500">${q.route} · ${q.aircraft} · ${q.hours}h</div>
+            <div class="font-bold mt-2">${q.question}</div>
+        </div>
+        <div class="space-y-2">${q.choices.map((c,i) => `
+            <button onclick="submitFuel('${q.id}',${i})" class="w-full text-left p-2 bg-black/30 rounded hover:border-[#0A84FF] border text-sm">${i+1}. ${c}</button>
+        `).join('')}</div>`;
+}
+async function submitFuel(id, ans) {
+    const res = await fetch('/api/extras/fuel-quiz/submit', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({quiz_id:id, answer:ans})});
+    const d = await res.json();
+    alert(d.error || d.message); await loadAll(); renderTab('fuel');
+}
+async function claimOntime(need) {
+    const res = await fetch('/api/extras/on-time/claim', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({need})});
+    const d = await res.json();
+    alert(d.error || d.message); await loadAll();
+}
+async function claimDemand() {
+    const res = await fetch('/api/extras/demand/claim', {method:'POST'});
+    const d = await res.json();
+    alert(d.error || d.message); await loadAll();
+}
+async function submitJournal() {
+    const entry_id = parseInt(document.getElementById('journal-entry-id').value);
+    const text = document.getElementById('journal-text').value;
+    const res = await fetch('/api/extras/journal', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({entry_id, text})});
+    const d = await res.json();
+    alert(d.error || d.message); await loadAll();
+}
+
+function prefillJournal() {
+    const params = new URLSearchParams(location.search);
+    const id = params.get('journal') || sessionStorage.getItem('lastJournalEntryId');
+    if (id) {
+        const el = document.getElementById('journal-entry-id');
+        if (el) el.value = id;
+    }
+}
+document.getElementById('life-tabs').addEventListener('click', e => {
+    const t = e.target.closest('.life-tab');
+    if (t) {
+        renderTab(t.dataset.tab);
+        if (t.dataset.tab === 'journal') prefillJournal();
+    }
+});
+loadAll().then(() => {
+    if ((new URLSearchParams(location.search)).get('journal')) {
+        renderTab('journal');
+        prefillJournal();
+    }
+});
+</script>
+{% endblock %}

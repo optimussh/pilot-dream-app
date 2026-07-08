@@ -123,6 +123,11 @@ def mission_complete():
         return jsonify({'error': msg}), 400
     bonuses, bonus_total = process_salary_bonuses(prog)
     try:
+        from app.services.pilot_extras import check_crew_unlocks
+        check_crew_unlocks(prog)
+    except Exception:
+        pass
+    try:
         from app.services.pilot_features import add_season_xp
         add_season_xp(prog, 'mission_done')
     except Exception:
@@ -224,6 +229,11 @@ def quiz_submit():
     else:
         quiz_money = award_money(prog, LEARNING_REWARDS['quiz_done'], f'퀴즈 완료 ({score}점)')
     try_unlock_badges(prog)
+    try:
+        from app.services.pilot_extras import check_crew_unlocks
+        check_crew_unlocks(prog)
+    except Exception:
+        pass
     bonus_extra = {'quiz_perfect': score >= 100}
     bonuses, bonus_total = process_salary_bonuses(prog, bonus_extra)
     try:
@@ -269,6 +279,11 @@ def flashcard_learn():
         flash_money = award_money(prog, LEARNING_REWARDS['flashcard'] * new_count, f'플래시카드 {new_count}개')
     log_activity(prog, 'flashcard', f'learned={len(card_ids)}')
     try_unlock_badges(prog)
+    try:
+        from app.services.pilot_extras import check_crew_unlocks
+        check_crew_unlocks(prog)
+    except Exception:
+        pass
     bonuses, bonus_total = process_salary_bonuses(prog)
     season_rewards = []
     if new_count > 0:

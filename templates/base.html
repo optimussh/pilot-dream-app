@@ -112,6 +112,7 @@
         <div class="flex gap-1 text-sm font-medium">
             <a href="/" class="nav-link {{ 'active' if request.path == '/' else '' }}">대시보드</a>
             <a href="/learn" class="nav-link {{ 'active' if request.path == '/learn' or request.path.startswith('/quiz') or request.path.startswith('/flash') or request.path.startswith('/scenario') or request.path.startswith('/captain') or request.path.startswith('/first-flight') else '' }}">학습</a>
+            <a href="/captain-life" class="nav-link {{ 'active' if request.path.startswith('/captain-life') else '' }}">👑 기장생활</a>
             <a href="/radar" class="nav-link {{ 'active' if request.path == '/radar' else '' }}">레이더</a>
             <a href="/aircraft" class="nav-link {{ 'active' if request.path == '/aircraft' else '' }}">기종</a>
             <a href="/atc-english" class="nav-link {{ 'active' if request.path == '/atc-english' else '' }}">항공영어</a>

@@ -513,6 +513,15 @@ function formatRewardAlert(result, baseMsg) {
         if (ex.combos?.length) ex.combos.forEach(c => msg += `\n✈️ 콤보: ${c.name}!`);
         if (ex.season?.length) msg += '\n☀️ 시즌 레벨 업!';
     }
+    const px = result.pilot_extras;
+    if (px) {
+        if (px.on_time) msg += `\n⏰ 정시 비행! (이번 주 ${px.on_time}회)`;
+        if (px.demand_match) msg += `\n🎯 주간 이벤트 매칭: ${px.demand_match}`;
+    }
+    if (result.entry_id) {
+        sessionStorage.setItem('lastJournalEntryId', String(result.entry_id));
+        msg += `\n\n📝 비행 일기를 쓰면 +₩100,000!\n/captain-life?journal=${result.entry_id}`;
+    }
     return msg;
 }
 

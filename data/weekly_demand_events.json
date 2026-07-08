@@ -1,0 +1,10 @@
+[
+  {"id": "demand_jeju", "name": "제주 여행 붐!", "icon": "🏝️", "desc": "이번 주 제주行 손님이 많아요! 제주 노선 비행하면 보너스!", "route_match": ["CJU", "제주"], "cargo": false, "bonus_money": 400000, "bonus_hours": 0.3},
+  {"id": "demand_japan", "name": "일본 여행 시즌", "icon": "🇯🇵", "desc": "일본 노선 수요 UP! NRT·HND·KIX 노선에 도전!", "route_match": ["NRT", "HND", "KIX", "일본"], "cargo": false, "bonus_money": 600000, "bonus_hours": 0.5},
+  {"id": "demand_intl", "name": "국제선 성수기", "icon": "🌏", "desc": "해외 노선이 인기! 한국↔해외 노선을 날아보세요.", "route_match": ["ICN-", "-ICN", "GMP-"], "cargo": false, "bonus_money": 800000, "bonus_hours": 0.5, "require_intl": true},
+  {"id": "demand_cargo", "name": "화물 대수송", "icon": "📦", "desc": "화물이 많아요! 2시간 이상 비행하면 화물 보너스!", "route_match": [], "cargo": true, "min_hours": 2, "bonus_money": 500000, "bonus_hours": 0.4},
+  {"id": "demand_domestic", "name": "국내선 주말", "icon": "🇰🇷", "desc": "국내 여행 수요 증가! ICN·GMP·PUS·CJU 노선!", "route_match": ["ICN-GMP", "GMP-ICN", "ICN-PUS", "PUS-ICN", "ICN-CJU", "CJU-ICN", "김포", "제주", "부산"], "cargo": false, "bonus_money": 350000, "bonus_hours": 0.2},
+  {"id": "demand_longhaul", "name": "장거리 프리미엄", "icon": "🌙", "desc": "8시간 이상 장거리 비행이 인기!", "route_match": [], "cargo": false, "min_hours": 8, "bonus_money": 1200000, "bonus_hours": 0.8},
+  {"id": "demand_ontime", "name": "정시 운항 주간", "icon": "⏰", "desc": "정시 운항이 중요해요! 정시 비행 기록에 추가 보너스!", "route_match": [], "cargo": false, "require_ontime": true, "bonus_money": 300000, "bonus_hours": 0.2},
+  {"id": "demand_student", "name": "학생 여행 할인", "icon": "🎒", "desc": "학생 손님이 많아요! 짧은 국내선(1.5h 이하) 비행!", "route_match": [], "cargo": false, "max_hours": 1.5, "bonus_money": 250000, "bonus_hours": 0.2}
+]
