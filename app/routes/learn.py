@@ -10,7 +10,7 @@ from app.services.gamification import (
 from app.services.economy import get_wallet_summary, salary_progress, process_salary_bonuses
 from app.services.content_bank import (
     get_quiz_bank, get_flashcard_bank, get_scenario_bank,
-    daily_sample, lookup_by_ids
+    daily_sample, lookup_by_ids, prepare_quiz_questions,
 )
 
 QUIZ_PER_ROUND = 5
@@ -176,7 +176,12 @@ def quiz_submit():
         return jsonify({'error': '오늘의 퀴즈는 이미 완료했습니다. 내일 다시 도전하세요!'}), 400
 
     bank = get_quiz_bank()
-    questions = lookup_by_ids(bank, question_ids)
+    prepared = quiz_day.get('prepared')
+    if prepared and len(prepared) == len(question_ids):
+        questions = prepared
+    else:
+        raw = lookup_by_ids(bank, question_ids)
+        questions = prepare_quiz_questions(raw, today_str())
     if not questions or len(questions) != len(question_ids):
         return jsonify({'error': '유효한 문항이 없습니다.'}), 400
     if len(answers) < len(questions):
@@ -193,6 +198,7 @@ def quiz_submit():
 
     quiz_day.update({
         'ids': question_ids,
+        'prepared': questions,
         'done': True,
         'score': score,
         'correct': correct,
@@ -435,22 +441,31 @@ def get_quiz():
     quiz_day = dl.get('quiz', {})
 
     if quiz_day.get('done'):
-        questions = lookup_by_ids(bank, quiz_day.get('ids', []))
+        prepared = quiz_day.get('prepared') or prepare_quiz_questions(
+            lookup_by_ids(bank, quiz_day.get('ids', [])), today
+        )
         return jsonify({
-            'questions': [quiz_public(q) for q in questions],
+            'questions': [quiz_public(q) for q in prepared],
             'pool_size': len(bank),
-            'count': len(questions),
+            'count': len(prepared),
             'daily_done': True,
             'score': quiz_day.get('score'),
             'correct': quiz_day.get('correct'),
             'results': quiz_day.get('results', []),
         })
 
-    if quiz_day.get('ids'):
-        picked = lookup_by_ids(bank, quiz_day['ids'])
+    if quiz_day.get('prepared'):
+        picked = quiz_day['prepared']
+    elif quiz_day.get('ids'):
+        picked = prepare_quiz_questions(lookup_by_ids(bank, quiz_day['ids']), today)
+        quiz_day['prepared'] = picked
+        dl['quiz'] = quiz_day
+        save_daily_learning(prog, dl)
+        db.session.commit()
     else:
-        picked = daily_sample(bank, QUIZ_PER_ROUND, f'quiz-{today}')
-        quiz_day = {'ids': [q['id'] for q in picked], 'done': False}
+        raw = daily_sample(bank, QUIZ_PER_ROUND, f'quiz-{today}')
+        picked = prepare_quiz_questions(raw, today)
+        quiz_day = {'ids': [q['id'] for q in picked], 'prepared': picked, 'done': False}
         dl['quiz'] = quiz_day
         save_daily_learning(prog, dl)
         db.session.commit()

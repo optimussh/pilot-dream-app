@@ -77,3 +77,29 @@ def daily_sample(items: list, count: int, date_key: str) -> list:
 def lookup_by_ids(bank: list, ids: list) -> list:
     by_id = {item["id"]: item for item in bank}
     return [by_id[i] for i in ids if i in by_id]
+
+
+def shuffle_quiz_choices(question: dict, seed: str = None) -> dict:
+    """보기 순서를 섞어 정답이 항상 같은 번호에 오지 않게 함"""
+    import copy
+    q = copy.deepcopy(question)
+    choices = q.get('choices') or []
+    if len(choices) < 2:
+        return q
+    correct_idx = q.get('answer', 0)
+    if correct_idx < 0 or correct_idx >= len(choices):
+        return q
+    indexed = list(enumerate(choices))
+    rng = random.Random(seed) if seed else random
+    rng.shuffle(indexed)
+    q['choices'] = [text for _, text in indexed]
+    q['answer'] = next(i for i, (orig, _) in enumerate(indexed) if orig == correct_idx)
+    return q
+
+
+def prepare_quiz_questions(questions: list, date_key: str) -> list:
+    """날짜+문항ID 기준으로 결정적 셔플 (제출·재조회 일치)"""
+    return [
+        shuffle_quiz_choices(q, seed=f'quiz-{date_key}-{q["id"]}')
+        for q in questions
+    ]
