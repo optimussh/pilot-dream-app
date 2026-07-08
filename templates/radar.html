@@ -108,7 +108,7 @@
         <div id="radar-panel-content" class="flex flex-col p-4 overflow-hidden">
             <div class="flex justify-between items-center mb-1">
                 <div class="text-[10px] text-[#ffaa00] font-bold">INBOUND TO ICN (한국행)</div>
-                <button onclick="showAddFlightModal()" 
+                <button onclick="showAddFlightModal().catch(e => { console.error('[Radar] modal open failed:', e); alert('항공편 추가 창을 열지 못했어요. 새로고침 후 다시 시도해주세요.'); })" 
                         class="text-[10px] px-2 py-0.5 bg-[#003300] border border-[#33ff33] rounded hover:bg-[#004400]">
                     + 항공편 추가
                 </button>
@@ -160,7 +160,7 @@
             </div>
 
             <div class="flex gap-2 mt-5">
-                <button onclick="addCustomFlight()" class="flex-1 py-2 bg-[#33ff33] text-black font-bold rounded">추가하기</button>
+                <button id="modal-add-btn" onclick="addCustomFlight()" class="flex-1 py-2 bg-[#33ff33] text-black font-bold rounded">추가하기</button>
                 <button onclick="hideAddFlightModal()" class="flex-1 py-2 border border-[#33ff33] rounded">취소</button>
             </div>
         </div>
@@ -502,6 +502,7 @@ function generateFlights() {
 
 function mergeUserFlightsIntoRadar() {
     flights = flights.filter(f => !f.isUserFlight);
+    if (!Array.isArray(userFlights)) userFlights = [];
 
     userFlights.forEach(uf => {
         const org = radarAirports.find(a => a.id === uf.org_id) || { id: uf.org_id, lat: 37.46, lng: 126.44, name: uf.org_id, country: '' };
@@ -562,8 +563,11 @@ let trails = {}; // For short recent trail
 let showFullRoutes = false;
 
 function updateFlights() {
+    if (!map) return;
+
     const iList = document.getElementById('inbound-list');
     const oList = document.getElementById('flight-list');
+    if (!iList || !oList) return;
     iList.innerHTML = '';
     oList.innerHTML = '';
 
@@ -572,6 +576,8 @@ function updateFlights() {
     let totalAlt = 0;
 
     flights.forEach(f => {
+        if (!f.org || !f.dest || f.org.lat == null || f.dest.lat == null) return;
+
         f.prog += f.spd;
         if (f.prog >= 1.0) {
             f.prog = 0;
@@ -702,22 +708,38 @@ function updateFlights() {
     });
 
     // Stats
-    document.getElementById('stat-total').innerText = visibleCount;
-    document.getElementById('stat-korea').innerText = koreaCount;
-    document.getElementById('stat-alt').innerText = 'FL' + Math.round(totalAlt / Math.max(visibleCount,1));
+    const statTotal = document.getElementById('stat-total');
+    const statKorea = document.getElementById('stat-korea');
+    const statAlt = document.getElementById('stat-alt');
+    const avgFl = 'FL' + Math.round(totalAlt / Math.max(visibleCount, 1));
+    if (statTotal) statTotal.innerText = visibleCount;
+    if (statKorea) statKorea.innerText = koreaCount;
+    if (statAlt) statAlt.innerText = avgFl;
 
-    // Simple collision detection
+    // 충돌 감지 — 항공편 많을 때 성능 보호 (150편 이상은 샘플링)
     let closeCalls = 0;
-    for (let i = 0; i < flights.length; i++) {
-        for (let j = i + 1; j < flights.length; j++) {
-            const dx = flights[i].lat - flights[j].lat;
-            const dy = flights[i].lng - flights[j].lng;
-            const dist = Math.sqrt(dx*dx + dy*dy);
-            if (dist < 0.8) closeCalls++;
+    if (flights.length <= 150) {
+        for (let i = 0; i < flights.length; i++) {
+            for (let j = i + 1; j < flights.length; j++) {
+                const dx = flights[i].lat - flights[j].lat;
+                const dy = flights[i].lng - flights[j].lng;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 0.8) closeCalls++;
+            }
+        }
+    } else {
+        const sample = flights.filter(f => f.isUserFlight || f.isKorea).slice(0, 80);
+        for (let i = 0; i < sample.length; i++) {
+            for (let j = i + 1; j < sample.length; j++) {
+                const dx = sample[i].lat - sample[j].lat;
+                const dy = sample[i].lng - sample[j].lng;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < 0.8) closeCalls++;
+            }
         }
     }
-    if (closeCalls > 0) {
-        document.getElementById('stat-alt').innerHTML = `FL${Math.round(totalAlt / Math.max(visibleCount,1))} <span class="text-red-400">⚠ ${closeCalls} close</span>`;
+    if (closeCalls > 0 && statAlt) {
+        statAlt.innerHTML = `${avgFl} <span class="text-red-400">⚠ ${closeCalls} close</span>`;
     }
 
     // Busiest airports (simple count)
@@ -732,9 +754,10 @@ function updateFlights() {
     sorted.forEach(([code, count]) => {
         busiestHTML += `<div>${code} <span class="text-[#33ff33]">${count}</span></div>`;
     });
-    document.getElementById('busiest-airports').innerHTML = busiestHTML || '데이터 수집 중...';
-
-    document.getElementById('active-flights-count').innerText = visibleCount + ' flights visible';
+    const busiestEl = document.getElementById('busiest-airports');
+    const activeCountEl = document.getElementById('active-flights-count');
+    if (busiestEl) busiestEl.innerHTML = busiestHTML || '데이터 수집 중...';
+    if (activeCountEl) activeCountEl.innerText = visibleCount + ' flights visible';
 }
 
 function startSimulation() {
@@ -778,9 +801,13 @@ function setupToggle() {
 }
 
 function applyFilters() {
-    currentFilters.koreaOnly = document.getElementById('filter-korea').checked;
-    currentFilters.aircraft = document.getElementById('filter-aircraft').value;
-    currentFilters.airline = document.getElementById('filter-airline').value;
+    const koreaEl = document.getElementById('filter-korea');
+    const aircraftEl = document.getElementById('filter-aircraft');
+    const airlineEl = document.getElementById('filter-airline');
+    if (!koreaEl || !aircraftEl || !airlineEl) return;
+    currentFilters.koreaOnly = koreaEl.checked;
+    currentFilters.aircraft = aircraftEl.value;
+    currentFilters.airline = airlineEl.value;
     updateFlights();
 }
 
@@ -855,9 +882,11 @@ async function loadCosmetics() {
 async function loadUserFlights() {
     try {
         const res = await fetch('/api/radar/flights');
-        userFlights = await res.json();
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        userFlights = Array.isArray(data) ? data : [];
     } catch (e) {
-        console.error('Failed to load user radar flights');
+        console.error('Failed to load user radar flights', e);
         userFlights = [];
     }
 }
@@ -946,6 +975,12 @@ async function populateAirportSelects() {
     }
 }
 
+async function refreshUserFlightsOnRadar() {
+    await loadUserFlights();
+    mergeUserFlightsIntoRadar();
+    updateFlights();
+}
+
 async function addCustomFlight() {
     const callsign = (document.getElementById('modal-callsign').value || 'MY-001').trim();
     const org_id = document.getElementById('modal-org').value;
@@ -954,7 +989,7 @@ async function addCustomFlight() {
     const is_korea = document.getElementById('modal-korea').value === 'true';
 
     if (!org_id || !dest_id) {
-        alert('출발/도착 공항을 선택해주세요.');
+        alert('출발/도착 공항을 선택해주세요. 공항 목록이 로딩 중이면 잠시 기다려주세요.');
         return;
     }
 
@@ -963,17 +998,14 @@ async function addCustomFlight() {
         return;
     }
 
+    const addBtn = document.getElementById('modal-add-btn');
+    if (addBtn) { addBtn.disabled = true; addBtn.textContent = '추가 중...'; }
+
     try {
         const res = await fetch('/api/radar/flights', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                callsign,
-                org_id,
-                dest_id,
-                ac_name,
-                is_korea
-            })
+            body: JSON.stringify({ callsign, org_id, dest_id, ac_name, is_korea })
         });
 
         let result = {};
@@ -983,19 +1015,24 @@ async function addCustomFlight() {
             console.error('Radar add response parse failed:', parseErr);
         }
 
-        if (res.ok && result.status === 'success') {
-            hideAddFlightModal();
-            await loadUserFlights();
-            mergeUserFlightsIntoRadar();
-            updateFlights();
-            alert('항공편이 레이더에 추가되었습니다!');
+        if (!res.ok || result.status !== 'success') {
+            alert(result.message || `추가 실패 (HTTP ${res.status})`);
             return;
         }
 
-        alert(result.message || `추가 실패 (HTTP ${res.status})`);
+        hideAddFlightModal();
+        try {
+            await refreshUserFlightsOnRadar();
+            alert('항공편이 레이더에 추가되었습니다!');
+        } catch (refreshErr) {
+            console.error('Radar refresh after add failed:', refreshErr);
+            alert('항공편은 저장됐어요! 화면이 안 바뀌면 새로고침 해주세요.');
+        }
     } catch (e) {
         console.error('Radar add flight failed:', e);
         alert('서버와 통신 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+    } finally {
+        if (addBtn) { addBtn.disabled = false; addBtn.textContent = '추가하기'; }
     }
 }
 
@@ -1124,7 +1161,8 @@ function populateFilters() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
+    (async () => {
     if (typeof trackActivity === 'function') trackActivity('radar', 'visited');
     console.log('[Radar] 페이지 로드 시작');
     initMap();
@@ -1154,6 +1192,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (window.requestIdleCallback) {
         requestIdleCallback(forceInvalidate);
     }
+    })().catch(e => console.error('[Radar] 초기화 실패:', e));
 });
 </script>
 {% endblock %}
