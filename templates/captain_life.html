@@ -48,12 +48,16 @@
 .codex-badge { font-size:8px; margin-top:5px; padding:2px 6px; border-radius:999px; font-weight:700; }
 .codex-legend { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
 .codex-legend span { font-size:10px; padding:3px 8px; border-radius:999px; border:1px solid; }
+.codex-entry { display:flex; flex-direction:column; align-items:center; }
 .slot-cell { min-height:60px; }
 </style>
 {% endblock %}
 
 {% block scripts %}
+<script src="/static/js/aircraft_visual.js"></script>
+<style id="ac-visual-styles-codex"></style>
 <script>
+if (window.AircraftVisual) document.getElementById('ac-visual-styles-codex').textContent = AircraftVisual.previewCss();
 let data = {};
 
 function fmt(n) { return '₩' + (n||0).toLocaleString('ko-KR'); }
@@ -156,12 +160,16 @@ function renderCodex() {
     </div>
     <div class="codex-grid mb-6">
         ${list.map(a => {
-            const v = codexVisual(a.category);
-            return `<div class="codex-card ${v.cls}" title="${a.name}">
-                <div class="codex-icon ${v.iconCls}">${v.icon}</div>
-                <div class="codex-name">${a.name}</div>
-                <div class="codex-meta" style="color:${v.color}">${v.label}${a.manufacturer ? ' · '+a.manufacturer : ''}</div>
+            const preview = (window.AircraftVisual)
+                ? AircraftVisual.buildPreviewHtml(a, a.loadout_details || {}, { large: false, preferImage: a.owned })
+                : (() => { const v = codexVisual(a.category); return `<div class="codex-card ${v.cls}"><div class="codex-icon">${v.icon}</div></div>`; })();
+            const decoHint = a.sticker_emoji ? ` ${a.sticker_emoji}` : '';
+            return `<div class="codex-entry" title="${a.name}">
+                ${preview}
+                <div class="codex-name mt-1">${a.name}${decoHint}</div>
+                <div class="codex-meta text-gray-500">${a.manufacturer||''}</div>
                 ${a.owned ? '<div class="codex-badge" style="background:#33ff3322;color:#33ff33;border:1px solid #33ff33">내 비행기</div>' : ''}
+                ${a.owned && a.loadout_details?.livery ? `<div class="text-[9px] text-purple-300 mt-1">${a.loadout_details.livery.name||'리버리'}</div>` : ''}
             </div>`;
         }).join('')}
         ${locked.slice(0,8).map(() => `
@@ -171,7 +179,7 @@ function renderCodex() {
                 <div class="codex-meta text-gray-600">비행·연습으로 해금</div>
             </div>`).join('')}
     </div>
-    <p class="text-xs text-gray-500">소형·중형·대형·화물기마다 색과 디자인이 달라요. 비행기를 모으고 연습하면 도감에 찍혀요!</p>`;
+    <p class="text-xs text-gray-500">창고에서 꾸민 리버리·스티커가 도감에도 반영돼요! <a href="/hangar" class="text-[#0A84FF]">비행기 창고 →</a></p>`;
 }
 
 function renderSchedule() {

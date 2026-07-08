@@ -64,30 +64,17 @@ def bonus_claim_api():
 
 @bp.route('/api/economy/cosmetics')
 def cosmetics_api():
-    """레이더/대시보드용 장착 코스메틱"""
+    """레이더/로그북/대시보드용 주력 기체 코스메틱"""
+    from app.services.economy import get_aircraft_cosmetics
     prog = get_or_create_progress()
     wallet = get_wallet_summary(prog)
-    catalog = get_shop_catalog()
-    active = prog.active_aircraft or 'b737'
-    loadouts = prog._json('aircraft_loadouts', {})
-    deco = loadouts.get(active, {})
-    trail = catalog.get(deco.get('trail'), {})
-    livery = catalog.get(deco.get('livery'), {})
-    radar_skin = None
-    for iid in prog._json('inventory', []):
-        item = catalog.get(iid, {})
-        if item.get('slot') == 'radar_skin':
-            equipped_radar = deco.get('radar_skin') or iid
-            if equipped_radar == iid or not deco.get('radar_skin'):
-                radar_skin = item
-    if deco.get('radar_skin'):
-        radar_skin = catalog.get(deco['radar_skin'], radar_skin or {})
+    cos = get_aircraft_cosmetics(prog)
+    radar_item = cos['loadout'].get('radar_skin')
     return jsonify({
-        'active_aircraft': active,
-        'active_aircraft_name': wallet.get('active_aircraft_name'),
-        'trail_color': trail.get('color', '#a855f7'),
-        'livery_color': livery.get('color', ''),
-        'radar_skin': radar_skin,
+        **cos,
+        'active_aircraft': cos['aircraft_id'],
+        'active_aircraft_name': wallet.get('active_aircraft_name') or cos['aircraft_name'],
+        'radar_skin': radar_item,
         'avatar_preview': wallet.get('avatar_preview'),
     })
 

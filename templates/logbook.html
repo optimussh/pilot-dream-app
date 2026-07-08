@@ -7,6 +7,16 @@
     <h1 class="text-3xl font-bold mb-2">📖 가상 조종사 로그북</h1>
     <p class="text-gray-400 mb-6">실제 기장처럼 비행을 기록하며 성장하세요</p>
 
+    <div id="active-aircraft-chip" class="info-card p-4 mb-6 border border-[#ffaa00]/30 flex flex-wrap items-center gap-4 hidden">
+        <div id="active-aircraft-preview" class="shrink-0"></div>
+        <div class="flex-1 min-w-[160px]">
+            <div class="text-xs text-gray-400">주력 기체 · 창고에서 꾸민 디자인이 반영돼요</div>
+            <div class="font-bold text-[#ffaa00]" id="active-aircraft-label">—</div>
+            <div class="text-[10px] text-gray-500 mt-1" id="active-aircraft-deco"></div>
+            <a href="/hangar" class="text-xs text-[#0A84FF] mt-1 inline-block">비행기 창고에서 바꾸기 →</a>
+        </div>
+    </div>
+
     <!-- New flight entry - CLEARLY SEPARATED Smart vs Manual -->
     <div class="mb-8">
         <h3 class="font-semibold text-xl mb-4">새로운 비행 기록하기</h3>
@@ -221,7 +231,11 @@
     </div>
 </div>
 
+<script src="/static/js/aircraft_visual.js"></script>
+<style id="ac-visual-styles-logbook"></style>
 <script>
+if (window.AircraftVisual) document.getElementById('ac-visual-styles-logbook').textContent = AircraftVisual.previewCss();
+
 let logbookAllEntries = [];
 let logbookFilterMode = 'day';
 let logbookSelectedDate = '';
@@ -985,11 +999,44 @@ function initLogbookEnhancements() {
     }
 }
 
+async function loadActiveAircraftPreview() {
+    try {
+        const res = await fetch('/api/economy/cosmetics');
+        const cos = await res.json();
+        const chip = document.getElementById('active-aircraft-chip');
+        const label = document.getElementById('active-aircraft-label');
+        const deco = document.getElementById('active-aircraft-deco');
+        const preview = document.getElementById('active-aircraft-preview');
+        if (!cos.active_aircraft_name) return;
+        chip.classList.remove('hidden');
+        label.textContent = cos.active_aircraft_name || cos.aircraft_name || '—';
+        const parts = [];
+        if (cos.livery_name) parts.push('🎨 ' + cos.livery_name);
+        if (cos.sticker_emoji) parts.push(cos.sticker_emoji + ' 스티커');
+        deco.textContent = parts.join(' · ') || '창고에서 리버리를 꾸며보세요!';
+        const manualAc = document.querySelector('input[name="aircraft"]');
+        if (manualAc && !manualAc.value) manualAc.placeholder = cos.active_aircraft_name;
+        if (window.AircraftVisual && preview) {
+            const ac = {
+                id: cos.aircraft_id,
+                name: cos.aircraft_name,
+                category: cos.category,
+                illustration: cos.illustration,
+                owned: true,
+            };
+            preview.innerHTML = AircraftVisual.buildPreviewHtml(ac, cos.loadout || {}, { large: false });
+        }
+    } catch (e) {
+        console.warn('Active aircraft preview load failed', e);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    loadAirportsForLogbook(); // 미리 로드
+    loadAirportsForLogbook();
     loadLogbook();
     loadFlightsDB();
     initLogbookEnhancements();
+    loadActiveAircraftPreview();
 });
 </script>
 {% endblock %}

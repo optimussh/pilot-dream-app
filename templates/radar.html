@@ -528,7 +528,7 @@ function buildFlightIcon(f) {
 
     let finalColor = '#33ff33';
     if (f.isUserFlight) {
-        finalColor = pilotCosmetics.trail_color || '#a855f7';
+        finalColor = pilotCosmetics.livery_color || pilotCosmetics.trail_color || '#a855f7';
     } else if (f.isKorea) {
         finalColor = '#ffaa00';
     } else {
@@ -541,9 +541,10 @@ function buildFlightIcon(f) {
     const size = f.isUserFlight ? 44 : (f.isKorea && highlightKorea ? 24 : 18);
     const showLabel = f.isUserFlight || f.isKorea;
 
+    const sticker = f.isUserFlight && pilotCosmetics.sticker_emoji ? pilotCosmetics.sticker_emoji + ' ' : '';
     const labelHtml = showLabel
         ? `<div style="position:absolute; top:${f.isUserFlight ? -20 : -14}px; left:${size + 2}px; white-space:nowrap; background:rgba(0,0,0,0.8); color:#fff; font-size:${f.isUserFlight ? 10 : 9}px; padding:2px 5px; border-radius:3px; line-height:1.1; border:1px solid ${finalColor};">
-            ${f.callsign}<br><span style="color:#4da8da; font-size:8px">${f.acName}</span>
+            ${sticker}${f.callsign}<br><span style="color:#4da8da; font-size:8px">${f.acName}</span>
            </div>`
         : '';
 
@@ -625,8 +626,9 @@ function updateFlights() {
             if (trails[f.id].length > maxTrailLength) trails[f.id].shift();
 
             if (f.trailLine) map.removeLayer(f.trailLine);
+            const userTrail = pilotCosmetics.trail_color || pilotCosmetics.radar_skin_color || '#a855f7';
             const trailOptions = f.isUserFlight
-                ? { color: pilotCosmetics.trail_color || '#a855f7', weight: 3, opacity: 0.65, dashArray: '5,4' }
+                ? { color: userTrail, weight: 3, opacity: 0.65, dashArray: '5,4' }
                 : { color: col, weight: 1.8, opacity: 0.38, dashArray: '2,4' };
             f.trailLine = L.polyline(trails[f.id], trailOptions).addTo(map);
         } else if (f.trailLine) {
@@ -868,14 +870,16 @@ function toggleFullRoutes() {
 // ==================== Custom Flight (User Radar Flights) ====================
 
 let userFlights = []; // DB에서 불러온 사용자 항공편
-let pilotCosmetics = { trail_color: '#a855f7' };
+let pilotCosmetics = { trail_color: '#a855f7', livery_color: '#a855f7', sticker_emoji: '' };
 
 async function loadCosmetics() {
     try {
         const res = await fetch('/api/economy/cosmetics');
         pilotCosmetics = await res.json();
+        if (!pilotCosmetics.trail_color) pilotCosmetics.trail_color = '#a855f7';
+        if (!pilotCosmetics.livery_color) pilotCosmetics.livery_color = pilotCosmetics.trail_color;
     } catch (e) {
-        pilotCosmetics = { trail_color: '#a855f7' };
+        pilotCosmetics = { trail_color: '#a855f7', livery_color: '#a855f7', sticker_emoji: '' };
     }
 }
 

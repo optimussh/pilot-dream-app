@@ -60,6 +60,13 @@
     </div>
 </div>
 
+<!-- 비행기 창고 상세 모달 -->
+<div id="hangar-modal" class="hidden fixed inset-0 bg-black/75 flex items-center justify-center z-[5000] p-4" onclick="if(event.target===this)closeHangarModal()">
+    <div class="info-card w-full max-w-3xl max-h-[92vh] overflow-y-auto p-0 border border-[#33ff33]/40" onclick="event.stopPropagation()">
+        <div id="hangar-modal-content"></div>
+    </div>
+</div>
+
 <style>
 .shop-tab { background: #1c1c1e; border: 1px solid #2c2c2e; color: #8e8e93; transition: all .2s; }
 .shop-tab.active, .shop-tab:hover { background: #002200; border-color: #33ff33; color: #33ff33; }
@@ -71,16 +78,29 @@
 .rarity-rare { color: #0A84FF; }
 .rarity-epic { color: #a855f7; }
 .rarity-legendary { color: #ffaa00; }
-.hangar-card { background: #0a0a0a; border: 1px solid #2c2c2e; border-radius: 12px; padding: 16px; }
+.hangar-card { background: #0a0a0a; border: 1px solid #2c2c2e; border-radius: 12px; padding: 16px; cursor: pointer; transition: transform .15s, border-color .15s; }
+.hangar-card:hover { transform: translateY(-2px); border-color: #33ff33/60; }
 .hangar-card.owned { border-color: #33ff33/50; }
 .hangar-card.active-ac { border-color: #ffaa00; box-shadow: 0 0 12px #ffaa0033; }
+.hangar-card-preview { margin: 10px 0; pointer-events: none; }
+.hangar-slot { background: #0a0a0a; border: 1px solid #2c2c2e; border-radius: 10px; padding: 10px; }
+.hangar-slot.equipped { border-color: #a855f7/60; }
+.hangar-item-btn { font-size: 10px; padding: 4px 8px; border-radius: 6px; border: 1px solid #333; background: #111; }
+.hangar-item-btn.owned { border-color: #0A84FF/50; }
+.hangar-item-btn.equipped { background: #2a1040; border-color: #a855f7; color: #e9d5ff; }
+.hangar-item-btn.locked { opacity: .45; border-style: dashed; }
 .bonus-claimed { opacity: 0.55; background: #141414 !important; border-color: #333 !important; filter: grayscale(0.65); }
 .bonus-claimable { border-color: #33ff33 !important; box-shadow: 0 0 8px #33ff3322; }
 </style>
 {% endblock %}
 
 {% block scripts %}
+<script src="/static/js/aircraft_visual.js"></script>
+<style id="ac-visual-styles"></style>
 <script>
+if (window.AircraftVisual && !document.getElementById('ac-visual-styles').textContent) {
+    document.getElementById('ac-visual-styles').textContent = AircraftVisual.previewCss();
+}
 const DEFAULT_TAB = '{{ default_tab|default("avatar") }}';
 let shopData = {};
 let hangarData = {};
@@ -93,8 +113,16 @@ let missionShopData = {};
 let routeData = {};
 let airlineData = {};
 let currentTab = 'avatar';
+let hangarModalAcId = null;
 const CAT_LABELS = { avatar:'아바타', livery:'리버리', deco:'데코', lounge:'라운지', boost:'가속권' };
 const RARITY_LABELS = { common:'일반', uncommon:'고급', rare:'희귀', epic:'영웅', legendary:'전설' };
+const HANGAR_SLOTS = [
+    { slot: 'livery', label: '🎨 리버리', hint: '비행기 몸체 색' },
+    { slot: 'trail', label: '🌈 레이더 트레일', hint: '레이더 꼬리 색' },
+    { slot: 'sticker', label: '⭐ 스티커', hint: '기체 외부 스티커' },
+    { slot: 'radar_skin', label: '📡 레이더 스킨', hint: '관제 화면 색' },
+    { slot: 'hangar_bg', label: '🏗️ 행거 배경', hint: '정비고 분위기' },
+];
 
 function fmt(n) { return '₩' + (n||0).toLocaleString('ko-KR'); }
 
@@ -280,45 +308,166 @@ function renderHangar() {
     return html;
 }
 
+function getHangarAc(id) {
+    return (hangarData.aircraft || []).find(a => a.id === id);
+}
+
+function hangarPreviewHtml(ac, small) {
+    if (!window.AircraftVisual || !ac) return '';
+    return `<div class="hangar-card-preview">${AircraftVisual.buildPreviewHtml(ac, ac.loadout_details || {}, { large: !small, preferImage: ac.owned })}</div>`;
+}
+
+function itemAppliesTo(item, aircraftId) {
+    const applies = item.applies_to || [];
+    return applies.includes('*') || applies.includes(aircraftId);
+}
+
+function shopItemsForSlot(slot) {
+    const cats = shopData.categories || {};
+    const items = [];
+    for (const list of Object.values(cats)) {
+        (list || []).forEach(i => { if ((i.slot || '') === slot) items.push(i); });
+    }
+    return items;
+}
+
 function renderHangarCard(ac) {
     const owned = ac.owned;
     const unlocked = ac.unlocked;
     const isActive = ac.is_active;
-    let status = '', actions = '';
+    let status = '';
+    if (owned) status = '<span class="text-[#33ff33] text-xs">✓ 내 비행기 · 클릭해서 꾸미기</span>';
+    else if (unlocked || ac.ready) status = '<span class="text-[#0A84FF] text-xs">✨ 준비 완료!</span>';
+    else status = `<span class="text-gray-400 text-xs">연습 ${ac.progress_pct}%</span>
+        <div class="h-1.5 bg-black rounded mt-1"><div class="h-1.5 bg-[#0A84FF] rounded" style="width:${ac.progress_pct}%"></div></div>`;
+    return `<div class="hangar-card ${owned?'owned':''} ${isActive?'active-ac':''}" onclick="openHangarModal('${ac.id}')" title="클릭해서 자세히 보기">
+        ${hangarPreviewHtml(ac, true)}
+        <div class="flex justify-between items-start gap-2">
+            <div class="min-w-0 flex-1">
+                <div class="font-bold text-sm leading-tight">${ac.name}</div>
+                <div class="text-[10px] text-gray-500">${ac.manufacturer||''} · ${ac.category||ac.type||''}</div>
+            </div>
+            ${isActive ? '<span class="text-[10px] text-[#ffaa00] shrink-0">★ 주력</span>' : ''}
+        </div>
+        <div class="mt-2">${status}</div>
+        <div class="text-[10px] text-gray-500 mt-2">탭해서 상세 · 꾸미기 →</div>
+    </div>`;
+}
+
+function renderHangarSlotItems(ac, slotDef) {
+    const slot = slotDef.slot;
+    const equippedId = (ac.loadout_details || {})[slot]?.id;
+    const invItems = walletData.inventory || [];
+    const allSlotItems = shopItemsForSlot(slot);
+    const ownedForSlot = invItems.filter(i => (i.slot || '') === slot && itemAppliesTo(i, ac.id));
+    const shopOnly = allSlotItems.filter(i => !invItems.some(o => o.id === i.id) && itemAppliesTo(i, ac.id));
+
+    let html = `<div class="hangar-slot ${equippedId?'equipped':''}">
+        <div class="flex justify-between items-center mb-2">
+            <div><div class="text-xs font-bold">${slotDef.label}</div><div class="text-[10px] text-gray-500">${slotDef.hint}</div></div>
+            ${equippedId ? `<button onclick="event.stopPropagation();equipDecoModal('${ac.id}','${slot}',null)" class="text-[10px] text-gray-400 hover:text-white">해제</button>` : '<span class="text-[10px] text-gray-600">비움</span>'}
+        </div>
+        <div class="flex flex-wrap gap-1">`;
+
+    if (!ac.owned) {
+        return html + '<span class="text-[10px] text-gray-500">비행기를 먼저 받아야 꾸밀 수 있어요</span></div></div>';
+    }
+
+    ownedForSlot.forEach(i => {
+        const on = equippedId === i.id;
+        html += `<button onclick="event.stopPropagation();equipDecoModal('${ac.id}','${slot}','${i.id}')" class="hangar-item-btn ${on?'equipped':'owned'}">${i.emoji||'📦'} ${i.name}${on?' ✓':''}</button>`;
+    });
+    shopOnly.slice(0, 4).forEach(i => {
+        html += `<button onclick="event.stopPropagation();goShopTab('${i.category||'livery'}')" class="hangar-item-btn locked" title="상점에서 구매">${i.emoji||'🔒'} ${i.name}</button>`;
+    });
+    if (!ownedForSlot.length && !shopOnly.length) {
+        html += '<span class="text-[10px] text-gray-500">이 슬롯 아이템이 아직 없어요</span>';
+    }
+    html += '</div></div>';
+    return html;
+}
+
+function renderHangarModal(ac) {
+    if (!ac) return '<p>비행기 정보 없음</p>';
+    const owned = ac.owned;
+    const isActive = ac.is_active;
+    const preview = hangarPreviewHtml(ac, false);
+    let actions = '';
     if (owned) {
-        status = '<span class="text-[#33ff33] text-xs">✓ 내 비행기</span>';
-        const decoItems = (walletData.inventory||[]).filter(i => ['livery','deco'].includes(i.category));
-        const decoBtns = decoItems.length ? `<div class="mt-2 text-[10px] text-gray-400">장식 적용:</div>
-            <div class="flex gap-1 flex-wrap mt-1">${decoItems.slice(0,6).map(i =>
-                `<button onclick="equipDeco('${ac.id}','${i.slot||'livery'}','${i.id}')" class="text-[10px] px-1.5 py-0.5 border border-purple-500/40 rounded">${i.emoji||''}${i.name}</button>`
-            ).join('')}</div>` : '';
-        actions = `<button onclick="setActive('${ac.id}')" class="text-xs px-2 py-1 ${isActive?'bg-[#ffaa00] text-black':'border border-[#ffaa00]'} rounded font-bold">${isActive?'★ 주력':'주력 설정'}</button>${decoBtns}`;
-    } else if (unlocked || ac.ready) {
-        status = '<span class="text-[#0A84FF] text-xs">✨ 준비 완료!</span>';
+        actions = `<button onclick="setActiveFromModal('${ac.id}')" class="px-4 py-2 text-sm rounded font-bold ${isActive?'bg-[#ffaa00] text-black':'border border-[#ffaa00] text-[#ffaa00]'}">${isActive?'★ 주력 기체':'주력 기체로 설정'}</button>`;
+    } else if (ac.unlocked || ac.ready) {
         const price = ac.discounted_price || ac.purchase_price || 0;
         actions = price > 0
-            ? `<button onclick="buyAircraft('${ac.id}')" class="text-xs px-3 py-1 bg-[#ffaa00] text-black rounded font-bold">사기 ${fmt(price)}</button>`
-            : `<button onclick="buyAircraft('${ac.id}')" class="text-xs px-3 py-1 bg-[#33ff33] text-black rounded font-bold">무료로 받기</button>`;
+            ? `<button onclick="buyAircraftFromModal('${ac.id}')" class="px-4 py-2 bg-[#ffaa00] text-black rounded font-bold text-sm">사기 ${fmt(price)}</button>`
+            : `<button onclick="buyAircraftFromModal('${ac.id}')" class="px-4 py-2 bg-[#33ff33] text-black rounded font-bold text-sm">무료로 받기</button>`;
     } else {
-        status = `<span class="text-gray-400 text-xs">연습 ${ac.progress_pct}% (더 필요 ${ac.hours_remaining||ac.practice_left}h)</span>`;
-        const bar = `<div class="h-1.5 bg-black rounded mt-1"><div class="h-1.5 bg-[#0A84FF] rounded" style="width:${ac.progress_pct}%"></div></div>`;
-        status += bar;
-        actions = `<button onclick="accelAircraft('${ac.id}','${ac.name}')" class="text-xs px-2 py-1 border border-[#0A84FF] rounded">💰 연습시간 채우기</button>
-            <button onclick="buyAircraft('${ac.id}')" class="text-xs px-2 py-1 bg-[#ffaa00] text-black rounded font-bold">${fmt(ac.discounted_price)}</button>`;
+        actions = `<button onclick="accelAircraftFromModal('${ac.id}')" class="px-3 py-2 border border-[#0A84FF] rounded text-sm">💰 연습 채우기</button>
+            <button onclick="buyAircraftFromModal('${ac.id}')" class="px-3 py-2 bg-[#ffaa00] text-black rounded font-bold text-sm">${fmt(ac.discounted_price)}</button>`;
     }
-    return `<div class="hangar-card ${owned?'owned':''} ${isActive?'active-ac':''}">
-        <div class="flex justify-between items-start">
-            <div>
-                <div class="font-bold">${ac.name}</div>
-                <div class="text-[10px] text-gray-500">${ac.manufacturer||''} · ${ac.region||''} · ${ac.engine||''}</div>
-            </div>
-            <span class="text-[10px] px-1.5 py-0.5 bg-black rounded">${ac.type||''}</span>
+
+    const slotsHtml = owned ? `<div class="mt-4 space-y-2">
+        <div class="text-sm font-bold text-purple-300">🎨 꾸미기 (장착 슬롯)</div>
+        <p class="text-[10px] text-gray-500">장착한 디자인은 레이더·도감·로그북에 반영돼요!</p>
+        ${HANGAR_SLOTS.map(s => renderHangarSlotItems(ac, s)).join('')}
+    </div>` : '';
+
+    return `<div class="p-5 border-b border-[#33ff33]/20 flex justify-between items-start sticky top-0 bg-[#1c1c1e] z-10">
+        <div>
+            <div class="text-xs text-gray-400">${ac.category||''} · ${ac.manufacturer||''}</div>
+            <h2 class="text-xl font-bold">${ac.name}</h2>
         </div>
-        <div class="text-[10px] text-gray-400 mt-2 line-clamp-2">${ac.desc||''}</div>
-        <div class="text-[10px] mt-2">연습 필요 ${ac.unlock_hours}h · 정가 ${fmt(ac.purchase_price)}</div>
-        <div class="mt-2">${status}</div>
-        <div class="flex gap-2 mt-3 flex-wrap">${actions}</div>
-    </div>`;
+        <button onclick="closeHangarModal()" class="text-2xl text-gray-400 hover:text-white leading-none px-2">×</button>
+    </div>
+    <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>${preview}
+            <div class="text-[10px] text-gray-500 mt-2 text-center">${ac.desc||''}</div>
+        </div>
+        <div class="text-sm space-y-2">
+            <div><span class="text-gray-500">엔진</span> ${ac.engine||'—'}</div>
+            <div><span class="text-gray-500">좌석</span> ${ac.typical_pax||'—'}</div>
+            <div><span class="text-gray-500">거리</span> ${ac.range_km ? ac.range_km+'km' : '—'}</div>
+            <div><span class="text-gray-500">연습 필요</span> ${ac.unlock_hours||0}h</div>
+            <div><span class="text-gray-500">정가</span> ${fmt(ac.purchase_price)}</div>
+            ${!owned ? `<div class="text-xs text-[#0A84FF] mt-2">연습 ${ac.progress_pct||0}% · ${ac.hours_remaining||ac.practice_left||0}h 더 필요</div>` : ''}
+            <div class="flex gap-2 flex-wrap mt-4">${actions}</div>
+        </div>
+    </div>
+    <div class="px-5 pb-5">${slotsHtml}</div>`;
+}
+
+function openHangarModal(acId) {
+    hangarModalAcId = acId;
+    const ac = getHangarAc(acId);
+    document.getElementById('hangar-modal-content').innerHTML = renderHangarModal(ac);
+    const modal = document.getElementById('hangar-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeHangarModal() {
+    hangarModalAcId = null;
+    const modal = document.getElementById('hangar-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+function refreshHangarModal() {
+    if (!hangarModalAcId) return;
+    const ac = getHangarAc(hangarModalAcId);
+    if (ac) document.getElementById('hangar-modal-content').innerHTML = renderHangarModal(ac);
+}
+
+function goShopTab(tab) {
+    closeHangarModal();
+    renderTab(tab);
+}
+
+async function setActiveFromModal(id) { await setActive(id); refreshHangarModal(); }
+async function buyAircraftFromModal(id) { await buyAircraft(id); if (hangarModalAcId) refreshHangarModal(); }
+async function accelAircraftFromModal(id) {
+    const ac = getHangarAc(id);
+    await accelAircraft(id, ac?.name || id);
+    refreshHangarModal();
 }
 
 function renderInventory() {
@@ -553,7 +702,8 @@ async function buyAircraft(id) {
     await loadAll();
     const hangarRes = await fetch('/api/hangar/aircraft');
     hangarData = await hangarRes.json();
-    renderTab('hangar');
+    if (hangarModalAcId) refreshHangarModal();
+    else renderTab('hangar');
 }
 
 async function setActive(id) {
@@ -563,19 +713,20 @@ async function setActive(id) {
     await loadAll();
     const hangarRes = await fetch('/api/hangar/aircraft');
     hangarData = await hangarRes.json();
-    renderTab('hangar');
+    if (hangarModalAcId) refreshHangarModal();
+    else renderTab('hangar');
 }
 
-async function equipDeco(aircraftId, slot, itemId) {
+async function equipDecoModal(aircraftId, slot, itemId) {
     const res = await fetch('/api/hangar/equip-deco', { method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({ aircraft_id: aircraftId, slot, item_id: itemId }) });
     const d = await res.json();
     if (d.error) { alert(d.error); return; }
-    alert(d.message || '장식 적용 완료!');
     await loadAll();
     const hangarRes = await fetch('/api/hangar/aircraft');
     hangarData = await hangarRes.json();
-    renderTab('hangar');
+    if (hangarModalAcId) refreshHangarModal();
+    else renderTab('hangar');
 }
 
 async function accelAircraft(id, name) {
@@ -589,7 +740,8 @@ async function accelAircraft(id, name) {
     await loadAll();
     const hangarRes = await fetch('/api/hangar/aircraft');
     hangarData = await hangarRes.json();
-    renderTab('hangar');
+    if (hangarModalAcId) refreshHangarModal();
+    else renderTab('hangar');
 }
 
 document.getElementById('shop-tabs').addEventListener('click', e => {

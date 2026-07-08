@@ -306,9 +306,12 @@ def get_aircraft_codex(prog):
         extras['codex_stamps'] = list(stamps)
         _save_meta(prog, extras)
         db.session.commit()
+    from app.services.economy import build_loadout_details, get_aircraft_cosmetics
     for aid, ac in catalog.items():
         st = aircraft_unlock_status(prog, aid)
         discovered = aid in stamps
+        loadout = build_loadout_details(prog, aid) if aid in owned else {}
+        vis = get_aircraft_cosmetics(prog, aid) if aid in owned else {}
         result.append({
             'id': aid,
             'name': ac.get('name', aid),
@@ -316,10 +319,15 @@ def get_aircraft_codex(prog):
             'category': ac.get('category', ''),
             'type': ac.get('type', ''),
             'region': ac.get('region', ''),
+            'illustration': ac.get('illustration', ''),
             'discovered': discovered,
             'owned': aid in owned,
             'ready': st.get('unlocked') or st.get('owned'),
             'progress_pct': st.get('progress_pct', 0),
+            'loadout_details': loadout,
+            'livery_color': vis.get('livery_color', ''),
+            'sticker_emoji': vis.get('sticker_emoji', ''),
+            'trail_color': vis.get('trail_color', ''),
         })
     discovered_count = sum(1 for r in result if r['discovered'])
     return {

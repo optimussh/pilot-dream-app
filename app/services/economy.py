@@ -506,6 +506,51 @@ def set_active_aircraft(prog, aircraft_id):
     return True, '주력 기체 변경 완료!'
 
 
+def build_loadout_details(prog, aircraft_id):
+    """기체별 장착 장식 상세 (미리보기·레이더·도감용)"""
+    catalog = get_shop_catalog()
+    loadouts = prog._json('aircraft_loadouts', {})
+    deco = loadouts.get(aircraft_id, {})
+    details = {}
+    for slot, iid in (deco or {}).items():
+        if iid and iid in catalog:
+            details[slot] = {**catalog[iid], 'id': iid}
+    return details
+
+
+def get_aircraft_cosmetics(prog, aircraft_id=None):
+    """기체 비주얼 — 리버리·트레일·스티커 등"""
+    catalog = get_shop_catalog()
+    ac_catalog = get_aircraft_catalog()
+    aid = aircraft_id or prog.active_aircraft or 'b737'
+    ac = ac_catalog.get(aid, {})
+    details = build_loadout_details(prog, aid)
+    livery = details.get('livery', {})
+    trail = details.get('trail', {})
+    sticker = details.get('sticker', {})
+    radar_skin = details.get('radar_skin', {})
+    hangar_bg = details.get('hangar_bg', {})
+    category_colors = {
+        '소형': '#33ff33', '리저널': '#4da8da', '중형': '#0A84FF',
+        '대형': '#ffaa00', '클래식': '#ffaa00', '화물기': '#a78bfa',
+    }
+    default_body = category_colors.get(ac.get('category', ''), '#33ff33')
+    return {
+        'aircraft_id': aid,
+        'aircraft_name': ac.get('name', aid),
+        'category': ac.get('category', ''),
+        'illustration': ac.get('illustration', ''),
+        'trail_color': trail.get('color', '#a855f7'),
+        'livery_color': livery.get('color', default_body),
+        'livery_name': livery.get('name', ''),
+        'sticker_emoji': sticker.get('emoji', ''),
+        'radar_skin_color': radar_skin.get('color', trail.get('color', '#33ff33')),
+        'hangar_bg_color': hangar_bg.get('color', '#111111'),
+        'hangar_bg_emoji': hangar_bg.get('emoji', ''),
+        'loadout': details,
+    }
+
+
 def equip_aircraft_deco(prog, aircraft_id, slot, item_id):
     owned = get_owned_aircraft(prog)
     if aircraft_id not in owned:
