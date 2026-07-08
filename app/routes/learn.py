@@ -234,6 +234,13 @@ def quiz_submit():
         check_crew_unlocks(prog)
     except Exception:
         pass
+    try:
+        from app.services.player_stats import apply_activity_stats
+        from app.services.guide_service import auto_complete_on_activity
+        apply_activity_stats(prog, 'quiz_high' if score >= 80 else 'quiz')
+        auto_complete_on_activity(prog, 'learn_quiz')
+    except Exception:
+        pass
     bonus_extra = {'quiz_perfect': score >= 100}
     bonuses, bonus_total = process_salary_bonuses(prog, bonus_extra)
     try:

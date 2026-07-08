@@ -44,7 +44,7 @@
         <button data-tab="missions" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🎯 미션세트</button>
         <button data-tab="routes" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🗺️ 노선도전</button>
         <button data-tab="gifts" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🎀 선물함</button>
-        <button data-tab="airline" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🏢 내항공사</button>
+
         <button data-tab="inventory" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🎒 가방</button>
         <button data-tab="bonuses" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">🎁 보너스</button>
         <button data-tab="wallet" class="shop-tab px-4 py-2 rounded-lg text-sm font-bold">💰 지갑</button>
@@ -173,7 +173,7 @@ async function unequipSlot(slot) {
     renderTab(document.querySelector('.shop-tab.active')?.dataset.tab || 'avatar');
 }
 
-const TAB_BASE = { avatar:'👤 아바타', livery:'🎨 리버리', deco:'✨ 데코', lounge:'🏠 라운지', boost:'⚡ 연습도우미', hangar:'✈️ 비행기창고', season:'☀️ 시즌', daily:'🏷️ 오늘특가', missions:'🎯 미션세트', routes:'🗺️ 노선도전', gifts:'🎀 선물함', airline:'🏢 내항공사', inventory:'🎒 가방', bonuses:'🎁 보너스', wallet:'💰 지갑' };
+const TAB_BASE = { avatar:'👤 아바타', livery:'🎨 리버리', deco:'✨ 데코', lounge:'🏠 라운지', boost:'⚡ 연습도우미', hangar:'✈️ 비행기창고', season:'☀️ 시즌', daily:'🏷️ 오늘특가', missions:'🎯 미션세트', routes:'🗺️ 노선도전', gifts:'🎀 선물함', inventory:'🎒 가방', bonuses:'🎁 보너스', wallet:'💰 지갑' };
 
 function updateTabCounts() {
     const cats = shopData.categories || {};
@@ -207,7 +207,7 @@ function renderTab(tab) {
     if (tab === 'missions') { searchBar.classList.add('hidden'); el.innerHTML = renderMissionShop(); return; }
     if (tab === 'routes') { searchBar.classList.add('hidden'); el.innerHTML = renderRoutes(); return; }
     if (tab === 'gifts') { searchBar.classList.add('hidden'); el.innerHTML = renderGifts(); return; }
-    if (tab === 'airline') { searchBar.classList.add('hidden'); el.innerHTML = renderAirline(); return; }
+    if (tab === 'airline') { window.location.href = '/airline'; return; }
     searchBar.classList.remove('hidden');
     let items = (shopData.categories || {})[tab] || [];
     const q = (document.getElementById('shop-search')?.value || '').toLowerCase();

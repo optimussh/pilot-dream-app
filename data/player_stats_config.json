@@ -1,0 +1,12 @@
+{
+  "stats": [
+    {"id": "flying", "name": "비행 실력", "emoji": "✈️", "kid_desc": "로그북에 비행을 기록하면 올라가요"},
+    {"id": "knowledge", "name": "항공 지식", "emoji": "📚", "kid_desc": "퀴즈·미션·플래시카드를 하면 올라가요"},
+    {"id": "navigation", "name": "항로 감각", "emoji": "🧭", "kid_desc": "노선·공항·플래너 활동으로 올라가요"},
+    {"id": "leadership", "name": "리더십", "emoji": "👥", "kid_desc": "승무원 모으기·항공사 운영으로 올라가요"},
+    {"id": "business", "name": "경영 감각", "emoji": "💰", "kid_desc": "항공사 수익·상점·급여로 올라가요"},
+    {"id": "imagination", "name": "상상력", "emoji": "🌟", "kid_desc": "시즌·이벤트·우주로 올라가요"}
+  ],
+  "xp_per_level": 100,
+  "space_unlock": {"airline_level": 5, "imagination": 30, "total_stat_sum": 80}
+}

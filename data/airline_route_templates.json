@@ -1,0 +1,10 @@
+[
+  {"id": "dom_cju", "route": "ICN-CJU", "name": "인천↔제주", "type": "domestic", "demand": 100, "min_category": "소형", "fa_need": 2, "kid_label": "제주 휴양 노선"},
+  {"id": "dom_pus", "route": "ICN-PUS", "name": "인천↔부산", "type": "domestic", "demand": 70, "min_category": "소형", "fa_need": 2, "kid_label": "부산 바다 노선"},
+  {"id": "dom_gmp", "route": "GMP-CJU", "name": "김포↔제주", "type": "domestic", "demand": 90, "min_category": "소형", "fa_need": 2, "kid_label": "국내 busiest"},
+  {"id": "intl_nrt", "route": "ICN-NRT", "name": "인천↔도쿄", "type": "international", "demand": 85, "min_category": "소형", "fa_need": 3, "kid_label": "일본 노선"},
+  {"id": "intl_bkk", "route": "ICN-BKK", "name": "인천↔방콕", "type": "international", "demand": 75, "min_category": "중형", "fa_need": 4, "kid_label": "동남아 노선"},
+  {"id": "intl_lax", "route": "ICN-LAX", "name": "인천↔LA", "type": "longhaul", "demand": 60, "min_category": "대형", "fa_need": 6, "kid_label": "태평양 횡단"},
+  {"id": "cargo_icn", "route": "ICN-ANC", "name": "인천↔앵커리지 화물", "type": "cargo", "demand": 50, "min_category": "화물기", "fa_need": 0, "kid_label": "화물 전용"},
+  {"id": "reg_cjj", "route": "ICN-CJJ", "name": "인천↔청주", "type": "regional", "demand": 45, "min_category": "리저널", "fa_need": 1, "kid_label": "짧은 국내선"}
+]

@@ -95,6 +95,17 @@ def add_logbook_entry():
             rewards_result['pilot_extras'] = pilot_extras
         except Exception:
             pass
+        try:
+            from app.services.player_stats import apply_activity_stats
+            from app.services.airline_ops import settle_weekly_revenue
+            from app.services.guide_service import auto_complete_on_activity
+            apply_activity_stats(prog, 'logbook')
+            airline_settle = settle_weekly_revenue(prog)
+            if airline_settle and rewards_result is not None:
+                rewards_result['airline_settle'] = airline_settle
+            auto_complete_on_activity(prog, 'logbook')
+        except Exception:
+            pass
     except Exception:
         pass
     
@@ -166,6 +177,8 @@ def add_logbook_entry():
             resp["extras"] = rewards_result['extras']
         if rewards_result.get('pilot_extras'):
             resp["pilot_extras"] = rewards_result['pilot_extras']
+        if rewards_result.get('airline_settle'):
+            resp["airline_settle"] = rewards_result['airline_settle']
         prog = UserProgress.query.first()
         resp["wallet_balance"] = (prog.wallet_balance or 0) if prog else 0
     return jsonify(resp)

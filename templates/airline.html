@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% block title %}내 항공사 - Pilot Dream{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <div class="flex flex-wrap justify-between items-start gap-4 mb-6">
+        <div>
+            <h1 class="text-3xl font-bold mb-1" id="al-title">🏢 내 항공사</h1>
+            <p class="text-gray-400 text-sm">CEO가 되어 비행기·노선·직원을 운영해요!</p>
+        </div>
+        <div class="info-card px-4 py-2 text-center border border-[#ffaa00]/40">
+            <div class="text-xs text-gray-400">지갑</div>
+            <div class="text-lg font-bold text-[#ffaa00]" id="al-wallet">—</div>
+        </div>
+    </div>
+    <div id="al-not-founded" class="hidden info-card p-6 border border-[#0A84FF]/40 mb-6">
+        <h2 class="font-bold text-lg mb-2">✈️ 항공사 창업 준비</h2>
+        <p class="text-sm text-gray-400 mb-4" id="al-found-hint"></p>
+        <div class="flex gap-2 flex-wrap">
+            <input id="al-name" class="px-3 py-2 bg-black border rounded flex-1 min-w-[200px]" placeholder="항공사 이름 (예: 하늘나라 항공)">
+            <input id="al-logo" class="px-3 py-2 bg-black border rounded w-20" placeholder="✈️" maxlength="4" value="✈️">
+            <button onclick="foundAirline()" class="px-5 py-2 bg-[#ffaa00] text-black font-bold rounded">창업하기!</button>
+        </div>
+        <p class="text-xs text-gray-500 mt-3">비행기 <b>10대</b>를 모으면 창업할 수 있어요. <a href="/hangar" class="text-[#0A84FF]">창고 →</a></p>
+    </div>
+    <div id="al-founded" class="hidden">
+        <div class="flex gap-1 mb-4 flex-wrap" id="al-tabs">
+            <button data-tab="overview" class="al-tab active px-3 py-2 rounded-lg text-xs font-bold">📊 개요</button>
+            <button data-tab="fleet" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">✈️ 기재</button>
+            <button data-tab="routes" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">🗺️ 노선</button>
+            <button data-tab="staff" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">👥 채용</button>
+            <button data-tab="stats" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">📈 능력</button>
+            <button data-tab="space" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">🚀 우주</button>
+        </div>
+        <div id="al-content" class="min-h-[360px]"></div>
+    </div>
+</div>
+<style>
+.al-tab { background:#1c1c1e; border:1px solid #2c2c2e; color:#8e8e93; }
+.al-tab.active, .al-tab:hover { background:#1a1a00; border-color:#ffaa00; color:#ffaa00; }
+.al-card { background:#0a0a0a; border:1px solid #2c2c2e; border-radius:12px; padding:14px; }
+.stat-bar { height:6px; background:#111; border-radius:4px; overflow:hidden; }
+.stat-bar div { height:100%; background:#0A84FF; border-radius:4px; }
+</style>
+{% endblock %}
+{% block scripts %}
+<script>
+let D = {};
+function fmt(n) { return '₩'+(n||0).toLocaleString('ko-KR'); }
+
+async function loadDash() {
+    const res = await fetch('/api/airline/dashboard');
+    D = await res.json();
+    const al = D.airline || {};
+    const ops = D.ops || {};
+    document.getElementById('al-wallet').textContent = fmt(D.wallet?.balance || 0);
+    if (!al.founded) {
+        document.getElementById('al-not-founded').classList.remove('hidden');
+        document.getElementById('al-founded').classList.add('hidden');
+        document.getElementById('al-found-hint').textContent = al.kid_hint || `비행기 ${al.owned_count||0}/${al.need_count||10}대`;
+        document.getElementById('al-title').textContent = '🏢 항공사 창업';
+        return;
+    }
+    document.getElementById('al-not-founded').classList.add('hidden');
+    document.getElementById('al-founded').classList.remove('hidden');
+    document.getElementById('al-title').textContent = `${al.logo||'✈️'} ${al.name} · Lv.${ops.level||1}`;
+    renderAlTab(document.querySelector('.al-tab.active')?.dataset.tab || 'overview');
+}
+
+function renderAlTab(tab) {
+    document.querySelectorAll('.al-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+    const el = document.getElementById('al-content');
+    const r = { overview: renderOverview, fleet: renderFleet, routes: renderRoutes, staff: renderStaff, stats: renderStats, space: renderSpace };
+    el.innerHTML = (r[tab] || renderOverview)();
+}
+
+function renderOverview() {
+    const ops = D.ops || {};
+    const al = D.airline || {};
+    const last = ops.last_revenue || 0;
+    return `<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+        <div class="al-card"><div class="text-xs text-gray-400">항공사 레벨</div><div class="text-2xl font-bold text-[#ffaa00]">Lv.${ops.level||1}</div><div class="text-[10px] text-gray-500">평판 ${ops.reputation||50}/100</div></div>
+        <div class="al-card"><div class="text-xs text-gray-400">지난 주 수익</div><div class="text-2xl font-bold text-[#33ff33]">${fmt(last)}</div>
+            <button onclick="settleNow()" class="text-[10px] mt-2 px-2 py-1 border border-[#33ff33] rounded">지금 정산</button></div>
+        <div class="al-card"><div class="text-xs text-gray-400">운영 모드</div>
+            <div class="flex gap-2 mt-2">
+                <button onclick="setMode('fsc')" class="text-xs px-2 py-1 rounded ${ops.mode==='fsc'?'bg-[#0A84FF]':'border'}">전통(FSC)</button>
+                <button onclick="setMode('lcc')" class="text-xs px-2 py-1 rounded ${ops.mode==='lcc'?'bg-[#ffaa00] text-black':'border'}">저가(LCC)</button>
+            </div></div>
+    </div>
+    <div class="al-card mb-4">
+        <div class="font-bold text-sm mb-2">🏠 허브 공항</div>
+        <div class="flex gap-2 flex-wrap">${(ops.hubs||[]).map(h => `
+            <button onclick="setHub('${h.id}')" class="text-xs px-3 py-1 rounded ${ops.hub===h.id?'bg-[#33ff33] text-black font-bold':'border'}">${h.emoji} ${h.name}</button>
+        `).join('')}</div>
+    </div>
+    <div class="al-card"><div class="font-bold text-sm mb-2">활성 노선 ${(ops.routes||[]).filter(r=>r.active).length}개</div>
+        <p class="text-xs text-gray-500">로그북에 비행을 기록하면 보너스 수익이 붙어요. 레이더에서 <b>${al.name}</b> 편을 볼 수 있어요!</p>
+        <a href="/radar" class="text-xs text-[#0A84FF] mt-2 inline-block">레이더 보기 →</a>
+    </div>`;
+}
+
+function renderFleet() {
+    const ops = D.ops || {};
+    const fleet = ops.fleet || [];
+    return `<p class="text-xs text-gray-400 mb-3">보유 비행기를 허브에 배치하세요!</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">${fleet.map(f => `
+        <div class="al-card flex justify-between items-center">
+            <div><div class="font-bold text-sm">${f.name}</div><div class="text-[10px] text-gray-500">${f.category} · 허브 ${f.hub}</div></div>
+            <select class="text-xs bg-black border rounded p-1" onchange="deployAc('${f.id}', this.value)">
+                ${(ops.hubs||[]).map(h => `<option value="${h.id}" ${f.hub===h.id?'selected':''}>${h.id}</option>`).join('')}
+            </select>
+        </div>`).join('') || '<p class="text-gray-500">보유 기체 없음. <a href="/hangar">창고</a></p>'}</div>`;
+}
+
+function renderRoutes() {
+    const ops = D.ops || {};
+    const routes = ops.routes || [];
+    const tpls = ops.route_templates || [];
+    const fleet = ops.fleet || [];
+    let html = `<div class="al-card mb-4">
+        <div class="font-bold text-sm mb-2">➕ 새 노선</div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
+            <select id="new-route-tpl" class="bg-black border rounded p-2">${tpls.map(t => `<option value="${t.id}">${t.name} (${t.route})</option>`).join('')}</select>
+            <select id="new-route-ac" class="bg-black border rounded p-2">${fleet.map(f => `<option value="${f.id}">${f.name}</option>`).join('')}</select>
+            <button onclick="addRoute()" class="bg-[#33ff33] text-black font-bold rounded p-2">노선 개설</button>
+        </div></div>`;
+    html += routes.length ? routes.map(r => `
+        <div class="al-card mb-2">
+            <div class="flex justify-between"><b class="text-sm">${r.name}</b>
+                <button onclick="delRoute('${r.id}')" class="text-[10px] text-red-400">삭제</button></div>
+            <div class="text-[10px] text-gray-500">${r.route} · ${r.flights_per_week}회/주 · ${r.aircraft_id}</div>
+            <div class="text-[10px] mt-1">기장 ${r.staff?.captain?'✓':'❌'} · 부기장 ${r.staff?.fo?'✓':'❌'} · 승무원 ${(r.staff?.fa||[]).length}/${r.fa_need||2}</div>
+        </div>`).join('') : '<p class="text-gray-500 text-sm">아직 노선이 없어요. 위에서 개설해보세요!</p>';
+    return html;
+}
+
+function renderStaff() {
+    const crew = D.ops?.hireable_crew || [];
+    const pool = D.ops?.staff_pool || {};
+    const hired = Object.values(pool).flat().length;
+    return `<p class="text-xs text-gray-400 mb-3">기장생활에서 만난 동료를 채용하세요! (채용 ${hired}명)</p>
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-2">${crew.map(c => `
+        <div class="al-card ${c.hired?'opacity-60':''} ${c.unlocked?'':'opacity-40'}">
+            <div class="text-2xl">${c.emoji}</div>
+            <div class="font-bold text-xs">${c.name}</div>
+            <div class="text-[10px] text-gray-500">${c.role}</div>
+            ${c.hired ? '<div class="text-[10px] text-[#33ff33]">✓ 채용됨</div>' :
+              c.unlocked ? `<button onclick="hireCrew('${c.id}')" class="text-[10px] mt-1 px-2 py-1 bg-purple-600 rounded">채용</button>` :
+              `<div class="text-[10px] text-gray-500">${c.bonus_tip}</div>`}
+        </div>`).join('')}</div>
+    <p class="text-xs text-gray-500 mt-4"><a href="/captain-life" class="text-[#0A84FF]">기장생활</a>에서 더 많은 동료를 만나요!</p>`;
+}
+
+function renderStats() {
+    const ps = D.player_stats || {};
+    const stats = ps.stats || [];
+    return `<div class="al-card mb-4">
+        <div class="flex justify-between"><span class="font-bold">플레이어 Lv.${ps.player_level||1}</span>
+            <span class="text-sm text-[#ffaa00]">능력 포인트 ${ps.stat_points||0}</span></div>
+        <p class="text-[10px] text-gray-500 mt-1">활동하면 능력이 자라요. 포인트로 직접 올릴 수도 있어요!</p>
+    </div>
+    <div class="space-y-3">${stats.map(s => `
+        <div class="al-card">
+            <div class="flex justify-between text-sm"><span>${s.emoji} ${s.name}</span><b>Lv.${s.value}</b></div>
+            <div class="stat-bar mt-1"><div style="width:${s.pct}%"></div></div>
+            <div class="text-[10px] text-gray-500 mt-1">${s.kid_desc}</div>
+            ${(ps.stat_points||0)>0 ? `<button onclick="allocStat('${s.id}')" class="text-[10px] mt-2 px-2 py-0.5 border rounded">+1 올리기</button>` : ''}
+        </div>`).join('')}</div>
+    <a href="/guide#stats" class="text-xs text-[#0A84FF] mt-4 inline-block">능력치 가이드 →</a>`;
+}
+
+function renderSpace() {
+    const sp = D.space || {};
+    if (!sp.unlocked) {
+        const p = sp.unlock_progress || {};
+        return `<div class="al-card border border-purple-500/30">
+            <h2 class="font-bold text-lg">🚀 우주 사업부 (잠김)</h2>
+            <p class="text-sm text-gray-400 mt-2">${sp.kid_hint}</p>
+            <ul class="text-xs mt-3 space-y-1 text-gray-300">
+                <li>항공사 Lv: ${p.airline_level||0} / ${p.need_level||5}</li>
+                <li>상상력: ${p.imagination||0} / ${p.need_imagination||30}</li>
+                <li>능력 합: ${p.stat_sum||0} / ${p.need_stat_sum||80}</li>
+            </ul></div>`;
+    }
+    let html = `<div class="al-card mb-4 border border-purple-500/40">
+        ${sp.founded ? '<div class="text-[#a78bfa] font-bold">🚀 드림 스페이스 운영 중</div>' :
+          '<button onclick="foundSpace()" class="px-4 py-2 bg-purple-600 rounded font-bold text-sm">우주 사업부 설립</button>'}
+        <div class="text-xs text-gray-500 mt-2">발사 ${sp.launches||0}회</div></div>`;
+    html += `<h3 class="font-bold text-sm mb-2">로켓</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">`;
+    html += (sp.rockets||[]).map(r => `
+        <div class="al-card text-center">
+            <div class="text-3xl">${r.emoji}</div><div class="text-xs font-bold">${r.name}</div>
+            <div class="text-[10px] text-gray-500">${r.kid_desc}</div>
+            ${r.owned ? '<div class="text-[10px] text-[#33ff33]">보유</div>' :
+              `<button onclick="buyRocket('${r.id}')" class="text-[10px] mt-1 px-2 py-1 bg-[#ffaa00] text-black rounded">${fmt(r.price)}</button>`}
+        </div>`).join('');
+    html += `</div><h3 class="font-bold text-sm mb-2">미션</h3><div class="space-y-2">`;
+    html += (sp.missions||[]).map(m => `
+        <div class="al-card flex justify-between items-center">
+            <div><span class="text-xl">${m.emoji}</span> <b class="text-sm">${m.name}</b>
+                <div class="text-[10px] text-gray-500">${m.kid_desc}</div></div>
+            ${m.done ? '<span class="text-[#33ff33] text-xs">완료</span>' :
+              m.can_launch ? `<button onclick="launchMission('${m.id}')" class="text-xs px-3 py-1 bg-purple-600 rounded font-bold">발사!</button>` :
+              '<span class="text-xs text-gray-500">로켓 필요</span>'}
+        </div>`).join('');
+    return html + '</div>';
+}
+
+async function apiPost(url, body) {
+    const res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body||{}) });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return null; }
+    if (d.message) alert(d.message);
+    await loadDash();
+    return d;
+}
+function foundAirline() { apiPost('/api/airline/found', { name: document.getElementById('al-name').value, logo: document.getElementById('al-logo').value }); }
+function setHub(id) { apiPost('/api/airline/hub', { hub_id: id }); }
+function setMode(m) { apiPost('/api/airline/mode', { mode: m }); }
+function deployAc(id, hub) { apiPost('/api/airline/deploy', { aircraft_id: id, hub_id: hub }); }
+function addRoute() { apiPost('/api/airline/route', { template_id: document.getElementById('new-route-tpl').value, aircraft_id: document.getElementById('new-route-ac').value, flights_per_week: 7 }); }
+function delRoute(id) { if(confirm('노선을 없앨까요?')) fetch('/api/airline/route/'+id,{method:'DELETE'}).then(()=>loadDash()); }
+function hireCrew(id) { apiPost('/api/airline/hire', { crew_id: id }); }
+function settleNow() { apiPost('/api/airline/settle'); }
+function allocStat(id) { apiPost('/api/player/stats/allocate', { stat_id: id }); }
+function foundSpace() { apiPost('/api/airline/space/found'); }
+function buyRocket(id) { apiPost('/api/airline/space/buy-rocket', { rocket_id: id }); }
+function launchMission(id) { apiPost('/api/airline/space/launch', { mission_id: id }); }
+
+document.getElementById('al-tabs')?.addEventListener('click', e => {
+    const t = e.target.closest('.al-tab');
+    if (t) renderAlTab(t.dataset.tab);
+});
+loadDash();
+</script>
+{% endblock %}

@@ -4,6 +4,17 @@
 
 {% block content %}
 <div class="max-w-6xl mx-auto">
+    <div id="dash-onboard" class="hidden info-card p-4 mb-4 border border-[#0A84FF]/50">
+        <div class="flex flex-wrap justify-between items-center gap-3">
+            <div>
+                <div class="font-bold text-sm">🎯 첫걸음 미션 진행 중!</div>
+                <div class="text-xs text-gray-400" id="dash-onboard-text"></div>
+            </div>
+            <a href="/guide" class="px-4 py-2 bg-[#0A84FF] text-white rounded-lg text-sm font-bold">가이드 보기</a>
+        </div>
+        <div class="h-1.5 bg-black rounded mt-2"><div id="dash-onboard-bar" class="h-1.5 bg-[#0A84FF] rounded" style="width:0%"></div></div>
+    </div>
+
     <div class="mb-6 flex flex-wrap justify-between items-start gap-4">
         <div>
             <h1 class="text-4xl font-bold mb-2">안녕하세요, 강로운 미래의 기장님 ✈️</h1>
@@ -171,6 +182,8 @@
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 text-center text-sm">
             <a href="/learn" class="p-3 bg-[#002200] hover:bg-[#003300] rounded">🎓 학습 허브</a>
             <a href="/captain-life" class="p-3 bg-[#1a1a00] hover:bg-[#2a2a00] rounded border border-[#ffaa00]/30">👑 기장생활</a>
+            <a href="/airline" class="p-3 bg-[#1a1a00] hover:bg-[#2a2a00] rounded border border-[#ffaa00]/30">🏢 항공사</a>
+            <a href="/guide" class="p-3 bg-[#002244] hover:bg-[#003366] rounded border border-[#0A84FF]/30">📖 가이드</a>
             <a href="/first-flight" class="p-3 bg-[#002200] hover:bg-[#003300] rounded">🛫 첫 비행</a>
             <a href="/quiz" class="p-3 bg-[#002200] hover:bg-[#003300] rounded">🧠 퀴즈</a>
             <a href="/flight-planner" class="p-3 bg-[#002200] hover:bg-[#003300] rounded">✈️ 플래너</a>
@@ -195,10 +208,21 @@
 <script src="/static/js/gamification.js"></script>
 <script>
 async function loadDashboard() {
-    const [gRes, bRes] = await Promise.all([
+    const [gRes, bRes, oRes] = await Promise.all([
         fetch('/api/gamification/status'),
-        fetch('/badges/api/progress')
+        fetch('/badges/api/progress'),
+        fetch('/api/guide/onboarding')
     ]);
+    try {
+        const od = await oRes.json();
+        const ob = od.onboarding || {};
+        if (ob.show_banner) {
+            document.getElementById('dash-onboard').classList.remove('hidden');
+            document.getElementById('dash-onboard-text').textContent =
+                `${ob.completed_count}/${ob.total} 완료 — 다음 미션을 가이드에서 확인하세요!`;
+            document.getElementById('dash-onboard-bar').style.width = (ob.pct||0) + '%';
+        }
+    } catch (e) {}
     const g = await gRes.json();
     const b = await bRes.json();
 

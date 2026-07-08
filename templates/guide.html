@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}가이드 & 온보딩 - Pilot Dream{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-2">📖 파일럿 가이드</h1>
+    <p class="text-gray-400 text-sm mb-6">초등학생도 쉽게! 기능별 설명과 첫걸음 안내</p>
+
+    <div id="onboard-panel" class="info-card p-5 mb-6 border border-[#0A84FF]/40 hidden">
+        <div class="flex justify-between items-start mb-3">
+            <div>
+                <h2 class="font-bold text-lg">🎯 첫걸음 미션</h2>
+                <p class="text-xs text-gray-400">하나씩보면 기장·CEO가 되는 길이 열려요!</p>
+            </div>
+            <button onclick="dismissOnboard()" class="text-xs text-gray-500 hover:text-white">나중에 할게요</button>
+        </div>
+        <div class="h-2 bg-black rounded mb-3"><div id="onboard-bar" class="h-2 bg-[#0A84FF] rounded transition-all" style="width:0%"></div></div>
+        <div id="onboard-steps" class="space-y-2"></div>
+    </div>
+
+    <div class="flex gap-2 mb-4 flex-wrap" id="guide-cats"></div>
+    <div id="guide-sections" class="space-y-4"></div>
+
+    <div id="stats-section" class="mt-8 info-card p-5 border border-purple-500/30">
+        <h2 class="font-bold text-lg mb-3" id="stats">📊 내 능력 (RPG)</h2>
+        <div id="guide-stats" class="space-y-2 text-sm"></div>
+    </div>
+</div>
+<style>
+.guide-card { background:#0a0a0a; border:1px solid #2c2c2e; border-radius:14px; padding:16px; }
+.guide-card.open { border-color:#0A84FF/50; }
+.onboard-step { display:flex; align-items:center; gap:12px; padding:10px; background:#111; border-radius:10px; }
+.onboard-step.done { opacity:.55; }
+.cat-btn { font-size:11px; padding:6px 12px; border-radius:999px; border:1px solid #333; }
+.cat-btn.active { border-color:#0A84FF; color:#0A84FF; }
+</style>
+{% endblock %}
+{% block scripts %}
+<script>
+let sections = [];
+let onboarding = {};
+let activeCat = '전체';
+
+async function loadGuide() {
+    const [sRes, oRes] = await Promise.all([
+        fetch('/api/guide/sections'),
+        fetch('/api/guide/onboarding'),
+    ]);
+    const sd = await sRes.json();
+    const od = await oRes.json();
+    sections = sd.sections || [];
+    onboarding = od.onboarding || {};
+    renderOnboarding();
+    renderCategories();
+    renderSections();
+    renderStats(od.stats || {});
+    if (location.hash === '#stats') document.getElementById('stats-section').scrollIntoView();
+}
+
+function renderOnboarding() {
+    const panel = document.getElementById('onboard-panel');
+    if (!onboarding.show_banner) { panel.classList.add('hidden'); return; }
+    panel.classList.remove('hidden');
+    document.getElementById('onboard-bar').style.width = (onboarding.pct||0) + '%';
+    document.getElementById('onboard-steps').innerHTML = (onboarding.steps||[]).map(s => `
+        <div class="onboard-step ${s.done?'done':''}">
+            <span class="text-2xl">${s.emoji}</span>
+            <div class="flex-1">
+                <div class="font-bold text-sm">${s.title} ${s.done?'✓':''}</div>
+                <div class="text-[10px] text-gray-400">${s.kid_text}</div>
+            </div>
+            ${s.done ? '' : s.current ? `<a href="${s.action}" class="text-xs px-3 py-1 bg-[#0A84FF] rounded font-bold">시작</a>` :
+              '<span class="text-[10px] text-gray-600">대기</span>'}
+        </div>`).join('');
+}
+
+function renderCategories() {
+    const cats = ['전체', ...new Set(sections.map(s => s.category))];
+    document.getElementById('guide-cats').innerHTML = cats.map(c => `
+        <button class="cat-btn ${activeCat===c?'active':''}" onclick="filterCat('${c}')">${c}</button>`).join('');
+}
+
+function filterCat(c) { activeCat = c; renderCategories(); renderSections(); }
+
+function renderSections() {
+    const list = activeCat === '전체' ? sections : sections.filter(s => s.category === activeCat);
+    document.getElementById('guide-sections').innerHTML = list.map(s => `
+        <div class="guide-card">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="text-3xl">${s.emoji}</span>
+                <div>
+                    <div class="text-[10px] text-gray-500">${s.category}</div>
+                    <h3 class="font-bold">${s.title}</h3>
+                </div>
+            </div>
+            <ol class="text-sm text-gray-300 space-y-2 list-decimal list-inside">
+                ${(s.steps||[]).map(step => `<li>${step.replace(/\*\*(.*?)\*\*/g,'<b class="text-white">$1</b>')}</li>`).join('')}
+            </ol>
+            ${s.tip ? `<p class="text-xs text-[#ffaa00] mt-3">💡 ${s.tip}</p>` : ''}
+        </div>`).join('');
+}
+
+function renderStats(ps) {
+    document.getElementById('guide-stats').innerHTML = (ps.stats||[]).map(s => `
+        <div class="flex justify-between items-center p-2 bg-black/40 rounded">
+            <span>${s.emoji} ${s.name} <span class="text-gray-500 text-xs">Lv.${s.value}</span></span>
+            <span class="text-[10px] text-gray-500">${s.kid_desc}</span>
+        </div>`).join('') || '<p class="text-gray-500">활동을 시작하면 능력이 보여요!</p>';
+}
+
+async function dismissOnboard() {
+    await fetch('/api/guide/onboarding/dismiss', { method:'POST' });
+    document.getElementById('onboard-panel').classList.add('hidden');
+}
+
+loadGuide();
+</script>
+{% endblock %}

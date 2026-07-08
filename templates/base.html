@@ -113,6 +113,7 @@
             <a href="/" class="nav-link {{ 'active' if request.path == '/' else '' }}">대시보드</a>
             <a href="/learn" class="nav-link {{ 'active' if request.path == '/learn' or request.path.startswith('/quiz') or request.path.startswith('/flash') or request.path.startswith('/scenario') or request.path.startswith('/captain') or request.path.startswith('/first-flight') else '' }}">학습</a>
             <a href="/captain-life" class="nav-link {{ 'active' if request.path.startswith('/captain-life') else '' }}">👑 기장생활</a>
+            <a href="/airline" class="nav-link {{ 'active' if request.path.startswith('/airline') else '' }}">🏢 항공사</a>
             <a href="/radar" class="nav-link {{ 'active' if request.path == '/radar' else '' }}">레이더</a>
             <a href="/aircraft" class="nav-link {{ 'active' if request.path == '/aircraft' else '' }}">기종</a>
             <a href="/atc-english" class="nav-link {{ 'active' if request.path == '/atc-english' else '' }}">항공영어</a>
@@ -121,6 +122,7 @@
             <a href="/shop" class="nav-link {{ 'active' if request.path.startswith('/shop') or request.path.startswith('/hangar') else '' }}">상점</a>
             <a href="/badges" class="nav-link {{ 'active' if request.path == '/badges' else '' }}">뱃지</a>
             <a href="/korea-career" class="nav-link {{ 'active' if request.path == '/korea-career' else '' }}">커리어</a>
+            <a href="/guide" class="nav-link {{ 'active' if request.path.startswith('/guide') else '' }}">📖 가이드</a>
         </div>
     </nav>
 

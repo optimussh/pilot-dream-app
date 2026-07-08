@@ -1,0 +1,8 @@
+[
+  {"id": "captain", "name": "기장", "emoji": "👑", "max_per_route": 1, "required_intl": true, "kid_desc": "비행의 책임자! 국제선·장거리에 꼭 필요해요."},
+  {"id": "fo", "name": "부기장", "emoji": "👨‍✈️", "max_per_route": 1, "required_all": true, "kid_desc": "기장을 돕는 조종사. 모든 노선에 필요해요."},
+  {"id": "fa", "name": "승무원", "emoji": "💁", "max_per_route": 8, "kid_desc": "승객을 돕는 친구들. 많을수록 서비스가 좋아요!"},
+  {"id": "mechanic", "name": "정비사", "emoji": "🔧", "max_per_route": 1, "kid_desc": "비행기를 건강하게 지켜요. 고장을 줄여줘요."},
+  {"id": "dispatcher", "name": "운항관리", "emoji": "📋", "max_per_route": 1, "kid_desc": "스케줄과 정시를 챙겨요."},
+  {"id": "ground", "name": "지상직", "emoji": "🧳", "max_per_route": 2, "kid_desc": "탑승·수하물을 도와요."}
+]

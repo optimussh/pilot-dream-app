@@ -82,7 +82,9 @@ def create_app():
         learn,
         shop,
         extras,
-    )
+        airline,
+        guide,
+    )  # noqa: airline, guide registered below
 
     app.register_blueprint(main.bp)
     app.register_blueprint(radar.bp)
@@ -95,6 +97,8 @@ def create_app():
     app.register_blueprint(learn.bp)
     app.register_blueprint(shop.bp)
     app.register_blueprint(extras.bp)
+    app.register_blueprint(airline.bp)
+    app.register_blueprint(guide.bp)
 
     from app.services.game_bridge import GAMES_ENABLED
     if GAMES_ENABLED:

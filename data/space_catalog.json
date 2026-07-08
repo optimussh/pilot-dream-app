@@ -1,0 +1,13 @@
+{
+  "rockets": [
+    {"id": "rocket_small", "name": "하늘나라 1호", "emoji": "🚀", "price": 5000000, "capacity": "위성", "kid_desc": "작은 위성을 궤도에 올려요"},
+    {"id": "rocket_heavy", "name": "드림 헤비", "emoji": "🔥", "price": 15000000, "capacity": "달", "kid_desc": "더 큰 화물·달 탐사"},
+    {"id": "rocket_mars", "name": "화성 드리머", "emoji": "🔴", "price": 50000000, "capacity": "화성", "kid_desc": "화성 미션 전용!"}
+  ],
+  "missions": [
+    {"id": "mis_sat1", "name": "첫 위성", "emoji": "🛰️", "rocket": "rocket_small", "reward_money": 2000000, "reward_imagination": 15, "kid_desc": "우리 회사 첫 위성을 쏘아올려요!"},
+    {"id": "mis_starlink", "name": "스타링크 꿈", "emoji": "📡", "rocket": "rocket_small", "reward_money": 5000000, "reward_imagination": 25, "kid_desc": "인터넷 위성 여러 개 (상상!)"},
+    {"id": "mis_moon", "name": "달 착륙 연습", "emoji": "🌙", "rocket": "rocket_heavy", "reward_money": 12000000, "reward_imagination": 40, "kid_desc": "달 근처까지 가는 연습 미션"},
+    {"id": "mis_mars", "name": "화성 도전", "emoji": "🔴", "rocket": "rocket_mars", "reward_money": 30000000, "reward_imagination": 80, "kid_desc": "가장 먼 꿈! 화성 탐사"}
+  ]
+}

@@ -161,6 +161,12 @@ def check_crew_unlocks(prog):
     if newly:
         extras['crew_unlocked'] = list(unlocked)
         _save_meta(prog, extras)
+        try:
+            from app.services.player_stats import apply_activity_stats
+            for _ in newly:
+                apply_activity_stats(prog, 'crew_unlock')
+        except Exception:
+            pass
         db.session.commit()
     return newly
 

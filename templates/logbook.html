@@ -532,6 +532,9 @@ function formatRewardAlert(result, baseMsg) {
         if (px.on_time) msg += `\n⏰ 정시 비행! (이번 주 ${px.on_time}회)`;
         if (px.demand_match) msg += `\n🎯 주간 이벤트 매칭: ${px.demand_match}`;
     }
+    if (result.airline_settle?.revenue) {
+        msg += `\n\n🏢 항공사 수익: ₩${result.airline_settle.revenue.toLocaleString()}`;
+    }
     if (result.entry_id) {
         sessionStorage.setItem('lastJournalEntryId', String(result.entry_id));
         msg += `\n\n📝 비행 일기를 쓰면 +₩100,000!\n/captain-life?journal=${result.entry_id}`;

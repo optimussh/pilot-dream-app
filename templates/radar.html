@@ -500,9 +500,36 @@ function generateFlights() {
     console.log(`[Radar] 항공편 ${flights.length}개 생성 (공항 ${radarAirports.length}개 × 5편 + 사용자 ${userFlights.length}편)`);
 }
 
+async function loadAirlineFlights() {
+    try {
+        const res = await fetch('/api/airline/radar-flights');
+        airlineFlights = await res.json();
+        if (!Array.isArray(airlineFlights)) airlineFlights = [];
+    } catch (e) {
+        airlineFlights = [];
+    }
+}
+
 function mergeUserFlightsIntoRadar() {
-    flights = flights.filter(f => !f.isUserFlight);
+    flights = flights.filter(f => !f.isUserFlight && !f.isAirlineFlight);
     if (!Array.isArray(userFlights)) userFlights = [];
+    if (!Array.isArray(airlineFlights)) airlineFlights = [];
+
+    airlineFlights.forEach((af, idx) => {
+        const org = radarAirports.find(a => a.id === af.org_id) || { id: af.org_id, lat: 37.46, lng: 126.44, name: af.org_id, country: '대한민국' };
+        const dest = radarAirports.find(a => a.id === af.dest_id) || { id: af.dest_id, lat: 33.51, lng: 126.49, name: af.dest_id, country: '' };
+        flights.push({
+            id: 'AIRLINE-' + idx,
+            callsign: String(af.callsign || 'AL') + (200 + idx),
+            org, dest,
+            prog: 0.2 + Math.random() * 0.5,
+            spd: 0.0009 + Math.random() * 0.0003,
+            isKorea: true,
+            acName: af.ac_name || 'B737',
+            isAirlineFlight: true,
+            airlineName: af.airline_name || '',
+        });
+    });
 
     userFlights.forEach(uf => {
         const org = radarAirports.find(a => a.id === uf.org_id) || { id: uf.org_id, lat: 37.46, lng: 126.44, name: uf.org_id, country: '' };
@@ -529,6 +556,8 @@ function buildFlightIcon(f) {
     let finalColor = '#33ff33';
     if (f.isUserFlight) {
         finalColor = pilotCosmetics.livery_color || pilotCosmetics.trail_color || '#a855f7';
+    } else if (f.isAirlineFlight) {
+        finalColor = pilotCosmetics.livery_color || '#ffaa00';
     } else if (f.isKorea) {
         finalColor = '#ffaa00';
     } else {
@@ -775,6 +804,7 @@ async function initRadar() {
         loadRadarAirports(),
         loadRadarAircraft(),
         loadUserFlights(),
+        loadAirlineFlights(),
         loadCosmetics()
     ]);
     drawAirportMarkers();
@@ -869,7 +899,8 @@ function toggleFullRoutes() {
 
 // ==================== Custom Flight (User Radar Flights) ====================
 
-let userFlights = []; // DB에서 불러온 사용자 항공편
+let userFlights = [];
+let airlineFlights = [];
 let pilotCosmetics = { trail_color: '#a855f7', livery_color: '#a855f7', sticker_emoji: '' };
 
 async function loadCosmetics() {
