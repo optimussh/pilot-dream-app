@@ -1,0 +1,10 @@
+[
+  {"id": "b1", "flight": "AL101 ICN→CJU", "topic": "METAR", "q": "METAR에서 'BKN015'는 무엇을 뜻할까요?", "choices": ["맑음", "구름 1500ft까지 5~7할", "강우"], "answer": 1, "fee": 85000, "tip": "BKN=Broken, 015=1500피트"},
+  {"id": "b2", "flight": "AL205 ICN→NRT", "topic": "NOTAM", "q": "NOTAM 'RWY 15L CLSD'의 의미는?", "choices": ["15L 활주로 폐쇄", "15L 활주로 개방", "유도로 공사"], "answer": 0, "fee": 95000, "tip": "CLSD=Closed, 대체 활주로 확인!"},
+  {"id": "b3", "flight": "AL308 GMP→PUS", "topic": "TAF", "q": "TAF 'TEMPO 1218/1222 3000 BR'는?", "choices": ["12~18시 맑음", "12~22시 일시적으로 시정 3000m 안개", "전일 강우"], "answer": 1, "fee": 90000, "tip": "TEMPO=일시적, BR=Mist(안개)"},
+  {"id": "b4", "flight": "AL412 ICN→BKK", "topic": "METAR", "q": "풍향 '27015G25KT'에서 G25는?", "choices": ["최저풍 25kt", "돌풍 25kt", "시정 25km"], "answer": 1, "fee": 100000, "tip": "G=gust 돌풍, 교차풍 주의"},
+  {"id": "b5", "flight": "AL507 ICN→LAX", "topic": "NOTAM", "q": "대체공항 선정 시 가장 중요한 것은?", "choices": ["가까운 거리", "연료·기상·시설 충족", "관광 명소"], "answer": 1, "fee": 120000, "tip": "장거리는 연료와 기상이 핵심"},
+  {"id": "b6", "flight": "AL601 ICN→SIN", "topic": "METAR", "q": "'CAVOK'의 의미는?", "choices": ["시정·구름·중요 현상 모두 양호", "활주로 결빙", "황사"], "answer": 0, "fee": 80000, "tip": "Ceiling And Visibility OK"},
+  {"id": "b7", "flight": "AL702 CJU→ICN", "topic": "TAF", "q": "제주 'PROB30 TEMPO'는?", "choices": ["30% 확률로 일시 변화", "30분 지연", "30kt 풍속"], "answer": 0, "fee": 85000, "tip": "PROB=확률, 대비 필요"},
+  {"id": "b8", "flight": "AL803 ICN→HKG", "topic": "NOTAM", "q": "공항 'ILS OUT OF SERVICE' 시?", "choices": ["시각접근 준비", "비행 취소만 가능", "연료 무시"], "answer": 0, "fee": 95000, "tip": "계기접근 불가 시 시각접근 대비"}
+]

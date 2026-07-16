@@ -63,12 +63,21 @@ async function nextStep(idx) {
 }
 
 async function advanceStep(step) {
-    await fetch('/api/gamification/first-flight/step', {
+    const res = await fetch('/api/gamification/first-flight/step', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ step })
     });
-    if (step >= steps.length) { load(); return; }
+    const data = await res.json();
+    if (data.money_earned) {
+        handleLearningReward(data, {
+            title: '첫 비행 튜토리얼 완료!',
+            subtitle: '기장의 꿈, 여기서 시작합니다',
+            emoji: '🛫',
+            onClose: () => load()
+        });
+    }
+    if (step >= steps.length) { if (!data.money_earned) load(); return; }
     current = step;
     renderStep(step);
 }

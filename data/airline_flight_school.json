@@ -1,0 +1,11 @@
+{
+  "modules": [
+    {"id": "crm", "name": "CRM 팀워크", "emoji": "👥", "fee": 180000, "xp_airline": 3, "q": "CRM에서 가장 중요한 것은?", "choices": ["혼자 판단", "팀 소통과 상호 감시", "속도 우선"], "answer": 1},
+    {"id": "checklist", "name": "체크리스트", "emoji": "📋", "fee": 150000, "xp_airline": 2, "q": "이륙 전 체크리스트 순서로 맞는 것은?", "choices": ["속도→플랩→기어", "플랩→속도→기어", "기어→플랩→속도"], "answer": 0},
+    {"id": "fuel", "name": "연료 관리", "emoji": "⛽", "fee": 200000, "xp_airline": 3, "q": "대체공항 연료는?", "choices": ["불필요", "항상 계획에 포함", "착륙 후만"], "answer": 1},
+    {"id": "wx", "name": "기상 판독", "emoji": "🌤️", "fee": 170000, "xp_airline": 2, "q": "적란운(CB) 근처에서?", "choices": ["가까이 접근", "20km 이상 회피", "무시"], "answer": 1},
+    {"id": "atc", "name": "ATC 통신", "emoji": "📻", "fee": 160000, "xp_airline": 2, "q": "'Roger'의 의미는?", "choices": ["수신 확인", "승인", "거절"], "answer": 0}
+  ],
+  "daily_limit": 3,
+  "requires_role": "fo"
+}

@@ -1,41 +1,3002 @@
 [
-  {"id": "first_flight_log", "type": "flight_count", "value": 1, "amount": 500000, "title": "첫 비행 기록!", "desc": "로그북에 첫 비행을 기록했어요", "icon": "🛫", "category": "비행"},
-  {"id": "flight_5", "type": "flight_count", "value": 5, "amount": 1500000, "title": "5회 비행 달성", "desc": "비행 5회 누적", "icon": "✈️", "category": "비행"},
-  {"id": "flight_10", "type": "flight_count", "value": 10, "amount": 3000000, "title": "10회 비행 달성", "desc": "비행 10회 누적", "icon": "🎯", "category": "비행"},
-  {"id": "flight_25", "type": "flight_count", "value": 25, "amount": 5000000, "title": "25회 비행 달성", "desc": "비행 25회 누적", "icon": "🏅", "category": "비행"},
-  {"id": "flight_50", "type": "flight_count", "value": 50, "amount": 10000000, "title": "50회 비행 달성", "desc": "비행 50회 누적 — 특별 보너스!", "icon": "🌟", "category": "비행"},
-  {"id": "flight_100", "type": "flight_count", "value": 100, "amount": 25000000, "title": "100회 비행 달성", "desc": "백 회 비행 전설", "icon": "👑", "category": "비행"},
-  {"id": "flight_200", "type": "flight_count", "value": 200, "amount": 50000000, "title": "200회 비행 달성", "desc": "베테랑 파일럿!", "icon": "💎", "category": "비행"},
-
-  {"id": "hours_10", "type": "total_hours", "value": 10, "amount": 1000000, "title": "10시간 돌파", "desc": "총 비행시간 10시간", "icon": "⏱️", "category": "시간"},
-  {"id": "hours_50", "type": "total_hours", "value": 50, "amount": 3000000, "title": "50시간 돌파", "desc": "총 비행시간 50시간", "icon": "⏰", "category": "시간"},
-  {"id": "hours_100", "type": "total_hours", "value": 100, "amount": 7000000, "title": "100시간 돌파", "desc": "백 시간 파일럿", "icon": "🏆", "category": "시간"},
-  {"id": "hours_500", "type": "total_hours", "value": 500, "amount": 20000000, "title": "500시간 돌파", "desc": "시니어 파일럿 구간", "icon": "🎖️", "category": "시간"},
-  {"id": "hours_1000", "type": "total_hours", "value": 1000, "amount": 50000000, "title": "1000시간 돌파", "desc": "천 시간의 전설", "icon": "💫", "category": "시간"},
-
-  {"id": "badge_1", "type": "badge_count", "value": 1, "amount": 500000, "title": "첫 뱃지 획득", "desc": "뱃지 1개 달성", "icon": "🎖️", "category": "성취"},
-  {"id": "badge_5", "type": "badge_count", "value": 5, "amount": 2000000, "title": "뱃지 5개", "desc": "뱃지 컬렉터", "icon": "🏅", "category": "성취"},
-  {"id": "badge_10", "type": "badge_count", "value": 10, "amount": 5000000, "title": "뱃지 10개", "desc": "뱃지 마스터", "icon": "🌟", "category": "성취"},
-  {"id": "badge_20", "type": "badge_count", "value": 20, "amount": 12000000, "title": "뱃지 20개", "desc": "뱃지 레전드", "icon": "👑", "category": "성취"},
-
-  {"id": "aircraft_variety_3", "type": "aircraft_variety", "value": 3, "amount": 1500000, "title": "3종목 비행", "desc": "서로 다른 기종 3종 비행", "icon": "🛩️", "category": "기록"},
-  {"id": "aircraft_variety_5", "type": "aircraft_variety", "value": 5, "amount": 3000000, "title": "5종목 비행", "desc": "다양한 기종 경험", "icon": "✈️", "category": "기록"},
-  {"id": "long_flight_5h", "type": "single_flight_hours", "value": 5, "amount": 2000000, "title": "5시간 단일 비행", "desc": "한 번에 5시간 이상 비행", "icon": "🌏", "category": "기록"},
-  {"id": "long_flight_10h", "type": "single_flight_hours", "value": 10, "amount": 5000000, "title": "10시간 장거리", "desc": "한 번에 10시간 이상 비행", "icon": "🌍", "category": "기록"},
-
-  {"id": "streak_3", "type": "streak_days", "value": 3, "amount": 800000, "title": "3일 연속 학습", "desc": "3일 연속 활동", "icon": "🔥", "category": "학습"},
-  {"id": "streak_7", "type": "streak_days", "value": 7, "amount": 2000000, "title": "7일 연속 학습", "desc": "일주일 연속 활동", "icon": "🔥", "category": "학습"},
-  {"id": "streak_30", "type": "streak_days", "value": 30, "amount": 10000000, "title": "30일 연속 학습", "desc": "한 달 연속 활동!", "icon": "💪", "category": "학습"},
-
-  {"id": "quiz_perfect", "type": "quiz_perfect", "value": 1, "amount": 1500000, "title": "퀴즈 만점!", "desc": "퀴즈 100점 달성", "icon": "🧠", "category": "학습"},
-  {"id": "mission_streak_7", "type": "mission_streak", "value": 7, "amount": 3000000, "title": "미션 7일 연속", "desc": "7일 연속 미션 완료", "icon": "🎯", "category": "학습"},
-  {"id": "flashcard_50", "type": "flashcard_count", "value": 50, "amount": 2500000, "title": "플래시카드 50개", "desc": "용어 50개 학습", "icon": "📇", "category": "학습"},
-
-  {"id": "owned_aircraft_3", "type": "owned_aircraft", "value": 3, "amount": 2000000, "title": "기체 3대 보유", "desc": "행거에 3대 이상", "icon": "🏢", "category": "기체"},
-  {"id": "owned_aircraft_10", "type": "owned_aircraft", "value": 10, "amount": 8000000, "title": "기체 10대 보유", "desc": "항공사 규모 행거", "icon": "🛫", "category": "기체"},
-  {"id": "owned_aircraft_25", "type": "owned_aircraft", "value": 25, "amount": 20000000, "title": "기체 25대 보유", "desc": "대형 항공사!", "icon": "🌐", "category": "기체"},
-
-  {"id": "first_international", "type": "international_route", "value": 1, "amount": 2500000, "title": "첫 국제선!", "desc": "ICN↔해외 노선 비행", "icon": "🌏", "category": "노선"},
-  {"id": "routes_10", "type": "unique_routes", "value": 10, "amount": 4000000, "title": "10개 노선 비행", "desc": "서로 다른 노선 10개", "icon": "🗺️", "category": "노선"},
-  {"id": "total_logbook_hours_50", "type": "logbook_hours", "value": 50, "amount": 5000000, "title": "로그북 50시간", "desc": "실제 기록 50시간", "icon": "📔", "category": "기록"}
+  {
+    "id": "flight_1",
+    "type": "flight_count",
+    "value": 1,
+    "amount": 350000,
+    "title": "비행 1회 달성",
+    "desc": "로그북 비행 1회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_2",
+    "type": "flight_count",
+    "value": 2,
+    "amount": 500000,
+    "title": "비행 2회 달성",
+    "desc": "로그북 비행 2회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_3",
+    "type": "flight_count",
+    "value": 3,
+    "amount": 650000,
+    "title": "비행 3회 달성",
+    "desc": "로그북 비행 3회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_4",
+    "type": "flight_count",
+    "value": 4,
+    "amount": 800000,
+    "title": "비행 4회 달성",
+    "desc": "로그북 비행 4회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_5",
+    "type": "flight_count",
+    "value": 5,
+    "amount": 950000,
+    "title": "비행 5회 달성",
+    "desc": "로그북 비행 5회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_6",
+    "type": "flight_count",
+    "value": 6,
+    "amount": 1100000,
+    "title": "비행 6회 달성",
+    "desc": "로그북 비행 6회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_7",
+    "type": "flight_count",
+    "value": 7,
+    "amount": 1250000,
+    "title": "비행 7회 달성",
+    "desc": "로그북 비행 7회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_8",
+    "type": "flight_count",
+    "value": 8,
+    "amount": 1400000,
+    "title": "비행 8회 달성",
+    "desc": "로그북 비행 8회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_9",
+    "type": "flight_count",
+    "value": 9,
+    "amount": 1550000,
+    "title": "비행 9회 달성",
+    "desc": "로그북 비행 9회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_10",
+    "type": "flight_count",
+    "value": 10,
+    "amount": 1700000,
+    "title": "비행 10회 달성",
+    "desc": "로그북 비행 10회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_11",
+    "type": "flight_count",
+    "value": 11,
+    "amount": 1850000,
+    "title": "비행 11회 달성",
+    "desc": "로그북 비행 11회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_12",
+    "type": "flight_count",
+    "value": 12,
+    "amount": 2000000,
+    "title": "비행 12회 달성",
+    "desc": "로그북 비행 12회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_13",
+    "type": "flight_count",
+    "value": 13,
+    "amount": 2150000,
+    "title": "비행 13회 달성",
+    "desc": "로그북 비행 13회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_14",
+    "type": "flight_count",
+    "value": 14,
+    "amount": 2300000,
+    "title": "비행 14회 달성",
+    "desc": "로그북 비행 14회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_15",
+    "type": "flight_count",
+    "value": 15,
+    "amount": 2450000,
+    "title": "비행 15회 달성",
+    "desc": "로그북 비행 15회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_16",
+    "type": "flight_count",
+    "value": 16,
+    "amount": 2600000,
+    "title": "비행 16회 달성",
+    "desc": "로그북 비행 16회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_17",
+    "type": "flight_count",
+    "value": 17,
+    "amount": 2750000,
+    "title": "비행 17회 달성",
+    "desc": "로그북 비행 17회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_18",
+    "type": "flight_count",
+    "value": 18,
+    "amount": 2900000,
+    "title": "비행 18회 달성",
+    "desc": "로그북 비행 18회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_19",
+    "type": "flight_count",
+    "value": 19,
+    "amount": 3050000,
+    "title": "비행 19회 달성",
+    "desc": "로그북 비행 19회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_20",
+    "type": "flight_count",
+    "value": 20,
+    "amount": 3200000,
+    "title": "비행 20회 달성",
+    "desc": "로그북 비행 20회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_21",
+    "type": "flight_count",
+    "value": 21,
+    "amount": 3350000,
+    "title": "비행 21회 달성",
+    "desc": "로그북 비행 21회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_22",
+    "type": "flight_count",
+    "value": 22,
+    "amount": 3500000,
+    "title": "비행 22회 달성",
+    "desc": "로그북 비행 22회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_23",
+    "type": "flight_count",
+    "value": 23,
+    "amount": 3650000,
+    "title": "비행 23회 달성",
+    "desc": "로그북 비행 23회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_24",
+    "type": "flight_count",
+    "value": 24,
+    "amount": 3800000,
+    "title": "비행 24회 달성",
+    "desc": "로그북 비행 24회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_25",
+    "type": "flight_count",
+    "value": 25,
+    "amount": 3950000,
+    "title": "비행 25회 달성",
+    "desc": "로그북 비행 25회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_26",
+    "type": "flight_count",
+    "value": 26,
+    "amount": 4100000,
+    "title": "비행 26회 달성",
+    "desc": "로그북 비행 26회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_27",
+    "type": "flight_count",
+    "value": 27,
+    "amount": 4250000,
+    "title": "비행 27회 달성",
+    "desc": "로그북 비행 27회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_28",
+    "type": "flight_count",
+    "value": 28,
+    "amount": 4400000,
+    "title": "비행 28회 달성",
+    "desc": "로그북 비행 28회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_29",
+    "type": "flight_count",
+    "value": 29,
+    "amount": 4550000,
+    "title": "비행 29회 달성",
+    "desc": "로그북 비행 29회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_30",
+    "type": "flight_count",
+    "value": 30,
+    "amount": 4700000,
+    "title": "비행 30회 달성",
+    "desc": "로그북 비행 30회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_31",
+    "type": "flight_count",
+    "value": 31,
+    "amount": 4850000,
+    "title": "비행 31회 달성",
+    "desc": "로그북 비행 31회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_32",
+    "type": "flight_count",
+    "value": 32,
+    "amount": 5000000,
+    "title": "비행 32회 달성",
+    "desc": "로그북 비행 32회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_33",
+    "type": "flight_count",
+    "value": 33,
+    "amount": 5150000,
+    "title": "비행 33회 달성",
+    "desc": "로그북 비행 33회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_34",
+    "type": "flight_count",
+    "value": 34,
+    "amount": 5300000,
+    "title": "비행 34회 달성",
+    "desc": "로그북 비행 34회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_35",
+    "type": "flight_count",
+    "value": 35,
+    "amount": 5450000,
+    "title": "비행 35회 달성",
+    "desc": "로그북 비행 35회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_36",
+    "type": "flight_count",
+    "value": 36,
+    "amount": 5600000,
+    "title": "비행 36회 달성",
+    "desc": "로그북 비행 36회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_37",
+    "type": "flight_count",
+    "value": 37,
+    "amount": 5750000,
+    "title": "비행 37회 달성",
+    "desc": "로그북 비행 37회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_38",
+    "type": "flight_count",
+    "value": 38,
+    "amount": 5900000,
+    "title": "비행 38회 달성",
+    "desc": "로그북 비행 38회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_39",
+    "type": "flight_count",
+    "value": 39,
+    "amount": 6050000,
+    "title": "비행 39회 달성",
+    "desc": "로그북 비행 39회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_40",
+    "type": "flight_count",
+    "value": 40,
+    "amount": 6200000,
+    "title": "비행 40회 달성",
+    "desc": "로그북 비행 40회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_50",
+    "type": "flight_count",
+    "value": 50,
+    "amount": 8700000,
+    "title": "비행 50회 달성",
+    "desc": "로그북 비행 50회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_60",
+    "type": "flight_count",
+    "value": 60,
+    "amount": 10200000,
+    "title": "비행 60회 달성",
+    "desc": "로그북 비행 60회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_70",
+    "type": "flight_count",
+    "value": 70,
+    "amount": 11700000,
+    "title": "비행 70회 달성",
+    "desc": "로그북 비행 70회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_80",
+    "type": "flight_count",
+    "value": 80,
+    "amount": 13200000,
+    "title": "비행 80회 달성",
+    "desc": "로그북 비행 80회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_90",
+    "type": "flight_count",
+    "value": 90,
+    "amount": 14700000,
+    "title": "비행 90회 달성",
+    "desc": "로그북 비행 90회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_100",
+    "type": "flight_count",
+    "value": 100,
+    "amount": 17200000,
+    "title": "비행 100회 달성",
+    "desc": "로그북 비행 100회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_110",
+    "type": "flight_count",
+    "value": 110,
+    "amount": 18700000,
+    "title": "비행 110회 달성",
+    "desc": "로그북 비행 110회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_120",
+    "type": "flight_count",
+    "value": 120,
+    "amount": 20200000,
+    "title": "비행 120회 달성",
+    "desc": "로그북 비행 120회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_130",
+    "type": "flight_count",
+    "value": 130,
+    "amount": 21700000,
+    "title": "비행 130회 달성",
+    "desc": "로그북 비행 130회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_140",
+    "type": "flight_count",
+    "value": 140,
+    "amount": 23200000,
+    "title": "비행 140회 달성",
+    "desc": "로그북 비행 140회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "flight_150",
+    "type": "flight_count",
+    "value": 150,
+    "amount": 25700000,
+    "title": "비행 150회 달성",
+    "desc": "로그북 비행 150회 누적",
+    "icon": "✈️",
+    "category": "비행"
+  },
+  {
+    "id": "hours_5",
+    "type": "total_hours",
+    "value": 5,
+    "amount": 700000,
+    "title": "5시간 돌파",
+    "desc": "총 비행시간 5시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_10",
+    "type": "total_hours",
+    "value": 10,
+    "amount": 900000,
+    "title": "10시간 돌파",
+    "desc": "총 비행시간 10시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_15",
+    "type": "total_hours",
+    "value": 15,
+    "amount": 1100000,
+    "title": "15시간 돌파",
+    "desc": "총 비행시간 15시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_20",
+    "type": "total_hours",
+    "value": 20,
+    "amount": 1300000,
+    "title": "20시간 돌파",
+    "desc": "총 비행시간 20시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_25",
+    "type": "total_hours",
+    "value": 25,
+    "amount": 1500000,
+    "title": "25시간 돌파",
+    "desc": "총 비행시간 25시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_30",
+    "type": "total_hours",
+    "value": 30,
+    "amount": 1700000,
+    "title": "30시간 돌파",
+    "desc": "총 비행시간 30시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_40",
+    "type": "total_hours",
+    "value": 40,
+    "amount": 2100000,
+    "title": "40시간 돌파",
+    "desc": "총 비행시간 40시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_50",
+    "type": "total_hours",
+    "value": 50,
+    "amount": 2500000,
+    "title": "50시간 돌파",
+    "desc": "총 비행시간 50시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_60",
+    "type": "total_hours",
+    "value": 60,
+    "amount": 2900000,
+    "title": "60시간 돌파",
+    "desc": "총 비행시간 60시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_75",
+    "type": "total_hours",
+    "value": 75,
+    "amount": 3500000,
+    "title": "75시간 돌파",
+    "desc": "총 비행시간 75시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_100",
+    "type": "total_hours",
+    "value": 100,
+    "amount": 4500000,
+    "title": "100시간 돌파",
+    "desc": "총 비행시간 100시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_125",
+    "type": "total_hours",
+    "value": 125,
+    "amount": 5500000,
+    "title": "125시간 돌파",
+    "desc": "총 비행시간 125시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_150",
+    "type": "total_hours",
+    "value": 150,
+    "amount": 6500000,
+    "title": "150시간 돌파",
+    "desc": "총 비행시간 150시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_175",
+    "type": "total_hours",
+    "value": 175,
+    "amount": 7500000,
+    "title": "175시간 돌파",
+    "desc": "총 비행시간 175시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_200",
+    "type": "total_hours",
+    "value": 200,
+    "amount": 8500000,
+    "title": "200시간 돌파",
+    "desc": "총 비행시간 200시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_250",
+    "type": "total_hours",
+    "value": 250,
+    "amount": 10500000,
+    "title": "250시간 돌파",
+    "desc": "총 비행시간 250시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_300",
+    "type": "total_hours",
+    "value": 300,
+    "amount": 12500000,
+    "title": "300시간 돌파",
+    "desc": "총 비행시간 300시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_350",
+    "type": "total_hours",
+    "value": 350,
+    "amount": 14500000,
+    "title": "350시간 돌파",
+    "desc": "총 비행시간 350시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_400",
+    "type": "total_hours",
+    "value": 400,
+    "amount": 16500000,
+    "title": "400시간 돌파",
+    "desc": "총 비행시간 400시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_450",
+    "type": "total_hours",
+    "value": 450,
+    "amount": 18500000,
+    "title": "450시간 돌파",
+    "desc": "총 비행시간 450시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_500",
+    "type": "total_hours",
+    "value": 500,
+    "amount": 20500000,
+    "title": "500시간 돌파",
+    "desc": "총 비행시간 500시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_600",
+    "type": "total_hours",
+    "value": 600,
+    "amount": 24500000,
+    "title": "600시간 돌파",
+    "desc": "총 비행시간 600시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_700",
+    "type": "total_hours",
+    "value": 700,
+    "amount": 28500000,
+    "title": "700시간 돌파",
+    "desc": "총 비행시간 700시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_800",
+    "type": "total_hours",
+    "value": 800,
+    "amount": 32500000,
+    "title": "800시간 돌파",
+    "desc": "총 비행시간 800시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_900",
+    "type": "total_hours",
+    "value": 900,
+    "amount": 36500000,
+    "title": "900시간 돌파",
+    "desc": "총 비행시간 900시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_1000",
+    "type": "total_hours",
+    "value": 1000,
+    "amount": 40500000,
+    "title": "1000시간 돌파",
+    "desc": "총 비행시간 1000시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_1200",
+    "type": "total_hours",
+    "value": 1200,
+    "amount": 48500000,
+    "title": "1200시간 돌파",
+    "desc": "총 비행시간 1200시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_1500",
+    "type": "total_hours",
+    "value": 1500,
+    "amount": 60500000,
+    "title": "1500시간 돌파",
+    "desc": "총 비행시간 1500시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_1800",
+    "type": "total_hours",
+    "value": 1800,
+    "amount": 72500000,
+    "title": "1800시간 돌파",
+    "desc": "총 비행시간 1800시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_2000",
+    "type": "total_hours",
+    "value": 2000,
+    "amount": 80500000,
+    "title": "2000시간 돌파",
+    "desc": "총 비행시간 2000시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_2500",
+    "type": "total_hours",
+    "value": 2500,
+    "amount": 100000000,
+    "title": "2500시간 돌파",
+    "desc": "총 비행시간 2500시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_3000",
+    "type": "total_hours",
+    "value": 3000,
+    "amount": 100000000,
+    "title": "3000시간 돌파",
+    "desc": "총 비행시간 3000시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_3500",
+    "type": "total_hours",
+    "value": 3500,
+    "amount": 100000000,
+    "title": "3500시간 돌파",
+    "desc": "총 비행시간 3500시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_4000",
+    "type": "total_hours",
+    "value": 4000,
+    "amount": 100000000,
+    "title": "4000시간 돌파",
+    "desc": "총 비행시간 4000시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_4500",
+    "type": "total_hours",
+    "value": 4500,
+    "amount": 100000000,
+    "title": "4500시간 돌파",
+    "desc": "총 비행시간 4500시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_5000",
+    "type": "total_hours",
+    "value": 5000,
+    "amount": 100000000,
+    "title": "5000시간 돌파",
+    "desc": "총 비행시간 5000시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_6000",
+    "type": "total_hours",
+    "value": 6000,
+    "amount": 100000000,
+    "title": "6000시간 돌파",
+    "desc": "총 비행시간 6000시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_7000",
+    "type": "total_hours",
+    "value": 7000,
+    "amount": 100000000,
+    "title": "7000시간 돌파",
+    "desc": "총 비행시간 7000시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_8000",
+    "type": "total_hours",
+    "value": 8000,
+    "amount": 100000000,
+    "title": "8000시간 돌파",
+    "desc": "총 비행시간 8000시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "hours_10000",
+    "type": "total_hours",
+    "value": 10000,
+    "amount": 100000000,
+    "title": "10000시간 돌파",
+    "desc": "총 비행시간 10000시간",
+    "icon": "⏱️",
+    "category": "시간"
+  },
+  {
+    "id": "lb_hours_5",
+    "type": "logbook_hours",
+    "value": 5,
+    "amount": 1050000,
+    "title": "로그북 5시간",
+    "desc": "실제 기록 5시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_10",
+    "type": "logbook_hours",
+    "value": 10,
+    "amount": 1300000,
+    "title": "로그북 10시간",
+    "desc": "실제 기록 10시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_15",
+    "type": "logbook_hours",
+    "value": 15,
+    "amount": 1550000,
+    "title": "로그북 15시간",
+    "desc": "실제 기록 15시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_20",
+    "type": "logbook_hours",
+    "value": 20,
+    "amount": 1800000,
+    "title": "로그북 20시간",
+    "desc": "실제 기록 20시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_30",
+    "type": "logbook_hours",
+    "value": 30,
+    "amount": 2300000,
+    "title": "로그북 30시간",
+    "desc": "실제 기록 30시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_40",
+    "type": "logbook_hours",
+    "value": 40,
+    "amount": 2800000,
+    "title": "로그북 40시간",
+    "desc": "실제 기록 40시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_50",
+    "type": "logbook_hours",
+    "value": 50,
+    "amount": 3300000,
+    "title": "로그북 50시간",
+    "desc": "실제 기록 50시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_75",
+    "type": "logbook_hours",
+    "value": 75,
+    "amount": 4550000,
+    "title": "로그북 75시간",
+    "desc": "실제 기록 75시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_100",
+    "type": "logbook_hours",
+    "value": 100,
+    "amount": 5800000,
+    "title": "로그북 100시간",
+    "desc": "실제 기록 100시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_125",
+    "type": "logbook_hours",
+    "value": 125,
+    "amount": 7050000,
+    "title": "로그북 125시간",
+    "desc": "실제 기록 125시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_150",
+    "type": "logbook_hours",
+    "value": 150,
+    "amount": 8300000,
+    "title": "로그북 150시간",
+    "desc": "실제 기록 150시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_200",
+    "type": "logbook_hours",
+    "value": 200,
+    "amount": 10800000,
+    "title": "로그북 200시간",
+    "desc": "실제 기록 200시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_250",
+    "type": "logbook_hours",
+    "value": 250,
+    "amount": 13300000,
+    "title": "로그북 250시간",
+    "desc": "실제 기록 250시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_300",
+    "type": "logbook_hours",
+    "value": 300,
+    "amount": 15800000,
+    "title": "로그북 300시간",
+    "desc": "실제 기록 300시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_400",
+    "type": "logbook_hours",
+    "value": 400,
+    "amount": 20800000,
+    "title": "로그북 400시간",
+    "desc": "실제 기록 400시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_500",
+    "type": "logbook_hours",
+    "value": 500,
+    "amount": 25800000,
+    "title": "로그북 500시간",
+    "desc": "실제 기록 500시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_750",
+    "type": "logbook_hours",
+    "value": 750,
+    "amount": 38300000,
+    "title": "로그북 750시간",
+    "desc": "실제 기록 750시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "lb_hours_1000",
+    "type": "logbook_hours",
+    "value": 1000,
+    "amount": 50000000,
+    "title": "로그북 1000시간",
+    "desc": "실제 기록 1000시간",
+    "icon": "📔",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_2",
+    "type": "aircraft_variety",
+    "value": 2,
+    "amount": 800000,
+    "title": "기종 2종 경험",
+    "desc": "서로 다른 기종 2종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_3",
+    "type": "aircraft_variety",
+    "value": 3,
+    "amount": 1000000,
+    "title": "기종 3종 경험",
+    "desc": "서로 다른 기종 3종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_4",
+    "type": "aircraft_variety",
+    "value": 4,
+    "amount": 1200000,
+    "title": "기종 4종 경험",
+    "desc": "서로 다른 기종 4종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_5",
+    "type": "aircraft_variety",
+    "value": 5,
+    "amount": 1400000,
+    "title": "기종 5종 경험",
+    "desc": "서로 다른 기종 5종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_6",
+    "type": "aircraft_variety",
+    "value": 6,
+    "amount": 1600000,
+    "title": "기종 6종 경험",
+    "desc": "서로 다른 기종 6종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_7",
+    "type": "aircraft_variety",
+    "value": 7,
+    "amount": 1800000,
+    "title": "기종 7종 경험",
+    "desc": "서로 다른 기종 7종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_8",
+    "type": "aircraft_variety",
+    "value": 8,
+    "amount": 2000000,
+    "title": "기종 8종 경험",
+    "desc": "서로 다른 기종 8종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_9",
+    "type": "aircraft_variety",
+    "value": 9,
+    "amount": 2200000,
+    "title": "기종 9종 경험",
+    "desc": "서로 다른 기종 9종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_10",
+    "type": "aircraft_variety",
+    "value": 10,
+    "amount": 2400000,
+    "title": "기종 10종 경험",
+    "desc": "서로 다른 기종 10종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_11",
+    "type": "aircraft_variety",
+    "value": 11,
+    "amount": 2600000,
+    "title": "기종 11종 경험",
+    "desc": "서로 다른 기종 11종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_12",
+    "type": "aircraft_variety",
+    "value": 12,
+    "amount": 2800000,
+    "title": "기종 12종 경험",
+    "desc": "서로 다른 기종 12종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_13",
+    "type": "aircraft_variety",
+    "value": 13,
+    "amount": 3000000,
+    "title": "기종 13종 경험",
+    "desc": "서로 다른 기종 13종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_14",
+    "type": "aircraft_variety",
+    "value": 14,
+    "amount": 3200000,
+    "title": "기종 14종 경험",
+    "desc": "서로 다른 기종 14종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_15",
+    "type": "aircraft_variety",
+    "value": 15,
+    "amount": 3400000,
+    "title": "기종 15종 경험",
+    "desc": "서로 다른 기종 15종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_16",
+    "type": "aircraft_variety",
+    "value": 16,
+    "amount": 3600000,
+    "title": "기종 16종 경험",
+    "desc": "서로 다른 기종 16종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_17",
+    "type": "aircraft_variety",
+    "value": 17,
+    "amount": 3800000,
+    "title": "기종 17종 경험",
+    "desc": "서로 다른 기종 17종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_18",
+    "type": "aircraft_variety",
+    "value": 18,
+    "amount": 4000000,
+    "title": "기종 18종 경험",
+    "desc": "서로 다른 기종 18종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_19",
+    "type": "aircraft_variety",
+    "value": 19,
+    "amount": 4200000,
+    "title": "기종 19종 경험",
+    "desc": "서로 다른 기종 19종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_20",
+    "type": "aircraft_variety",
+    "value": 20,
+    "amount": 4400000,
+    "title": "기종 20종 경험",
+    "desc": "서로 다른 기종 20종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "ac_var_21",
+    "type": "aircraft_variety",
+    "value": 21,
+    "amount": 4600000,
+    "title": "기종 21종 경험",
+    "desc": "서로 다른 기종 21종 비행",
+    "icon": "🛩️",
+    "category": "기록"
+  },
+  {
+    "id": "long_3h",
+    "type": "single_flight_hours",
+    "value": 3,
+    "amount": 1400000,
+    "title": "3시간 단일 비행",
+    "desc": "한 번에 3시간 이상",
+    "icon": "🌍",
+    "category": "기록"
+  },
+  {
+    "id": "long_4h",
+    "type": "single_flight_hours",
+    "value": 4,
+    "amount": 1700000,
+    "title": "4시간 단일 비행",
+    "desc": "한 번에 4시간 이상",
+    "icon": "🌍",
+    "category": "기록"
+  },
+  {
+    "id": "long_5h",
+    "type": "single_flight_hours",
+    "value": 5,
+    "amount": 2000000,
+    "title": "5시간 단일 비행",
+    "desc": "한 번에 5시간 이상",
+    "icon": "🌍",
+    "category": "기록"
+  },
+  {
+    "id": "long_6h",
+    "type": "single_flight_hours",
+    "value": 6,
+    "amount": 2300000,
+    "title": "6시간 단일 비행",
+    "desc": "한 번에 6시간 이상",
+    "icon": "🌍",
+    "category": "기록"
+  },
+  {
+    "id": "long_7h",
+    "type": "single_flight_hours",
+    "value": 7,
+    "amount": 2600000,
+    "title": "7시간 단일 비행",
+    "desc": "한 번에 7시간 이상",
+    "icon": "🌍",
+    "category": "기록"
+  },
+  {
+    "id": "long_8h",
+    "type": "single_flight_hours",
+    "value": 8,
+    "amount": 2900000,
+    "title": "8시간 단일 비행",
+    "desc": "한 번에 8시간 이상",
+    "icon": "🌍",
+    "category": "기록"
+  },
+  {
+    "id": "long_9h",
+    "type": "single_flight_hours",
+    "value": 9,
+    "amount": 3200000,
+    "title": "9시간 단일 비행",
+    "desc": "한 번에 9시간 이상",
+    "icon": "🌍",
+    "category": "기록"
+  },
+  {
+    "id": "long_10h",
+    "type": "single_flight_hours",
+    "value": 10,
+    "amount": 3500000,
+    "title": "10시간 단일 비행",
+    "desc": "한 번에 10시간 이상",
+    "icon": "🌍",
+    "category": "기록"
+  },
+  {
+    "id": "long_11h",
+    "type": "single_flight_hours",
+    "value": 11,
+    "amount": 3800000,
+    "title": "11시간 단일 비행",
+    "desc": "한 번에 11시간 이상",
+    "icon": "🌍",
+    "category": "기록"
+  },
+  {
+    "id": "long_12h",
+    "type": "single_flight_hours",
+    "value": 12,
+    "amount": 4100000,
+    "title": "12시간 단일 비행",
+    "desc": "한 번에 12시간 이상",
+    "icon": "🌍",
+    "category": "기록"
+  },
+  {
+    "id": "long_14h",
+    "type": "single_flight_hours",
+    "value": 14,
+    "amount": 4700000,
+    "title": "14시간 단일 비행",
+    "desc": "한 번에 14시간 이상",
+    "icon": "🌍",
+    "category": "기록"
+  },
+  {
+    "id": "long_16h",
+    "type": "single_flight_hours",
+    "value": 16,
+    "amount": 5300000,
+    "title": "16시간 단일 비행",
+    "desc": "한 번에 16시간 이상",
+    "icon": "🌍",
+    "category": "기록"
+  },
+  {
+    "id": "badge_1",
+    "type": "badge_count",
+    "value": 1,
+    "amount": 380000,
+    "title": "뱃지 1개",
+    "desc": "뱃지 1개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_2",
+    "type": "badge_count",
+    "value": 2,
+    "amount": 460000,
+    "title": "뱃지 2개",
+    "desc": "뱃지 2개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_3",
+    "type": "badge_count",
+    "value": 3,
+    "amount": 540000,
+    "title": "뱃지 3개",
+    "desc": "뱃지 3개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_4",
+    "type": "badge_count",
+    "value": 4,
+    "amount": 620000,
+    "title": "뱃지 4개",
+    "desc": "뱃지 4개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_5",
+    "type": "badge_count",
+    "value": 5,
+    "amount": 700000,
+    "title": "뱃지 5개",
+    "desc": "뱃지 5개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_6",
+    "type": "badge_count",
+    "value": 6,
+    "amount": 780000,
+    "title": "뱃지 6개",
+    "desc": "뱃지 6개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_7",
+    "type": "badge_count",
+    "value": 7,
+    "amount": 860000,
+    "title": "뱃지 7개",
+    "desc": "뱃지 7개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_8",
+    "type": "badge_count",
+    "value": 8,
+    "amount": 940000,
+    "title": "뱃지 8개",
+    "desc": "뱃지 8개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_9",
+    "type": "badge_count",
+    "value": 9,
+    "amount": 1020000,
+    "title": "뱃지 9개",
+    "desc": "뱃지 9개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_10",
+    "type": "badge_count",
+    "value": 10,
+    "amount": 1100000,
+    "title": "뱃지 10개",
+    "desc": "뱃지 10개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_11",
+    "type": "badge_count",
+    "value": 11,
+    "amount": 1180000,
+    "title": "뱃지 11개",
+    "desc": "뱃지 11개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_12",
+    "type": "badge_count",
+    "value": 12,
+    "amount": 1260000,
+    "title": "뱃지 12개",
+    "desc": "뱃지 12개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_13",
+    "type": "badge_count",
+    "value": 13,
+    "amount": 1340000,
+    "title": "뱃지 13개",
+    "desc": "뱃지 13개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_14",
+    "type": "badge_count",
+    "value": 14,
+    "amount": 1420000,
+    "title": "뱃지 14개",
+    "desc": "뱃지 14개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_15",
+    "type": "badge_count",
+    "value": 15,
+    "amount": 1500000,
+    "title": "뱃지 15개",
+    "desc": "뱃지 15개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_16",
+    "type": "badge_count",
+    "value": 16,
+    "amount": 1580000,
+    "title": "뱃지 16개",
+    "desc": "뱃지 16개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_17",
+    "type": "badge_count",
+    "value": 17,
+    "amount": 1660000,
+    "title": "뱃지 17개",
+    "desc": "뱃지 17개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_18",
+    "type": "badge_count",
+    "value": 18,
+    "amount": 1740000,
+    "title": "뱃지 18개",
+    "desc": "뱃지 18개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_19",
+    "type": "badge_count",
+    "value": 19,
+    "amount": 1820000,
+    "title": "뱃지 19개",
+    "desc": "뱃지 19개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_20",
+    "type": "badge_count",
+    "value": 20,
+    "amount": 1900000,
+    "title": "뱃지 20개",
+    "desc": "뱃지 20개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_21",
+    "type": "badge_count",
+    "value": 21,
+    "amount": 1980000,
+    "title": "뱃지 21개",
+    "desc": "뱃지 21개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_22",
+    "type": "badge_count",
+    "value": 22,
+    "amount": 2060000,
+    "title": "뱃지 22개",
+    "desc": "뱃지 22개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_23",
+    "type": "badge_count",
+    "value": 23,
+    "amount": 2140000,
+    "title": "뱃지 23개",
+    "desc": "뱃지 23개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_24",
+    "type": "badge_count",
+    "value": 24,
+    "amount": 2220000,
+    "title": "뱃지 24개",
+    "desc": "뱃지 24개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_25",
+    "type": "badge_count",
+    "value": 25,
+    "amount": 2300000,
+    "title": "뱃지 25개",
+    "desc": "뱃지 25개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_26",
+    "type": "badge_count",
+    "value": 26,
+    "amount": 2380000,
+    "title": "뱃지 26개",
+    "desc": "뱃지 26개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_27",
+    "type": "badge_count",
+    "value": 27,
+    "amount": 2460000,
+    "title": "뱃지 27개",
+    "desc": "뱃지 27개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_28",
+    "type": "badge_count",
+    "value": 28,
+    "amount": 2540000,
+    "title": "뱃지 28개",
+    "desc": "뱃지 28개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_29",
+    "type": "badge_count",
+    "value": 29,
+    "amount": 2620000,
+    "title": "뱃지 29개",
+    "desc": "뱃지 29개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_30",
+    "type": "badge_count",
+    "value": 30,
+    "amount": 2700000,
+    "title": "뱃지 30개",
+    "desc": "뱃지 30개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_35",
+    "type": "badge_count",
+    "value": 35,
+    "amount": 3100000,
+    "title": "뱃지 35개",
+    "desc": "뱃지 35개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_40",
+    "type": "badge_count",
+    "value": 40,
+    "amount": 3500000,
+    "title": "뱃지 40개",
+    "desc": "뱃지 40개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_50",
+    "type": "badge_count",
+    "value": 50,
+    "amount": 4300000,
+    "title": "뱃지 50개",
+    "desc": "뱃지 50개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_60",
+    "type": "badge_count",
+    "value": 60,
+    "amount": 5100000,
+    "title": "뱃지 60개",
+    "desc": "뱃지 60개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_80",
+    "type": "badge_count",
+    "value": 80,
+    "amount": 6700000,
+    "title": "뱃지 80개",
+    "desc": "뱃지 80개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_100",
+    "type": "badge_count",
+    "value": 100,
+    "amount": 8300000,
+    "title": "뱃지 100개",
+    "desc": "뱃지 100개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_120",
+    "type": "badge_count",
+    "value": 120,
+    "amount": 9900000,
+    "title": "뱃지 120개",
+    "desc": "뱃지 120개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_150",
+    "type": "badge_count",
+    "value": 150,
+    "amount": 12300000,
+    "title": "뱃지 150개",
+    "desc": "뱃지 150개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_200",
+    "type": "badge_count",
+    "value": 200,
+    "amount": 16300000,
+    "title": "뱃지 200개",
+    "desc": "뱃지 200개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "badge_250",
+    "type": "badge_count",
+    "value": 250,
+    "amount": 20300000,
+    "title": "뱃지 250개",
+    "desc": "뱃지 250개 수집",
+    "icon": "🏅",
+    "category": "성취"
+  },
+  {
+    "id": "streak_2",
+    "type": "streak_days",
+    "value": 2,
+    "amount": 400000,
+    "title": "2일 연속 학습",
+    "desc": "2일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "streak_3",
+    "type": "streak_days",
+    "value": 3,
+    "amount": 500000,
+    "title": "3일 연속 학습",
+    "desc": "3일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "streak_5",
+    "type": "streak_days",
+    "value": 5,
+    "amount": 700000,
+    "title": "5일 연속 학습",
+    "desc": "5일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "streak_7",
+    "type": "streak_days",
+    "value": 7,
+    "amount": 900000,
+    "title": "7일 연속 학습",
+    "desc": "7일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "streak_10",
+    "type": "streak_days",
+    "value": 10,
+    "amount": 1200000,
+    "title": "10일 연속 학습",
+    "desc": "10일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "streak_14",
+    "type": "streak_days",
+    "value": 14,
+    "amount": 1600000,
+    "title": "14일 연속 학습",
+    "desc": "14일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "streak_21",
+    "type": "streak_days",
+    "value": 21,
+    "amount": 2300000,
+    "title": "21일 연속 학습",
+    "desc": "21일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "streak_30",
+    "type": "streak_days",
+    "value": 30,
+    "amount": 3200000,
+    "title": "30일 연속 학습",
+    "desc": "30일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "streak_45",
+    "type": "streak_days",
+    "value": 45,
+    "amount": 4700000,
+    "title": "45일 연속 학습",
+    "desc": "45일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "streak_60",
+    "type": "streak_days",
+    "value": 60,
+    "amount": 6200000,
+    "title": "60일 연속 학습",
+    "desc": "60일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "streak_90",
+    "type": "streak_days",
+    "value": 90,
+    "amount": 9200000,
+    "title": "90일 연속 학습",
+    "desc": "90일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "streak_100",
+    "type": "streak_days",
+    "value": 100,
+    "amount": 10200000,
+    "title": "100일 연속 학습",
+    "desc": "100일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "streak_120",
+    "type": "streak_days",
+    "value": 120,
+    "amount": 12200000,
+    "title": "120일 연속 학습",
+    "desc": "120일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "streak_180",
+    "type": "streak_days",
+    "value": 180,
+    "amount": 18200000,
+    "title": "180일 연속 학습",
+    "desc": "180일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "streak_365",
+    "type": "streak_days",
+    "value": 365,
+    "amount": 36700000,
+    "title": "365일 연속 학습",
+    "desc": "365일 연속 활동",
+    "icon": "🔥",
+    "category": "학습"
+  },
+  {
+    "id": "mstreak_3",
+    "type": "mission_streak",
+    "value": 3,
+    "amount": 850000,
+    "title": "미션 3일 연속",
+    "desc": "3일 연속 미션 완료",
+    "icon": "🎯",
+    "category": "학습"
+  },
+  {
+    "id": "mstreak_5",
+    "type": "mission_streak",
+    "value": 5,
+    "amount": 1150000,
+    "title": "미션 5일 연속",
+    "desc": "5일 연속 미션 완료",
+    "icon": "🎯",
+    "category": "학습"
+  },
+  {
+    "id": "mstreak_7",
+    "type": "mission_streak",
+    "value": 7,
+    "amount": 1450000,
+    "title": "미션 7일 연속",
+    "desc": "7일 연속 미션 완료",
+    "icon": "🎯",
+    "category": "학습"
+  },
+  {
+    "id": "mstreak_10",
+    "type": "mission_streak",
+    "value": 10,
+    "amount": 1900000,
+    "title": "미션 10일 연속",
+    "desc": "10일 연속 미션 완료",
+    "icon": "🎯",
+    "category": "학습"
+  },
+  {
+    "id": "mstreak_14",
+    "type": "mission_streak",
+    "value": 14,
+    "amount": 2500000,
+    "title": "미션 14일 연속",
+    "desc": "14일 연속 미션 완료",
+    "icon": "🎯",
+    "category": "학습"
+  },
+  {
+    "id": "mstreak_21",
+    "type": "mission_streak",
+    "value": 21,
+    "amount": 3550000,
+    "title": "미션 21일 연속",
+    "desc": "21일 연속 미션 완료",
+    "icon": "🎯",
+    "category": "학습"
+  },
+  {
+    "id": "mstreak_30",
+    "type": "mission_streak",
+    "value": 30,
+    "amount": 4900000,
+    "title": "미션 30일 연속",
+    "desc": "30일 연속 미션 완료",
+    "icon": "🎯",
+    "category": "학습"
+  },
+  {
+    "id": "mstreak_50",
+    "type": "mission_streak",
+    "value": 50,
+    "amount": 7900000,
+    "title": "미션 50일 연속",
+    "desc": "50일 연속 미션 완료",
+    "icon": "🎯",
+    "category": "학습"
+  },
+  {
+    "id": "mstreak_75",
+    "type": "mission_streak",
+    "value": 75,
+    "amount": 11650000,
+    "title": "미션 75일 연속",
+    "desc": "75일 연속 미션 완료",
+    "icon": "🎯",
+    "category": "학습"
+  },
+  {
+    "id": "mstreak_100",
+    "type": "mission_streak",
+    "value": 100,
+    "amount": 15400000,
+    "title": "미션 100일 연속",
+    "desc": "100일 연속 미션 완료",
+    "icon": "🎯",
+    "category": "학습"
+  },
+  {
+    "id": "flash_5",
+    "type": "flashcard_count",
+    "value": 5,
+    "amount": 275000,
+    "title": "용어 5개 학습",
+    "desc": "플래시카드 5개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_10",
+    "type": "flashcard_count",
+    "value": 10,
+    "amount": 400000,
+    "title": "용어 10개 학습",
+    "desc": "플래시카드 10개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_15",
+    "type": "flashcard_count",
+    "value": 15,
+    "amount": 525000,
+    "title": "용어 15개 학습",
+    "desc": "플래시카드 15개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_20",
+    "type": "flashcard_count",
+    "value": 20,
+    "amount": 650000,
+    "title": "용어 20개 학습",
+    "desc": "플래시카드 20개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_25",
+    "type": "flashcard_count",
+    "value": 25,
+    "amount": 775000,
+    "title": "용어 25개 학습",
+    "desc": "플래시카드 25개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_30",
+    "type": "flashcard_count",
+    "value": 30,
+    "amount": 900000,
+    "title": "용어 30개 학습",
+    "desc": "플래시카드 30개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_35",
+    "type": "flashcard_count",
+    "value": 35,
+    "amount": 1025000,
+    "title": "용어 35개 학습",
+    "desc": "플래시카드 35개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_40",
+    "type": "flashcard_count",
+    "value": 40,
+    "amount": 1150000,
+    "title": "용어 40개 학습",
+    "desc": "플래시카드 40개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_45",
+    "type": "flashcard_count",
+    "value": 45,
+    "amount": 1275000,
+    "title": "용어 45개 학습",
+    "desc": "플래시카드 45개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_50",
+    "type": "flashcard_count",
+    "value": 50,
+    "amount": 1400000,
+    "title": "용어 50개 학습",
+    "desc": "플래시카드 50개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_55",
+    "type": "flashcard_count",
+    "value": 55,
+    "amount": 1525000,
+    "title": "용어 55개 학습",
+    "desc": "플래시카드 55개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_60",
+    "type": "flashcard_count",
+    "value": 60,
+    "amount": 1650000,
+    "title": "용어 60개 학습",
+    "desc": "플래시카드 60개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_65",
+    "type": "flashcard_count",
+    "value": 65,
+    "amount": 1775000,
+    "title": "용어 65개 학습",
+    "desc": "플래시카드 65개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_70",
+    "type": "flashcard_count",
+    "value": 70,
+    "amount": 1900000,
+    "title": "용어 70개 학습",
+    "desc": "플래시카드 70개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_75",
+    "type": "flashcard_count",
+    "value": 75,
+    "amount": 2025000,
+    "title": "용어 75개 학습",
+    "desc": "플래시카드 75개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_80",
+    "type": "flashcard_count",
+    "value": 80,
+    "amount": 2150000,
+    "title": "용어 80개 학습",
+    "desc": "플래시카드 80개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_85",
+    "type": "flashcard_count",
+    "value": 85,
+    "amount": 2275000,
+    "title": "용어 85개 학습",
+    "desc": "플래시카드 85개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_90",
+    "type": "flashcard_count",
+    "value": 90,
+    "amount": 2400000,
+    "title": "용어 90개 학습",
+    "desc": "플래시카드 90개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_95",
+    "type": "flashcard_count",
+    "value": 95,
+    "amount": 2525000,
+    "title": "용어 95개 학습",
+    "desc": "플래시카드 95개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_100",
+    "type": "flashcard_count",
+    "value": 100,
+    "amount": 2650000,
+    "title": "용어 100개 학습",
+    "desc": "플래시카드 100개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_120",
+    "type": "flashcard_count",
+    "value": 120,
+    "amount": 3150000,
+    "title": "용어 120개 학습",
+    "desc": "플래시카드 120개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_150",
+    "type": "flashcard_count",
+    "value": 150,
+    "amount": 3900000,
+    "title": "용어 150개 학습",
+    "desc": "플래시카드 150개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_200",
+    "type": "flashcard_count",
+    "value": 200,
+    "amount": 5150000,
+    "title": "용어 200개 학습",
+    "desc": "플래시카드 200개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_250",
+    "type": "flashcard_count",
+    "value": 250,
+    "amount": 6400000,
+    "title": "용어 250개 학습",
+    "desc": "플래시카드 250개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "flash_300",
+    "type": "flashcard_count",
+    "value": 300,
+    "amount": 7650000,
+    "title": "용어 300개 학습",
+    "desc": "플래시카드 300개",
+    "icon": "📇",
+    "category": "학습"
+  },
+  {
+    "id": "quiz_perfect",
+    "type": "quiz_perfect",
+    "value": 1,
+    "amount": 1500000,
+    "title": "퀴즈 만점!",
+    "desc": "퀴즈 100점",
+    "icon": "🧠",
+    "category": "학습"
+  },
+  {
+    "id": "quiz_perfect_2",
+    "type": "quiz_perfect",
+    "value": 1,
+    "amount": 1600000,
+    "title": "퀴즈 마스터 단계 2",
+    "desc": "퀴즈 만점 달성 보상",
+    "icon": "🧠",
+    "category": "학습"
+  },
+  {
+    "id": "quiz_perfect_3",
+    "type": "quiz_perfect",
+    "value": 1,
+    "amount": 1900000,
+    "title": "퀴즈 마스터 단계 3",
+    "desc": "퀴즈 만점 달성 보상",
+    "icon": "🧠",
+    "category": "학습"
+  },
+  {
+    "id": "quiz_perfect_4",
+    "type": "quiz_perfect",
+    "value": 1,
+    "amount": 2200000,
+    "title": "퀴즈 마스터 단계 4",
+    "desc": "퀴즈 만점 달성 보상",
+    "icon": "🧠",
+    "category": "학습"
+  },
+  {
+    "id": "owned_2",
+    "type": "owned_aircraft",
+    "value": 2,
+    "amount": 1300000,
+    "title": "기체 2대 보유",
+    "desc": "행거 2대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_3",
+    "type": "owned_aircraft",
+    "value": 3,
+    "amount": 1700000,
+    "title": "기체 3대 보유",
+    "desc": "행거 3대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_4",
+    "type": "owned_aircraft",
+    "value": 4,
+    "amount": 2100000,
+    "title": "기체 4대 보유",
+    "desc": "행거 4대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_5",
+    "type": "owned_aircraft",
+    "value": 5,
+    "amount": 2500000,
+    "title": "기체 5대 보유",
+    "desc": "행거 5대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_6",
+    "type": "owned_aircraft",
+    "value": 6,
+    "amount": 2900000,
+    "title": "기체 6대 보유",
+    "desc": "행거 6대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_7",
+    "type": "owned_aircraft",
+    "value": 7,
+    "amount": 3300000,
+    "title": "기체 7대 보유",
+    "desc": "행거 7대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_8",
+    "type": "owned_aircraft",
+    "value": 8,
+    "amount": 3700000,
+    "title": "기체 8대 보유",
+    "desc": "행거 8대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_9",
+    "type": "owned_aircraft",
+    "value": 9,
+    "amount": 4100000,
+    "title": "기체 9대 보유",
+    "desc": "행거 9대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_10",
+    "type": "owned_aircraft",
+    "value": 10,
+    "amount": 4500000,
+    "title": "기체 10대 보유",
+    "desc": "행거 10대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_11",
+    "type": "owned_aircraft",
+    "value": 11,
+    "amount": 4900000,
+    "title": "기체 11대 보유",
+    "desc": "행거 11대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_12",
+    "type": "owned_aircraft",
+    "value": 12,
+    "amount": 5300000,
+    "title": "기체 12대 보유",
+    "desc": "행거 12대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_13",
+    "type": "owned_aircraft",
+    "value": 13,
+    "amount": 5700000,
+    "title": "기체 13대 보유",
+    "desc": "행거 13대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_14",
+    "type": "owned_aircraft",
+    "value": 14,
+    "amount": 6100000,
+    "title": "기체 14대 보유",
+    "desc": "행거 14대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_15",
+    "type": "owned_aircraft",
+    "value": 15,
+    "amount": 6500000,
+    "title": "기체 15대 보유",
+    "desc": "행거 15대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_16",
+    "type": "owned_aircraft",
+    "value": 16,
+    "amount": 6900000,
+    "title": "기체 16대 보유",
+    "desc": "행거 16대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_17",
+    "type": "owned_aircraft",
+    "value": 17,
+    "amount": 7300000,
+    "title": "기체 17대 보유",
+    "desc": "행거 17대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_18",
+    "type": "owned_aircraft",
+    "value": 18,
+    "amount": 7700000,
+    "title": "기체 18대 보유",
+    "desc": "행거 18대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_19",
+    "type": "owned_aircraft",
+    "value": 19,
+    "amount": 8100000,
+    "title": "기체 19대 보유",
+    "desc": "행거 19대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_20",
+    "type": "owned_aircraft",
+    "value": 20,
+    "amount": 8500000,
+    "title": "기체 20대 보유",
+    "desc": "행거 20대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_21",
+    "type": "owned_aircraft",
+    "value": 21,
+    "amount": 8900000,
+    "title": "기체 21대 보유",
+    "desc": "행거 21대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_22",
+    "type": "owned_aircraft",
+    "value": 22,
+    "amount": 9300000,
+    "title": "기체 22대 보유",
+    "desc": "행거 22대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_23",
+    "type": "owned_aircraft",
+    "value": 23,
+    "amount": 9700000,
+    "title": "기체 23대 보유",
+    "desc": "행거 23대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_24",
+    "type": "owned_aircraft",
+    "value": 24,
+    "amount": 10100000,
+    "title": "기체 24대 보유",
+    "desc": "행거 24대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_25",
+    "type": "owned_aircraft",
+    "value": 25,
+    "amount": 10500000,
+    "title": "기체 25대 보유",
+    "desc": "행거 25대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_26",
+    "type": "owned_aircraft",
+    "value": 26,
+    "amount": 10900000,
+    "title": "기체 26대 보유",
+    "desc": "행거 26대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_27",
+    "type": "owned_aircraft",
+    "value": 27,
+    "amount": 11300000,
+    "title": "기체 27대 보유",
+    "desc": "행거 27대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_28",
+    "type": "owned_aircraft",
+    "value": 28,
+    "amount": 11700000,
+    "title": "기체 28대 보유",
+    "desc": "행거 28대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_29",
+    "type": "owned_aircraft",
+    "value": 29,
+    "amount": 12100000,
+    "title": "기체 29대 보유",
+    "desc": "행거 29대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_30",
+    "type": "owned_aircraft",
+    "value": 30,
+    "amount": 12500000,
+    "title": "기체 30대 보유",
+    "desc": "행거 30대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "owned_31",
+    "type": "owned_aircraft",
+    "value": 31,
+    "amount": 12900000,
+    "title": "기체 31대 보유",
+    "desc": "행거 31대",
+    "icon": "🏢",
+    "category": "기체"
+  },
+  {
+    "id": "first_intl",
+    "type": "international_route",
+    "value": 1,
+    "amount": 2500000,
+    "title": "첫 국제선!",
+    "desc": "한국↔해외 노선 비행",
+    "icon": "🌏",
+    "category": "노선"
+  },
+  {
+    "id": "routes_2",
+    "type": "unique_routes",
+    "value": 2,
+    "amount": 540000,
+    "title": "노선 2개 비행",
+    "desc": "서로 다른 노선 2개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_3",
+    "type": "unique_routes",
+    "value": 3,
+    "amount": 660000,
+    "title": "노선 3개 비행",
+    "desc": "서로 다른 노선 3개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_4",
+    "type": "unique_routes",
+    "value": 4,
+    "amount": 780000,
+    "title": "노선 4개 비행",
+    "desc": "서로 다른 노선 4개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_5",
+    "type": "unique_routes",
+    "value": 5,
+    "amount": 900000,
+    "title": "노선 5개 비행",
+    "desc": "서로 다른 노선 5개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_6",
+    "type": "unique_routes",
+    "value": 6,
+    "amount": 1020000,
+    "title": "노선 6개 비행",
+    "desc": "서로 다른 노선 6개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_7",
+    "type": "unique_routes",
+    "value": 7,
+    "amount": 1140000,
+    "title": "노선 7개 비행",
+    "desc": "서로 다른 노선 7개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_8",
+    "type": "unique_routes",
+    "value": 8,
+    "amount": 1260000,
+    "title": "노선 8개 비행",
+    "desc": "서로 다른 노선 8개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_9",
+    "type": "unique_routes",
+    "value": 9,
+    "amount": 1380000,
+    "title": "노선 9개 비행",
+    "desc": "서로 다른 노선 9개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_10",
+    "type": "unique_routes",
+    "value": 10,
+    "amount": 1500000,
+    "title": "노선 10개 비행",
+    "desc": "서로 다른 노선 10개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_11",
+    "type": "unique_routes",
+    "value": 11,
+    "amount": 1620000,
+    "title": "노선 11개 비행",
+    "desc": "서로 다른 노선 11개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_12",
+    "type": "unique_routes",
+    "value": 12,
+    "amount": 1740000,
+    "title": "노선 12개 비행",
+    "desc": "서로 다른 노선 12개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_13",
+    "type": "unique_routes",
+    "value": 13,
+    "amount": 1860000,
+    "title": "노선 13개 비행",
+    "desc": "서로 다른 노선 13개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_14",
+    "type": "unique_routes",
+    "value": 14,
+    "amount": 1980000,
+    "title": "노선 14개 비행",
+    "desc": "서로 다른 노선 14개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_15",
+    "type": "unique_routes",
+    "value": 15,
+    "amount": 2100000,
+    "title": "노선 15개 비행",
+    "desc": "서로 다른 노선 15개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_16",
+    "type": "unique_routes",
+    "value": 16,
+    "amount": 2220000,
+    "title": "노선 16개 비행",
+    "desc": "서로 다른 노선 16개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_17",
+    "type": "unique_routes",
+    "value": 17,
+    "amount": 2340000,
+    "title": "노선 17개 비행",
+    "desc": "서로 다른 노선 17개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_18",
+    "type": "unique_routes",
+    "value": 18,
+    "amount": 2460000,
+    "title": "노선 18개 비행",
+    "desc": "서로 다른 노선 18개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_19",
+    "type": "unique_routes",
+    "value": 19,
+    "amount": 2580000,
+    "title": "노선 19개 비행",
+    "desc": "서로 다른 노선 19개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_20",
+    "type": "unique_routes",
+    "value": 20,
+    "amount": 2700000,
+    "title": "노선 20개 비행",
+    "desc": "서로 다른 노선 20개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_21",
+    "type": "unique_routes",
+    "value": 21,
+    "amount": 2820000,
+    "title": "노선 21개 비행",
+    "desc": "서로 다른 노선 21개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_22",
+    "type": "unique_routes",
+    "value": 22,
+    "amount": 2940000,
+    "title": "노선 22개 비행",
+    "desc": "서로 다른 노선 22개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_23",
+    "type": "unique_routes",
+    "value": 23,
+    "amount": 3060000,
+    "title": "노선 23개 비행",
+    "desc": "서로 다른 노선 23개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_24",
+    "type": "unique_routes",
+    "value": 24,
+    "amount": 3180000,
+    "title": "노선 24개 비행",
+    "desc": "서로 다른 노선 24개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_25",
+    "type": "unique_routes",
+    "value": 25,
+    "amount": 3300000,
+    "title": "노선 25개 비행",
+    "desc": "서로 다른 노선 25개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_26",
+    "type": "unique_routes",
+    "value": 26,
+    "amount": 3420000,
+    "title": "노선 26개 비행",
+    "desc": "서로 다른 노선 26개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_27",
+    "type": "unique_routes",
+    "value": 27,
+    "amount": 3540000,
+    "title": "노선 27개 비행",
+    "desc": "서로 다른 노선 27개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_28",
+    "type": "unique_routes",
+    "value": 28,
+    "amount": 3660000,
+    "title": "노선 28개 비행",
+    "desc": "서로 다른 노선 28개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_29",
+    "type": "unique_routes",
+    "value": 29,
+    "amount": 3780000,
+    "title": "노선 29개 비행",
+    "desc": "서로 다른 노선 29개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_30",
+    "type": "unique_routes",
+    "value": 30,
+    "amount": 3900000,
+    "title": "노선 30개 비행",
+    "desc": "서로 다른 노선 30개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_31",
+    "type": "unique_routes",
+    "value": 31,
+    "amount": 4020000,
+    "title": "노선 31개 비행",
+    "desc": "서로 다른 노선 31개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_32",
+    "type": "unique_routes",
+    "value": 32,
+    "amount": 4140000,
+    "title": "노선 32개 비행",
+    "desc": "서로 다른 노선 32개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_33",
+    "type": "unique_routes",
+    "value": 33,
+    "amount": 4260000,
+    "title": "노선 33개 비행",
+    "desc": "서로 다른 노선 33개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_34",
+    "type": "unique_routes",
+    "value": 34,
+    "amount": 4380000,
+    "title": "노선 34개 비행",
+    "desc": "서로 다른 노선 34개",
+    "icon": "🗺️",
+    "category": "노선"
+  },
+  {
+    "id": "routes_35",
+    "type": "unique_routes",
+    "value": 35,
+    "amount": 4500000,
+    "title": "노선 35개 비행",
+    "desc": "서로 다른 노선 35개",
+    "icon": "🗺️",
+    "category": "노선"
+  }
 ]

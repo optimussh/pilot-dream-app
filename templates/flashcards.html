@@ -7,15 +7,30 @@
         용어 풀 <span id="pool-size" class="text-[#ffaa00] font-bold">1000</span>개 중
         오늘의 카드 <span class="text-[#33ff33] font-bold">5</span>개
     </p>
-    <div class="text-sm text-[#33ff33] mb-6">
+    <div class="text-sm text-[#33ff33] mb-4">
         스트릭: <span id="fc-streak">0</span>일 · 누적 학습: <span id="fc-total">0</span> / <span id="fc-pool">1000</span>개
     </div>
+
+    <div id="fc-done-banner" class="hidden mb-6 info-card p-5 rounded-2xl border border-[#33ff33]/50 text-center">
+        <div class="text-3xl mb-2">✅</div>
+        <div class="font-bold text-[#33ff33] text-lg" id="fc-banner-title">오늘의 학습 완료!</div>
+        <p class="text-sm text-gray-400 mt-1" id="fc-banner-desc">내일 새로운 5장이 열립니다</p>
+        <div id="fc-actions" class="hidden flex flex-col gap-3 mt-4 w-full max-w-sm mx-auto"></div>
+    </div>
+
+    <div id="fc-extra-banner" class="hidden mb-6 info-card p-5 rounded-2xl border border-[#0A84FF]/50 text-center">
+        <div class="text-3xl mb-2">🔁</div>
+        <div class="font-bold text-[#0A84FF] text-lg">학습 더하기 진행 중</div>
+        <p class="text-sm text-gray-400 mt-1">새로운 5장 · 완료 시 보상 지급</p>
+    </div>
+
     <div id="cards" class="space-y-4"></div>
     <button id="fc-done-btn" onclick="markLearned()" class="mt-6 w-full py-3 bg-[#33ff33] text-black font-bold rounded-xl">오늘의 5개 학습 완료!</button>
 </div>
 <script src="/static/js/gamification.js"></script>
 <script>
 let dailyCards = [];
+let cardMode = 'daily';
 
 async function loadCards() {
     const [cardsRes, statusRes] = await Promise.all([
@@ -24,6 +39,7 @@ async function loadCards() {
     ]);
     const data = await cardsRes.json();
     dailyCards = data.cards || data;
+    cardMode = data.mode || 'daily';
     const poolSize = data.pool_size || 1000;
     document.getElementById('pool-size').textContent = poolSize;
     document.getElementById('fc-pool').textContent = poolSize;
@@ -31,6 +47,30 @@ async function loadCards() {
     const status = await statusRes.json();
     document.getElementById('fc-streak').textContent = status.flashcard_streak || 0;
     document.getElementById('fc-total').textContent = status.flashcards_learned_count || 0;
+
+    const doneBanner = document.getElementById('fc-done-banner');
+    const doneBtn = document.getElementById('fc-done-btn');
+
+    document.getElementById('fc-extra-banner').classList.add('hidden');
+
+    if (cardMode === 'extra') {
+        doneBanner.classList.add('hidden');
+        showLearningExtraMode('flashcard');
+        doneBtn.textContent = '추가 5개 학습 완료!';
+        doneBtn.classList.remove('hidden');
+    } else if (data.daily_done || data.extra_done) {
+        doneBtn.classList.add('hidden');
+        storeLearningReward(data);
+        applyLearningCompleteUI('flashcard', {
+            ...data,
+            daily_done: data.daily_done || data.extra_done,
+            extra_done: data.extra_done,
+        });
+    } else {
+        doneBanner.classList.add('hidden');
+        doneBtn.textContent = '오늘의 5개 학습 완료!';
+        doneBtn.classList.remove('hidden');
+    }
 
     document.getElementById('cards').innerHTML = dailyCards.map(c => `
         <div class="info-card p-5 rounded-xl cursor-pointer ${c.already_learned ? 'opacity-60' : ''}" onclick="flip('${c.id}')">
@@ -61,12 +101,32 @@ async function markLearned() {
         body: JSON.stringify({ card_ids: ids })
     });
     const data = await res.json();
-    let msg = `학습 완료! 총 ${data.learned_total}개 · 스트릭 ${data.streak}일`;
-    if (data.money_earned) msg += `\n💰 +₩${data.money_earned.toLocaleString()} 획득!`;
-    alert(msg);
-    loadCards();
+    if (data.error) { alert(data.error); return; }
+
+    document.getElementById('fc-done-btn').classList.add('hidden');
+    const isExtra = data.mode === 'extra';
+    if (isExtra) {
+        data.extra_done = true;
+        finishLearningSession('flashcard', data, {
+            showPopup: true,
+            rewardTitle: '추가 학습 보상!',
+            rewardSubtitle: `총 ${data.learned_total}개 · 보상 50%`,
+            emoji: '📇',
+            onClose: () => loadCards(),
+        });
+    } else {
+        data.daily_done = true;
+        if (data.streak != null) {
+            document.getElementById('fc-streak').textContent = data.streak;
+        }
+        if (data.learned_total != null) {
+            document.getElementById('fc-total').textContent = data.learned_total;
+        }
+        finishLearningSession('flashcard', data, { showPopup: false });
+    }
 }
 
+setLearningPageReload(loadCards);
 loadCards();
 </script>
 {% endblock %}

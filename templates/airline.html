@@ -23,28 +23,73 @@
         <p class="text-xs text-gray-500 mt-3">비행기 <b>10대</b>를 모으면 창업할 수 있어요. <a href="/hangar" class="text-[#0A84FF]">창고 →</a></p>
     </div>
     <div id="al-founded" class="hidden">
+        <div id="al-income-toast" class="hidden mb-3 info-card px-4 py-2 border border-[#33ff33]/40 text-sm text-[#33ff33] font-bold"></div>
         <div class="flex gap-1 mb-4 flex-wrap" id="al-tabs">
             <button data-tab="overview" class="al-tab active px-3 py-2 rounded-lg text-xs font-bold">📊 개요</button>
             <button data-tab="fleet" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">✈️ 기재</button>
             <button data-tab="routes" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">🗺️ 노선</button>
             <button data-tab="staff" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">👥 채용</button>
+            <button data-tab="revenue" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">💰 수입원</button>
             <button data-tab="stats" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">📈 능력</button>
             <button data-tab="space" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">🚀 우주</button>
         </div>
         <div id="al-content" class="min-h-[360px]"></div>
     </div>
 </div>
+
+<!-- 노선 승무 배치 모달 -->
+<div id="route-staff-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[5000] p-4" onclick="if(event.target===this)closeRouteStaffModal()">
+    <div class="info-card w-full max-w-lg max-h-[90vh] overflow-y-auto border border-[#ffaa00]/40" onclick="event.stopPropagation()">
+        <div id="route-staff-modal-body"></div>
+    </div>
+</div>
+
+<!-- 동료 상세 모달 -->
+<div id="crew-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[5000] p-4" onclick="if(event.target===this)closeCrewModal()">
+    <div class="info-card w-full max-w-md border border-purple-500/40" onclick="event.stopPropagation()">
+        <div id="crew-modal-body"></div>
+    </div>
+</div>
+
 <style>
 .al-tab { background:#1c1c1e; border:1px solid #2c2c2e; color:#8e8e93; }
 .al-tab.active, .al-tab:hover { background:#1a1a00; border-color:#ffaa00; color:#ffaa00; }
 .al-card { background:#0a0a0a; border:1px solid #2c2c2e; border-radius:12px; padding:14px; }
 .stat-bar { height:6px; background:#111; border-radius:4px; overflow:hidden; }
-.stat-bar div { height:100%; background:#0A84FF; border-radius:4px; }
+.stat-bar div { height:100%; background:#0A84FF; border-radius:4px; transition:width .35s ease; }
+.crew-hire-card { cursor:pointer; transition:border-color .15s, transform .15s; }
+.crew-hire-card:hover { border-color:rgba(168,85,247,0.5); transform:translateY(-1px); }
+.crew-hire-card.hired { border-color:rgba(51,255,51,0.4); }
+.crew-hire-card.locked { opacity:.92; }
+.crew-spec-box { background:#111; border:1px solid #2c2c2e; border-radius:8px; padding:8px; margin-top:8px; }
+.crew-spec-row { display:flex; justify-content:space-between; font-size:10px; color:#aaa; margin-bottom:2px; }
+.crew-spec-row b { color:#f5f5f7; }
+.grade-S { color:#ffaa00; border-color:rgba(255,170,0,0.5); background:#2a2000; }
+.grade-A { color:#a78bfa; border-color:rgba(167,139,250,0.5); background:#1a1030; }
+.grade-B { color:#0A84FF; border-color:rgba(10,132,255,0.5); background:#001a33; }
+.grade-C { color:#33ff33; border-color:rgba(51,255,51,0.4); background:#001a00; }
+.grade-D { color:#888; border-color:#444; }
+.crew-skill-bar { height:4px; background:#111; border-radius:3px; overflow:hidden; margin-top:2px; }
+.crew-skill-bar div { height:100%; border-radius:3px; }
+.crew-hired-badge { display:inline-block; font-size:9px; font-weight:700; color:#33ff33; background:rgba(51,255,51,0.12); border:1px solid rgba(51,255,51,0.35); border-radius:4px; padding:1px 6px; }
+.crew-fire-btn { width:100%; margin-top:8px; padding:6px 10px; font-size:11px; font-weight:700; color:#fca5a5; background:rgba(127,29,29,0.35); border:1px solid rgba(239,68,68,0.55); border-radius:8px; cursor:pointer; transition:background .15s, border-color .15s; }
+.crew-fire-btn:hover { background:rgba(153,27,27,0.55); border-color:#ef4444; color:#fff; }
+.crew-hired-row { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 10px; background:#111; border:1px solid #2c2c2e; border-radius:8px; }
+.crew-hired-row .crew-fire-btn { width:auto; margin-top:0; padding:4px 10px; font-size:10px; flex-shrink:0; }
 </style>
 {% endblock %}
 {% block scripts %}
 <script>
 let D = {};
+let staffRoleFilter = '전체';
+let staffSort = 'rating';
+let routeStaffModalId = null;
+let routeGroupMode = 'all';
+let routeFilterKey = '';
+const STAFF_ROLE_LABELS = {
+    captain: '기장', fo: '부기장', fa: '승무원',
+    mechanic: '정비사', dispatcher: '운항관리', ground: '지상직',
+};
 function fmt(n) { return '₩'+(n||0).toLocaleString('ko-KR'); }
 
 async function loadDash() {
@@ -63,29 +108,195 @@ async function loadDash() {
     document.getElementById('al-not-founded').classList.add('hidden');
     document.getElementById('al-founded').classList.remove('hidden');
     document.getElementById('al-title').textContent = `${al.logo||'✈️'} ${al.name} · Lv.${ops.level||1}`;
+    showEconomyTick(D.economy_tick);
     renderAlTab(document.querySelector('.al-tab.active')?.dataset.tab || 'overview');
+}
+
+function showEconomyTick(tick) {
+    const el = document.getElementById('al-income-toast');
+    if (!tick || (!tick.gross && !tick.payroll)) {
+        if (el) el.classList.add('hidden');
+        return;
+    }
+    let msg = '';
+    if (tick.gross > 0) msg += `✈️ 노선 운영 수익 +${fmt(tick.gross)}`;
+    if (tick.payroll > 0) msg += `${msg ? ' · ' : ''}주급 −${fmt(tick.payroll)}`;
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.remove('hidden');
 }
 
 function renderAlTab(tab) {
     document.querySelectorAll('.al-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
     const el = document.getElementById('al-content');
-    const r = { overview: renderOverview, fleet: renderFleet, routes: renderRoutes, staff: renderStaff, stats: renderStats, space: renderSpace };
+    const r = { overview: renderOverview, fleet: renderFleet, routes: renderRoutes, staff: renderStaff, revenue: renderRevenue, stats: renderStats, space: renderSpace };
+    if (tab === 'revenue') {
+        el.innerHTML = (r.revenue || renderOverview)();
+        return;
+    }
     el.innerHTML = (r[tab] || renderOverview)();
+}
+
+let _revenueLoading = false;
+async function loadRevenuePanel(force) {
+    if (_revenueLoading && !force) return;
+    _revenueLoading = true;
+    const el = document.getElementById('al-content');
+    try {
+        const res = await fetch('/api/airline/revenue');
+        const data = await res.json();
+        if (!res.ok || data.error) {
+            el.innerHTML = `<div class="al-card text-sm"><p class="text-red-400 mb-2">${data.error || '수입원을 불러오지 못했어요.'}</p>
+                <button onclick="loadRevenuePanel(true)" class="text-xs px-3 py-1.5 border border-[#ffaa00] text-[#ffaa00] rounded">다시 시도</button></div>`;
+            return;
+        }
+        D.ops = D.ops || {};
+        D.ops.revenue_panel = data.revenue_panel;
+        if (data.revenue_preview) D.ops.revenue_preview = data.revenue_preview;
+        if (data.ancillary) D.ops.ancillary = data.ancillary;
+        if (data.wallet) D.wallet = data.wallet;
+        if (document.querySelector('.al-tab.active')?.dataset.tab === 'revenue') {
+            el.innerHTML = renderRevenue();
+        }
+    } catch (err) {
+        el.innerHTML = `<div class="al-card text-sm"><p class="text-red-400 mb-2">수입원 연결 오류</p>
+            <button onclick="loadRevenuePanel(true)" class="text-xs px-3 py-1.5 border rounded">다시 시도</button></div>`;
+    } finally {
+        _revenueLoading = false;
+    }
+}
+
+function renderCompanyBoard() {
+    const cb = D.ops?.company_board;
+    if (!cb) return '';
+    const al = cb.allocation || {};
+    const story = (cb.story || []).map(s => `
+        <div class="p-3 bg-black/40 rounded-xl flex gap-3 items-start">
+            <span class="text-2xl">${s.emoji}</span>
+            <div class="flex-1 min-w-0">
+                <div class="flex justify-between gap-2 items-baseline">
+                    <b class="text-sm">${s.label}</b>
+                    <span class="font-bold text-sm ${s.amount>=0?'text-[#33ff33]':'text-red-300'}">${s.formatted}</span>
+                </div>
+                <div class="text-[10px] text-gray-400 mt-0.5">${s.kid}</div>
+                <div class="text-[9px] text-gray-600 mt-0.5">${s.detail||''}</div>
+            </div>
+        </div>`).join('');
+    const terms = (cb.terms || []).map(t =>
+        `<span class="inline-block text-[9px] px-2 py-1 m-0.5 rounded-full border border-[#333] bg-black/30"><b class="text-[#ffaa00]">${t.word}</b> ${t.meaning}</span>`
+    ).join('');
+    const boosts = (cb.boosts || []).map(b => `<div class="text-[10px] text-[#33ff33]">${b}</div>`).join('');
+    let allocHtml = '';
+    if (al.done) {
+        const last = al.last || {};
+        allocHtml = `<div class="mt-3 p-3 rounded-xl border border-[#33ff33]/40 bg-[#001a00]/40 text-sm">
+            ✅ 이번 주 CEO 회의 완료! ${last.emoji||''} <b>${last.label||''}</b>
+            <div class="text-[10px] text-gray-400 mt-1">${last.message||'다음 주에 다시 만나요.'}</div>
+        </div>`;
+    } else if (al.available) {
+        allocHtml = `<div class="mt-3">
+            <div class="font-bold text-sm mb-1">📋 CEO 회의 — 이익을 어디에 쓸까요?</div>
+            <p class="text-[10px] text-gray-400 mb-2">배치 가능 약 ${al.amount_formatted||fmt(0)} · 주 1회 선택</p>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                ${(al.choices||[]).map(ch => `
+                <button type="button" onclick="allocateProfit('${ch.id}')"
+                    class="text-left p-3 rounded-xl border border-[#2c2c2e] hover:border-[#ffaa00] bg-black/40 transition">
+                    <div class="text-xl mb-1">${ch.emoji} <b class="text-sm">${ch.label}</b></div>
+                    <div class="text-[10px] text-gray-400 mb-1">${ch.kid}</div>
+                    <div class="text-[9px] text-[#0A84FF]">${ch.effect||''}</div>
+                    <div class="text-[9px] text-gray-600 mt-1">개념: ${ch.concept||''}</div>
+                </button>`).join('')}
+            </div>
+        </div>`;
+    } else {
+        allocHtml = `<p class="text-[10px] text-gray-500 mt-3">💡 노선 수익을 받으면 CEO 회의(이익 배치)가 열려요.</p>`;
+    }
+    return `<div class="al-card mb-4 border border-[#ffaa00]/35">
+        <div class="flex flex-wrap justify-between items-start gap-2 mb-2">
+            <div>
+                <div class="font-bold text-sm">🏢 우리 회사 손익 보드</div>
+                <p class="text-[10px] text-gray-400 mt-0.5">${cb.kid_summary||''}</p>
+            </div>
+            <div class="text-right">
+                <div class="text-[10px] text-gray-500">회사 금고</div>
+                <div class="font-bold text-[#0A84FF]">${cb.vault_formatted||fmt(0)}</div>
+                ${(cb.vault||0)>0 ? `<button onclick="withdrawVault()" class="text-[9px] mt-1 px-2 py-0.5 border border-[#0A84FF]/50 text-[#0A84FF] rounded">금고→지갑</button>` : ''}
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">${story}</div>
+        ${boosts ? `<div class="mb-2 space-y-0.5">${boosts}</div>` : ''}
+        ${allocHtml}
+        <div class="mt-3 pt-2 border-t border-[#222]">
+            <div class="text-[10px] text-gray-500 mb-1">📖 쉬운 단어장</div>
+            <div>${terms}</div>
+            <p class="text-[9px] text-gray-600 mt-2">더 자세한 설명은 <a href="/guide" class="text-[#0A84FF]">📖 가이드 → 회사 경영</a>을 보세요!</p>
+        </div>
+    </div>`;
 }
 
 function renderOverview() {
     const ops = D.ops || {};
     const al = D.airline || {};
-    const last = ops.last_revenue || 0;
-    return `<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+    const net = ops.last_net_revenue ?? ops.last_revenue ?? 0;
+    const gross = ops.last_gross_revenue || 0;
+    const payroll = ops.last_payroll || 0;
+    const pp = ops.payroll_preview || {};
+    const rv = ops.revenue_preview || {};
+    const st = ops.settlement || {};
+    const activeRoutes = rv.active_routes || 0;
+    const dailyRate = activeRoutes ? Math.floor((rv.gross || 0) / 7) : 0;
+    const side = rv.side_income || {};
+    const settleHint = activeRoutes
+        ? `노선 운영 시 매일 자동 수익 (하루 약 ${fmt(dailyRate)})`
+        : '노선을 개설하면 매일 수익이 들어와요';
+    const anc = ops.ancillary || 'basic';
+    return `<div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
         <div class="al-card"><div class="text-xs text-gray-400">항공사 레벨</div><div class="text-2xl font-bold text-[#ffaa00]">Lv.${ops.level||1}</div><div class="text-[10px] text-gray-500">평판 ${ops.reputation||50}/100</div></div>
-        <div class="al-card"><div class="text-xs text-gray-400">지난 주 수익</div><div class="text-2xl font-bold text-[#33ff33]">${fmt(last)}</div>
-            <button onclick="settleNow()" class="text-[10px] mt-2 px-2 py-1 border border-[#33ff33] rounded">지금 정산</button></div>
+        <div class="al-card"><div class="text-xs text-gray-400">이번 주 예상 순수익</div><div class="text-2xl font-bold ${(rv.net||0)>=0?'text-[#33ff33]':'text-red-400'}">${rv.formatted_net||fmt(0)}</div>
+            <div class="text-[9px] text-gray-500 mt-1">매출 ${rv.formatted_gross||fmt(0)} − 주급 ${rv.formatted_payroll||fmt(0)}</div>
+            <div class="text-[9px] text-gray-500">노선 ${activeRoutes}개 · 부가수입 ${rv.formatted_side||fmt(0)} · 로그북 ${fmt(rv.log_bonus||0)}</div>
+            <button onclick="settleNow()" class="text-[11px] mt-2 px-3 py-1.5 border border-[#33ff33] text-[#33ff33] rounded">미수령 수익 받기</button>
+            <div class="text-[9px] text-gray-500 mt-1">${settleHint}</div></div>
+        <div class="al-card"><div class="text-xs text-gray-400">지난 정산 순수익</div><div class="text-xl font-bold ${net>=0?'text-[#33ff33]':'text-red-400'}">${fmt(net)}</div>
+            <div class="text-[9px] text-gray-500 mt-1">매출 ${fmt(gross)} − 주급 ${fmt(payroll)}</div></div>
+        <div class="al-card"><div class="text-xs text-gray-400">이번 주 예상 주급</div><div class="text-xl font-bold text-red-300">${pp.weekly_formatted||fmt(0)}</div>
+            <div class="text-[10px] text-gray-500">채용 ${pp.hired_count||0}명 · 노선배치 ${rv.assigned_crew||0}명</div>
+            <div class="text-[9px] text-gray-500">미배치 인력은 주급 25%만 지급</div></div>
         <div class="al-card"><div class="text-xs text-gray-400">운영 모드</div>
             <div class="flex gap-2 mt-2">
                 <button onclick="setMode('fsc')" class="text-xs px-2 py-1 rounded ${ops.mode==='fsc'?'bg-[#0A84FF]':'border'}">전통(FSC)</button>
                 <button onclick="setMode('lcc')" class="text-xs px-2 py-1 rounded ${ops.mode==='lcc'?'bg-[#ffaa00] text-black':'border'}">저가(LCC)</button>
             </div></div>
+    </div>
+    ${renderCompanyBoard()}
+    <div class="al-card mb-4">
+        <div class="font-bold text-sm mb-2">💰 다양한 수입원</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-[10px] mb-3">
+            <div class="p-2 bg-black/40 rounded"><b class="text-[#33ff33]">노선 운영</b><br>${fmt(rv.route_gross||0)}/주</div>
+            <div class="p-2 bg-black/40 rounded"><b class="text-[#ffaa00]">부가서비스</b><br>+${fmt(side.ancillary||0)}/주</div>
+            <div class="p-2 bg-black/40 rounded"><b class="text-[#0A84FF]">화물·임대·MRO</b><br>+${fmt((side.cargo_desk||0)+(side.lease||0)+(side.mro_shop||0))}/주</div>
+            <div class="p-2 bg-black/40 rounded"><b class="text-purple-300">제휴·시즌</b><br>+${fmt((side.codeshare||0)+(side.codeshare_partners||0)+(side.seasonal||0))}/주</div>
+        </div>
+        <button onclick="renderAlTab('revenue')" class="text-[11px] px-3 py-1.5 border border-[#ffaa00] text-[#ffaa00] rounded mb-2">💰 수입원 탭에서 화물·브리핑·훈련원 운영 →</button>
+        <div class="text-[10px] text-gray-400 mb-2">부가서비스 단계 (노선 매출 보너스)</div>
+        <div class="flex gap-2 flex-wrap">
+            <button onclick="setAncillary('off')" class="text-xs px-2 py-1 rounded ${anc==='off'?'bg-gray-600 text-white':'border'}">없음</button>
+            <button onclick="setAncillary('basic')" class="text-xs px-2 py-1 rounded ${anc==='basic'?'bg-[#ffaa00] text-black font-bold':'border'}">기본 +6%</button>
+            <button onclick="setAncillary('premium')" class="text-xs px-2 py-1 rounded ${anc==='premium'?'bg-[#0A84FF] text-white':'border'}">프리미엄 +12%</button>
+        </div>
+        <p class="text-[9px] text-gray-500 mt-2">화물 노선·국제선 2개↑ 코드셰어로 추가 수입 · 학습·기장생활 보상은 <a href="/learn" class="text-[#0A84FF]">학습 허브</a>에서!</p>
+    </div>
+    ${(rv.world_oil || rv.world_demand_mult) ? `<div class="al-card mb-4 border border-[#0A84FF]/30">
+        <div class="font-bold text-sm mb-1">🌍 세계 경제 영향 (이번 주)</div>
+        <div class="text-xs text-gray-300">⛽ ${(rv.world_oil && (rv.world_oil.kid || rv.world_oil.label)) || '유가 보통'}
+            ${rv.world_demand_mult ? ` · 수요 배수 ×${rv.world_demand_mult}` : ''}</div>
+        <div class="text-[10px] text-gray-500 mt-1">노선 수익에 유가·세계 이벤트가 반영돼요. <a href="/world" class="text-[#0A84FF]">스카이 타임즈·요금 실험실 →</a></div>
+    </div>` : `<div class="al-card mb-4 border border-[#0A84FF]/20">
+        <div class="text-xs"><a href="/world" class="text-[#0A84FF]">🌍 세계 탭</a>에서 유가·무역·요금 실험을 배우면 항공사 운영이 더 잘 보여요!</div>
+    </div>`}
+    <div class="al-card mb-4 text-[10px] text-gray-400 space-y-1">
+        <div>📈 매출 = 노선 + 부가서비스 + 화물데스크 + 코드셰어 + 로그북 (주급은 매주 1회, <b class="text-white">노선 배치 인력만 100%</b>)</div>
+        <div>💡 과잉 채용은 주급 부담! 노선에 배치하거나 해고해서 캐시플로우를 맞추세요.</div>
     </div>
     <div class="al-card mb-4">
         <div class="font-bold text-sm mb-2">🏠 허브 공항</div>
@@ -93,11 +304,166 @@ function renderOverview() {
             <button onclick="setHub('${h.id}')" class="text-xs px-3 py-1 rounded ${ops.hub===h.id?'bg-[#33ff33] text-black font-bold':'border'}">${h.emoji} ${h.name}</button>
         `).join('')}</div>
     </div>
-    <div class="al-card"><div class="font-bold text-sm mb-2">활성 노선 ${(ops.routes||[]).filter(r=>r.active).length}개</div>
-        <p class="text-xs text-gray-500">로그북에 비행을 기록하면 보너스 수익이 붙어요. 레이더에서 <b>${al.name}</b> 편을 볼 수 있어요!</p>
-        <a href="/radar" class="text-xs text-[#0A84FF] mt-2 inline-block">레이더 보기 →</a>
+    <div class="al-card"><div class="font-bold text-sm mb-2">활성 노선 ${activeRoutes}개</div>
+        <p class="text-xs text-gray-500">노선만 만들면 매출이 쌓여요. 승무원 배치·특기 매칭으로 효율을 올리고, 로그북 기록 시 보너스도 붙어요.</p>
+        <a href="/radar" class="text-xs text-[#0A84FF] mt-2 inline-block">레이더에서 ${al.name||'항공사'} 편 보기 →</a>
     </div>`;
 }
+
+function renderRevenue() {
+    const rp = D.ops?.revenue_panel;
+    if (!rp) {
+        loadRevenuePanel();
+        return '<p class="text-gray-400 text-sm animate-pulse">수입원 불러오는 중...</p>';
+    }
+    const side = D.ops?.revenue_preview?.side_income || {};
+    const season = rp.seasonal || {};
+    const anc = rp.ancillary || D.ops?.ancillary || 'basic';
+    const rv = D.ops?.revenue_preview || {};
+    const cargoHtml = (rp.cargo_offers||[]).map(o => {
+        const btn = o.status==='open' ? `<button onclick="acceptCargo('${o.id}')" class="text-[10px] px-2 py-1 bg-[#ffaa00] text-black rounded font-bold">수락</button>`
+            : o.status==='active' ? `<button onclick="completeCargo('${o.id}')" class="text-[10px] px-2 py-1 bg-[#33ff33] text-black rounded font-bold">운송 완료</button>`
+            : '<span class="text-[10px] text-gray-500">완료</span>';
+        return `<div class="p-2 bg-black/40 rounded mb-2 flex justify-between items-start gap-2">
+            <div><b>${o.emoji} ${o.name}</b> · ${o.route_name}<br>
+            <span class="text-[9px] text-gray-500">${o.weight_t}t · ${o.min_category}↑ · ${fmt(o.pay)}</span><br>
+            <span class="text-[9px] text-[#0A84FF]">${o.fuel_hint||''}</span></div>${btn}</div>`;
+    }).join('') || '<p class="text-gray-500 text-xs">오늘 화물 없음</p>';
+
+    const briefHtml = (rp.briefings||[]).map(b => {
+        const done = (rp.briefing_done||[]).includes(b.idx);
+        const choices = (b.choices||[]).map((c,i) =>
+            done ? '' : `<button onclick="answerBriefing(${b.idx},${i})" class="block w-full text-left text-[10px] px-2 py-1 mb-1 border rounded hover:border-[#0A84FF]">${c}</button>`
+        ).join('');
+        return `<div class="p-2 bg-black/40 rounded mb-2 ${done?'opacity-50':''}">
+            <div class="text-[10px]"><b>${b.flight}</b> · ${b.topic} ${done?'✅':''}</div>
+            <div class="text-xs mt-1">${b.q}</div>${done?'':choices}</div>`;
+    }).join('');
+
+    const fleetHtml = (rp.fleet||[]).map(f => {
+        const leaseBtn = !f.on_route ? `<button onclick="toggleLease('${f.id}')" class="text-[9px] px-2 py-0.5 rounded ${f.leased?'bg-red-800':'border border-[#ffaa00] text-[#ffaa00]'}">${f.leased?'임대중지':'임대'}</button>` : '<span class="text-[9px] text-gray-500">노선운항</span>';
+        const condColor = f.condition>=80?'text-[#33ff33]':f.condition>=60?'text-[#ffaa00]':'text-red-400';
+        return `<div class="flex justify-between items-center p-2 bg-black/40 rounded mb-1 text-[10px]">
+            <span>${f.name} <span class="${condColor}">정비${f.condition}%</span></span>${leaseBtn}</div>`;
+    }).join('');
+
+    const csHtml = (rp.codeshare_partners||[]).map(p => `
+        <button onclick="toggleCodeshare('${p.id}')" class="text-[10px] px-2 py-1 rounded mr-1 mb-1 ${p.enabled?'bg-purple-600':'border'} ${!p.eligible?'opacity-40':''}" ${!p.eligible?'disabled':''}>
+            ${p.emoji} ${p.name} ${p.enabled?'ON':'OFF'} ${p.eligible?'+₩'+p.weekly_est.toLocaleString()+'/주':''}
+        </button>`).join('');
+
+    const trainHtml = (rp.school_modules||[]).map(m => {
+        const done = (rp.training_done||[]).includes(m.id);
+        const choices = (m.choices||[]).map((c,i) =>
+            done ? '' : `<button onclick="runTraining('${m.id}',${i})" class="block w-full text-left text-[10px] px-2 py-1 mb-1 border rounded">${c}</button>`
+        ).join('');
+        return `<div class="p-2 bg-black/40 rounded mb-2 ${done?'opacity-50':''}">
+            <b>${m.emoji} ${m.name}</b> · ${fmt(m.fee)} ${done?'✅':''}<div class="text-xs mt-1">${m.q}</div>${choices}</div>`;
+    }).join('');
+
+    return `<div class="space-y-4">
+        <div class="al-card">
+            <div class="font-bold text-sm mb-1">📊 패시브 수입 (주간 예상)</div>
+            <div class="text-xl font-bold text-[#33ff33]">${rp.passive_formatted||fmt(0)}/주</div>
+            <div class="grid grid-cols-3 gap-1 text-[9px] text-gray-400 mt-2">
+                <span>임대 +${fmt(side.lease||0)}</span><span>MRO +${fmt(side.mro_shop||0)}</span><span>제휴 +${fmt(side.codeshare_partners||0)}</span>
+                <span>시즌 +${fmt(side.seasonal||0)}</span><span>훈련 +${fmt(side.training_passive||0)}</span><span>정비비 −${fmt(side.maintain_cost||0)}</span>
+            </div>
+        </div>
+
+        <div class="al-card">
+            <div class="font-bold text-sm mb-2">📦 화물 전용 계약 <span class="text-[10px] text-gray-500">오늘 ${rp.cargo_done||0}/${rp.cargo_limit||3}</span></div>
+            ${cargoHtml}
+            <p class="text-[9px] text-gray-500 mt-1">수락 → 운송 완료 시 화물 퀴즈 통과하면 계약금 지급</p>
+        </div>
+
+        <div class="al-card">
+            <div class="font-bold text-sm mb-2">🌤️ 브리핑 데스크 <span class="text-[10px] text-gray-500">${(rp.briefing_done||[]).length}/${(rp.briefings||[]).length}</span></div>
+            ${briefHtml}
+        </div>
+
+        <div class="al-card">
+            <div class="font-bold text-sm mb-2">✈️ 기체 임대 · MRO</div>
+            <div class="mb-2">${fleetHtml}</div>
+            <div class="flex gap-2 flex-wrap mb-2">
+                <button onclick="setMroDesk(${!rp.mro_desk})" class="text-[10px] px-2 py-1 rounded ${rp.mro_desk?'bg-[#0A84FF]':'border'}">MRO 데스크 ${rp.mro_desk?'ON':'OFF'} (정비사 ${rp.mechanics||0}명)</button>
+                <button onclick="setFleetMaintain(${!rp.fleet_maintain})" class="text-[10px] px-2 py-1 rounded ${rp.fleet_maintain?'bg-[#33ff33] text-black':'border'}">정기정비 ${rp.fleet_maintain?'ON':'OFF'}</button>
+            </div>
+            <p class="text-[9px] text-gray-500">미운항 기체 임대 · 정비 안 하면 노선 수익 감소 · MRO 데스크는 정비사 필요</p>
+        </div>
+
+        <div class="al-card">
+            <div class="font-bold text-sm mb-2">🤝 코드셰어 제휴</div>
+            <div class="flex flex-wrap">${csHtml}</div>
+        </div>
+
+        <div class="al-card">
+            <div class="font-bold text-sm mb-2">🎓 비행 훈련원 <span class="text-[10px] text-gray-500">${(rp.training_done||[]).length}/${rp.training_limit||3}</span></div>
+            ${rp.training_requires_fo ? trainHtml : '<p class="text-xs text-gray-500">부기장을 채용하면 훈련원 운영이 가능해요!</p>'}
+        </div>
+
+        <div class="al-card">
+            <div class="font-bold text-sm mb-2">${season.icon||'🎉'} 시즌 특선 · ${season.name||'이번 주 이벤트'}</div>
+            <p class="text-xs text-gray-400 mb-2">${season.desc||''}</p>
+            <button onclick="claimSeasonal()" class="text-[10px] px-3 py-1.5 rounded ${rp.seasonal_claimed?'bg-gray-600':'bg-[#ffaa00] text-black font-bold'}" ${rp.seasonal_claimed?'disabled':''}>
+                ${rp.seasonal_claimed?'이번 주 수령 완료':'시즌 보너스 받기'}
+            </button>
+        </div>
+
+        <div class="al-card">
+            <div class="font-bold text-sm mb-2">🧳 부가서비스 (노선 매출 보너스)</div>
+            <div class="flex gap-2 flex-wrap mb-2">
+                <button onclick="setAncillary('off')" class="text-xs px-2 py-1 rounded ${anc==='off'?'bg-gray-600 text-white':'border'}">없음</button>
+                <button onclick="setAncillary('basic')" class="text-xs px-2 py-1 rounded ${anc==='basic'?'bg-[#ffaa00] text-black font-bold':'border'}">기본 +6%</button>
+                <button onclick="setAncillary('premium')" class="text-xs px-2 py-1 rounded ${anc==='premium'?'bg-[#0A84FF] text-white':'border'}">프리미엄 +12%</button>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-[10px]">
+                <div class="p-2 bg-black/40 rounded"><b class="text-[#0A84FF]">화물데스크</b><br>+${fmt(side.cargo_desk||0)}/주</div>
+                <div class="p-2 bg-black/40 rounded"><b class="text-purple-300">코드셰어(노선)</b><br>+${fmt(side.codeshare||0)}/주</div>
+            </div>
+            <p class="text-[9px] text-gray-500 mt-2">노선 매출 ${fmt(rv.route_gross||0)}/주 · 부가수입 합계 ${rv.formatted_side||fmt(rv.side_income_total||0)}/주</p>
+        </div>
+    </div>`;
+}
+
+let pendingCargoId = null;
+function showCargoQuiz(offerId) {
+    const rp = D.ops?.revenue_panel || {};
+    const offer = (rp.cargo_offers||[]).find(o => o.id === offerId);
+    const q = offer?.quiz || {q:'화물 운송 준비 완료?', choices:['완료'], answer:0};
+    pendingCargoId = offerId;
+    const body = `<div class="p-4"><div class="font-bold mb-2">📦 화물 운송 퀴즈</div><p class="text-sm mb-3">${q.q}</p>
+        ${(q.choices||[]).map((c,i)=>`<button onclick="submitCargoQuiz(${i})" class="block w-full text-left px-3 py-2 mb-2 border rounded hover:border-[#33ff33]">${c}</button>`).join('')}
+        <button onclick="closeCargoQuiz()" class="text-xs text-gray-500 mt-2">취소</button></div>`;
+    let modal = document.getElementById('cargo-quiz-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'cargo-quiz-modal';
+        modal.className = 'fixed inset-0 bg-black/80 flex items-center justify-center z-[5000] p-4';
+        modal.onclick = e => { if (e.target===modal) closeCargoQuiz(); };
+        document.body.appendChild(modal);
+    }
+    modal.innerHTML = `<div class="info-card w-full max-w-md border border-[#ffaa00]/40" onclick="event.stopPropagation()">${body}</div>`;
+    modal.classList.remove('hidden');
+}
+function closeCargoQuiz() {
+    pendingCargoId = null;
+    document.getElementById('cargo-quiz-modal')?.classList.add('hidden');
+}
+function submitCargoQuiz(ans) {
+    if (!pendingCargoId) return;
+    apiPost('/api/airline/revenue/cargo/complete', { offer_id: pendingCargoId, answer: ans });
+    closeCargoQuiz();
+}
+function acceptCargo(id) { apiPost('/api/airline/revenue/cargo/accept', { offer_id: id }); }
+function completeCargo(id) { showCargoQuiz(id); }
+function toggleLease(id) { apiPost('/api/airline/revenue/lease', { aircraft_id: id }); }
+function setMroDesk(on) { apiPost('/api/airline/revenue/mro', { enabled: on }); }
+function setFleetMaintain(on) { apiPost('/api/airline/revenue/maintain', { enabled: on }); }
+function answerBriefing(idx, ans) { apiPost('/api/airline/revenue/briefing', { idx, answer: ans }); }
+function toggleCodeshare(id) { apiPost('/api/airline/revenue/codeshare', { partner_id: id }); }
+function runTraining(id, ans) { apiPost('/api/airline/revenue/training', { module_id: id, answer: ans }); }
+function claimSeasonal() { apiPost('/api/airline/revenue/seasonal', {}); }
 
 function renderFleet() {
     const ops = D.ops || {};
@@ -112,43 +478,446 @@ function renderFleet() {
         </div>`).join('') || '<p class="text-gray-500">보유 기체 없음. <a href="/hangar">창고</a></p>'}</div>`;
 }
 
+const ROUTE_TYPE_LABELS = {
+    domestic: '🇰🇷 국내선', international: '🌏 국제선', longhaul: '🌐 장거리',
+    regional: '🛫 리저널', cargo: '📦 화물',
+};
+
+function renderRouteTemplateOptions(tpls, groupBy) {
+    const keyFn = {
+        type: t => t.type || 'domestic',
+        region: t => t.kid_label || '기타',
+        aircraft: t => t.min_category || '소형',
+    }[groupBy] || (t => t.type || 'domestic');
+    const grouped = {};
+    tpls.forEach(t => {
+        const k = keyFn(t);
+        (grouped[k] ||= []).push(t);
+    });
+    const keys = Object.keys(grouped).sort();
+    const labelFn = k => groupBy === 'type' ? (ROUTE_TYPE_LABELS[k] || k) : k;
+    return keys.map(k => `
+        <optgroup label="${labelFn(k)} (${grouped[k].length})">
+            ${grouped[k].map(t => `<option value="${t.id}">${t.name} · ${t.route} · ${t.min_category||''} · 수요${t.demand}</option>`).join('')}
+        </optgroup>`).join('');
+}
+
+function routeCardHtml(r, ops) {
+    const sd = r.staff_detail || {};
+    const bp = r.bonus_preview || {};
+    const cap = sd.captain ? `${sd.captain.emoji}${sd.captain.name}(${sd.captain.grade})` : '—';
+    const fo = sd.fo ? `${sd.fo.emoji}${sd.fo.name}(${sd.fo.grade})` : '—';
+    const faN = (sd.fa||[]).length;
+    const syn = (bp.synergy_labels||[]).join(' ');
+    const spec = (bp.specialty_labels||[]).slice(0,2).join(' ');
+    const est = (ops.revenue_preview?.per_route || []).find(x => x.route_id === r.id);
+    const estPay = est ? fmt(est.money) : '—';
+    const typeLbl = ROUTE_TYPE_LABELS[r.type] || r.type || '';
+    return `<div class="al-card mb-2">
+        <div class="flex justify-between items-start gap-2">
+            <div><b class="text-sm">${r.name}</b>
+                <div class="text-[10px] text-gray-500">${r.route} · ${r.flights_per_week}회/주 · ${typeLbl}</div>
+                <div class="text-[10px] text-gray-500">📍 ${r.region||'—'} · ✈️ ${r.aircraft_name||''} (${r.aircraft_category||r.min_category||''})</div>
+                <div class="text-[10px] text-[#33ff33] mt-0.5">예상 주간 매출 ${estPay}</div></div>
+            <div class="flex gap-1 shrink-0">
+                <button onclick="openRouteStaffModal('${r.id}')" class="text-[10px] px-2 py-1 bg-[#ffaa00] text-black rounded font-bold">👥 배치</button>
+                <button onclick="delRoute('${r.id}')" class="text-[10px] text-red-400">삭제</button>
+            </div>
+        </div>
+        <div class="text-[10px] mt-2 text-gray-300">👑 ${cap} · 👨‍✈️ ${fo} · 💁 ${faN}/${r.fa_need||2}</div>
+        <div class="text-[9px] mt-1 text-gray-500">효율 ${r.staff_efficiency_pct||0}% · 보너스 +${r.total_bonus_pct||0}%</div>
+        ${spec ? `<div class="text-[9px] text-[#a78bfa]">특기: ${spec}</div>` : ''}
+        ${syn ? `<div class="text-[9px] text-[#33ff33]">시너지: ${syn}</div>` : ''}
+    </div>`;
+}
+
+function filterRoutesList(routes) {
+    if (!routeFilterKey) return routes;
+    if (routeGroupMode === 'type') return routes.filter(r => (r.type || 'domestic') === routeFilterKey);
+    if (routeGroupMode === 'region') return routes.filter(r => (r.region || '기타') === routeFilterKey);
+    if (routeGroupMode === 'aircraft') {
+        return routes.filter(r => (r.aircraft_category || r.aircraft_name || '미지정') === routeFilterKey);
+    }
+    return routes;
+}
+
+function groupRoutesList(routes) {
+    if (routeGroupMode === 'all') return { '전체 노선': routes };
+    const keyFn = {
+        type: r => r.type || 'domestic',
+        region: r => r.region || '기타',
+        aircraft: r => r.aircraft_category || r.aircraft_name || '미지정',
+    }[routeGroupMode];
+    const groups = {};
+    routes.forEach(r => {
+        const k = keyFn(r);
+        const label = routeGroupMode === 'type' ? (ROUTE_TYPE_LABELS[k] || k) : k;
+        (groups[label] ||= []).push(r);
+    });
+    return groups;
+}
+
+function setRouteGroupMode(mode, key) {
+    routeGroupMode = mode;
+    routeFilterKey = key || '';
+    renderAlTab('routes');
+}
+
 function renderRoutes() {
     const ops = D.ops || {};
     const routes = ops.routes || [];
     const tpls = ops.route_templates || [];
     const fleet = ops.fleet || [];
+    const filters = ops.route_filters || {};
+    const filtered = filterRoutesList(routes);
+    const groups = groupRoutesList(filtered);
+
+    const modeBtns = [
+        ['all', '전체', ''],
+        ['type', '노선유형', ...(filters.types || [])],
+        ['region', '지역', ...(filters.regions || [])],
+        ['aircraft', '기종', ...(filters.aircraft_categories || [])],
+    ];
+
     let html = `<div class="al-card mb-4">
-        <div class="font-bold text-sm mb-2">➕ 새 노선</div>
+        <div class="flex justify-between items-center mb-2">
+            <div class="font-bold text-sm">➕ 새 노선</div>
+            <span class="text-[10px] text-gray-500">템플릿 ${tpls.length}개 · 운영 ${routes.length}/100</span>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
-            <select id="new-route-tpl" class="bg-black border rounded p-2">${tpls.map(t => `<option value="${t.id}">${t.name} (${t.route})</option>`).join('')}</select>
-            <select id="new-route-ac" class="bg-black border rounded p-2">${fleet.map(f => `<option value="${f.id}">${f.name}</option>`).join('')}</select>
+            <select id="new-route-tpl" class="bg-black border rounded p-2 max-h-40">${renderRouteTemplateOptions(tpls, routeGroupMode === 'all' ? 'type' : routeGroupMode)}</select>
+            <select id="new-route-ac" class="bg-black border rounded p-2">${fleet.map(f => `<option value="${f.id}">${f.name} (${f.category})</option>`).join('')}</select>
             <button onclick="addRoute()" class="bg-[#33ff33] text-black font-bold rounded p-2">노선 개설</button>
-        </div></div>`;
-    html += routes.length ? routes.map(r => `
-        <div class="al-card mb-2">
-            <div class="flex justify-between"><b class="text-sm">${r.name}</b>
-                <button onclick="delRoute('${r.id}')" class="text-[10px] text-red-400">삭제</button></div>
-            <div class="text-[10px] text-gray-500">${r.route} · ${r.flights_per_week}회/주 · ${r.aircraft_id}</div>
-            <div class="text-[10px] mt-1">기장 ${r.staff?.captain?'✓':'❌'} · 부기장 ${r.staff?.fo?'✓':'❌'} · 승무원 ${(r.staff?.fa||[]).length}/${r.fa_need||2}</div>
-        </div>`).join('') : '<p class="text-gray-500 text-sm">아직 노선이 없어요. 위에서 개설해보세요!</p>';
+        </div></div>
+    <div class="al-card mb-4 border border-purple-500/40">
+        <div class="flex flex-wrap justify-between items-center gap-2">
+            <div>
+                <div class="font-bold text-sm">🎲 전체 노선 한 번에 배치</div>
+                <div class="text-[10px] text-gray-400 mt-1">
+                    채용된 직원을 <b class="text-white">모든 노선</b>에 랜덤·골고루 배치해요.<br>
+                    · <b class="text-[#ffaa00]">수동 배치</b>: 한 명이 몇 개든 가능 (제한 없음)<br>
+                    · <b class="text-purple-300">일괄 배치</b>: 한 명당 <b>최대 5개</b> 노선 우선 (인원 부족 시 초과 가능)
+                </div>
+            </div>
+            <button onclick="autoAssignAllRoutes()" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg text-sm shrink-0">
+                🎲 전체 랜덤 배치
+            </button>
+        </div>
+    </div>`;
+
+    html += `<div class="al-card mb-4">
+        <div class="font-bold text-sm mb-2">🗂️ 노선 보기</div>
+        <div class="flex flex-wrap gap-1 mb-2">
+            <button onclick="setRouteGroupMode('all','')" class="text-[10px] px-2 py-1 rounded ${routeGroupMode==='all'&&!routeFilterKey?'bg-[#ffaa00] text-black font-bold':'border'}">전체 (${routes.length})</button>
+            <button onclick="setRouteGroupMode('type','')" class="text-[10px] px-2 py-1 rounded ${routeGroupMode==='type'&&!routeFilterKey?'bg-[#0A84FF] text-white':'border'}">유형별</button>
+            <button onclick="setRouteGroupMode('region','')" class="text-[10px] px-2 py-1 rounded ${routeGroupMode==='region'&&!routeFilterKey?'bg-[#33ff33] text-black font-bold':'border'}">지역별</button>
+            <button onclick="setRouteGroupMode('aircraft','')" class="text-[10px] px-2 py-1 rounded ${routeGroupMode==='aircraft'&&!routeFilterKey?'bg-purple-500 text-white':'border'}">기종별</button>
+        </div>`;
+
+    if (routeGroupMode === 'type' && filters.types?.length) {
+        html += `<div class="flex flex-wrap gap-1 mb-1">${filters.types.map(t => `
+            <button onclick="setRouteGroupMode('type','${t}')" class="text-[9px] px-2 py-0.5 rounded ${routeFilterKey===t?'bg-[#0A84FF]':'border border-gray-600'}">${ROUTE_TYPE_LABELS[t]||t}</button>`).join('')}</div>`;
+    }
+    if (routeGroupMode === 'region' && filters.regions?.length) {
+        html += `<div class="flex flex-wrap gap-1 mb-1 max-h-24 overflow-y-auto">${filters.regions.map(t => `
+            <button onclick="setRouteGroupMode('region','${t}')" class="text-[9px] px-2 py-0.5 rounded ${routeFilterKey===t?'bg-[#33ff33] text-black':'border border-gray-600'}">${t}</button>`).join('')}</div>`;
+    }
+    if (routeGroupMode === 'aircraft' && filters.aircraft_categories?.length) {
+        html += `<div class="flex flex-wrap gap-1 mb-1">${filters.aircraft_categories.map(t => `
+            <button onclick="setRouteGroupMode('aircraft','${t}')" class="text-[9px] px-2 py-0.5 rounded ${routeFilterKey===t?'bg-purple-500':'border border-gray-600'}">${t}</button>`).join('')}</div>`;
+    }
+    html += `<div class="text-[9px] text-gray-500">표시 ${filtered.length}개${routeFilterKey ? ` · 필터: ${routeFilterKey}` : ''}</div></div>`;
+
+    if (!filtered.length) {
+        html += '<p class="text-gray-500 text-sm">해당 조건의 노선이 없어요.</p>';
+    } else if (routeGroupMode === 'all' || routeFilterKey) {
+        html += filtered.map(r => routeCardHtml(r, ops)).join('');
+    } else {
+        html += Object.entries(groups).sort((a,b) => a[0].localeCompare(b[0])).map(([label, list]) => `
+            <div class="mb-3">
+                <div class="text-xs font-bold text-[#ffaa00] mb-2 border-b border-[#2c2c2e] pb-1">${label} <span class="text-gray-500 font-normal">(${list.length})</span></div>
+                ${list.map(r => routeCardHtml(r, ops)).join('')}
+            </div>`).join('');
+    }
     return html;
+}
+
+function hiredPool(role) {
+    return (D.ops?.hireable_crew || []).filter(c => c.hired && c.airline_role === role);
+}
+
+function crewOption(c, selected) {
+    const p = c.profile || {};
+    const sel = selected === c.id ? 'selected' : '';
+    return `<option value="${c.id}" ${sel}>${c.emoji} ${c.name} [${p.grade}] ${p.specialty||''}</option>`;
+}
+
+function openRouteStaffModal(routeId) {
+    routeStaffModalId = routeId;
+    const route = (D.ops?.routes || []).find(r => r.id === routeId);
+    if (!route) return;
+    const st = route.staff || {};
+    const faSel = new Set(st.fa || []);
+    const caps = hiredPool('captain');
+    const fos = hiredPool('fo');
+    const fas = hiredPool('fa');
+    const mechs = hiredPool('mechanic');
+    const disps = hiredPool('dispatcher');
+    const faChecks = fas.map(c => `
+        <label class="flex items-center gap-2 text-[10px] p-1 hover:bg-white/5 rounded">
+            <input type="checkbox" class="rs-fa-cb" value="${c.id}" ${faSel.has(c.id)?'checked':''}>
+            ${c.emoji} ${c.name} <span class="${gradeClass(c.profile?.grade)} px-1 rounded text-[9px]">${c.profile?.grade}</span> ${c.profile?.specialty||''}
+        </label>`).join('') || '<p class="text-[10px] text-gray-500">채용된 승무원이 없어요</p>';
+
+    document.getElementById('route-staff-modal-body').innerHTML = `
+        <div class="p-4 border-b border-[#ffaa00]/20 flex justify-between sticky top-0 bg-[#1c1c1e] z-10">
+            <div><h3 class="font-bold">👥 ${route.name} 승무 배치</h3>
+                <p class="text-[10px] text-gray-400">${route.route} · ${route.type} · 승무원 ${route.fa_need||2}명 필요</p></div>
+            <button onclick="closeRouteStaffModal()" class="text-xl text-gray-400">×</button>
+        </div>
+        <div class="p-4 space-y-3 text-xs">
+            <div><label class="text-gray-400">👑 기장</label>
+                <select id="rs-captain" class="w-full mt-1 bg-black border rounded p-2 text-xs">
+                    <option value="">— 미배치 —</option>${caps.map(c => crewOption(c, st.captain)).join('')}
+                </select></div>
+            <div><label class="text-gray-400">👨‍✈️ 부기장</label>
+                <select id="rs-fo" class="w-full mt-1 bg-black border rounded p-2 text-xs">
+                    <option value="">— 미배치 —</option>${fos.map(c => crewOption(c, st.fo)).join('')}
+                </select></div>
+            <div><label class="text-gray-400">💁 승무원 (복수 선택)</label><div class="mt-1 max-h-28 overflow-y-auto border rounded p-2">${faChecks}</div></div>
+            <div><label class="text-gray-400">🔧 정비사</label>
+                <select id="rs-mechanic" class="w-full mt-1 bg-black border rounded p-2 text-xs">
+                    <option value="">— 미배치 —</option>${mechs.map(c => crewOption(c, st.mechanic)).join('')}
+                </select></div>
+            <div><label class="text-gray-400">📋 운항관리</label>
+                <select id="rs-dispatcher" class="w-full mt-1 bg-black border rounded p-2 text-xs">
+                    <option value="">— 미배치 —</option>${disps.map(c => crewOption(c, st.dispatcher)).join('')}
+                </select></div>
+            <button onclick="saveRouteStaff()" class="w-full py-2 bg-[#ffaa00] text-black font-bold rounded">배치 저장</button>
+        </div>`;
+    const modal = document.getElementById('route-staff-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeRouteStaffModal() {
+    routeStaffModalId = null;
+    const modal = document.getElementById('route-staff-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+async function saveRouteStaff() {
+    if (!routeStaffModalId) return;
+    const fa = [...document.querySelectorAll('.rs-fa-cb:checked')].map(el => el.value);
+    const staff = {
+        captain: document.getElementById('rs-captain')?.value || null,
+        fo: document.getElementById('rs-fo')?.value || null,
+        fa,
+        mechanic: document.getElementById('rs-mechanic')?.value || null,
+        dispatcher: document.getElementById('rs-dispatcher')?.value || null,
+    };
+    await apiPost('/api/airline/route/staff', { route_id: routeStaffModalId, staff });
+    closeRouteStaffModal();
+    renderAlTab('routes');
+}
+
+async function autoAssignAllRoutes() {
+    const n = (D.ops?.routes || []).length;
+    if (!n) {
+        alert('먼저 노선을 개설해주세요!');
+        return;
+    }
+    if (!confirm(`채용된 직원을 ${n}개 노선에 랜덤으로 골고루 배치할까요?\n(기존 배치는 덮어써요 · 1인 우선 최대 5노선)`)) return;
+    await apiPost('/api/airline/route/staff/auto-assign', { max_per_crew: 5 });
+    renderAlTab('routes');
+}
+
+function setStaffFilter(role) {
+    staffRoleFilter = role;
+    renderAlTab('staff');
+}
+
+function setStaffSort(sort) {
+    staffSort = sort;
+    renderAlTab('staff');
+}
+
+function fmtPay(n) { return '₩' + (n||0).toLocaleString('ko-KR'); }
+
+function gradeClass(g) { return 'grade-' + (g || 'C'); }
+
+function sortCrewList(list) {
+    const arr = [...list];
+    if (staffSort === 'rating') arr.sort((a, b) => (b.profile?.overall||0) - (a.profile?.overall||0));
+    else if (staffSort === 'pay') arr.sort((a, b) => (b.profile?.weekly_pay||0) - (a.profile?.weekly_pay||0));
+    else if (staffSort === 'exp') arr.sort((a, b) => (b.profile?.experience_years||0) - (a.profile?.experience_years||0));
+    else arr.sort((a, b) => a.name.localeCompare(b.name, 'ko'));
+    return arr;
+}
+
+function renderCrewSkills(p, compact) {
+    if (!p?.skills?.length) return '<div class="text-[9px] text-gray-500">능력 정보 없음</div>';
+    const max = compact ? 3 : 3;
+    return p.skills.slice(0, max).map(s => `
+        <div class="${compact?'text-[9px]':'text-[10px]'} mt-1">
+            <div class="flex justify-between"><span>${s.emoji} ${s.name}</span><span>${s.value}</span></div>
+            <div class="crew-skill-bar"><div style="width:${s.value}%;background:${s.value>=80?'#33ff33':s.value>=60?'#0A84FF':'#666'}"></div></div>
+        </div>`).join('');
+}
+
+function renderCrewSpecBox(p, compact) {
+    if (!p || !p.overall) return '<div class="crew-spec-box text-[10px] text-gray-500">스펙 로딩 중...</div>';
+    const g = p.grade || 'C';
+    return `<div class="crew-spec-box">
+        <div class="flex justify-between items-center mb-1">
+            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded border ${gradeClass(g)}">${p.grade_emoji||''} ${g}등급</span>
+            <span class="text-xs font-bold text-white">종합 ${p.overall}</span>
+        </div>
+        <div class="crew-spec-row"><span>경력</span><b>${p.experience_years||0}년 · ${(p.flight_hours||0).toLocaleString()}h</b></div>
+        <div class="crew-spec-row"><span>특기</span><b class="text-[#a78bfa]">${p.specialty||'—'}</b></div>
+        <div class="crew-spec-row"><span>성격</span><b>${p.personality||'—'}</b></div>
+        <div class="crew-spec-row"><span>주급</span><b class="text-[#ffaa00]">${fmtPay(p.weekly_pay)}</b></div>
+        ${compact ? renderCrewSkills(p, true) : ''}
+    </div>`;
+}
+
+function renderCrewHireCard(c) {
+    const p = c.profile || {};
+    const g = p.grade || 'C';
+    const locked = !c.unlocked;
+    const cls = `al-card crew-hire-card ${c.hired?'hired':''} ${locked?'locked':''} border ${gradeClass(g)}`;
+    let action = '';
+    if (c.hired) {
+        action = `<button type="button" onclick="event.stopPropagation();fireCrew('${c.id}')" class="crew-fire-btn">🚪 해고하기</button>`;
+    } else if (c.unlocked) {
+        action = `<button onclick="event.stopPropagation();hireCrew('${c.id}')" class="text-[10px] mt-2 w-full px-2 py-1 bg-purple-600 rounded font-bold hover:bg-purple-500">✅ 채용하기</button>
+            <div class="text-[9px] text-[#33ff33] mt-1">기장생활에서 만난 동료</div>`;
+    } else {
+        action = `<div class="text-[10px] text-[#ffaa00] mt-2">🔒 기장생활에서 먼저 만나요<br>조건: ${c.bonus_tip || '활동 더하기'}</div>
+            <a href="/captain-life" onclick="event.stopPropagation()" class="text-[9px] text-[#0A84FF] mt-1 inline-block">기장생활 →</a>`;
+    }
+
+    return `<div class="${cls}" onclick="openCrewModal('${c.id}')">
+        <div class="flex justify-between items-start gap-1">
+            <span class="text-2xl">${c.emoji}</span>
+            <div class="text-right">
+                ${c.hired ? '<span class="crew-hired-badge">✓ 채용됨</span>' : ''}
+                <div class="text-[9px] text-gray-500 mt-0.5">${c.role}</div>
+            </div>
+        </div>
+        <div class="font-bold text-sm mt-1">${c.name}</div>
+        ${renderCrewSpecBox(p, true)}
+        ${action}
+    </div>`;
+}
+
+function openCrewModal(crewId) {
+    const c = (D.ops?.hireable_crew || []).find(x => x.id === crewId);
+    if (!c) return;
+    const p = c.profile || {};
+    const g = p.grade || 'C';
+    document.getElementById('crew-modal-body').innerHTML = `
+        <div class="p-5 border-b border-purple-500/20 flex justify-between items-start">
+            <div class="flex gap-3">
+                <span class="text-4xl">${c.emoji}</span>
+                <div>
+                    <div class="font-bold text-lg">${c.name}</div>
+                    <div class="text-xs text-gray-400">${c.role}</div>
+                    <span class="text-xs font-bold px-2 py-0.5 rounded border mt-1 inline-block ${gradeClass(g)}">${p.grade_emoji||''} ${g}등급 · 종합 ${p.overall}</span>
+                </div>
+            </div>
+            <button onclick="closeCrewModal()" class="text-2xl text-gray-400 hover:text-white">×</button>
+        </div>
+        <div class="p-5 text-sm space-y-3">
+            <p class="text-xs text-gray-300">${p.kid_summary||''} · ${p.personality||''}</p>
+            <div class="grid grid-cols-3 gap-2 text-center text-[10px]">
+                <div class="al-card py-2"><div class="text-gray-500">경력</div><div class="font-bold">${p.experience_years||0}년</div></div>
+                <div class="al-card py-2"><div class="text-gray-500">비행시간</div><div class="font-bold">${(p.flight_hours||0).toLocaleString()}h</div></div>
+                <div class="al-card py-2"><div class="text-gray-500">총 비행</div><div class="font-bold">${(p.flights_count||0).toLocaleString()}회</div></div>
+            </div>
+            <div><div class="text-xs font-bold text-purple-300 mb-1">💪 능력</div>${renderCrewSkills(p, false)}</div>
+            <div class="al-card p-3 text-xs">
+                <div><span class="text-gray-500">특기</span> <b class="text-[#a78bfa]">${p.specialty||'—'}</b></div>
+                <div class="mt-1"><span class="text-gray-500">주급</span> <b class="text-[#ffaa00]">${fmtPay(p.weekly_pay)}</b></div>
+                <div class="mt-1 text-[#33ff33]">💡 ${p.hire_tip||''}</div>
+                <div class="mt-1 text-gray-400">노선 수익 보너스 약 +${p.route_bonus_pct||0}%</div>
+            </div>
+            ${c.hired ? `<div class="space-y-2">
+                <div class="text-center text-[#33ff33] font-bold py-1">✓ 우리 항공사 소속</div>
+                <button type="button" onclick="fireCrew('${c.id}');closeCrewModal();" class="crew-fire-btn">🚪 해고하기 (노선 배치에서도 제외)</button>
+            </div>` :
+              c.unlocked ? `<button onclick="hireCrew('${c.id}');closeCrewModal();" class="w-full py-2 bg-purple-600 rounded font-bold">채용하기</button>` :
+              `<div class="text-center text-[#ffaa00] text-xs py-2">🔒 아직 못 만났어요: ${c.bonus_tip}<br>
+                <a href="/captain-life" class="text-[#0A84FF] mt-2 inline-block">기장생활에서 만나기 →</a></div>`}
+        </div>`;
+    const modal = document.getElementById('crew-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function closeCrewModal() {
+    const modal = document.getElementById('crew-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
 }
 
 function renderStaff() {
     const crew = D.ops?.hireable_crew || [];
     const pool = D.ops?.staff_pool || {};
     const hired = Object.values(pool).flat().length;
-    return `<p class="text-xs text-gray-400 mb-3">기장생활에서 만난 동료를 채용하세요! (채용 ${hired}명)</p>
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-2">${crew.map(c => `
-        <div class="al-card ${c.hired?'opacity-60':''} ${c.unlocked?'':'opacity-40'}">
-            <div class="text-2xl">${c.emoji}</div>
-            <div class="font-bold text-xs">${c.name}</div>
-            <div class="text-[10px] text-gray-500">${c.role}</div>
-            ${c.hired ? '<div class="text-[10px] text-[#33ff33]">✓ 채용됨</div>' :
-              c.unlocked ? `<button onclick="hireCrew('${c.id}')" class="text-[10px] mt-1 px-2 py-1 bg-purple-600 rounded">채용</button>` :
-              `<div class="text-[10px] text-gray-500">${c.bonus_tip}</div>`}
-        </div>`).join('')}</div>
-    <p class="text-xs text-gray-500 mt-4"><a href="/captain-life" class="text-[#0A84FF]">기장생활</a>에서 더 많은 동료를 만나요!</p>`;
+    const roleKeys = ['전체', '채용됨', ...Object.keys(STAFF_ROLE_LABELS)];
+    let filtered = staffRoleFilter === '전체' ? crew
+        : staffRoleFilter === '채용됨' ? crew.filter(c => c.hired)
+        : crew.filter(c => c.airline_role === staffRoleFilter);
+    filtered = sortCrewList(filtered);
+    const summary = Object.entries(STAFF_ROLE_LABELS).map(([k, label]) => {
+        const inPool = (pool[k] || []).length;
+        const avail = crew.filter(c => c.airline_role === k && c.unlocked && !c.hired).length;
+        return `${label} ${inPool}명${avail ? ` (+${avail})` : ''}`;
+    }).join(' · ');
+    const hiredList = crew.filter(c => c.hired);
+    const hiredBar = hiredList.length ? `<div class="al-card mb-4 p-3 border border-red-500/30">
+        <div class="flex justify-between items-center mb-2">
+            <h3 class="text-sm font-bold text-white">👥 채용된 승무원 <span class="text-red-400">${hiredList.length}명</span></h3>
+            <button type="button" onclick="setStaffFilter('채용됨')" class="text-[10px] text-gray-400 hover:text-white">전체 보기 →</button>
+        </div>
+        <div class="space-y-2">${hiredList.map(c => {
+            const p = c.profile || {};
+            const roleLabel = STAFF_ROLE_LABELS[c.airline_role] || c.role;
+            return `<div class="crew-hired-row">
+                <div class="min-w-0">
+                    <span class="text-sm">${c.emoji} <b>${c.name}</b></span>
+                    <span class="text-[10px] text-gray-500 ml-1">${roleLabel} · ${p.grade||'?'}등급 · ${fmtPay(p.weekly_pay)}/주</span>
+                </div>
+                <button type="button" onclick="fireCrew('${c.id}')" class="crew-fire-btn">해고</button>
+            </div>`;
+        }).join('')}</div>
+    </div>` : '';
+    const unlockedN = crew.filter(c => c.unlocked).length;
+    const readyN = crew.filter(c => c.unlocked && !c.hired).length;
+    return `${hiredBar}<div class="al-card mb-4 p-3 border border-purple-500/30 text-[10px] text-gray-400">
+        🔗 <b class="text-white">기장생활 → 채용 연동</b><br>
+        기장생활에서 <b class="text-[#33ff33]">만난(체크된) 동료</b>만 여기서 채용할 수 있어요.
+        지금 해금 <b class="text-[#33ff33]">${unlockedN}</b>명 · 바로 채용 가능 <b class="text-purple-300">${readyN}</b>명
+        · <a href="/captain-life" class="text-[#0A84FF]">기장생활에서 더 만나기 →</a>
+    </div>
+    <div class="al-card mb-4 p-3 border border-[#ffaa00]/20 text-[10px] text-gray-400">
+        💡 <b class="text-white">등급이 높을수록</b> 노선 수익이 올라가요! S·A급은 국제선에, B·C급은 국내선에 맞춰 뽑아보세요.
+    </div>
+    <p class="text-xs text-gray-400 mb-1">동료 풀 <b>${crew.length}</b>명 · 해금 <b class="text-[#33ff33]">${unlockedN}</b> · 채용 <b>${hired}</b>명</p>
+    <p class="text-[10px] text-gray-500 mb-3">${summary}</p>
+    <div class="flex gap-1 mb-2 flex-wrap">
+        ${roleKeys.map(r => `<button onclick="setStaffFilter('${r}')" class="px-2 py-1 rounded-full text-[10px] border ${staffRoleFilter===r?'border-[#ffaa00] text-[#ffaa00]':'border-[#333] text-gray-400'}">${r==='전체'||r==='채용됨'?r:STAFF_ROLE_LABELS[r]}</button>`).join('')}
+    </div>
+    <div class="flex gap-1 mb-4 flex-wrap items-center">
+        <span class="text-[10px] text-gray-500">정렬:</span>
+        ${[['rating','등급순'],['pay','주급순'],['exp','경력순'],['name','이름순']].map(([k,l]) =>
+            `<button onclick="setStaffSort('${k}')" class="px-2 py-1 rounded-full text-[10px] border ${staffSort===k?'border-purple-500 text-purple-400':'border-[#333] text-gray-400'}">${l}</button>`
+        ).join('')}
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${filtered.map(c => renderCrewHireCard(c)).join('')}</div>
+    <p class="text-xs text-gray-500 mt-4"><a href="/captain-life" class="text-[#0A84FF]">기장생활</a>에서 더 많은 동료를 만나요! 카드를 누르면 상세 스펙을 볼 수 있어요.</p>`;
 }
 
 function renderStats() {
@@ -162,8 +931,8 @@ function renderStats() {
     <div class="space-y-3">${stats.map(s => `
         <div class="al-card">
             <div class="flex justify-between text-sm"><span>${s.emoji} ${s.name}</span><b>Lv.${s.value}</b></div>
-            <div class="stat-bar mt-1"><div style="width:${s.pct}%"></div></div>
-            <div class="text-[10px] text-gray-500 mt-1">${s.kid_desc}</div>
+            <div class="stat-bar mt-1"><div class="stat-bar-fill" style="width:${s.pct||0}%"></div></div>
+            <div class="text-[10px] text-gray-500 mt-1">${s.kid_desc} · XP ${s.xp||0}/${s.xp_need||100}</div>
             ${(ps.stat_points||0)>0 ? `<button onclick="allocStat('${s.id}')" class="text-[10px] mt-2 px-2 py-0.5 border rounded">+1 올리기</button>` : ''}
         </div>`).join('')}</div>
     <a href="/guide#stats" class="text-xs text-[#0A84FF] mt-4 inline-block">능력치 가이드 →</a>`;
@@ -206,30 +975,107 @@ function renderSpace() {
     return html + '</div>';
 }
 
+async function applyDashboard(dash) {
+    if (!dash) return;
+    const prevTab = document.querySelector('.al-tab.active')?.dataset.tab;
+    D = dash;
+    const al = D.airline || {};
+    const ops = D.ops || {};
+    document.getElementById('al-wallet').textContent = fmt(D.wallet?.balance || 0);
+    if (al.founded) {
+        document.getElementById('al-title').textContent = `${al.logo||'✈️'} ${al.name} · Lv.${ops.level||1}`;
+    }
+    if (prevTab === 'revenue' && !ops.revenue_panel) {
+        await loadRevenuePanel(true);
+    }
+}
+
 async function apiPost(url, body) {
     const res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body||{}) });
     const d = await res.json();
     if (d.error) { alert(d.error); return null; }
     if (d.message) alert(d.message);
-    await loadDash();
+    if (d.wallet?.balance != null) {
+        D.wallet = d.wallet;
+        document.getElementById('al-wallet').textContent = fmt(d.wallet.balance);
+    }
+    if (d.dashboard) {
+        await applyDashboard(d.dashboard);
+        const tab = document.querySelector('.al-tab.active')?.dataset.tab || 'overview';
+        if (!document.getElementById('al-founded').classList.contains('hidden')) {
+            renderAlTab(tab);
+        }
+    } else await loadDash();
     return d;
 }
 function foundAirline() { apiPost('/api/airline/found', { name: document.getElementById('al-name').value, logo: document.getElementById('al-logo').value }); }
 function setHub(id) { apiPost('/api/airline/hub', { hub_id: id }); }
 function setMode(m) { apiPost('/api/airline/mode', { mode: m }); }
+function setAncillary(tier) { apiPost('/api/airline/ancillary', { tier }); }
+function allocateProfit(choice) {
+    if (!confirm('이번 주 이익 배치를 이 방향으로 할까요?\n(주 1회만 가능해요)')) return;
+    apiPost('/api/airline/company/allocate', { choice });
+}
+function withdrawVault() {
+    if (!confirm('회사 금고에 모은 돈을 지갑으로 옮길까요?')) return;
+    apiPost('/api/airline/company/vault/withdraw', {});
+}
 function deployAc(id, hub) { apiPost('/api/airline/deploy', { aircraft_id: id, hub_id: hub }); }
 function addRoute() { apiPost('/api/airline/route', { template_id: document.getElementById('new-route-tpl').value, aircraft_id: document.getElementById('new-route-ac').value, flights_per_week: 7 }); }
 function delRoute(id) { if(confirm('노선을 없앨까요?')) fetch('/api/airline/route/'+id,{method:'DELETE'}).then(()=>loadDash()); }
 function hireCrew(id) { apiPost('/api/airline/hire', { crew_id: id }); }
-function settleNow() { apiPost('/api/airline/settle'); }
-function allocStat(id) { apiPost('/api/player/stats/allocate', { stat_id: id }); }
+function fireCrew(id) {
+    const c = (D.ops?.hireable_crew || []).find(x => x.id === id);
+    const name = c?.name || '이 승무원';
+    if (!confirm(`${name}을(를) 해고할까요?\n노선 배치에서도 빠져요.`)) return;
+    apiPost('/api/airline/fire', { crew_id: id });
+}
+async function settleNow() {
+    const rv = D.ops?.revenue_preview || {};
+    if (!(rv.active_routes > 0)) {
+        if (!confirm('활성 노선이 없어요. 주급만 나갈 수 있습니다.\n그래도 받을까요?')) return;
+    }
+    const res = await fetch('/api/airline/settle', { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    if (!d.gross && !d.payroll) { alert('오늘 받을 운영 수익이 없어요. 내일 다시 확인해주세요!'); return; }
+    let msg = `수익 반영!\n운영 수익: +${d.formatted_gross||fmt(d.gross||0)}`;
+    if (d.days_accrued > 1) msg += ` (${d.days_accrued}일치)`;
+    msg += `\n주급: −${d.formatted_payroll||fmt(d.payroll||0)}\n순수익: ${d.formatted_net||fmt(d.net||0)}`;
+    if (d.payroll_warning) msg += `\n⚠️ ${d.payroll_warning}`;
+    if (d.details?.length) {
+        msg += '\n\n노선별:';
+        d.details.forEach(x => { msg += `\n· ${x.route}: ${fmt(x.money)} (보너스+${x.bonus_pct||0}%)`; });
+    }
+    alert(msg);
+    if (d.wallet) await loadDash();
+    else await loadDash();
+}
+async function allocStat(id) {
+    const res = await fetch('/api/player/stats/allocate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stat_id: id }),
+    });
+    const d = await res.json();
+    if (d.error) { alert(d.error); return; }
+    if (d.stats) {
+        D.player_stats = d.stats;
+        renderAlTab('stats');
+    } else {
+        await loadDash();
+        renderAlTab('stats');
+    }
+}
 function foundSpace() { apiPost('/api/airline/space/found'); }
 function buyRocket(id) { apiPost('/api/airline/space/buy-rocket', { rocket_id: id }); }
 function launchMission(id) { apiPost('/api/airline/space/launch', { mission_id: id }); }
 
 document.getElementById('al-tabs')?.addEventListener('click', e => {
     const t = e.target.closest('.al-tab');
-    if (t) renderAlTab(t.dataset.tab);
+    if (!t) return;
+    renderAlTab(t.dataset.tab);
+    if (t.dataset.tab === 'revenue' && !D.ops?.revenue_panel) loadRevenuePanel();
 });
 loadDash();
 </script>

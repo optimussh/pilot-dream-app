@@ -1,0 +1,14 @@
+[
+  {"month": 1, "icon": "⛷️", "theme": "겨울 스키·연초 여행", "hot_routes": ["HND", "NRT", "CJU", "CTS"], "desc": "눈 축제·스키 리조트 수요. 연초 가족 여행도 많아요.", "economy": "계절 관광 + 연휴 소비"},
+  {"month": 2, "icon": "🧧", "theme": "설·아시아 명절", "hot_routes": ["ICN", "TPE", "HKG", "BKK"], "desc": "명절 고향 방문·친척 만남으로 국내·아시아 노선이 바빠요.", "economy": "문화 행사 = 단기 수요 폭발"},
+  {"month": 3, "icon": "🌸", "theme": "벚꽃 시즌 시작", "hot_routes": ["NRT", "HND", "KIX", "FUK"], "desc": "일본 벚꽃 관광이 시작되는 달!", "economy": "시즌 관광 피크 진입"},
+  {"month": 4, "icon": "🌷", "theme": "봄 여행·수학여행", "hot_routes": ["NRT", "CJU", "PUS", "TPE"], "desc": "학교 수학여행·봄 휴가 수요.", "economy": "교육 여행 + 레저"},
+  {"month": 5, "icon": "👪", "theme": "가정의 달", "hot_routes": ["CJU", "GMP", "BKK", "SIN"], "desc": "가족 여행 성수기. 국내선이 특히 붐벼요.", "economy": "가족 소비·국내 관광"},
+  {"month": 6, "icon": "☀️", "theme": "초여름·휴양", "hot_routes": ["CJU", "OKA", "BKK", "DPS"], "desc": "바다·휴양지 노선 인기 상승.", "economy": "레저 관광 시즌"},
+  {"month": 7, "icon": "🏖️", "theme": "여름 성수기", "hot_routes": ["CJU", "NRT", "BKK", "SIN", "GUM"], "desc": "휴가 대목! 표 값이 오르기 쉬워요.", "economy": "성수기 요금(수요↑ 가격↑)"},
+  {"month": 8, "icon": "🎆", "theme": "여름 휴가 절정", "hot_routes": ["CJU", "HND", "LAX", "SYD"], "desc": "장거리 휴가도 늘어나요. 태풍 주의!", "economy": "성수기 + 기상 리스크"},
+  {"month": 9, "icon": "🍁", "theme": "가을 여행 시작", "hot_routes": ["HND", "KIX", "TPE", "ICN"], "desc": "선선한 날씨, 단풍·도시 여행.", "economy": "비수기 직전 골든타임"},
+  {"month": 10, "icon": "🍂", "theme": "단풍·전시회", "hot_routes": ["NRT", "FRA", "CDG", "ICN"], "desc": "관광 + 비즈니스 전시회 시즌이 겹쳐요.", "economy": "관광·비즈 혼합 수요"},
+  {"month": 11, "icon": "🛍️", "theme": "쇼핑·연말 준비", "hot_routes": ["ICN", "HKG", "NRT", "BKK"], "desc": "쇼핑 여행·화물(선물) 수요 증가.", "economy": "소비 시즌 선행"},
+  {"month": 12, "icon": "🎄", "theme": "연말 성수기", "hot_routes": ["ICN", "NRT", "LAX", "LHR", "CJU"], "desc": "연말 여행·고향 방문·화물 피크.", "economy": "연간 최대 성수기 중 하나"}
+]

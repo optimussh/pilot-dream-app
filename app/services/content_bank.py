@@ -42,7 +42,27 @@ def ensure_bank(name: str, generator, target: int) -> list:
 
 
 def get_quiz_bank() -> list:
-    return ensure_bank("quiz.json", _gen.generate_quizzes, 1000)
+    bank = ensure_bank("quiz.json", _gen.generate_quizzes, 1000)
+    # 경제 교육 퀴즈를 은행 앞에 병합 (중복 id 방지)
+    try:
+        eco = _load_file("economy_quiz.json")
+        if isinstance(eco, list) and eco:
+            existing = {q.get("id") for q in bank}
+            extra = []
+            for q in eco:
+                qid = q.get("id")
+                if not qid or qid in existing:
+                    continue
+                item = dict(q)
+                item.setdefault("category", "economy")
+                item.setdefault("explanation", q.get("explanation", ""))
+                extra.append(item)
+            if extra:
+                bank = extra + bank
+                _cache["quiz.json"] = bank
+    except Exception:
+        pass
+    return bank
 
 
 def get_flashcard_bank() -> list:
@@ -79,6 +99,23 @@ def lookup_by_ids(bank: list, ids: list) -> list:
     return [by_id[i] for i in ids if i in by_id]
 
 
+def _shuffle_indexed(indexed: list, seed: str = None) -> list:
+    rng = random.Random(seed) if seed else random
+    out = list(indexed)
+    rng.shuffle(out)
+    return out
+
+
+def shuffle_options_list(options: list, seed: str = None) -> list:
+    """임의 옵션 리스트(문자열·dict) 순서 섞기"""
+    import copy
+    opts = copy.deepcopy(options)
+    if len(opts) < 2:
+        return opts
+    indexed = _shuffle_indexed(list(enumerate(opts)), seed)
+    return [item for _, item in indexed]
+
+
 def shuffle_quiz_choices(question: dict, seed: str = None) -> dict:
     """보기 순서를 섞어 정답이 항상 같은 번호에 오지 않게 함"""
     import copy
@@ -86,15 +123,21 @@ def shuffle_quiz_choices(question: dict, seed: str = None) -> dict:
     choices = q.get('choices') or []
     if len(choices) < 2:
         return q
-    correct_idx = q.get('answer', 0)
+    try:
+        correct_idx = int(q.get('answer', 0))
+    except (TypeError, ValueError):
+        correct_idx = 0
     if correct_idx < 0 or correct_idx >= len(choices):
         return q
-    indexed = list(enumerate(choices))
-    rng = random.Random(seed) if seed else random
-    rng.shuffle(indexed)
+    indexed = _shuffle_indexed(list(enumerate(choices)), seed)
     q['choices'] = [text for _, text in indexed]
     q['answer'] = next(i for i, (orig, _) in enumerate(indexed) if orig == correct_idx)
     return q
+
+
+def quiz_public_dict(question: dict) -> dict:
+    """클라이언트용 — 정답 인덱스 제거"""
+    return {k: v for k, v in question.items() if k != 'answer'}
 
 
 def prepare_quiz_questions(questions: list, date_key: str) -> list:
@@ -103,3 +146,26 @@ def prepare_quiz_questions(questions: list, date_key: str) -> list:
         shuffle_quiz_choices(q, seed=f'quiz-{date_key}-{q["id"]}')
         for q in questions
     ]
+
+
+def prepare_scenario(scenario: dict, date_key: str) -> dict:
+    """시나리오 선택지 순서 섞기 (최고 점수 보기가 항상 1번이 아니게)"""
+    import copy
+    s = copy.deepcopy(scenario)
+    choices = s.get('choices')
+    if choices and len(choices) >= 2:
+        s['choices'] = shuffle_options_list(choices, seed=f'scenario-{date_key}-{s["id"]}')
+    return s
+
+
+def prepare_first_flight_steps(steps: list) -> list:
+    """첫 비행 튜토리얼 — 단계별 선택지 섞기"""
+    import copy
+    out = copy.deepcopy(steps)
+    for step in out:
+        choices = step.get('choices')
+        if choices and len(choices) >= 2:
+            step['choices'] = shuffle_options_list(
+                choices, seed=f'first-flight-step-{step["step"]}'
+            )
+    return out

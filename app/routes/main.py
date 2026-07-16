@@ -167,6 +167,11 @@ def add_logbook_entry():
         pass  # fail silently for now
     
     resp = {"status": "success", "entry_id": entry.id}
+    try:
+        from app.services.world_economy import story_for_logbook_route
+        resp["flight_story"] = story_for_logbook_route(route)
+    except Exception:
+        pass
     if rewards_result:
         if rewards_result.get('salary'):
             resp["salary"] = rewards_result['salary']

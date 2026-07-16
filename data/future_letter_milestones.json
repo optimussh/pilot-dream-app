@@ -1,0 +1,50 @@
+[
+  {
+    "id": "ml_first",
+    "title": "첫 이륙",
+    "icon": "🛫",
+    "require": {"type": "first_flight"},
+    "prompt": "첫 비행을 마친 나에게, 왜 기장이 되고 싶은지 한 줄 더 적어볼까요?",
+    "future_voice": "그때의 설렘을 기억해. 지금의 너는 이미 활주로에 서 있어."
+  },
+  {
+    "id": "ml_10h",
+    "title": "10시간 파일럿",
+    "icon": "⏱️",
+    "require": {"type": "hours", "value": 10},
+    "prompt": "10시간을 모았어! 가장 재미있었던 학습은 뭐였어?",
+    "future_voice": "작은 시간이 쌓여 구름 위를 열었어. 계속 가면 돼."
+  },
+  {
+    "id": "ml_50h",
+    "title": "50시간 항해사",
+    "icon": "🧭",
+    "require": {"type": "hours", "value": 50},
+    "prompt": "어려운 순간이 있었어? 어떻게 이겨냈는지 적어봐.",
+    "future_voice": "흔들려도 코스를 다시 잡은 네가 기장이야."
+  },
+  {
+    "id": "ml_airline",
+    "title": "항공사 CEO",
+    "icon": "🏢",
+    "require": {"type": "airline_founded"},
+    "prompt": "내 항공사 이름에 담긴 꿈을 적어볼까?",
+    "future_voice": "하늘을 경영하는 리더의 첫걸음, 정말 멋져."
+  },
+  {
+    "id": "ml_badges",
+    "title": "뱃지 컬렉터",
+    "icon": "🏅",
+    "require": {"type": "badges", "value": 5},
+    "prompt": "가장 마음에 드는 뱃지는? 그 이유는?",
+    "future_voice": "성취의 별들이 제복을 빛나게 할 거야."
+  },
+  {
+    "id": "ml_economy",
+    "title": "경제 파일럿",
+    "icon": "🌍",
+    "require": {"type": "economy_lessons", "value": 5},
+    "prompt": "세계 경제와 항공이 연결된다는 걸 알고 느낀 점은?",
+    "future_voice": "하늘을 이해하는 기장은 세상도 이해해."
+  }
+]

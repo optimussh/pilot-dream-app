@@ -1,0 +1,53 @@
+{
+  "scenarios": [
+    {
+      "id": "jeju_weekend",
+      "name": "제주 주말선",
+      "icon": "🏝️",
+      "base_demand": 100,
+      "base_price": 120000,
+      "seats": 180,
+      "cost_per_flight": 14000000,
+      "desc": "주말 제주 수요. 가격에 따라 손님 수가 바뀌어요.",
+      "elasticity": 1.1,
+      "hint": "너무 비싸면 자리가 남고, 너무 싸면 표는 다 팔려도 이익이 줄 수 있어요."
+    },
+    {
+      "id": "tokyo_spring",
+      "name": "도쿄 벚꽃",
+      "icon": "🌸",
+      "base_demand": 130,
+      "base_price": 280000,
+      "seats": 250,
+      "cost_per_flight": 32000000,
+      "desc": "성수기 국제선. 수요가 탄탄해요.",
+      "elasticity": 0.7,
+      "hint": "성수기에는 가격을 조금 올려도 손님이 잘 와요."
+    },
+    {
+      "id": "longhaul_us",
+      "name": "미주 장거리",
+      "icon": "🌙",
+      "base_demand": 90,
+      "base_price": 950000,
+      "seats": 300,
+      "cost_per_flight": 180000000,
+      "desc": "비용이 큰 장거리. 유가에 민해요.",
+      "elasticity": 0.9,
+      "hint": "빈자리는 큰 손해! 적당한 가격으로 채우는 게 중요해요."
+    },
+    {
+      "id": "biz_weekday",
+      "name": "평일 출장선",
+      "icon": "💼",
+      "base_demand": 70,
+      "base_price": 220000,
+      "seats": 160,
+      "cost_per_flight": 18000000,
+      "desc": "비즈니스 비중 높음. 가격 민감도가 낮아요.",
+      "elasticity": 0.5,
+      "hint": "출장객은 시간·정시를 더 중요하게 볼 수 있어요."
+    }
+  ],
+  "price_options_pct": [0.7, 0.85, 1.0, 1.15, 1.35]
+}

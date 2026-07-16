@@ -1,0 +1,124 @@
+[
+  {
+    "id": "to_maint",
+    "icon": "🔧",
+    "title": "정비를 미룰까?",
+    "situation": "이번 주 바쁜데 정비를 미루면 당장 운항을 더 할 수 있어요.",
+    "choices": [
+      {
+        "id": "delay",
+        "label": "정비 미루기",
+        "short": "이번 주 이익↑, 다음 주 위험↑",
+        "money_delta": 200000,
+        "reputation_delta": -6,
+        "condition_delta": -12,
+        "lesson": "단기 이익을 택하면 고장·결항 위험이 커져요."
+      },
+      {
+        "id": "maintain",
+        "label": "정비 진행",
+        "short": "이번 주 비용, 장기 안전",
+        "money_delta": -80000,
+        "reputation_delta": 4,
+        "condition_delta": 10,
+        "lesson": "안전과 신뢰는 시간이 지나며 이익으로 돌아와요."
+      }
+    ]
+  },
+  {
+    "id": "to_fuel",
+    "icon": "⛽",
+    "title": "연료를 얼마나 실을까?",
+    "situation": "연료를 많이 실으면 안전 여유가 커지지만 무거워져 연료를 더 써요.",
+    "choices": [
+      {
+        "id": "min",
+        "label": "최소 연료",
+        "short": "비용↓, 여유↓",
+        "money_delta": 120000,
+        "reputation_delta": -3,
+        "condition_delta": 0,
+        "lesson": "너무 줄이면 기상 회항 때 위험할 수 있어요."
+      },
+      {
+        "id": "balanced",
+        "label": "균형 연료",
+        "short": "안전과 비용 균형",
+        "money_delta": 40000,
+        "reputation_delta": 3,
+        "condition_delta": 2,
+        "lesson": "기장은 안전 여유와 효율을 함께 봐요."
+      },
+      {
+        "id": "extra",
+        "label": "여유 연료 많이",
+        "short": "안전↑, 비용↑",
+        "money_delta": -60000,
+        "reputation_delta": 5,
+        "condition_delta": 1,
+        "lesson": "악천후·혼잡 예상 시 여유 연료가 현명한 선택일 수 있어요."
+      }
+    ]
+  },
+  {
+    "id": "to_ontime",
+    "icon": "⏰",
+    "title": "정시 vs 연결",
+    "situation": "출발이 조금 늦었어요. 급히 출발하면 연결편은 살리지만 승무원 피로가 커요.",
+    "choices": [
+      {
+        "id": "rush",
+        "label": "서둘러 출발",
+        "short": "정시·연결 유지",
+        "money_delta": 90000,
+        "reputation_delta": 2,
+        "condition_delta": -4,
+        "lesson": "정시는 돈이지만, 서두름은 실수 위험을 키워요."
+      },
+      {
+        "id": "safe_delay",
+        "label": "안전하게 지연",
+        "short": "안전 우선, 일부 환불",
+        "money_delta": -50000,
+        "reputation_delta": 6,
+        "condition_delta": 3,
+        "lesson": "장기적으로 '믿을 수 있는 항공사' 평판이 더 큰 자산이에요."
+      }
+    ]
+  },
+  {
+    "id": "to_price",
+    "icon": "💰",
+    "title": "성수기 요금",
+    "situation": "제주 성수기! 표를 비싸게 팔면 이익이 늘지만 빈자리가 생길 수도 있어요.",
+    "choices": [
+      {
+        "id": "high",
+        "label": "높은 요금",
+        "short": "객단가↑, 탑승률↓ 가능",
+        "money_delta": 150000,
+        "reputation_delta": -2,
+        "condition_delta": 0,
+        "lesson": "가격을 올리면 단위 이익은 커지지만 손님이 줄 수 있어요."
+      },
+      {
+        "id": "mid",
+        "label": "중간 요금",
+        "short": "균형",
+        "money_delta": 100000,
+        "reputation_delta": 2,
+        "condition_delta": 0,
+        "lesson": "많은 항공사가 쓰는 균형 전략이에요."
+      },
+      {
+        "id": "low",
+        "label": "낮은 요금",
+        "short": "탑승률↑, 객단가↓",
+        "money_delta": 70000,
+        "reputation_delta": 4,
+        "condition_delta": 0,
+        "lesson": "좌석을 채우면 브랜드와 점유율에 도움이 될 수 있어요."
+      }
+    ]
+  }
+]

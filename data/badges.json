@@ -1,6 +1,18 @@
 [
   {
-    "id": "total_hours_10",
+    "id": "th_5",
+    "category": "비행 시간",
+    "name": "5시간 파일럿",
+    "description": "총 비행 시간 5시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 5
+    }
+  },
+  {
+    "id": "th_10",
     "category": "비행 시간",
     "name": "10시간 파일럿",
     "description": "총 비행 시간 10시간 달성",
@@ -12,619 +24,7 @@
     }
   },
   {
-    "id": "total_hours_25",
-    "category": "비행 시간",
-    "name": "25시간 파일럿",
-    "description": "총 비행 시간 25시간 달성",
-    "icon": "⏱️",
-    "rarity": "common",
-    "requirement": {
-      "type": "total_hours",
-      "value": 25
-    }
-  },
-  {
-    "id": "total_hours_50",
-    "category": "비행 시간",
-    "name": "50시간 파일럿",
-    "description": "총 비행 시간 50시간 달성",
-    "icon": "⏱️",
-    "rarity": "rare",
-    "requirement": {
-      "type": "total_hours",
-      "value": 50
-    }
-  },
-  {
-    "id": "total_hours_100",
-    "category": "비행 시간",
-    "name": "100시간 파일럿",
-    "description": "총 비행 시간 100시간 달성",
-    "icon": "⏱️",
-    "rarity": "rare",
-    "requirement": {
-      "type": "total_hours",
-      "value": 100
-    }
-  },
-  {
-    "id": "total_hours_250",
-    "category": "비행 시간",
-    "name": "250시간 파일럿",
-    "description": "총 비행 시간 250시간 달성",
-    "icon": "⏱️",
-    "rarity": "epic",
-    "requirement": {
-      "type": "total_hours",
-      "value": 250
-    }
-  },
-  {
-    "id": "total_hours_500",
-    "category": "비행 시간",
-    "name": "500시간 파일럿",
-    "description": "총 비행 시간 500시간 달성",
-    "icon": "⏱️",
-    "rarity": "epic",
-    "requirement": {
-      "type": "total_hours",
-      "value": 500
-    }
-  },
-  {
-    "id": "total_hours_1000",
-    "category": "비행 시간",
-    "name": "1,000시간 파일럿",
-    "description": "총 비행 시간 1,000시간 달성",
-    "icon": "⏱️",
-    "rarity": "legendary",
-    "requirement": {
-      "type": "total_hours",
-      "value": 1000
-    }
-  },
-  {
-    "id": "total_hours_2000",
-    "category": "비행 시간",
-    "name": "2,000시간 파일럿",
-    "description": "총 비행 시간 2,000시간 달성",
-    "icon": "⏱️",
-    "rarity": "legendary",
-    "requirement": {
-      "type": "total_hours",
-      "value": 2000
-    }
-  },
-  {
-    "id": "total_hours_3000",
-    "category": "비행 시간",
-    "name": "3,000시간 파일럿",
-    "description": "총 비행 시간 3,000시간 달성 (기장 트랙)",
-    "icon": "⏱️",
-    "rarity": "legendary",
-    "requirement": {
-      "type": "total_hours",
-      "value": 3000
-    }
-  },
-  {
-    "id": "total_hours_5000",
-    "category": "비행 시간",
-    "name": "5,000시간 파일럿",
-    "description": "총 비행 시간 5,000시간 달성 - 진짜 기장급",
-    "icon": "⏱️",
-    "rarity": "legendary",
-    "requirement": {
-      "type": "total_hours",
-      "value": 5000
-    }
-  },
-  {
-    "id": "B737-800_1h",
-    "category": "기종별 전문가",
-    "name": "B737 첫 비행",
-    "description": "보잉 737-800 첫 비행 기록",
-    "icon": "🛫",
-    "rarity": "common",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "B737-800",
-      "value": 1
-    }
-  },
-  {
-    "id": "B737-800_10h",
-    "category": "기종별 전문가",
-    "name": "B737 10시간",
-    "description": "보잉 737-800으로 10시간 비행",
-    "icon": "🛫",
-    "rarity": "rare",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "B737-800",
-      "value": 10
-    }
-  },
-  {
-    "id": "B737-800_50h",
-    "category": "기종별 전문가",
-    "name": "B737 50시간",
-    "description": "보잉 737-800으로 50시간 비행",
-    "icon": "🛫",
-    "rarity": "epic",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "B737-800",
-      "value": 50
-    }
-  },
-  {
-    "id": "A320-200_1h",
-    "category": "기종별 전문가",
-    "name": "A320 첫 비행",
-    "description": "에어버스 A320 첫 비행 기록",
-    "icon": "🛫",
-    "rarity": "common",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "A320-200",
-      "value": 1
-    }
-  },
-  {
-    "id": "A320-200_10h",
-    "category": "기종별 전문가",
-    "name": "A320 10시간",
-    "description": "에어버스 A320으로 10시간 비행",
-    "icon": "🛫",
-    "rarity": "rare",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "A320-200",
-      "value": 10
-    }
-  },
-  {
-    "id": "A320-200_50h",
-    "category": "기종별 전문가",
-    "name": "A320 50시간",
-    "description": "에어버스 A320으로 50시간 비행",
-    "icon": "🛫",
-    "rarity": "epic",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "A320-200",
-      "value": 50
-    }
-  },
-  {
-    "id": "A330-300_1h",
-    "category": "기종별 전문가",
-    "name": "A330 첫 비행",
-    "description": "에어버스 A330 첫 비행",
-    "icon": "🛫",
-    "rarity": "common",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "A330-300",
-      "value": 1
-    }
-  },
-  {
-    "id": "A330-300_50h",
-    "category": "기종별 전문가",
-    "name": "A330 50시간",
-    "description": "에어버스 A330으로 50시간 비행",
-    "icon": "🛫",
-    "rarity": "epic",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "A330-300",
-      "value": 50
-    }
-  },
-  {
-    "id": "A350-900_1h",
-    "category": "기종별 전문가",
-    "name": "A350 첫 비행",
-    "description": "에어버스 A350 첫 비행",
-    "icon": "🛫",
-    "rarity": "common",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "A350-900",
-      "value": 1
-    }
-  },
-  {
-    "id": "A350-900_50h",
-    "category": "기종별 전문가",
-    "name": "A350 50시간",
-    "description": "에어버스 A350으로 50시간 비행",
-    "icon": "🛫",
-    "rarity": "epic",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "A350-900",
-      "value": 50
-    }
-  },
-  {
-    "id": "B777-300ER_1h",
-    "category": "기종별 전문가",
-    "name": "B777 첫 비행",
-    "description": "보잉 777-300ER 첫 비행",
-    "icon": "🛫",
-    "rarity": "common",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "B777-300ER",
-      "value": 1
-    }
-  },
-  {
-    "id": "B777-300ER_10h",
-    "category": "기종별 전문가",
-    "name": "B777 10시간",
-    "description": "보잉 777으로 10시간 비행",
-    "icon": "🛫",
-    "rarity": "rare",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "B777-300ER",
-      "value": 10
-    }
-  },
-  {
-    "id": "B777-300ER_50h",
-    "category": "기종별 전문가",
-    "name": "B777 50시간",
-    "description": "보잉 777으로 50시간 비행",
-    "icon": "🛫",
-    "rarity": "epic",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "B777-300ER",
-      "value": 50
-    }
-  },
-  {
-    "id": "B777-300ER_100h",
-    "category": "기종별 전문가",
-    "name": "B777 100시간",
-    "description": "보잉 777으로 100시간 비행 - Heavy Metal",
-    "icon": "🛫",
-    "rarity": "legendary",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "B777-300ER",
-      "value": 100
-    }
-  },
-  {
-    "id": "B787-9_1h",
-    "category": "기종별 전문가",
-    "name": "B787 첫 비행",
-    "description": "보잉 787 드림라이너 첫 비행",
-    "icon": "🛫",
-    "rarity": "common",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "B787-9",
-      "value": 1
-    }
-  },
-  {
-    "id": "B787-9_50h",
-    "category": "기종별 전문가",
-    "name": "B787 50시간",
-    "description": "보잉 787으로 50시간 비행",
-    "icon": "🛫",
-    "rarity": "epic",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "B787-9",
-      "value": 50
-    }
-  },
-  {
-    "id": "A380-800_1h",
-    "category": "기종별 전문가",
-    "name": "A380 첫 비행",
-    "description": "에어버스 A380 세계 최대 여객기 첫 비행",
-    "icon": "🛫",
-    "rarity": "rare",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "A380-800",
-      "value": 1
-    }
-  },
-  {
-    "id": "A380-800_10h",
-    "category": "기종별 전문가",
-    "name": "A380 10시간",
-    "description": "A380으로 10시간 비행",
-    "icon": "🛫",
-    "rarity": "epic",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "A380-800",
-      "value": 10
-    }
-  },
-  {
-    "id": "A380-800_50h",
-    "category": "기종별 전문가",
-    "name": "A380 50시간",
-    "description": "A380으로 50시간 비행",
-    "icon": "🛫",
-    "rarity": "legendary",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "A380-800",
-      "value": 50
-    }
-  },
-  {
-    "id": "B777F_1h",
-    "category": "기종별 전문가",
-    "name": "화물 B777 첫 비행",
-    "description": "보잉 777F 화물기 첫 비행",
-    "icon": "📦",
-    "rarity": "rare",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "B777F",
-      "value": 1
-    }
-  },
-  {
-    "id": "atc_10",
-    "category": "ATC 영어 정복",
-    "name": "ATC 10문장",
-    "description": "항공 통신 영어 10개 이상 학습",
-    "icon": "🎧",
-    "rarity": "common",
-    "requirement": {
-      "type": "atc_phrases",
-      "value": 10
-    }
-  },
-  {
-    "id": "atc_25",
-    "category": "ATC 영어 정복",
-    "name": "ATC 25문장",
-    "description": "항공 통신 영어 25개 이상 학습",
-    "icon": "🎧",
-    "rarity": "common",
-    "requirement": {
-      "type": "atc_phrases",
-      "value": 25
-    }
-  },
-  {
-    "id": "atc_50",
-    "category": "ATC 영어 정복",
-    "name": "ATC 50문장",
-    "description": "항공 통신 영어 50개 이상 학습",
-    "icon": "🎧",
-    "rarity": "rare",
-    "requirement": {
-      "type": "atc_phrases",
-      "value": 50
-    }
-  },
-  {
-    "id": "atc_100",
-    "category": "ATC 영어 정복",
-    "name": "ATC 100문장",
-    "description": "항공 통신 영어 100개 이상 학습",
-    "icon": "🎧",
-    "rarity": "epic",
-    "requirement": {
-      "type": "atc_phrases",
-      "value": 100
-    }
-  },
-  {
-    "id": "atc_200",
-    "category": "ATC 영어 정복",
-    "name": "ATC 200문장",
-    "description": "항공 통신 영어 200개 이상 학습",
-    "icon": "🎧",
-    "rarity": "epic",
-    "requirement": {
-      "type": "atc_phrases",
-      "value": 200
-    }
-  },
-  {
-    "id": "atc_250",
-    "category": "ATC 영어 정복",
-    "name": "ATC 전설",
-    "description": "항공 통신 영어 250개 전체 마스터",
-    "icon": "🎧",
-    "rarity": "legendary",
-    "requirement": {
-      "type": "atc_phrases",
-      "value": 250
-    }
-  },
-  {
-    "id": "flights_1",
-    "category": "로그북 성실도",
-    "name": "첫 비행 기록",
-    "description": "첫 비행을 로그북에 기록",
-    "icon": "📖",
-    "rarity": "common",
-    "requirement": {
-      "type": "flight_count",
-      "value": 1
-    }
-  },
-  {
-    "id": "flights_10",
-    "category": "로그북 성실도",
-    "name": "비행 10회 기록",
-    "description": "로그북에 비행 10회 기록",
-    "icon": "📖",
-    "rarity": "common",
-    "requirement": {
-      "type": "flight_count",
-      "value": 10
-    }
-  },
-  {
-    "id": "flights_50",
-    "category": "로그북 성실도",
-    "name": "비행 50회 기록",
-    "description": "로그북에 비행 50회 기록",
-    "icon": "📖",
-    "rarity": "rare",
-    "requirement": {
-      "type": "flight_count",
-      "value": 50
-    }
-  },
-  {
-    "id": "flights_100",
-    "category": "로그북 성실도",
-    "name": "비행 100회 기록",
-    "description": "로그북에 비행 100회 기록",
-    "icon": "📖",
-    "rarity": "epic",
-    "requirement": {
-      "type": "flight_count",
-      "value": 100
-    }
-  },
-  {
-    "id": "dream_ke",
-    "category": "대한민국 항공사 꿈",
-    "name": "대한항공의 꿈",
-    "description": "대한항공 기장이 되는 꿈을 키우기 시작",
-    "icon": "🇰🇷",
-    "rarity": "common",
-    "requirement": {
-      "type": "special",
-      "id": "dream_ke"
-    }
-  },
-  {
-    "id": "dream_oz",
-    "category": "대한민국 항공사 꿈",
-    "name": "아시아나 도전자",
-    "description": "아시아나항공으로 가는 길에 도전",
-    "icon": "🇰🇷",
-    "rarity": "common",
-    "requirement": {
-      "type": "special",
-      "id": "dream_oz"
-    }
-  },
-  {
-    "id": "heavy_100",
-    "category": "대한민국 항공사 꿈",
-    "name": "Heavy Metal 100시간",
-    "description": "B777 또는 A380 100시간 이상 경험",
-    "icon": "🇰🇷",
-    "rarity": "rare",
-    "requirement": {
-      "type": "special",
-      "id": "heavy_100"
-    }
-  },
-  {
-    "id": "captain_track_1000",
-    "category": "대한민국 항공사 꿈",
-    "name": "기장 트랙 1,000시간",
-    "description": "기장 최소 시간대 1,000시간 달성",
-    "icon": "🇰🇷",
-    "rarity": "epic",
-    "requirement": {
-      "type": "total_hours",
-      "value": 1000
-    }
-  },
-  {
-    "id": "captain_track_3000",
-    "category": "대한민국 항공사 꿈",
-    "name": "3,000시간 클럽",
-    "description": "실제 부기장급 경험치 달성",
-    "icon": "🇰🇷",
-    "rarity": "legendary",
-    "requirement": {
-      "type": "total_hours",
-      "value": 3000
-    }
-  },
-  {
-    "id": "a380_korean",
-    "category": "대한민국 항공사 꿈",
-    "name": "A380 대한항공 파일럿",
-    "description": "대한항공 A380 50시간 이상",
-    "icon": "🇰🇷",
-    "rarity": "epic",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "A380-800",
-      "value": 50
-    }
-  },
-  {
-    "id": "b777_korean",
-    "category": "대한민국 항공사 꿈",
-    "name": "B777 대한항공 파일럿",
-    "description": "대한항공 B777 100시간 이상",
-    "icon": "🇰🇷",
-    "rarity": "epic",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "B777-300ER",
-      "value": 100
-    }
-  },
-  {
-    "id": "a380_100h",
-    "category": "전설의 업적",
-    "name": "A380의 주인",
-    "description": "A380으로 100시간 비행 - 초대형기 마스터",
-    "icon": "🏆",
-    "rarity": "legendary",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "A380-800",
-      "value": 100
-    }
-  },
-  {
-    "id": "b777_200h",
-    "category": "전설의 업적",
-    "name": "트리플 세븐 마스터",
-    "description": "B777으로 200시간 비행",
-    "icon": "🏆",
-    "rarity": "legendary",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "B777-300ER",
-      "value": 200
-    }
-  },
-  {
-    "id": "true_captain",
-    "category": "전설의 업적",
-    "name": "진짜 기장",
-    "description": "총 5,000시간 + 주요 타입 경험",
-    "icon": "🏆",
-    "rarity": "legendary",
-    "requirement": {
-      "type": "total_hours",
-      "value": 5000
-    }
-  },
-  {
-    "id": "total_hours_15",
+    "id": "th_15",
     "category": "비행 시간",
     "name": "15시간 파일럿",
     "description": "총 비행 시간 15시간 달성",
@@ -636,7 +36,139 @@
     }
   },
   {
-    "id": "total_hours_75",
+    "id": "th_20",
+    "category": "비행 시간",
+    "name": "20시간 파일럿",
+    "description": "총 비행 시간 20시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 20
+    }
+  },
+  {
+    "id": "th_25",
+    "category": "비행 시간",
+    "name": "25시간 파일럿",
+    "description": "총 비행 시간 25시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 25
+    }
+  },
+  {
+    "id": "th_30",
+    "category": "비행 시간",
+    "name": "30시간 파일럿",
+    "description": "총 비행 시간 30시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 30
+    }
+  },
+  {
+    "id": "th_35",
+    "category": "비행 시간",
+    "name": "35시간 파일럿",
+    "description": "총 비행 시간 35시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 35
+    }
+  },
+  {
+    "id": "th_40",
+    "category": "비행 시간",
+    "name": "40시간 파일럿",
+    "description": "총 비행 시간 40시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 40
+    }
+  },
+  {
+    "id": "th_45",
+    "category": "비행 시간",
+    "name": "45시간 파일럿",
+    "description": "총 비행 시간 45시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 45
+    }
+  },
+  {
+    "id": "th_50",
+    "category": "비행 시간",
+    "name": "50시간 파일럿",
+    "description": "총 비행 시간 50시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 50
+    }
+  },
+  {
+    "id": "th_55",
+    "category": "비행 시간",
+    "name": "55시간 파일럿",
+    "description": "총 비행 시간 55시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 55
+    }
+  },
+  {
+    "id": "th_60",
+    "category": "비행 시간",
+    "name": "60시간 파일럿",
+    "description": "총 비행 시간 60시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 60
+    }
+  },
+  {
+    "id": "th_65",
+    "category": "비행 시간",
+    "name": "65시간 파일럿",
+    "description": "총 비행 시간 65시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 65
+    }
+  },
+  {
+    "id": "th_70",
+    "category": "비행 시간",
+    "name": "70시간 파일럿",
+    "description": "총 비행 시간 70시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 70
+    }
+  },
+  {
+    "id": "th_75",
     "category": "비행 시간",
     "name": "75시간 파일럿",
     "description": "총 비행 시간 75시간 달성",
@@ -648,353 +180,1055 @@
     }
   },
   {
-    "id": "total_hours_125",
+    "id": "th_80",
     "category": "비행 시간",
-    "name": "125시간 파일럿",
-    "description": "총 비행 시간 125시간 달성",
+    "name": "80시간 파일럿",
+    "description": "총 비행 시간 80시간 달성",
     "icon": "⏱️",
-    "rarity": "rare",
+    "rarity": "common",
     "requirement": {
       "type": "total_hours",
-      "value": 125
+      "value": 80
     }
   },
   {
-    "id": "total_hours_175",
+    "id": "th_85",
     "category": "비행 시간",
-    "name": "175시간 파일럿",
-    "description": "총 비행 시간 175시간 달성",
+    "name": "85시간 파일럿",
+    "description": "총 비행 시간 85시간 달성",
     "icon": "⏱️",
-    "rarity": "rare",
+    "rarity": "common",
     "requirement": {
       "type": "total_hours",
-      "value": 175
+      "value": 85
     }
   },
   {
-    "id": "total_hours_400",
+    "id": "th_90",
+    "category": "비행 시간",
+    "name": "90시간 파일럿",
+    "description": "총 비행 시간 90시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 90
+    }
+  },
+  {
+    "id": "th_95",
+    "category": "비행 시간",
+    "name": "95시간 파일럿",
+    "description": "총 비행 시간 95시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 95
+    }
+  },
+  {
+    "id": "th_100",
+    "category": "비행 시간",
+    "name": "100시간 파일럿",
+    "description": "총 비행 시간 100시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 100
+    }
+  },
+  {
+    "id": "th_120",
+    "category": "비행 시간",
+    "name": "120시간 파일럿",
+    "description": "총 비행 시간 120시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 120
+    }
+  },
+  {
+    "id": "th_140",
+    "category": "비행 시간",
+    "name": "140시간 파일럿",
+    "description": "총 비행 시간 140시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 140
+    }
+  },
+  {
+    "id": "th_160",
+    "category": "비행 시간",
+    "name": "160시간 파일럿",
+    "description": "총 비행 시간 160시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 160
+    }
+  },
+  {
+    "id": "th_180",
+    "category": "비행 시간",
+    "name": "180시간 파일럿",
+    "description": "총 비행 시간 180시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 180
+    }
+  },
+  {
+    "id": "th_200",
+    "category": "비행 시간",
+    "name": "200시간 파일럿",
+    "description": "총 비행 시간 200시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 200
+    }
+  },
+  {
+    "id": "th_220",
+    "category": "비행 시간",
+    "name": "220시간 파일럿",
+    "description": "총 비행 시간 220시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 220
+    }
+  },
+  {
+    "id": "th_240",
+    "category": "비행 시간",
+    "name": "240시간 파일럿",
+    "description": "총 비행 시간 240시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 240
+    }
+  },
+  {
+    "id": "th_260",
+    "category": "비행 시간",
+    "name": "260시간 파일럿",
+    "description": "총 비행 시간 260시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 260
+    }
+  },
+  {
+    "id": "th_280",
+    "category": "비행 시간",
+    "name": "280시간 파일럿",
+    "description": "총 비행 시간 280시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 280
+    }
+  },
+  {
+    "id": "th_300",
+    "category": "비행 시간",
+    "name": "300시간 파일럿",
+    "description": "총 비행 시간 300시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 300
+    }
+  },
+  {
+    "id": "th_320",
+    "category": "비행 시간",
+    "name": "320시간 파일럿",
+    "description": "총 비행 시간 320시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 320
+    }
+  },
+  {
+    "id": "th_340",
+    "category": "비행 시간",
+    "name": "340시간 파일럿",
+    "description": "총 비행 시간 340시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 340
+    }
+  },
+  {
+    "id": "th_360",
+    "category": "비행 시간",
+    "name": "360시간 파일럿",
+    "description": "총 비행 시간 360시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 360
+    }
+  },
+  {
+    "id": "th_380",
+    "category": "비행 시간",
+    "name": "380시간 파일럿",
+    "description": "총 비행 시간 380시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 380
+    }
+  },
+  {
+    "id": "th_400",
     "category": "비행 시간",
     "name": "400시간 파일럿",
     "description": "총 비행 시간 400시간 달성",
     "icon": "⏱️",
-    "rarity": "rare",
+    "rarity": "common",
     "requirement": {
       "type": "total_hours",
       "value": 400
     }
   },
   {
-    "id": "total_hours_600",
+    "id": "th_420",
+    "category": "비행 시간",
+    "name": "420시간 파일럿",
+    "description": "총 비행 시간 420시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 420
+    }
+  },
+  {
+    "id": "th_440",
+    "category": "비행 시간",
+    "name": "440시간 파일럿",
+    "description": "총 비행 시간 440시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 440
+    }
+  },
+  {
+    "id": "th_460",
+    "category": "비행 시간",
+    "name": "460시간 파일럿",
+    "description": "총 비행 시간 460시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 460
+    }
+  },
+  {
+    "id": "th_480",
+    "category": "비행 시간",
+    "name": "480시간 파일럿",
+    "description": "총 비행 시간 480시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 480
+    }
+  },
+  {
+    "id": "th_500",
+    "category": "비행 시간",
+    "name": "500시간 파일럿",
+    "description": "총 비행 시간 500시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 500
+    }
+  },
+  {
+    "id": "th_600",
     "category": "비행 시간",
     "name": "600시간 파일럿",
     "description": "총 비행 시간 600시간 달성",
     "icon": "⏱️",
-    "rarity": "rare",
+    "rarity": "common",
     "requirement": {
       "type": "total_hours",
       "value": 600
     }
   },
   {
-    "id": "total_hours_800",
+    "id": "th_700",
+    "category": "비행 시간",
+    "name": "700시간 파일럿",
+    "description": "총 비행 시간 700시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 700
+    }
+  },
+  {
+    "id": "th_800",
     "category": "비행 시간",
     "name": "800시간 파일럿",
     "description": "총 비행 시간 800시간 달성",
     "icon": "⏱️",
-    "rarity": "rare",
+    "rarity": "common",
     "requirement": {
       "type": "total_hours",
       "value": 800
     }
   },
   {
-    "id": "total_hours_1200",
+    "id": "th_900",
     "category": "비행 시간",
-    "name": "1200시간 파일럿",
-    "description": "총 비행 시간 1200시간 달성",
+    "name": "900시간 파일럿",
+    "description": "총 비행 시간 900시간 달성",
     "icon": "⏱️",
-    "rarity": "epic",
+    "rarity": "common",
     "requirement": {
       "type": "total_hours",
-      "value": 1200
+      "value": 900
     }
   },
   {
-    "id": "total_hours_1800",
+    "id": "th_1000",
     "category": "비행 시간",
-    "name": "1800시간 파일럿",
-    "description": "총 비행 시간 1800시간 달성",
+    "name": "1000시간 파일럿",
+    "description": "총 비행 시간 1000시간 달성",
     "icon": "⏱️",
-    "rarity": "epic",
+    "rarity": "common",
     "requirement": {
       "type": "total_hours",
-      "value": 1800
+      "value": 1000
     }
   },
   {
-    "id": "total_hours_2500",
+    "id": "th_1500",
     "category": "비행 시간",
-    "name": "2500시간 파일럿",
-    "description": "총 비행 시간 2500시간 달성",
+    "name": "1500시간 파일럿",
+    "description": "총 비행 시간 1500시간 달성",
     "icon": "⏱️",
-    "rarity": "epic",
+    "rarity": "common",
     "requirement": {
       "type": "total_hours",
-      "value": 2500
+      "value": 1500
     }
   },
   {
-    "id": "total_hours_4000",
+    "id": "th_2000",
     "category": "비행 시간",
-    "name": "4000시간 파일럿",
-    "description": "총 비행 시간 4000시간 달성",
+    "name": "2000시간 파일럿",
+    "description": "총 비행 시간 2000시간 달성",
+    "icon": "⏱️",
+    "rarity": "common",
+    "requirement": {
+      "type": "total_hours",
+      "value": 2000
+    }
+  },
+  {
+    "id": "th_3000",
+    "category": "비행 시간",
+    "name": "3000시간 파일럿",
+    "description": "총 비행 시간 3000시간 달성",
+    "icon": "⏱️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "total_hours",
+      "value": 3000
+    }
+  },
+  {
+    "id": "th_5000",
+    "category": "비행 시간",
+    "name": "5000시간 파일럿",
+    "description": "총 비행 시간 5000시간 달성",
     "icon": "⏱️",
     "rarity": "legendary",
     "requirement": {
       "type": "total_hours",
-      "value": 4000
+      "value": 5000
     }
   },
   {
-    "id": "Boeing_737_800_25h",
-    "category": "기종별 전문가",
-    "name": "Boeing 737-800 25시간",
-    "description": "Boeing 737-800 기종으로 25시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "rare",
+    "id": "fc_1",
+    "category": "로그북 성실도",
+    "name": "비행 1회",
+    "description": "로그북 1회 기록",
+    "icon": "📖",
+    "rarity": "common",
     "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Boeing 737-800",
-      "value": 25
+      "type": "flight_count",
+      "value": 1
     }
   },
   {
-    "id": "Boeing_737_800_75h",
-    "category": "기종별 전문가",
-    "name": "Boeing 737-800 75시간",
-    "description": "Boeing 737-800 기종으로 75시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "epic",
+    "id": "fc_2",
+    "category": "로그북 성실도",
+    "name": "비행 2회",
+    "description": "로그북 2회 기록",
+    "icon": "📖",
+    "rarity": "common",
     "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Boeing 737-800",
-      "value": 75
+      "type": "flight_count",
+      "value": 2
     }
   },
   {
-    "id": "Airbus_A320_200_25h",
-    "category": "기종별 전문가",
-    "name": "Airbus A320-200 25시간",
-    "description": "Airbus A320-200 기종으로 25시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "rare",
+    "id": "fc_3",
+    "category": "로그북 성실도",
+    "name": "비행 3회",
+    "description": "로그북 3회 기록",
+    "icon": "📖",
+    "rarity": "common",
     "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Airbus A320-200",
-      "value": 25
+      "type": "flight_count",
+      "value": 3
     }
   },
   {
-    "id": "Airbus_A320_200_75h",
-    "category": "기종별 전문가",
-    "name": "Airbus A320-200 75시간",
-    "description": "Airbus A320-200 기종으로 75시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "epic",
+    "id": "fc_4",
+    "category": "로그북 성실도",
+    "name": "비행 4회",
+    "description": "로그북 4회 기록",
+    "icon": "📖",
+    "rarity": "common",
     "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Airbus A320-200",
-      "value": 75
+      "type": "flight_count",
+      "value": 4
     }
   },
   {
-    "id": "Airbus_A330_300_25h",
-    "category": "기종별 전문가",
-    "name": "Airbus A330-300 25시간",
-    "description": "Airbus A330-300 기종으로 25시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "rare",
+    "id": "fc_5",
+    "category": "로그북 성실도",
+    "name": "비행 5회",
+    "description": "로그북 5회 기록",
+    "icon": "📖",
+    "rarity": "common",
     "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Airbus A330-300",
-      "value": 25
+      "type": "flight_count",
+      "value": 5
     }
   },
   {
-    "id": "Airbus_A330_300_75h",
-    "category": "기종별 전문가",
-    "name": "Airbus A330-300 75시간",
-    "description": "Airbus A330-300 기종으로 75시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "epic",
+    "id": "fc_6",
+    "category": "로그북 성실도",
+    "name": "비행 6회",
+    "description": "로그북 6회 기록",
+    "icon": "📖",
+    "rarity": "common",
     "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Airbus A330-300",
-      "value": 75
+      "type": "flight_count",
+      "value": 6
     }
   },
   {
-    "id": "Airbus_A350_900_25h",
-    "category": "기종별 전문가",
-    "name": "Airbus A350-900 25시간",
-    "description": "Airbus A350-900 기종으로 25시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "rare",
+    "id": "fc_7",
+    "category": "로그북 성실도",
+    "name": "비행 7회",
+    "description": "로그북 7회 기록",
+    "icon": "📖",
+    "rarity": "common",
     "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Airbus A350-900",
-      "value": 25
+      "type": "flight_count",
+      "value": 7
     }
   },
   {
-    "id": "Airbus_A350_900_75h",
-    "category": "기종별 전문가",
-    "name": "Airbus A350-900 75시간",
-    "description": "Airbus A350-900 기종으로 75시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "epic",
+    "id": "fc_8",
+    "category": "로그북 성실도",
+    "name": "비행 8회",
+    "description": "로그북 8회 기록",
+    "icon": "📖",
+    "rarity": "common",
     "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Airbus A350-900",
-      "value": 75
+      "type": "flight_count",
+      "value": 8
     }
   },
   {
-    "id": "Boeing_777_300ER_25h",
-    "category": "기종별 전문가",
-    "name": "Boeing 777-300ER 25시간",
-    "description": "Boeing 777-300ER 기종으로 25시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "rare",
+    "id": "fc_9",
+    "category": "로그북 성실도",
+    "name": "비행 9회",
+    "description": "로그북 9회 기록",
+    "icon": "📖",
+    "rarity": "common",
     "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Boeing 777-300ER",
-      "value": 25
+      "type": "flight_count",
+      "value": 9
     }
   },
   {
-    "id": "Boeing_777_300ER_75h",
-    "category": "기종별 전문가",
-    "name": "Boeing 777-300ER 75시간",
-    "description": "Boeing 777-300ER 기종으로 75시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "epic",
+    "id": "fc_10",
+    "category": "로그북 성실도",
+    "name": "비행 10회",
+    "description": "로그북 10회 기록",
+    "icon": "📖",
+    "rarity": "common",
     "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Boeing 777-300ER",
-      "value": 75
-    }
-  },
-  {
-    "id": "Boeing_787_9_Dreamliner_25h",
-    "category": "기종별 전문가",
-    "name": "Boeing 787-9 Dreamliner 25시간",
-    "description": "Boeing 787-9 Dreamliner 기종으로 25시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "rare",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Boeing 787-9 Dreamliner",
-      "value": 25
-    }
-  },
-  {
-    "id": "Boeing_787_9_Dreamliner_75h",
-    "category": "기종별 전문가",
-    "name": "Boeing 787-9 Dreamliner 75시간",
-    "description": "Boeing 787-9 Dreamliner 기종으로 75시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "epic",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Boeing 787-9 Dreamliner",
-      "value": 75
-    }
-  },
-  {
-    "id": "Airbus_A380_800_25h",
-    "category": "기종별 전문가",
-    "name": "Airbus A380-800 25시간",
-    "description": "Airbus A380-800 기종으로 25시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "rare",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Airbus A380-800",
-      "value": 25
-    }
-  },
-  {
-    "id": "Airbus_A380_800_75h",
-    "category": "기종별 전문가",
-    "name": "Airbus A380-800 75시간",
-    "description": "Airbus A380-800 기종으로 75시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "epic",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Airbus A380-800",
-      "value": 75
-    }
-  },
-  {
-    "id": "Boeing_757_200_10h",
-    "category": "기종별 전문가",
-    "name": "Boeing 757-200 10시간",
-    "description": "Boeing 757-200 기종으로 10시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "rare",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Boeing 757-200",
+      "type": "flight_count",
       "value": 10
     }
   },
   {
-    "id": "Boeing_757_200_30h",
-    "category": "기종별 전문가",
-    "name": "Boeing 757-200 30시간",
-    "description": "Boeing 757-200 기종으로 30시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "rare",
+    "id": "fc_11",
+    "category": "로그북 성실도",
+    "name": "비행 11회",
+    "description": "로그북 11회 기록",
+    "icon": "📖",
+    "rarity": "common",
     "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Boeing 757-200",
+      "type": "flight_count",
+      "value": 11
+    }
+  },
+  {
+    "id": "fc_12",
+    "category": "로그북 성실도",
+    "name": "비행 12회",
+    "description": "로그북 12회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 12
+    }
+  },
+  {
+    "id": "fc_13",
+    "category": "로그북 성실도",
+    "name": "비행 13회",
+    "description": "로그북 13회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 13
+    }
+  },
+  {
+    "id": "fc_14",
+    "category": "로그북 성실도",
+    "name": "비행 14회",
+    "description": "로그북 14회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 14
+    }
+  },
+  {
+    "id": "fc_15",
+    "category": "로그북 성실도",
+    "name": "비행 15회",
+    "description": "로그북 15회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 15
+    }
+  },
+  {
+    "id": "fc_16",
+    "category": "로그북 성실도",
+    "name": "비행 16회",
+    "description": "로그북 16회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 16
+    }
+  },
+  {
+    "id": "fc_17",
+    "category": "로그북 성실도",
+    "name": "비행 17회",
+    "description": "로그북 17회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 17
+    }
+  },
+  {
+    "id": "fc_18",
+    "category": "로그북 성실도",
+    "name": "비행 18회",
+    "description": "로그북 18회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 18
+    }
+  },
+  {
+    "id": "fc_19",
+    "category": "로그북 성실도",
+    "name": "비행 19회",
+    "description": "로그북 19회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 19
+    }
+  },
+  {
+    "id": "fc_20",
+    "category": "로그북 성실도",
+    "name": "비행 20회",
+    "description": "로그북 20회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 20
+    }
+  },
+  {
+    "id": "fc_21",
+    "category": "로그북 성실도",
+    "name": "비행 21회",
+    "description": "로그북 21회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 21
+    }
+  },
+  {
+    "id": "fc_22",
+    "category": "로그북 성실도",
+    "name": "비행 22회",
+    "description": "로그북 22회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 22
+    }
+  },
+  {
+    "id": "fc_23",
+    "category": "로그북 성실도",
+    "name": "비행 23회",
+    "description": "로그북 23회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 23
+    }
+  },
+  {
+    "id": "fc_24",
+    "category": "로그북 성실도",
+    "name": "비행 24회",
+    "description": "로그북 24회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 24
+    }
+  },
+  {
+    "id": "fc_25",
+    "category": "로그북 성실도",
+    "name": "비행 25회",
+    "description": "로그북 25회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 25
+    }
+  },
+  {
+    "id": "fc_26",
+    "category": "로그북 성실도",
+    "name": "비행 26회",
+    "description": "로그북 26회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 26
+    }
+  },
+  {
+    "id": "fc_27",
+    "category": "로그북 성실도",
+    "name": "비행 27회",
+    "description": "로그북 27회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 27
+    }
+  },
+  {
+    "id": "fc_28",
+    "category": "로그북 성실도",
+    "name": "비행 28회",
+    "description": "로그북 28회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 28
+    }
+  },
+  {
+    "id": "fc_29",
+    "category": "로그북 성실도",
+    "name": "비행 29회",
+    "description": "로그북 29회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 29
+    }
+  },
+  {
+    "id": "fc_30",
+    "category": "로그북 성실도",
+    "name": "비행 30회",
+    "description": "로그북 30회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
       "value": 30
     }
   },
   {
-    "id": "Airbus_A340_300_10h",
-    "category": "기종별 전문가",
-    "name": "Airbus A340-300 10시간",
-    "description": "Airbus A340-300 기종으로 10시간 비행 달성",
-    "icon": "🛫",
+    "id": "fc_31",
+    "category": "로그북 성실도",
+    "name": "비행 31회",
+    "description": "로그북 31회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 31
+    }
+  },
+  {
+    "id": "fc_32",
+    "category": "로그북 성실도",
+    "name": "비행 32회",
+    "description": "로그북 32회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 32
+    }
+  },
+  {
+    "id": "fc_33",
+    "category": "로그북 성실도",
+    "name": "비행 33회",
+    "description": "로그북 33회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 33
+    }
+  },
+  {
+    "id": "fc_34",
+    "category": "로그북 성실도",
+    "name": "비행 34회",
+    "description": "로그북 34회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 34
+    }
+  },
+  {
+    "id": "fc_35",
+    "category": "로그북 성실도",
+    "name": "비행 35회",
+    "description": "로그북 35회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 35
+    }
+  },
+  {
+    "id": "fc_36",
+    "category": "로그북 성실도",
+    "name": "비행 36회",
+    "description": "로그북 36회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 36
+    }
+  },
+  {
+    "id": "fc_37",
+    "category": "로그북 성실도",
+    "name": "비행 37회",
+    "description": "로그북 37회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 37
+    }
+  },
+  {
+    "id": "fc_38",
+    "category": "로그북 성실도",
+    "name": "비행 38회",
+    "description": "로그북 38회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 38
+    }
+  },
+  {
+    "id": "fc_39",
+    "category": "로그북 성실도",
+    "name": "비행 39회",
+    "description": "로그북 39회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 39
+    }
+  },
+  {
+    "id": "fc_40",
+    "category": "로그북 성실도",
+    "name": "비행 40회",
+    "description": "로그북 40회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 40
+    }
+  },
+  {
+    "id": "fc_50",
+    "category": "로그북 성실도",
+    "name": "비행 50회",
+    "description": "로그북 50회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 50
+    }
+  },
+  {
+    "id": "fc_60",
+    "category": "로그북 성실도",
+    "name": "비행 60회",
+    "description": "로그북 60회 기록",
+    "icon": "📖",
+    "rarity": "common",
+    "requirement": {
+      "type": "flight_count",
+      "value": 60
+    }
+  },
+  {
+    "id": "fc_70",
+    "category": "로그북 성실도",
+    "name": "비행 70회",
+    "description": "로그북 70회 기록",
+    "icon": "📖",
     "rarity": "rare",
     "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Airbus A340-300",
+      "type": "flight_count",
+      "value": 70
+    }
+  },
+  {
+    "id": "fc_80",
+    "category": "로그북 성실도",
+    "name": "비행 80회",
+    "description": "로그북 80회 기록",
+    "icon": "📖",
+    "rarity": "rare",
+    "requirement": {
+      "type": "flight_count",
+      "value": 80
+    }
+  },
+  {
+    "id": "fc_90",
+    "category": "로그북 성실도",
+    "name": "비행 90회",
+    "description": "로그북 90회 기록",
+    "icon": "📖",
+    "rarity": "rare",
+    "requirement": {
+      "type": "flight_count",
+      "value": 90
+    }
+  },
+  {
+    "id": "fc_100",
+    "category": "로그북 성실도",
+    "name": "비행 100회",
+    "description": "로그북 100회 기록",
+    "icon": "📖",
+    "rarity": "rare",
+    "requirement": {
+      "type": "flight_count",
+      "value": 100
+    }
+  },
+  {
+    "id": "fc_110",
+    "category": "로그북 성실도",
+    "name": "비행 110회",
+    "description": "로그북 110회 기록",
+    "icon": "📖",
+    "rarity": "rare",
+    "requirement": {
+      "type": "flight_count",
+      "value": 110
+    }
+  },
+  {
+    "id": "fc_120",
+    "category": "로그북 성실도",
+    "name": "비행 120회",
+    "description": "로그북 120회 기록",
+    "icon": "📖",
+    "rarity": "epic",
+    "requirement": {
+      "type": "flight_count",
+      "value": 120
+    }
+  },
+  {
+    "id": "fc_130",
+    "category": "로그북 성실도",
+    "name": "비행 130회",
+    "description": "로그북 130회 기록",
+    "icon": "📖",
+    "rarity": "epic",
+    "requirement": {
+      "type": "flight_count",
+      "value": 130
+    }
+  },
+  {
+    "id": "fc_140",
+    "category": "로그북 성실도",
+    "name": "비행 140회",
+    "description": "로그북 140회 기록",
+    "icon": "📖",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "flight_count",
+      "value": 140
+    }
+  },
+  {
+    "id": "fc_150",
+    "category": "로그북 성실도",
+    "name": "비행 150회",
+    "description": "로그북 150회 기록",
+    "icon": "📖",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "flight_count",
+      "value": 150
+    }
+  },
+  {
+    "id": "atc_5",
+    "category": "ATC 영어 정복",
+    "name": "ATC 5구문",
+    "description": "ATC 연습 5회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 5
+    }
+  },
+  {
+    "id": "atc_10",
+    "category": "ATC 영어 정복",
+    "name": "ATC 10구문",
+    "description": "ATC 연습 10회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
       "value": 10
-    }
-  },
-  {
-    "id": "Airbus_A340_300_30h",
-    "category": "기종별 전문가",
-    "name": "Airbus A340-300 30시간",
-    "description": "Airbus A340-300 기종으로 30시간 비행 달성",
-    "icon": "🛫",
-    "rarity": "rare",
-    "requirement": {
-      "type": "aircraft_hours",
-      "aircraft": "Airbus A340-300",
-      "value": 30
     }
   },
   {
     "id": "atc_15",
     "category": "ATC 영어 정복",
-    "name": "ATC 15문장",
-    "description": "항공 통신 영어 15개 이상 학습",
-    "icon": "🎧",
+    "name": "ATC 15구문",
+    "description": "ATC 연습 15회 상당 달성",
+    "icon": "📻",
     "rarity": "common",
     "requirement": {
       "type": "atc_phrases",
@@ -1002,11 +1236,59 @@
     }
   },
   {
+    "id": "atc_20",
+    "category": "ATC 영어 정복",
+    "name": "ATC 20구문",
+    "description": "ATC 연습 20회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 20
+    }
+  },
+  {
+    "id": "atc_25",
+    "category": "ATC 영어 정복",
+    "name": "ATC 25구문",
+    "description": "ATC 연습 25회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 25
+    }
+  },
+  {
+    "id": "atc_30",
+    "category": "ATC 영어 정복",
+    "name": "ATC 30구문",
+    "description": "ATC 연습 30회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 30
+    }
+  },
+  {
+    "id": "atc_35",
+    "category": "ATC 영어 정복",
+    "name": "ATC 35구문",
+    "description": "ATC 연습 35회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 35
+    }
+  },
+  {
     "id": "atc_40",
     "category": "ATC 영어 정복",
-    "name": "ATC 40문장",
-    "description": "항공 통신 영어 40개 이상 학습",
-    "icon": "🎧",
+    "name": "ATC 40구문",
+    "description": "ATC 연습 40회 상당 달성",
+    "icon": "📻",
     "rarity": "common",
     "requirement": {
       "type": "atc_phrases",
@@ -1014,35 +1296,191 @@
     }
   },
   {
+    "id": "atc_45",
+    "category": "ATC 영어 정복",
+    "name": "ATC 45구문",
+    "description": "ATC 연습 45회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 45
+    }
+  },
+  {
+    "id": "atc_50",
+    "category": "ATC 영어 정복",
+    "name": "ATC 50구문",
+    "description": "ATC 연습 50회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 50
+    }
+  },
+  {
+    "id": "atc_55",
+    "category": "ATC 영어 정복",
+    "name": "ATC 55구문",
+    "description": "ATC 연습 55회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 55
+    }
+  },
+  {
     "id": "atc_60",
     "category": "ATC 영어 정복",
-    "name": "ATC 60문장",
-    "description": "항공 통신 영어 60개 이상 학습",
-    "icon": "🎧",
-    "rarity": "rare",
+    "name": "ATC 60구문",
+    "description": "ATC 연습 60회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
     "requirement": {
       "type": "atc_phrases",
       "value": 60
     }
   },
   {
+    "id": "atc_65",
+    "category": "ATC 영어 정복",
+    "name": "ATC 65구문",
+    "description": "ATC 연습 65회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 65
+    }
+  },
+  {
+    "id": "atc_70",
+    "category": "ATC 영어 정복",
+    "name": "ATC 70구문",
+    "description": "ATC 연습 70회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 70
+    }
+  },
+  {
+    "id": "atc_75",
+    "category": "ATC 영어 정복",
+    "name": "ATC 75구문",
+    "description": "ATC 연습 75회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 75
+    }
+  },
+  {
     "id": "atc_80",
     "category": "ATC 영어 정복",
-    "name": "ATC 80문장",
-    "description": "항공 통신 영어 80개 이상 학습",
-    "icon": "🎧",
-    "rarity": "rare",
+    "name": "ATC 80구문",
+    "description": "ATC 연습 80회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
     "requirement": {
       "type": "atc_phrases",
       "value": 80
     }
   },
   {
+    "id": "atc_85",
+    "category": "ATC 영어 정복",
+    "name": "ATC 85구문",
+    "description": "ATC 연습 85회 상당 달성",
+    "icon": "📻",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 85
+    }
+  },
+  {
+    "id": "atc_90",
+    "category": "ATC 영어 정복",
+    "name": "ATC 90구문",
+    "description": "ATC 연습 90회 상당 달성",
+    "icon": "📻",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 90
+    }
+  },
+  {
+    "id": "atc_95",
+    "category": "ATC 영어 정복",
+    "name": "ATC 95구문",
+    "description": "ATC 연습 95회 상당 달성",
+    "icon": "📻",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 95
+    }
+  },
+  {
+    "id": "atc_100",
+    "category": "ATC 영어 정복",
+    "name": "ATC 100구문",
+    "description": "ATC 연습 100회 상당 달성",
+    "icon": "📻",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 100
+    }
+  },
+  {
+    "id": "atc_105",
+    "category": "ATC 영어 정복",
+    "name": "ATC 105구문",
+    "description": "ATC 연습 105회 상당 달성",
+    "icon": "📻",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 105
+    }
+  },
+  {
+    "id": "atc_110",
+    "category": "ATC 영어 정복",
+    "name": "ATC 110구문",
+    "description": "ATC 연습 110회 상당 달성",
+    "icon": "📻",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 110
+    }
+  },
+  {
+    "id": "atc_115",
+    "category": "ATC 영어 정복",
+    "name": "ATC 115구문",
+    "description": "ATC 연습 115회 상당 달성",
+    "icon": "📻",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 115
+    }
+  },
+  {
     "id": "atc_120",
     "category": "ATC 영어 정복",
-    "name": "ATC 120문장",
-    "description": "항공 통신 영어 120개 이상 학습",
-    "icon": "🎧",
+    "name": "ATC 120구문",
+    "description": "ATC 연습 120회 상당 달성",
+    "icon": "📻",
     "rarity": "rare",
     "requirement": {
       "type": "atc_phrases",
@@ -1050,11 +1488,95 @@
     }
   },
   {
+    "id": "atc_125",
+    "category": "ATC 영어 정복",
+    "name": "ATC 125구문",
+    "description": "ATC 연습 125회 상당 달성",
+    "icon": "📻",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 125
+    }
+  },
+  {
+    "id": "atc_130",
+    "category": "ATC 영어 정복",
+    "name": "ATC 130구문",
+    "description": "ATC 연습 130회 상당 달성",
+    "icon": "📻",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 130
+    }
+  },
+  {
+    "id": "atc_135",
+    "category": "ATC 영어 정복",
+    "name": "ATC 135구문",
+    "description": "ATC 연습 135회 상당 달성",
+    "icon": "📻",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 135
+    }
+  },
+  {
+    "id": "atc_140",
+    "category": "ATC 영어 정복",
+    "name": "ATC 140구문",
+    "description": "ATC 연습 140회 상당 달성",
+    "icon": "📻",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 140
+    }
+  },
+  {
+    "id": "atc_145",
+    "category": "ATC 영어 정복",
+    "name": "ATC 145구문",
+    "description": "ATC 연습 145회 상당 달성",
+    "icon": "📻",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 145
+    }
+  },
+  {
+    "id": "atc_150",
+    "category": "ATC 영어 정복",
+    "name": "ATC 150구문",
+    "description": "ATC 연습 150회 상당 달성",
+    "icon": "📻",
+    "rarity": "epic",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 150
+    }
+  },
+  {
+    "id": "atc_155",
+    "category": "ATC 영어 정복",
+    "name": "ATC 155구문",
+    "description": "ATC 연습 155회 상당 달성",
+    "icon": "📻",
+    "rarity": "epic",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 155
+    }
+  },
+  {
     "id": "atc_160",
     "category": "ATC 영어 정복",
-    "name": "ATC 160문장",
-    "description": "항공 통신 영어 160개 이상 학습",
-    "icon": "🎧",
+    "name": "ATC 160구문",
+    "description": "ATC 연습 160회 상당 달성",
+    "icon": "📻",
     "rarity": "epic",
     "requirement": {
       "type": "atc_phrases",
@@ -1062,11 +1584,47 @@
     }
   },
   {
+    "id": "atc_165",
+    "category": "ATC 영어 정복",
+    "name": "ATC 165구문",
+    "description": "ATC 연습 165회 상당 달성",
+    "icon": "📻",
+    "rarity": "epic",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 165
+    }
+  },
+  {
+    "id": "atc_170",
+    "category": "ATC 영어 정복",
+    "name": "ATC 170구문",
+    "description": "ATC 연습 170회 상당 달성",
+    "icon": "📻",
+    "rarity": "epic",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 170
+    }
+  },
+  {
+    "id": "atc_175",
+    "category": "ATC 영어 정복",
+    "name": "ATC 175구문",
+    "description": "ATC 연습 175회 상당 달성",
+    "icon": "📻",
+    "rarity": "epic",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 175
+    }
+  },
+  {
     "id": "atc_180",
     "category": "ATC 영어 정복",
-    "name": "ATC 180문장",
-    "description": "항공 통신 영어 180개 이상 학습",
-    "icon": "🎧",
+    "name": "ATC 180구문",
+    "description": "ATC 연습 180회 상당 달성",
+    "icon": "📻",
     "rarity": "epic",
     "requirement": {
       "type": "atc_phrases",
@@ -1074,275 +1632,1359 @@
     }
   },
   {
-    "id": "atc_210",
+    "id": "atc_185",
     "category": "ATC 영어 정복",
-    "name": "ATC 210문장",
-    "description": "항공 통신 영어 210개 이상 학습",
-    "icon": "🎧",
-    "rarity": "epic",
+    "name": "ATC 185구문",
+    "description": "ATC 연습 185회 상당 달성",
+    "icon": "📻",
+    "rarity": "legendary",
     "requirement": {
       "type": "atc_phrases",
-      "value": 210
+      "value": 185
     }
   },
   {
-    "id": "atc_230",
+    "id": "atc_190",
     "category": "ATC 영어 정복",
-    "name": "ATC 230문장",
-    "description": "항공 통신 영어 230개 이상 학습",
-    "icon": "🎧",
-    "rarity": "epic",
+    "name": "ATC 190구문",
+    "description": "ATC 연습 190회 상당 달성",
+    "icon": "📻",
+    "rarity": "legendary",
     "requirement": {
       "type": "atc_phrases",
-      "value": 230
+      "value": 190
     }
   },
   {
-    "id": "flights_15",
-    "category": "로그북 성실도",
-    "name": "비행 15회 기록",
-    "description": "로그북에 비행 15회 기록",
-    "icon": "📖",
+    "id": "atc_195",
+    "category": "ATC 영어 정복",
+    "name": "ATC 195구문",
+    "description": "ATC 연습 195회 상당 달성",
+    "icon": "📻",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 195
+    }
+  },
+  {
+    "id": "atc_200",
+    "category": "ATC 영어 정복",
+    "name": "ATC 200구문",
+    "description": "ATC 연습 200회 상당 달성",
+    "icon": "📻",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 200
+    }
+  },
+  {
+    "id": "ac_b737_1h",
+    "category": "기종별 전문가",
+    "name": "B737-800 1시간",
+    "description": "Boeing 737-800 1시간 비행",
+    "icon": "🛫",
     "rarity": "common",
     "requirement": {
-      "type": "flight_count",
-      "value": 15
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 737-800",
+      "value": 1
     }
   },
   {
-    "id": "flights_30",
-    "category": "로그북 성실도",
-    "name": "비행 30회 기록",
-    "description": "로그북에 비행 30회 기록",
-    "icon": "📖",
+    "id": "ac_b737_5h",
+    "category": "기종별 전문가",
+    "name": "B737-800 5시간",
+    "description": "Boeing 737-800 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 737-800",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_b737_10h",
+    "category": "기종별 전문가",
+    "name": "B737-800 10시간",
+    "description": "Boeing 737-800 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 737-800",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_b737_25h",
+    "category": "기종별 전문가",
+    "name": "B737-800 25시간",
+    "description": "Boeing 737-800 25시간 비행",
+    "icon": "✈️",
     "rarity": "rare",
     "requirement": {
-      "type": "flight_count",
-      "value": 30
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 737-800",
+      "value": 25
     }
   },
   {
-    "id": "flights_75",
-    "category": "로그북 성실도",
-    "name": "비행 75회 기록",
-    "description": "로그북에 비행 75회 기록",
-    "icon": "📖",
+    "id": "ac_a320_1h",
+    "category": "기종별 전문가",
+    "name": "AA320-200 1시간",
+    "description": "Airbus A320-200 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A320-200",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_a320_5h",
+    "category": "기종별 전문가",
+    "name": "AA320-200 5시간",
+    "description": "Airbus A320-200 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A320-200",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_a320_10h",
+    "category": "기종별 전문가",
+    "name": "AA320-200 10시간",
+    "description": "Airbus A320-200 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A320-200",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_a320_25h",
+    "category": "기종별 전문가",
+    "name": "AA320-200 25시간",
+    "description": "Airbus A320-200 25시간 비행",
+    "icon": "✈️",
     "rarity": "rare",
     "requirement": {
-      "type": "flight_count",
-      "value": 75
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A320-200",
+      "value": 25
     }
   },
   {
-    "id": "flights_150",
-    "category": "로그북 성실도",
-    "name": "비행 150회 기록",
-    "description": "로그북에 비행 150회 기록",
-    "icon": "📖",
-    "rarity": "epic",
+    "id": "ac_a321_1h",
+    "category": "기종별 전문가",
+    "name": "AA321-200 1시간",
+    "description": "Airbus A321-200 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
     "requirement": {
-      "type": "flight_count",
-      "value": 150
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A321-200",
+      "value": 1
     }
   },
   {
-    "id": "flights_250",
-    "category": "로그북 성실도",
-    "name": "비행 250회 기록",
-    "description": "로그북에 비행 250회 기록",
-    "icon": "📖",
-    "rarity": "epic",
+    "id": "ac_a321_5h",
+    "category": "기종별 전문가",
+    "name": "AA321-200 5시간",
+    "description": "Airbus A321-200 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
     "requirement": {
-      "type": "flight_count",
-      "value": 250
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A321-200",
+      "value": 5
     }
   },
   {
-    "id": "ke_first_officer",
-    "category": "대한민국 항공사 꿈",
-    "name": "대한항공 부기장 트랙",
-    "description": "대한항공 부기장 최소 시간 달성",
-    "icon": "🇰🇷",
-    "rarity": "epic",
+    "id": "ac_a321_10h",
+    "category": "기종별 전문가",
+    "name": "AA321-200 10시간",
+    "description": "Airbus A321-200 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
     "requirement": {
-      "type": "special",
-      "id": "ke_first_officer"
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A321-200",
+      "value": 10
     }
   },
   {
-    "id": "oz_first_officer",
-    "category": "대한민국 항공사 꿈",
-    "name": "아시아나 부기장 트랙",
-    "description": "아시아나 부기장 최소 시간 달성",
-    "icon": "🇰🇷",
-    "rarity": "epic",
-    "requirement": {
-      "type": "special",
-      "id": "oz_first_officer"
-    }
-  },
-  {
-    "id": "type_rating_777",
-    "category": "대한민국 항공사 꿈",
-    "name": "B777 타입 레이팅",
-    "description": "B777 기종 전환 훈련 완료 상징",
-    "icon": "🇰🇷",
+    "id": "ac_a321_25h",
+    "category": "기종별 전문가",
+    "name": "AA321-200 25시간",
+    "description": "Airbus A321-200 25시간 비행",
+    "icon": "✈️",
     "rarity": "rare",
     "requirement": {
-      "type": "special",
-      "id": "type_rating_777"
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A321-200",
+      "value": 25
     }
   },
   {
-    "id": "type_rating_a380",
-    "category": "대한민국 항공사 꿈",
-    "name": "A380 타입 레이팅",
-    "description": "A380 기종 전환 훈련 완료 상징",
-    "icon": "🇰🇷",
-    "rarity": "epic",
+    "id": "ac_b737max_1h",
+    "category": "기종별 전문가",
+    "name": "B737MAX8 1시간",
+    "description": "Boeing 737 MAX 8 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
     "requirement": {
-      "type": "special",
-      "id": "type_rating_a380"
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 737 MAX 8",
+      "value": 1
     }
   },
   {
-    "id": "incheon_captain",
-    "category": "대한민국 항공사 꿈",
-    "name": "인천 기장 꿈",
-    "description": "인천 기반 기장으로서의 꿈",
-    "icon": "🇰🇷",
-    "rarity": "legendary",
+    "id": "ac_b737max_5h",
+    "category": "기종별 전문가",
+    "name": "B737MAX8 5시간",
+    "description": "Boeing 737 MAX 8 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
     "requirement": {
-      "type": "special",
-      "id": "incheon_captain"
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 737 MAX 8",
+      "value": 5
     }
   },
   {
-    "id": "pacific_crossing",
-    "category": "장거리 & 특수 도전",
-    "name": "태평양 횡단 전문가",
-    "description": "태평양 횡단 노선 20회",
-    "icon": "🌍",
-    "rarity": "epic",
+    "id": "ac_b737max_10h",
+    "category": "기종별 전문가",
+    "name": "B737MAX8 10시간",
+    "description": "Boeing 737 MAX 8 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
     "requirement": {
-      "type": "special",
-      "id": "pacific_crossing"
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 737 MAX 8",
+      "value": 10
     }
   },
   {
-    "id": "europe_explorer",
-    "category": "장거리 & 특수 도전",
-    "name": "유럽 노선 개척자",
-    "description": "유럽 5개국 이상 노선 경험",
-    "icon": "🌍",
+    "id": "ac_b737max_25h",
+    "category": "기종별 전문가",
+    "name": "B737MAX8 25시간",
+    "description": "Boeing 737 MAX 8 25시간 비행",
+    "icon": "✈️",
     "rarity": "rare",
     "requirement": {
-      "type": "special",
-      "id": "europe_explorer"
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 737 MAX 8",
+      "value": 25
     }
   },
   {
-    "id": "cargo_veteran",
-    "category": "장거리 & 특수 도전",
-    "name": "화물 베테랑",
-    "description": "화물기 50시간",
-    "icon": "🌍",
+    "id": "ac_a320neo_1h",
+    "category": "기종별 전문가",
+    "name": "AA320neo 1시간",
+    "description": "Airbus A320neo 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A320neo",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_a320neo_5h",
+    "category": "기종별 전문가",
+    "name": "AA320neo 5시간",
+    "description": "Airbus A320neo 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A320neo",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_a320neo_10h",
+    "category": "기종별 전문가",
+    "name": "AA320neo 10시간",
+    "description": "Airbus A320neo 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A320neo",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_a320neo_25h",
+    "category": "기종별 전문가",
+    "name": "AA320neo 25시간",
+    "description": "Airbus A320neo 25시간 비행",
+    "icon": "✈️",
     "rarity": "rare",
     "requirement": {
-      "type": "special",
-      "id": "cargo_veteran"
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A320neo",
+      "value": 25
     }
   },
   {
-    "id": "night_flight_50",
-    "category": "장거리 & 특수 도전",
-    "name": "나이트 파일럿 50",
-    "description": "야간 비행 50회",
-    "icon": "🌍",
-    "rarity": "epic",
+    "id": "ac_a220_1h",
+    "category": "기종별 전문가",
+    "name": "AA220-300 1시간",
+    "description": "Airbus A220-300 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
     "requirement": {
-      "type": "special",
-      "id": "night_flight_50"
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A220-300",
+      "value": 1
     }
   },
   {
-    "id": "radar_master",
-    "category": "지식 & 시뮬레이터 마스터",
-    "name": "레이더 마스터",
-    "description": "레이더에서 500대 관찰",
-    "icon": "📚",
+    "id": "ac_a220_5h",
+    "category": "기종별 전문가",
+    "name": "AA220-300 5시간",
+    "description": "Airbus A220-300 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A220-300",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_a220_10h",
+    "category": "기종별 전문가",
+    "name": "AA220-300 10시간",
+    "description": "Airbus A220-300 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A220-300",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_a220_25h",
+    "category": "기종별 전문가",
+    "name": "AA220-300 25시간",
+    "description": "Airbus A220-300 25시간 비행",
+    "icon": "✈️",
     "rarity": "rare",
     "requirement": {
-      "type": "special",
-      "id": "radar_master"
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A220-300",
+      "value": 25
     }
   },
   {
-    "id": "planner_100",
-    "category": "지식 & 시뮬레이터 마스터",
-    "name": "슈퍼 플래너",
-    "description": "비행 계획 100회",
-    "icon": "📚",
-    "rarity": "epic",
+    "id": "ac_e190_1h",
+    "category": "기종별 전문가",
+    "name": "EmbraerE190 1시간",
+    "description": "Embraer E190 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
     "requirement": {
-      "type": "special",
-      "id": "planner_100"
+      "type": "aircraft_hours",
+      "aircraft": "Embraer E190",
+      "value": 1
     }
   },
   {
-    "id": "all_aircraft",
-    "category": "지식 & 시뮬레이터 마스터",
-    "name": "전 기종 마스터",
-    "description": "모든 기종 설계도 열람",
-    "icon": "📚",
-    "rarity": "epic",
+    "id": "ac_e190_5h",
+    "category": "기종별 전문가",
+    "name": "EmbraerE190 5시간",
+    "description": "Embraer E190 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
     "requirement": {
-      "type": "special",
-      "id": "all_aircraft"
+      "type": "aircraft_hours",
+      "aircraft": "Embraer E190",
+      "value": 5
     }
   },
   {
-    "id": "ke_5000h",
-    "category": "전설의 업적",
-    "name": "대한항공 5000시간",
-    "description": "대한항공에서 5000시간 누적",
-    "icon": "🏆",
-    "rarity": "legendary",
+    "id": "ac_e190_10h",
+    "category": "기종별 전문가",
+    "name": "EmbraerE190 10시간",
+    "description": "Embraer E190 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
     "requirement": {
-      "type": "special",
-      "id": "ke_5000h"
+      "type": "aircraft_hours",
+      "aircraft": "Embraer E190",
+      "value": 10
     }
   },
   {
-    "id": "global_10000",
-    "category": "전설의 업적",
-    "name": "글로벌 1만 시간",
-    "description": "전 세계 노선 1만 시간",
-    "icon": "🏆",
-    "rarity": "legendary",
+    "id": "ac_e190_25h",
+    "category": "기종별 전문가",
+    "name": "EmbraerE190 25시간",
+    "description": "Embraer E190 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
     "requirement": {
-      "type": "special",
-      "id": "global_10000"
+      "type": "aircraft_hours",
+      "aircraft": "Embraer E190",
+      "value": 25
     }
   },
   {
-    "id": "true_captain_2",
-    "category": "전설의 업적",
-    "name": "진짜 기장 II",
-    "description": "총 8000시간 + 4개 타입 경험",
-    "icon": "🏆",
-    "rarity": "legendary",
+    "id": "ac_e195_1h",
+    "category": "기종별 전문가",
+    "name": "EmbraerE195-E2 1시간",
+    "description": "Embraer E195-E2 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
     "requirement": {
-      "type": "special",
-      "id": "true_captain_2"
+      "type": "aircraft_hours",
+      "aircraft": "Embraer E195-E2",
+      "value": 1
     }
   },
   {
-    "id": "first_flight_complete",
+    "id": "ac_e195_5h",
+    "category": "기종별 전문가",
+    "name": "EmbraerE195-E2 5시간",
+    "description": "Embraer E195-E2 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Embraer E195-E2",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_e195_10h",
+    "category": "기종별 전문가",
+    "name": "EmbraerE195-E2 10시간",
+    "description": "Embraer E195-E2 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Embraer E195-E2",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_e195_25h",
+    "category": "기종별 전문가",
+    "name": "EmbraerE195-E2 25시간",
+    "description": "Embraer E195-E2 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Embraer E195-E2",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_b757_1h",
+    "category": "기종별 전문가",
+    "name": "B757-200 1시간",
+    "description": "Boeing 757-200 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 757-200",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_b757_5h",
+    "category": "기종별 전문가",
+    "name": "B757-200 5시간",
+    "description": "Boeing 757-200 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 757-200",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_b757_10h",
+    "category": "기종별 전문가",
+    "name": "B757-200 10시간",
+    "description": "Boeing 757-200 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 757-200",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_b757_25h",
+    "category": "기종별 전문가",
+    "name": "B757-200 25시간",
+    "description": "Boeing 757-200 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 757-200",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_md80_1h",
+    "category": "기종별 전문가",
+    "name": "McDonnellDouglasMD-80 1시간",
+    "description": "McDonnell Douglas MD-80 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "McDonnell Douglas MD-80",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_md80_5h",
+    "category": "기종별 전문가",
+    "name": "McDonnellDouglasMD-80 5시간",
+    "description": "McDonnell Douglas MD-80 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "McDonnell Douglas MD-80",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_md80_10h",
+    "category": "기종별 전문가",
+    "name": "McDonnellDouglasMD-80 10시간",
+    "description": "McDonnell Douglas MD-80 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "McDonnell Douglas MD-80",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_md80_25h",
+    "category": "기종별 전문가",
+    "name": "McDonnellDouglasMD-80 25시간",
+    "description": "McDonnell Douglas MD-80 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "McDonnell Douglas MD-80",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_tu154_1h",
+    "category": "기종별 전문가",
+    "name": "TupolevTu-154 1시간",
+    "description": "Tupolev Tu-154 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Tupolev Tu-154",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_tu154_5h",
+    "category": "기종별 전문가",
+    "name": "TupolevTu-154 5시간",
+    "description": "Tupolev Tu-154 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Tupolev Tu-154",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_tu154_10h",
+    "category": "기종별 전문가",
+    "name": "TupolevTu-154 10시간",
+    "description": "Tupolev Tu-154 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Tupolev Tu-154",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_tu154_25h",
+    "category": "기종별 전문가",
+    "name": "TupolevTu-154 25시간",
+    "description": "Tupolev Tu-154 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Tupolev Tu-154",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_crj900_1h",
+    "category": "기종별 전문가",
+    "name": "BombardierCRJ-900 1시간",
+    "description": "Bombardier CRJ-900 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Bombardier CRJ-900",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_crj900_5h",
+    "category": "기종별 전문가",
+    "name": "BombardierCRJ-900 5시간",
+    "description": "Bombardier CRJ-900 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Bombardier CRJ-900",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_crj900_10h",
+    "category": "기종별 전문가",
+    "name": "BombardierCRJ-900 10시간",
+    "description": "Bombardier CRJ-900 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Bombardier CRJ-900",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_crj900_25h",
+    "category": "기종별 전문가",
+    "name": "BombardierCRJ-900 25시간",
+    "description": "Bombardier CRJ-900 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Bombardier CRJ-900",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_a321neo_1h",
+    "category": "기종별 전문가",
+    "name": "AA321neoLR 1시간",
+    "description": "Airbus A321neo LR 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A321neo LR",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_a321neo_5h",
+    "category": "기종별 전문가",
+    "name": "AA321neoLR 5시간",
+    "description": "Airbus A321neo LR 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A321neo LR",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_a321neo_10h",
+    "category": "기종별 전문가",
+    "name": "AA321neoLR 10시간",
+    "description": "Airbus A321neo LR 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A321neo LR",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_a321neo_25h",
+    "category": "기종별 전문가",
+    "name": "AA321neoLR 25시간",
+    "description": "Airbus A321neo LR 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A321neo LR",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_a330_1h",
+    "category": "기종별 전문가",
+    "name": "AA330-300 1시간",
+    "description": "Airbus A330-300 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A330-300",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_a330_5h",
+    "category": "기종별 전문가",
+    "name": "AA330-300 5시간",
+    "description": "Airbus A330-300 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A330-300",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_a330_10h",
+    "category": "기종별 전문가",
+    "name": "AA330-300 10시간",
+    "description": "Airbus A330-300 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A330-300",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_a330_25h",
+    "category": "기종별 전문가",
+    "name": "AA330-300 25시간",
+    "description": "Airbus A330-300 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A330-300",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_a330neo_1h",
+    "category": "기종별 전문가",
+    "name": "AA330-900neo 1시간",
+    "description": "Airbus A330-900neo 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A330-900neo",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_a330neo_5h",
+    "category": "기종별 전문가",
+    "name": "AA330-900neo 5시간",
+    "description": "Airbus A330-900neo 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A330-900neo",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_a330neo_10h",
+    "category": "기종별 전문가",
+    "name": "AA330-900neo 10시간",
+    "description": "Airbus A330-900neo 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A330-900neo",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_a330neo_25h",
+    "category": "기종별 전문가",
+    "name": "AA330-900neo 25시간",
+    "description": "Airbus A330-900neo 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A330-900neo",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_b787_1h",
+    "category": "기종별 전문가",
+    "name": "B787-9Dreamliner 1시간",
+    "description": "Boeing 787-9 Dreamliner 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 787-9 Dreamliner",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_b787_5h",
+    "category": "기종별 전문가",
+    "name": "B787-9Dreamliner 5시간",
+    "description": "Boeing 787-9 Dreamliner 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 787-9 Dreamliner",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_b787_10h",
+    "category": "기종별 전문가",
+    "name": "B787-9Dreamliner 10시간",
+    "description": "Boeing 787-9 Dreamliner 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 787-9 Dreamliner",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_b787_25h",
+    "category": "기종별 전문가",
+    "name": "B787-9Dreamliner 25시간",
+    "description": "Boeing 787-9 Dreamliner 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 787-9 Dreamliner",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_b78710_1h",
+    "category": "기종별 전문가",
+    "name": "B787-10 1시간",
+    "description": "Boeing 787-10 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 787-10",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_b78710_5h",
+    "category": "기종별 전문가",
+    "name": "B787-10 5시간",
+    "description": "Boeing 787-10 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 787-10",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_b78710_10h",
+    "category": "기종별 전문가",
+    "name": "B787-10 10시간",
+    "description": "Boeing 787-10 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 787-10",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_b78710_25h",
+    "category": "기종별 전문가",
+    "name": "B787-10 25시간",
+    "description": "Boeing 787-10 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 787-10",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_a350_1h",
+    "category": "기종별 전문가",
+    "name": "AA350-900 1시간",
+    "description": "Airbus A350-900 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A350-900",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_a350_5h",
+    "category": "기종별 전문가",
+    "name": "AA350-900 5시간",
+    "description": "Airbus A350-900 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A350-900",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_a350_10h",
+    "category": "기종별 전문가",
+    "name": "AA350-900 10시간",
+    "description": "Airbus A350-900 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A350-900",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_a350_25h",
+    "category": "기종별 전문가",
+    "name": "AA350-900 25시간",
+    "description": "Airbus A350-900 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A350-900",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_a3501000_1h",
+    "category": "기종별 전문가",
+    "name": "AA350-1000 1시간",
+    "description": "Airbus A350-1000 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A350-1000",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_a3501000_5h",
+    "category": "기종별 전문가",
+    "name": "AA350-1000 5시간",
+    "description": "Airbus A350-1000 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A350-1000",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_a3501000_10h",
+    "category": "기종별 전문가",
+    "name": "AA350-1000 10시간",
+    "description": "Airbus A350-1000 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A350-1000",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_a3501000_25h",
+    "category": "기종별 전문가",
+    "name": "AA350-1000 25시간",
+    "description": "Airbus A350-1000 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A350-1000",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_b767_1h",
+    "category": "기종별 전문가",
+    "name": "B767-300ER 1시간",
+    "description": "Boeing 767-300ER 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 767-300ER",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_b767_5h",
+    "category": "기종별 전문가",
+    "name": "B767-300ER 5시간",
+    "description": "Boeing 767-300ER 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 767-300ER",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_b767_10h",
+    "category": "기종별 전문가",
+    "name": "B767-300ER 10시간",
+    "description": "Boeing 767-300ER 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 767-300ER",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_b767_25h",
+    "category": "기종별 전문가",
+    "name": "B767-300ER 25시간",
+    "description": "Boeing 767-300ER 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 767-300ER",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_a340_1h",
+    "category": "기종별 전문가",
+    "name": "AA340-300 1시간",
+    "description": "Airbus A340-300 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A340-300",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_a340_5h",
+    "category": "기종별 전문가",
+    "name": "AA340-300 5시간",
+    "description": "Airbus A340-300 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A340-300",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_a340_10h",
+    "category": "기종별 전문가",
+    "name": "AA340-300 10시간",
+    "description": "Airbus A340-300 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A340-300",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_a340_25h",
+    "category": "기종별 전문가",
+    "name": "AA340-300 25시간",
+    "description": "Airbus A340-300 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A340-300",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_a310_1h",
+    "category": "기종별 전문가",
+    "name": "AA310 1시간",
+    "description": "Airbus A310 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A310",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_a310_5h",
+    "category": "기종별 전문가",
+    "name": "AA310 5시간",
+    "description": "Airbus A310 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A310",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_a310_10h",
+    "category": "기종별 전문가",
+    "name": "AA310 10시간",
+    "description": "Airbus A310 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A310",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_a310_25h",
+    "category": "기종별 전문가",
+    "name": "AA310 25시간",
+    "description": "Airbus A310 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A310",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_dc10_1h",
+    "category": "기종별 전문가",
+    "name": "McDonnellDouglasDC-10 1시간",
+    "description": "McDonnell Douglas DC-10 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "McDonnell Douglas DC-10",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_dc10_5h",
+    "category": "기종별 전문가",
+    "name": "McDonnellDouglasDC-10 5시간",
+    "description": "McDonnell Douglas DC-10 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "McDonnell Douglas DC-10",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_dc10_10h",
+    "category": "기종별 전문가",
+    "name": "McDonnellDouglasDC-10 10시간",
+    "description": "McDonnell Douglas DC-10 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "McDonnell Douglas DC-10",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_dc10_25h",
+    "category": "기종별 전문가",
+    "name": "McDonnellDouglasDC-10 25시간",
+    "description": "McDonnell Douglas DC-10 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "McDonnell Douglas DC-10",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_il96_1h",
+    "category": "기종별 전문가",
+    "name": "IlyushinIl-96-300 1시간",
+    "description": "Ilyushin Il-96-300 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Ilyushin Il-96-300",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_il96_5h",
+    "category": "기종별 전문가",
+    "name": "IlyushinIl-96-300 5시간",
+    "description": "Ilyushin Il-96-300 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Ilyushin Il-96-300",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_il96_10h",
+    "category": "기종별 전문가",
+    "name": "IlyushinIl-96-300 10시간",
+    "description": "Ilyushin Il-96-300 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Ilyushin Il-96-300",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_il96_25h",
+    "category": "기종별 전문가",
+    "name": "IlyushinIl-96-300 25시간",
+    "description": "Ilyushin Il-96-300 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Ilyushin Il-96-300",
+      "value": 25
+    }
+  },
+  {
+    "id": "ac_b777_1h",
+    "category": "기종별 전문가",
+    "name": "B777-300ER 1시간",
+    "description": "Boeing 777-300ER 1시간 비행",
+    "icon": "🛫",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 777-300ER",
+      "value": 1
+    }
+  },
+  {
+    "id": "ac_b777_5h",
+    "category": "기종별 전문가",
+    "name": "B777-300ER 5시간",
+    "description": "Boeing 777-300ER 5시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 777-300ER",
+      "value": 5
+    }
+  },
+  {
+    "id": "ac_b777_10h",
+    "category": "기종별 전문가",
+    "name": "B777-300ER 10시간",
+    "description": "Boeing 777-300ER 10시간 비행",
+    "icon": "✈️",
+    "rarity": "common",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 777-300ER",
+      "value": 10
+    }
+  },
+  {
+    "id": "ac_b777_25h",
+    "category": "기종별 전문가",
+    "name": "B777-300ER 25시간",
+    "description": "Boeing 777-300ER 25시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 777-300ER",
+      "value": 25
+    }
+  },
+  {
+    "id": "sp_first_flight",
     "category": "학습 & 모험",
     "name": "첫 비행 완료",
-    "description": "첫 비행 튜토리얼을 끝까지 완료",
-    "icon": "🛫",
+    "description": "튜토리얼 첫 비행",
+    "icon": "⭐",
     "rarity": "rare",
     "requirement": {
       "type": "special",
@@ -1350,11 +2992,11 @@
     }
   },
   {
-    "id": "quiz_captain",
+    "id": "sp_quiz",
     "category": "학습 & 모험",
-    "name": "기장 지식인",
-    "description": "퀴즈 80점 이상 달성",
-    "icon": "🧠",
+    "name": "퀴즈 캡틴",
+    "description": "퀴즈 80점 이상",
+    "icon": "⭐",
     "rarity": "rare",
     "requirement": {
       "type": "special",
@@ -1362,51 +3004,699 @@
     }
   },
   {
-    "id": "scenario_hero",
+    "id": "sp_scenario",
     "category": "학습 & 모험",
-    "name": "위기관리 영웅",
-    "description": "비상 시나리오 1개 완료",
-    "icon": "🚨",
-    "rarity": "epic",
+    "name": "시나리오 히어로",
+    "description": "비상 시나리오 완료",
+    "icon": "⭐",
+    "rarity": "rare",
     "requirement": {
       "type": "special",
       "id": "scenario_hero"
     }
   },
   {
-    "id": "mission_streak_7",
+    "id": "sp_mission7",
     "category": "학습 & 모험",
-    "name": "미션 마스터",
-    "description": "7일 연속 오늘의 미션 완료",
-    "icon": "🎯",
-    "rarity": "legendary",
+    "name": "미션 7일",
+    "description": "미션 7일 연속",
+    "icon": "⭐",
+    "rarity": "rare",
     "requirement": {
       "type": "special",
       "id": "mission_streak_7"
     }
   },
   {
-    "id": "weekly_champion",
+    "id": "sp_weekly",
     "category": "학습 & 모험",
     "name": "주간 챔피언",
-    "description": "주간 챌린지 2개 완료",
-    "icon": "🏆",
-    "rarity": "epic",
+    "description": "주간 챌린지 달성",
+    "icon": "⭐",
+    "rarity": "rare",
     "requirement": {
       "type": "special",
       "id": "weekly_champion"
     }
   },
   {
-    "id": "word_pilot",
+    "id": "sp_words",
     "category": "학습 & 모험",
     "name": "용어 파일럿",
-    "description": "항공 용어 플래시카드 20개 학습",
-    "icon": "📇",
+    "description": "플래시카드 20개",
+    "icon": "⭐",
     "rarity": "rare",
     "requirement": {
       "type": "special",
       "id": "word_pilot"
+    }
+  },
+  {
+    "id": "sp_learn_1",
+    "category": "학습 & 모험",
+    "name": "학습 탐험가 1",
+    "description": "학습 모험 단계 1",
+    "icon": "🧭",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "quiz_captain"
+    }
+  },
+  {
+    "id": "sp_learn_2",
+    "category": "학습 & 모험",
+    "name": "학습 탐험가 2",
+    "description": "학습 모험 단계 2",
+    "icon": "🧭",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "word_pilot"
+    }
+  },
+  {
+    "id": "sp_learn_3",
+    "category": "학습 & 모험",
+    "name": "학습 탐험가 3",
+    "description": "학습 모험 단계 3",
+    "icon": "🧭",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "quiz_captain"
+    }
+  },
+  {
+    "id": "sp_learn_4",
+    "category": "학습 & 모험",
+    "name": "학습 탐험가 4",
+    "description": "학습 모험 단계 4",
+    "icon": "🧭",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "word_pilot"
+    }
+  },
+  {
+    "id": "sp_learn_5",
+    "category": "학습 & 모험",
+    "name": "학습 탐험가 5",
+    "description": "학습 모험 단계 5",
+    "icon": "🧭",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "quiz_captain"
+    }
+  },
+  {
+    "id": "sp_learn_6",
+    "category": "학습 & 모험",
+    "name": "학습 탐험가 6",
+    "description": "학습 모험 단계 6",
+    "icon": "🧭",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "word_pilot"
+    }
+  },
+  {
+    "id": "sp_learn_7",
+    "category": "학습 & 모험",
+    "name": "학습 탐험가 7",
+    "description": "학습 모험 단계 7",
+    "icon": "🧭",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "quiz_captain"
+    }
+  },
+  {
+    "id": "sp_learn_8",
+    "category": "학습 & 모험",
+    "name": "학습 탐험가 8",
+    "description": "학습 모험 단계 8",
+    "icon": "🧭",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "word_pilot"
+    }
+  },
+  {
+    "id": "sp_learn_9",
+    "category": "학습 & 모험",
+    "name": "학습 탐험가 9",
+    "description": "학습 모험 단계 9",
+    "icon": "🧭",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "quiz_captain"
+    }
+  },
+  {
+    "id": "sp_learn_10",
+    "category": "학습 & 모험",
+    "name": "학습 탐험가 10",
+    "description": "학습 모험 단계 10",
+    "icon": "🧭",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "word_pilot"
+    }
+  },
+  {
+    "id": "sp_learn_11",
+    "category": "학습 & 모험",
+    "name": "학습 탐험가 11",
+    "description": "학습 모험 단계 11",
+    "icon": "🧭",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "quiz_captain"
+    }
+  },
+  {
+    "id": "sp_learn_12",
+    "category": "학습 & 모험",
+    "name": "학습 탐험가 12",
+    "description": "학습 모험 단계 12",
+    "icon": "🧭",
+    "rarity": "epic",
+    "requirement": {
+      "type": "special",
+      "id": "word_pilot"
+    }
+  },
+  {
+    "id": "sp_learn_13",
+    "category": "학습 & 모험",
+    "name": "학습 탐험가 13",
+    "description": "학습 모험 단계 13",
+    "icon": "🧭",
+    "rarity": "epic",
+    "requirement": {
+      "type": "special",
+      "id": "quiz_captain"
+    }
+  },
+  {
+    "id": "sp_learn_14",
+    "category": "학습 & 모험",
+    "name": "학습 탐험가 14",
+    "description": "학습 모험 단계 14",
+    "icon": "🧭",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "special",
+      "id": "word_pilot"
+    }
+  },
+  {
+    "id": "legend_long_12",
+    "category": "장거리 & 특수 도전",
+    "name": "12시간 장거리 도전",
+    "description": "장거리 기록 목표 12h 관련 업적",
+    "icon": "🌏",
+    "rarity": "epic",
+    "requirement": {
+      "type": "total_hours",
+      "value": 120
+    }
+  },
+  {
+    "id": "legend_long_14",
+    "category": "장거리 & 특수 도전",
+    "name": "14시간 장거리 도전",
+    "description": "장거리 기록 목표 14h 관련 업적",
+    "icon": "🌏",
+    "rarity": "epic",
+    "requirement": {
+      "type": "total_hours",
+      "value": 140
+    }
+  },
+  {
+    "id": "legend_long_16",
+    "category": "장거리 & 특수 도전",
+    "name": "16시간 장거리 도전",
+    "description": "장거리 기록 목표 16h 관련 업적",
+    "icon": "🌏",
+    "rarity": "epic",
+    "requirement": {
+      "type": "total_hours",
+      "value": 160
+    }
+  },
+  {
+    "id": "legend_long_18",
+    "category": "장거리 & 특수 도전",
+    "name": "18시간 장거리 도전",
+    "description": "장거리 기록 목표 18h 관련 업적",
+    "icon": "🌏",
+    "rarity": "epic",
+    "requirement": {
+      "type": "total_hours",
+      "value": 180
+    }
+  },
+  {
+    "id": "legend_long_20",
+    "category": "장거리 & 특수 도전",
+    "name": "20시간 장거리 도전",
+    "description": "장거리 기록 목표 20h 관련 업적",
+    "icon": "🌏",
+    "rarity": "epic",
+    "requirement": {
+      "type": "total_hours",
+      "value": 200
+    }
+  },
+  {
+    "id": "legend_long_22",
+    "category": "장거리 & 특수 도전",
+    "name": "22시간 장거리 도전",
+    "description": "장거리 기록 목표 22h 관련 업적",
+    "icon": "🌏",
+    "rarity": "epic",
+    "requirement": {
+      "type": "total_hours",
+      "value": 220
+    }
+  },
+  {
+    "id": "legend_long_24",
+    "category": "장거리 & 특수 도전",
+    "name": "24시간 장거리 도전",
+    "description": "장거리 기록 목표 24h 관련 업적",
+    "icon": "🌏",
+    "rarity": "epic",
+    "requirement": {
+      "type": "total_hours",
+      "value": 240
+    }
+  },
+  {
+    "id": "legend_1",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 1",
+    "description": "장기 성장 전설 단계 1",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 1200
+    }
+  },
+  {
+    "id": "legend_2",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 2",
+    "description": "장기 성장 전설 단계 2",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 1400
+    }
+  },
+  {
+    "id": "legend_3",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 3",
+    "description": "장기 성장 전설 단계 3",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 1600
+    }
+  },
+  {
+    "id": "legend_4",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 4",
+    "description": "장기 성장 전설 단계 4",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 1800
+    }
+  },
+  {
+    "id": "legend_5",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 5",
+    "description": "장기 성장 전설 단계 5",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 2000
+    }
+  },
+  {
+    "id": "legend_6",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 6",
+    "description": "장기 성장 전설 단계 6",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 2200
+    }
+  },
+  {
+    "id": "legend_7",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 7",
+    "description": "장기 성장 전설 단계 7",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 2400
+    }
+  },
+  {
+    "id": "legend_8",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 8",
+    "description": "장기 성장 전설 단계 8",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 2600
+    }
+  },
+  {
+    "id": "legend_9",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 9",
+    "description": "장기 성장 전설 단계 9",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 2800
+    }
+  },
+  {
+    "id": "legend_10",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 10",
+    "description": "장기 성장 전설 단계 10",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 3000
+    }
+  },
+  {
+    "id": "legend_11",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 11",
+    "description": "장기 성장 전설 단계 11",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 3200
+    }
+  },
+  {
+    "id": "legend_12",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 12",
+    "description": "장기 성장 전설 단계 12",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 3400
+    }
+  },
+  {
+    "id": "legend_13",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 13",
+    "description": "장기 성장 전설 단계 13",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 3600
+    }
+  },
+  {
+    "id": "legend_14",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 14",
+    "description": "장기 성장 전설 단계 14",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 3800
+    }
+  },
+  {
+    "id": "legend_15",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 15",
+    "description": "장기 성장 전설 단계 15",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 4000
+    }
+  },
+  {
+    "id": "legend_16",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 16",
+    "description": "장기 성장 전설 단계 16",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 4200
+    }
+  },
+  {
+    "id": "legend_17",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 17",
+    "description": "장기 성장 전설 단계 17",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 4400
+    }
+  },
+  {
+    "id": "legend_18",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 18",
+    "description": "장기 성장 전설 단계 18",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 4600
+    }
+  },
+  {
+    "id": "legend_19",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 19",
+    "description": "장기 성장 전설 단계 19",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 4800
+    }
+  },
+  {
+    "id": "legend_20",
+    "category": "전설의 업적",
+    "name": "전설 파일럿 휘장 20",
+    "description": "장기 성장 전설 단계 20",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 5000
+    }
+  },
+  {
+    "id": "knowledge_1",
+    "category": "지식 & 시뮬레이터 마스터",
+    "name": "지식 마스터 1",
+    "description": "지식·시뮬 업적 1",
+    "icon": "📘",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 20
+    }
+  },
+  {
+    "id": "knowledge_2",
+    "category": "지식 & 시뮬레이터 마스터",
+    "name": "지식 마스터 2",
+    "description": "지식·시뮬 업적 2",
+    "icon": "📘",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 30
+    }
+  },
+  {
+    "id": "knowledge_3",
+    "category": "지식 & 시뮬레이터 마스터",
+    "name": "지식 마스터 3",
+    "description": "지식·시뮬 업적 3",
+    "icon": "📘",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 40
+    }
+  },
+  {
+    "id": "knowledge_4",
+    "category": "지식 & 시뮬레이터 마스터",
+    "name": "지식 마스터 4",
+    "description": "지식·시뮬 업적 4",
+    "icon": "📘",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 50
+    }
+  },
+  {
+    "id": "knowledge_5",
+    "category": "지식 & 시뮬레이터 마스터",
+    "name": "지식 마스터 5",
+    "description": "지식·시뮬 업적 5",
+    "icon": "📘",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 60
+    }
+  },
+  {
+    "id": "knowledge_6",
+    "category": "지식 & 시뮬레이터 마스터",
+    "name": "지식 마스터 6",
+    "description": "지식·시뮬 업적 6",
+    "icon": "📘",
+    "rarity": "common",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 70
+    }
+  },
+  {
+    "id": "knowledge_7",
+    "category": "지식 & 시뮬레이터 마스터",
+    "name": "지식 마스터 7",
+    "description": "지식·시뮬 업적 7",
+    "icon": "📘",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 80
+    }
+  },
+  {
+    "id": "knowledge_8",
+    "category": "지식 & 시뮬레이터 마스터",
+    "name": "지식 마스터 8",
+    "description": "지식·시뮬 업적 8",
+    "icon": "📘",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 90
+    }
+  },
+  {
+    "id": "knowledge_9",
+    "category": "지식 & 시뮬레이터 마스터",
+    "name": "지식 마스터 9",
+    "description": "지식·시뮬 업적 9",
+    "icon": "📘",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 100
+    }
+  },
+  {
+    "id": "knowledge_10",
+    "category": "지식 & 시뮬레이터 마스터",
+    "name": "지식 마스터 10",
+    "description": "지식·시뮬 업적 10",
+    "icon": "📘",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 110
+    }
+  },
+  {
+    "id": "knowledge_11",
+    "category": "지식 & 시뮬레이터 마스터",
+    "name": "지식 마스터 11",
+    "description": "지식·시뮬 업적 11",
+    "icon": "📘",
+    "rarity": "rare",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 120
+    }
+  },
+  {
+    "id": "knowledge_12",
+    "category": "지식 & 시뮬레이터 마스터",
+    "name": "지식 마스터 12",
+    "description": "지식·시뮬 업적 12",
+    "icon": "📘",
+    "rarity": "epic",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 130
+    }
+  },
+  {
+    "id": "knowledge_13",
+    "category": "지식 & 시뮬레이터 마스터",
+    "name": "지식 마스터 13",
+    "description": "지식·시뮬 업적 13",
+    "icon": "📘",
+    "rarity": "epic",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 140
     }
   }
 ]

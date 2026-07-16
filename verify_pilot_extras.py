@@ -64,7 +64,14 @@ with app.app_context():
             print(f"  FAIL: {fname} empty")
             errors.append(fname)
         else:
-            print(f"  OK: {fname} ({len(data)} items)")
+            extra = ''
+            if fname == 'crew_cards.json' and len(data) < 50:
+                print(f"  FAIL: {fname} expected >=50, got {len(data)}")
+                errors.append(fname)
+                continue
+            if fname == 'crew_cards.json':
+                extra = ' (50명 풀)'
+            print(f"  OK: {fname} ({len(data)} items){extra}")
 
 if errors:
     print(f"\nFailed ({len(errors)}):")

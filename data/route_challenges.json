@@ -1,8 +1,946 @@
 [
-  {"id": "rt_icn_gmp", "name": "국내선 첫 비행", "route_match": ["ICN-GMP", "GMP-ICN", "ICN-PUS", "PUS-ICN"], "reward_money": 500000, "reward_item": "av_cap_ke", "shop_item_id": "ch_icn_gmp", "desc": "인천↔김포(또는 부산) 노선 비행"},
-  {"id": "rt_icn_nrt", "name": "일본 가기", "route_match": ["ICN-NRT", "NRT-ICN", "ICN-HND", "HND-ICN", "ICN-KIX"], "reward_money": 1500000, "reward_item": "lv_ana", "shop_item_id": "ch_icn_nrt", "desc": "한국↔일본 노선"},
-  {"id": "rt_icn_syd", "name": "호주 가기", "route_match": ["ICN-SYD", "SYD-ICN", "ICN-BNE", "BNE-ICN"], "reward_money": 3000000, "reward_item": "lv_qantas", "shop_item_id": "ch_icn_syd", "desc": "한국↔호주 장거리"},
-  {"id": "rt_icn_jfk", "name": "뉴욕 도전!", "route_match": ["ICN-JFK", "JFK-ICN", "ICN-EWR", "EWR-ICN"], "reward_money": 8000000, "reward_item": "dc_callsign_gold", "shop_item_id": "ch_icn_jfk", "desc": "한국↔뉴욕 대서양 횡단"},
-  {"id": "rt_icn_lhr", "name": "런던 가기", "route_match": ["ICN-LHR", "LHR-ICN", "ICN-CDG", "CDG-ICN"], "reward_money": 5000000, "reward_item": "lv_ba", "shop_item_id": "ch_icn_lhr", "desc": "한국↔유럽"},
-  {"id": "rt_long_8h", "name": "8시간 이상 비행", "min_hours": 8, "reward_money": 4000000, "reward_item": "dc_patch_world", "shop_item_id": "ch_long_8h", "desc": "한 번에 8시간 넘게 비행 기록"}
+  {
+    "id": "rt_icn_gmp",
+    "name": "국내선 첫 비행",
+    "route_match": [
+      "ICN-GMP",
+      "GMP-ICN",
+      "ICN-PUS",
+      "PUS-ICN"
+    ],
+    "reward_money": 500000,
+    "reward_item": "av_cap_ke",
+    "shop_item_id": "ch_icn_gmp",
+    "desc": "인천↔김포(또는 부산) 노선 비행"
+  },
+  {
+    "id": "rt_icn_nrt",
+    "name": "일본 가기",
+    "route_match": [
+      "ICN-NRT",
+      "NRT-ICN",
+      "ICN-HND",
+      "HND-ICN",
+      "ICN-KIX"
+    ],
+    "reward_money": 1500000,
+    "reward_item": "lv_ana",
+    "shop_item_id": "ch_icn_nrt",
+    "desc": "한국↔일본 노선"
+  },
+  {
+    "id": "rt_icn_syd",
+    "name": "호주 가기",
+    "route_match": [
+      "ICN-SYD",
+      "SYD-ICN",
+      "ICN-BNE",
+      "BNE-ICN"
+    ],
+    "reward_money": 3000000,
+    "reward_item": "lv_qantas",
+    "shop_item_id": "ch_icn_syd",
+    "desc": "한국↔호주 장거리"
+  },
+  {
+    "id": "rt_icn_jfk",
+    "name": "뉴욕 도전!",
+    "route_match": [
+      "ICN-JFK",
+      "JFK-ICN",
+      "ICN-EWR",
+      "EWR-ICN"
+    ],
+    "reward_money": 8000000,
+    "reward_item": "dc_callsign_gold",
+    "shop_item_id": "ch_icn_jfk",
+    "desc": "한국↔뉴욕 대서양 횡단"
+  },
+  {
+    "id": "rt_icn_lhr",
+    "name": "런던 가기",
+    "route_match": [
+      "ICN-LHR",
+      "LHR-ICN",
+      "ICN-CDG",
+      "CDG-ICN"
+    ],
+    "reward_money": 5000000,
+    "reward_item": "lv_ba",
+    "shop_item_id": "ch_icn_lhr",
+    "desc": "한국↔유럽"
+  },
+  {
+    "id": "rt_long_8h",
+    "name": "8시간 이상 비행",
+    "min_hours": 8,
+    "reward_money": 4000000,
+    "reward_item": "dc_patch_world",
+    "shop_item_id": "ch_long_8h",
+    "desc": "한 번에 8시간 넘게 비행 기록"
+  },
+  {
+    "id": "rt_gen_cju",
+    "name": "제주 노선 도전",
+    "route_match": [
+      "ICN-CJU",
+      "CJU-ICN",
+      "GMP-CJU",
+      "CJU-GMP"
+    ],
+    "reward_money": 600000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_cju",
+    "desc": "한국↔제주 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_pus",
+    "name": "부산 노선 도전",
+    "route_match": [
+      "ICN-PUS",
+      "PUS-ICN",
+      "GMP-PUS"
+    ],
+    "reward_money": 500000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_pus",
+    "desc": "한국↔부산 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_nrt",
+    "name": "나리타 노선 도전",
+    "route_match": [
+      "ICN-NRT",
+      "NRT-ICN"
+    ],
+    "reward_money": 1500000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_nrt",
+    "desc": "한국↔나리타 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_hnd",
+    "name": "하네다 노선 도전",
+    "route_match": [
+      "ICN-HND",
+      "HND-ICN"
+    ],
+    "reward_money": 1500000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_hnd",
+    "desc": "한국↔하네다 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_kix",
+    "name": "간사이 노선 도전",
+    "route_match": [
+      "ICN-KIX",
+      "KIX-ICN"
+    ],
+    "reward_money": 1400000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_kix",
+    "desc": "한국↔간사이 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_fuk",
+    "name": "후쿠오카 노선 도전",
+    "route_match": [
+      "ICN-FUK",
+      "FUK-ICN",
+      "PUS-FUK"
+    ],
+    "reward_money": 1200000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_fuk",
+    "desc": "한국↔후쿠오카 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_tpe",
+    "name": "타이베이 노선 도전",
+    "route_match": [
+      "ICN-TPE",
+      "TPE-ICN"
+    ],
+    "reward_money": 1600000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_tpe",
+    "desc": "한국↔타이베이 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_hkg",
+    "name": "홍콩 노선 도전",
+    "route_match": [
+      "ICN-HKG",
+      "HKG-ICN"
+    ],
+    "reward_money": 1800000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_hkg",
+    "desc": "한국↔홍콩 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_bkk",
+    "name": "방콕 노선 도전",
+    "route_match": [
+      "ICN-BKK",
+      "BKK-ICN"
+    ],
+    "reward_money": 2000000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_bkk",
+    "desc": "한국↔방콕 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_sin",
+    "name": "싱가포르 노선 도전",
+    "route_match": [
+      "ICN-SIN",
+      "SIN-ICN"
+    ],
+    "reward_money": 2200000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_sin",
+    "desc": "한국↔싱가포르 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_mnl",
+    "name": "마닐라 노선 도전",
+    "route_match": [
+      "ICN-MNL",
+      "MNL-ICN"
+    ],
+    "reward_money": 1700000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_mnl",
+    "desc": "한국↔마닐라 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_dad",
+    "name": "다낭 노선 도전",
+    "route_match": [
+      "ICN-DAD",
+      "DAD-ICN"
+    ],
+    "reward_money": 1500000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_dad",
+    "desc": "한국↔다낭 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_sgn",
+    "name": "호치민 노선 도전",
+    "route_match": [
+      "ICN-SGN",
+      "SGN-ICN"
+    ],
+    "reward_money": 1800000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_sgn",
+    "desc": "한국↔호치민 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_lax",
+    "name": "LA 노선 도전",
+    "route_match": [
+      "ICN-LAX",
+      "LAX-ICN"
+    ],
+    "reward_money": 5000000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_lax",
+    "desc": "한국↔LA 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_sfo",
+    "name": "샌프란 노선 도전",
+    "route_match": [
+      "ICN-SFO",
+      "SFO-ICN"
+    ],
+    "reward_money": 5200000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_sfo",
+    "desc": "한국↔샌프란 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_sea",
+    "name": "시애틀 노선 도전",
+    "route_match": [
+      "ICN-SEA",
+      "SEA-ICN"
+    ],
+    "reward_money": 4800000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_sea",
+    "desc": "한국↔시애틀 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_jfk",
+    "name": "뉴욕 노선 도전",
+    "route_match": [
+      "ICN-JFK",
+      "JFK-ICN"
+    ],
+    "reward_money": 8000000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_jfk",
+    "desc": "한국↔뉴욕 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_ord",
+    "name": "시카고 노선 도전",
+    "route_match": [
+      "ICN-ORD",
+      "ORD-ICN"
+    ],
+    "reward_money": 5500000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_ord",
+    "desc": "한국↔시카고 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_yvr",
+    "name": "밴쿠버 노선 도전",
+    "route_match": [
+      "ICN-YVR",
+      "YVR-ICN"
+    ],
+    "reward_money": 4500000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_yvr",
+    "desc": "한국↔밴쿠버 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_lhr",
+    "name": "런던 노선 도전",
+    "route_match": [
+      "ICN-LHR",
+      "LHR-ICN"
+    ],
+    "reward_money": 6000000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_lhr",
+    "desc": "한국↔런던 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_cdg",
+    "name": "파리 노선 도전",
+    "route_match": [
+      "ICN-CDG",
+      "CDG-ICN"
+    ],
+    "reward_money": 5800000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_cdg",
+    "desc": "한국↔파리 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_fra",
+    "name": "프랑크푸르트 노선 도전",
+    "route_match": [
+      "ICN-FRA",
+      "FRA-ICN"
+    ],
+    "reward_money": 5600000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_fra",
+    "desc": "한국↔프랑크푸르트 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_ams",
+    "name": "암스테르담 노선 도전",
+    "route_match": [
+      "ICN-AMS",
+      "AMS-ICN"
+    ],
+    "reward_money": 5400000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_ams",
+    "desc": "한국↔암스테르담 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_dxb",
+    "name": "두바이 노선 도전",
+    "route_match": [
+      "ICN-DXB",
+      "DXB-ICN"
+    ],
+    "reward_money": 4500000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_dxb",
+    "desc": "한국↔두바이 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_doh",
+    "name": "도하 노선 도전",
+    "route_match": [
+      "ICN-DOH",
+      "DOH-ICN"
+    ],
+    "reward_money": 4300000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_doh",
+    "desc": "한국↔도하 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_syd",
+    "name": "시드니 노선 도전",
+    "route_match": [
+      "ICN-SYD",
+      "SYD-ICN"
+    ],
+    "reward_money": 5000000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_syd",
+    "desc": "한국↔시드니 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_mel",
+    "name": "멜버른 노선 도전",
+    "route_match": [
+      "ICN-MEL",
+      "MEL-ICN"
+    ],
+    "reward_money": 4800000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_mel",
+    "desc": "한국↔멜버른 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_akl",
+    "name": "오클랜드 노선 도전",
+    "route_match": [
+      "ICN-AKL",
+      "AKL-ICN"
+    ],
+    "reward_money": 5200000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_akl",
+    "desc": "한국↔오클랜드 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_hnl",
+    "name": "호놀룰루 노선 도전",
+    "route_match": [
+      "ICN-HNL",
+      "HNL-ICN"
+    ],
+    "reward_money": 4000000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_hnl",
+    "desc": "한국↔호놀룰루 노선 비행 기록"
+  },
+  {
+    "id": "rt_gen_gum",
+    "name": "괌 노선 도전",
+    "route_match": [
+      "ICN-GUM",
+      "GUM-ICN"
+    ],
+    "reward_money": 2500000,
+    "reward_item": null,
+    "shop_item_id": "ch_gen_gum",
+    "desc": "한국↔괌 노선 비행 기록"
+  },
+  {
+    "id": "rt_long_2h",
+    "name": "2시간 이상 비행",
+    "min_hours": 2,
+    "reward_money": 1000000,
+    "reward_item": null,
+    "shop_item_id": "ch_long_2h",
+    "desc": "한 번에 2시간 넘게 비행"
+  },
+  {
+    "id": "rt_long_3h",
+    "name": "3시간 이상 비행",
+    "min_hours": 3,
+    "reward_money": 1500000,
+    "reward_item": null,
+    "shop_item_id": "ch_long_3h",
+    "desc": "한 번에 3시간 넘게 비행"
+  },
+  {
+    "id": "rt_long_4h",
+    "name": "4시간 이상 비행",
+    "min_hours": 4,
+    "reward_money": 2000000,
+    "reward_item": null,
+    "shop_item_id": "ch_long_4h",
+    "desc": "한 번에 4시간 넘게 비행"
+  },
+  {
+    "id": "rt_long_5h",
+    "name": "5시간 이상 비행",
+    "min_hours": 5,
+    "reward_money": 2500000,
+    "reward_item": null,
+    "shop_item_id": "ch_long_5h",
+    "desc": "한 번에 5시간 넘게 비행"
+  },
+  {
+    "id": "rt_long_6h",
+    "name": "6시간 이상 비행",
+    "min_hours": 6,
+    "reward_money": 3000000,
+    "reward_item": null,
+    "shop_item_id": "ch_long_6h",
+    "desc": "한 번에 6시간 넘게 비행"
+  },
+  {
+    "id": "rt_long_7h",
+    "name": "7시간 이상 비행",
+    "min_hours": 7,
+    "reward_money": 3500000,
+    "reward_item": null,
+    "shop_item_id": "ch_long_7h",
+    "desc": "한 번에 7시간 넘게 비행"
+  },
+  {
+    "id": "rt_long_9h",
+    "name": "9시간 이상 비행",
+    "min_hours": 9,
+    "reward_money": 4500000,
+    "reward_item": null,
+    "shop_item_id": "ch_long_9h",
+    "desc": "한 번에 9시간 넘게 비행"
+  },
+  {
+    "id": "rt_long_10h",
+    "name": "10시간 이상 비행",
+    "min_hours": 10,
+    "reward_money": 5000000,
+    "reward_item": null,
+    "shop_item_id": "ch_long_10h",
+    "desc": "한 번에 10시간 넘게 비행"
+  },
+  {
+    "id": "rt_long_12h",
+    "name": "12시간 이상 비행",
+    "min_hours": 12,
+    "reward_money": 6000000,
+    "reward_item": null,
+    "shop_item_id": "ch_long_12h",
+    "desc": "한 번에 12시간 넘게 비행"
+  },
+  {
+    "id": "rt_long_14h",
+    "name": "14시간 이상 비행",
+    "min_hours": 14,
+    "reward_money": 7000000,
+    "reward_item": null,
+    "shop_item_id": "ch_long_14h",
+    "desc": "한 번에 14시간 넘게 비행"
+  },
+  {
+    "id": "rt_long_16h",
+    "name": "16시간 이상 비행",
+    "min_hours": 16,
+    "reward_money": 8000000,
+    "reward_item": null,
+    "shop_item_id": "ch_long_16h",
+    "desc": "한 번에 16시간 넘게 비행"
+  },
+  {
+    "id": "rt_extra_001",
+    "name": "부산 특별 도전 #1",
+    "route_match": [
+      "ICN-PUS",
+      "PUS-ICN",
+      "GMP-PUS"
+    ],
+    "reward_money": 510000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_001",
+    "desc": "부산 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_002",
+    "name": "나리타 특별 도전 #2",
+    "route_match": [
+      "ICN-NRT",
+      "NRT-ICN"
+    ],
+    "reward_money": 1520000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_002",
+    "desc": "나리타 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_003",
+    "name": "하네다 특별 도전 #3",
+    "route_match": [
+      "ICN-HND",
+      "HND-ICN"
+    ],
+    "reward_money": 1530000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_003",
+    "desc": "하네다 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_004",
+    "name": "간사이 특별 도전 #4",
+    "route_match": [
+      "ICN-KIX",
+      "KIX-ICN"
+    ],
+    "reward_money": 1440000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_004",
+    "desc": "간사이 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_005",
+    "name": "후쿠오카 특별 도전 #5",
+    "route_match": [
+      "ICN-FUK",
+      "FUK-ICN",
+      "PUS-FUK"
+    ],
+    "reward_money": 1250000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_005",
+    "desc": "후쿠오카 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_006",
+    "name": "타이베이 특별 도전 #6",
+    "route_match": [
+      "ICN-TPE",
+      "TPE-ICN"
+    ],
+    "reward_money": 1660000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_006",
+    "desc": "타이베이 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_007",
+    "name": "홍콩 특별 도전 #7",
+    "route_match": [
+      "ICN-HKG",
+      "HKG-ICN"
+    ],
+    "reward_money": 1870000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_007",
+    "desc": "홍콩 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_008",
+    "name": "방콕 특별 도전 #8",
+    "route_match": [
+      "ICN-BKK",
+      "BKK-ICN"
+    ],
+    "reward_money": 2080000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_008",
+    "desc": "방콕 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_009",
+    "name": "싱가포르 특별 도전 #9",
+    "route_match": [
+      "ICN-SIN",
+      "SIN-ICN"
+    ],
+    "reward_money": 2290000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_009",
+    "desc": "싱가포르 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_010",
+    "name": "마닐라 특별 도전 #10",
+    "route_match": [
+      "ICN-MNL",
+      "MNL-ICN"
+    ],
+    "reward_money": 1800000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_010",
+    "desc": "마닐라 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_011",
+    "name": "다낭 특별 도전 #11",
+    "route_match": [
+      "ICN-DAD",
+      "DAD-ICN"
+    ],
+    "reward_money": 1610000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_011",
+    "desc": "다낭 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_012",
+    "name": "호치민 특별 도전 #12",
+    "route_match": [
+      "ICN-SGN",
+      "SGN-ICN"
+    ],
+    "reward_money": 1920000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_012",
+    "desc": "호치민 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_013",
+    "name": "LA 특별 도전 #13",
+    "route_match": [
+      "ICN-LAX",
+      "LAX-ICN"
+    ],
+    "reward_money": 5130000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_013",
+    "desc": "LA 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_014",
+    "name": "샌프란 특별 도전 #14",
+    "route_match": [
+      "ICN-SFO",
+      "SFO-ICN"
+    ],
+    "reward_money": 5340000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_014",
+    "desc": "샌프란 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_015",
+    "name": "시애틀 특별 도전 #15",
+    "route_match": [
+      "ICN-SEA",
+      "SEA-ICN"
+    ],
+    "reward_money": 4950000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_015",
+    "desc": "시애틀 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_016",
+    "name": "뉴욕 특별 도전 #16",
+    "route_match": [
+      "ICN-JFK",
+      "JFK-ICN"
+    ],
+    "reward_money": 8160000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_016",
+    "desc": "뉴욕 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_017",
+    "name": "시카고 특별 도전 #17",
+    "route_match": [
+      "ICN-ORD",
+      "ORD-ICN"
+    ],
+    "reward_money": 5670000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_017",
+    "desc": "시카고 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_018",
+    "name": "밴쿠버 특별 도전 #18",
+    "route_match": [
+      "ICN-YVR",
+      "YVR-ICN"
+    ],
+    "reward_money": 4680000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_018",
+    "desc": "밴쿠버 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_019",
+    "name": "런던 특별 도전 #19",
+    "route_match": [
+      "ICN-LHR",
+      "LHR-ICN"
+    ],
+    "reward_money": 6190000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_019",
+    "desc": "런던 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_020",
+    "name": "파리 특별 도전 #20",
+    "route_match": [
+      "ICN-CDG",
+      "CDG-ICN"
+    ],
+    "reward_money": 6000000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_020",
+    "desc": "파리 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_021",
+    "name": "프랑크푸르트 특별 도전 #21",
+    "route_match": [
+      "ICN-FRA",
+      "FRA-ICN"
+    ],
+    "reward_money": 5810000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_021",
+    "desc": "프랑크푸르트 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_022",
+    "name": "암스테르담 특별 도전 #22",
+    "route_match": [
+      "ICN-AMS",
+      "AMS-ICN"
+    ],
+    "reward_money": 5620000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_022",
+    "desc": "암스테르담 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_023",
+    "name": "두바이 특별 도전 #23",
+    "route_match": [
+      "ICN-DXB",
+      "DXB-ICN"
+    ],
+    "reward_money": 4730000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_023",
+    "desc": "두바이 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_024",
+    "name": "도하 특별 도전 #24",
+    "route_match": [
+      "ICN-DOH",
+      "DOH-ICN"
+    ],
+    "reward_money": 4540000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_024",
+    "desc": "도하 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_025",
+    "name": "시드니 특별 도전 #25",
+    "route_match": [
+      "ICN-SYD",
+      "SYD-ICN"
+    ],
+    "reward_money": 5250000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_025",
+    "desc": "시드니 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_026",
+    "name": "멜버른 특별 도전 #26",
+    "route_match": [
+      "ICN-MEL",
+      "MEL-ICN"
+    ],
+    "reward_money": 5060000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_026",
+    "desc": "멜버른 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_027",
+    "name": "오클랜드 특별 도전 #27",
+    "route_match": [
+      "ICN-AKL",
+      "AKL-ICN"
+    ],
+    "reward_money": 5470000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_027",
+    "desc": "오클랜드 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_028",
+    "name": "호놀룰루 특별 도전 #28",
+    "route_match": [
+      "ICN-HNL",
+      "HNL-ICN"
+    ],
+    "reward_money": 4280000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_028",
+    "desc": "호놀룰루 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_029",
+    "name": "괌 특별 도전 #29",
+    "route_match": [
+      "ICN-GUM",
+      "GUM-ICN"
+    ],
+    "reward_money": 2790000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_029",
+    "desc": "괌 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_030",
+    "name": "제주 특별 도전 #30",
+    "route_match": [
+      "ICN-CJU",
+      "CJU-ICN",
+      "GMP-CJU",
+      "CJU-GMP"
+    ],
+    "reward_money": 900000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_030",
+    "desc": "제주 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_031",
+    "name": "부산 특별 도전 #31",
+    "route_match": [
+      "ICN-PUS",
+      "PUS-ICN",
+      "GMP-PUS"
+    ],
+    "reward_money": 810000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_031",
+    "desc": "부산 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_032",
+    "name": "나리타 특별 도전 #32",
+    "route_match": [
+      "ICN-NRT",
+      "NRT-ICN"
+    ],
+    "reward_money": 1820000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_032",
+    "desc": "나리타 관련 노선 추가 도전"
+  },
+  {
+    "id": "rt_extra_033",
+    "name": "하네다 특별 도전 #33",
+    "route_match": [
+      "ICN-HND",
+      "HND-ICN"
+    ],
+    "reward_money": 1830000,
+    "reward_item": null,
+    "shop_item_id": "ch_extra_033",
+    "desc": "하네다 관련 노선 추가 도전"
+  }
 ]

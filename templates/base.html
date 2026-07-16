@@ -109,8 +109,14 @@
             <span class="text-3xl">✈️</span>
             <span class="font-semibold text-2xl tracking-tight">Pilot Dream</span>
         </div>
+        <div class="flex items-center gap-4">
+            <div class="text-sm hidden sm:block">
+                <span class="text-gray-500">지갑</span>
+                <span id="nav-wallet" class="font-bold text-[#ffaa00] ml-1">₩0</span>
+            </div>
         <div class="flex gap-1 text-sm font-medium">
             <a href="/" class="nav-link {{ 'active' if request.path == '/' else '' }}">대시보드</a>
+            <a href="/world" class="nav-link {{ 'active' if request.path.startswith('/world') else '' }}">🌍 세계</a>
             <a href="/learn" class="nav-link {{ 'active' if request.path == '/learn' or request.path.startswith('/quiz') or request.path.startswith('/flash') or request.path.startswith('/scenario') or request.path.startswith('/captain') or request.path.startswith('/first-flight') else '' }}">학습</a>
             <a href="/captain-life" class="nav-link {{ 'active' if request.path.startswith('/captain-life') else '' }}">👑 기장생활</a>
             <a href="/airline" class="nav-link {{ 'active' if request.path.startswith('/airline') else '' }}">🏢 항공사</a>
@@ -124,6 +130,7 @@
             <a href="/korea-career" class="nav-link {{ 'active' if request.path == '/korea-career' else '' }}">커리어</a>
             <a href="/guide" class="nav-link {{ 'active' if request.path.startswith('/guide') else '' }}">📖 가이드</a>
         </div>
+        </div>
     </nav>
 
     <main class="max-w-7xl mx-auto px-6 py-8">
@@ -131,6 +138,7 @@
     </main>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/static/js/gamification.js"></script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

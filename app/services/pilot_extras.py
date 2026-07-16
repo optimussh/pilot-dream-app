@@ -105,11 +105,53 @@ def _rank_order():
     return ['trainee', 'student', 'private', 'fo', 'captain', 'senior']
 
 
+# 해금 조건 상한 (아이·채용 친화: 많이 만날 수 있게)
+_CREW_UNLOCK_CAPS = {
+    'logbook_count': 25,
+    'quiz_done': 8,
+    'flashcard_count': 30,
+    'mission_count': 12,
+    'journal_count': 8,
+    'airport_quiz': 10,
+    'fuel_quiz': 8,
+    'owned_aircraft': 8,
+    'intl_route': 3,
+    'schedule_week': 3,
+    'crew_count': 20,
+    'demand_claim': 8,
+    'on_time_week': 3,
+    'quiz_score': 70,
+}
+
+
+def _ease_crew_value(rtype, val):
+    """원본 조건의 약 1/4 + 상한. 채용 가능한 동료를 늘리기 위함."""
+    try:
+        val = int(val or 0)
+    except (TypeError, ValueError):
+        val = 0
+    if rtype == 'rank_id':
+        return val
+    if rtype == 'quiz_score':
+        return min(max(val, 60), 70)
+    if val <= 0:
+        return 1
+    eased = max(1, (val + 3) // 4)
+    cap = _CREW_UNLOCK_CAPS.get(rtype)
+    if cap is not None:
+        eased = min(eased, cap)
+    return eased
+
+
 def _crew_unlock_met(prog, extras, card):
-    req = card.get('unlock', {})
+    req = card.get('unlock', {}) or {}
     rtype = req.get('type')
-    val = req.get('value', 0)
+    raw_val = req.get('value', 0)
+    val = _ease_crew_value(rtype, raw_val)
     stats = extras.get('stats', {})
+    # 스타터 동료: free_unlock 또는 unlock.starter
+    if card.get('free_unlock') or req.get('starter'):
+        return True
     if rtype == 'logbook_count':
         return LogbookEntry.query.count() >= val
     if rtype == 'quiz_done':
@@ -138,12 +180,16 @@ def _crew_unlock_met(prog, extras, card):
     if rtype == 'demand_claim':
         return stats.get('demand_claim_total', 0) >= val
     if rtype == 'intl_route':
-        return any(_is_intl_route(e.route) for e in LogbookEntry.query.all())
+        n = sum(1 for e in LogbookEntry.query.all() if _is_intl_route(e.route))
+        return n >= max(1, val)
     if rtype == 'on_time_week':
         wk = week_key()
         return extras.get('on_time_log', {}).get(wk, 0) >= val
     if rtype == 'crew_count':
         return len(extras.get('crew_unlocked', [])) >= val
+    # 조건 없으면 기본 해금 (데이터 누락 방지)
+    if not rtype:
+        return True
     return False
 
 
@@ -151,14 +197,26 @@ def check_crew_unlocks(prog):
     extras = _meta(prog)
     unlocked = set(extras.get('crew_unlocked', []))
     newly = []
-    for card in load_json('crew_cards.json'):
+    cards = load_json('crew_cards.json')
+    # 역할별 스타터 2명씩은 무조건 해금 → 항공사 채용 시작 가능
+    by_role = {}
+    for card in cards:
+        role = card.get('airline_role') or card.get('role') or 'fa'
+        by_role.setdefault(role, []).append(card)
+    for role, role_cards in by_role.items():
+        for card in role_cards[:2]:
+            cid = card['id']
+            if cid not in unlocked:
+                unlocked.add(cid)
+                newly.append(card)
+    for card in cards:
         cid = card['id']
         if cid in unlocked:
             continue
         if _crew_unlock_met(prog, extras, card):
             unlocked.add(cid)
             newly.append(card)
-    if newly:
+    if newly or set(extras.get('crew_unlocked', [])) != unlocked:
         extras['crew_unlocked'] = list(unlocked)
         _save_meta(prog, extras)
         try:
@@ -172,6 +230,7 @@ def check_crew_unlocks(prog):
 
 
 def get_crew_cards(prog):
+    from app.services.crew_stats import generate_crew_profile
     extras = _meta(prog)
     check_crew_unlocks(prog)
     unlocked = set(extras.get('crew_unlocked', []))
@@ -181,6 +240,7 @@ def get_crew_cards(prog):
             **card,
             'unlocked': card['id'] in unlocked,
             'can_unlock': _crew_unlock_met(prog, extras, card),
+            'profile': generate_crew_profile(card),
         })
     return result
 
@@ -223,38 +283,63 @@ def claim_captain_duty(prog):
 
 
 # ── 2. 오늘의 공항 ──
-def get_daily_airport(prog):
-    extras = _meta(prog)
-    today = today_str()
+def _airport_fact_for_today(today):
     facts = load_json('airport_daily_facts.json')
     if not facts:
         return None
     seed = hashlib.md5(f'airport-{today}'.encode()).hexdigest()
     idx = int(seed, 16) % len(facts)
-    ap = dict(facts[idx])
+    return dict(facts[idx])
+
+
+def _prepare_airport_quiz(airport_id, quiz_raw, today):
+    from app.services.content_bank import shuffle_quiz_choices
+    return shuffle_quiz_choices(dict(quiz_raw), seed=f'airport-quiz-{today}-{airport_id}')
+
+
+def get_daily_airport(prog):
+    extras = _meta(prog)
+    today = today_str()
+    ap = _airport_fact_for_today(today)
+    if not ap:
+        return None
     done = extras.get('daily_airport', {}).get('date') == today and extras['daily_airport'].get('done')
     ap['quiz_done'] = done
-    ap['reward_money'] = 150000
+    ap['reward_money'] = AIRPORT_QUIZ_REWARD
+    raw_quiz = ap.get('quiz')
+    if raw_quiz:
+        from app.services.content_bank import quiz_public_dict
+        prepared = _prepare_airport_quiz(ap['id'], raw_quiz, today)
+        ap['quiz'] = quiz_public_dict(prepared)
     return ap
 
 
+AIRPORT_QUIZ_REWARD = 150000
+AIRPORT_QUIZ_PARTIAL = 50000
+
+
 def submit_daily_airport_quiz(prog, answer_idx):
-    ap = get_daily_airport(prog)
+    today = today_str()
+    ap = _airport_fact_for_today(today)
     if not ap:
         return False, '오늘의 공항 정보가 없어요.'
     extras = _meta(prog)
-    today = today_str()
     if extras.get('daily_airport', {}).get('date') == today and extras['daily_airport'].get('done'):
         return False, '오늘 공항 퀴즈는 이미 풀었어요!'
-    quiz = ap.get('quiz', {})
-    correct = quiz.get('answer', 0)
-    is_correct = int(answer_idx) == correct
+    raw_quiz = ap.get('quiz', {})
+    prepared = _prepare_airport_quiz(ap['id'], raw_quiz, today)
+    try:
+        ans = int(answer_idx)
+    except (TypeError, ValueError):
+        return False, '답을 선택해주세요!'
+    is_correct = ans == prepared.get('answer', 0)
     extras['daily_airport'] = {
         'date': today, 'airport_id': ap['id'], 'done': True, 'correct': is_correct,
     }
     extras['stats']['airport_quiz_total'] = extras['stats'].get('airport_quiz_total', 0) + 1
     _save_meta(prog, extras)
-    money = ap['reward_money'] if is_correct else 50000
+    # raw airport JSON has no reward_money — only get_daily_airport adds it for UI
+    money = AIRPORT_QUIZ_REWARD if is_correct else AIRPORT_QUIZ_PARTIAL
     award_money(prog, money, f"오늘의 공항 퀴즈: {ap['name']}")
     if is_correct:
         award_virtual_hours(prog, 0.2, f"공항 학습: {ap['id']}")
@@ -296,6 +381,22 @@ def get_flight_journals(prog, limit=10):
 
 
 # ── 4. 기종 도감 ──
+CODEX_COLOR_PALETTE = [
+    '#004B9C', '#E60012', '#FF6600', '#4B0082', '#00B4B4', '#003087', '#CC0000',
+    '#0A84FF', '#33ff33', '#ffaa00', '#a78bfa', '#ec4899', '#14b8a6', '#f97316',
+    '#6366f1', '#84cc16', '#06b6d4', '#e11d48', '#7c3aed', '#0891b2', '#ca8a04',
+    '#2563eb', '#dc2626', '#059669', '#db2777', '#4f46e5', '#0d9488', '#ea580c',
+]
+
+
+def _codex_display_colors(aid, category=''):
+    import hashlib
+    h = int(hashlib.md5(aid.encode('utf-8')).hexdigest()[:8], 16)
+    body = CODEX_COLOR_PALETTE[h % len(CODEX_COLOR_PALETTE)]
+    accent = CODEX_COLOR_PALETTE[(h + len(category) * 7) % len(CODEX_COLOR_PALETTE)]
+    return body, accent
+
+
 def get_aircraft_codex(prog):
     catalog = get_aircraft_catalog()
     owned = set(get_owned_aircraft(prog))
@@ -318,20 +419,23 @@ def get_aircraft_codex(prog):
         discovered = aid in stamps
         loadout = build_loadout_details(prog, aid) if aid in owned else {}
         vis = get_aircraft_cosmetics(prog, aid) if aid in owned else {}
+        cat = ac.get('category', '')
+        display_color, accent_color = _codex_display_colors(aid, cat)
         result.append({
             'id': aid,
             'name': ac.get('name', aid),
             'manufacturer': ac.get('manufacturer', ''),
-            'category': ac.get('category', ''),
+            'category': cat,
             'type': ac.get('type', ''),
             'region': ac.get('region', ''),
-            'illustration': ac.get('illustration', ''),
             'discovered': discovered,
             'owned': aid in owned,
             'ready': st.get('unlocked') or st.get('owned'),
             'progress_pct': st.get('progress_pct', 0),
             'loadout_details': loadout,
-            'livery_color': vis.get('livery_color', ''),
+            'display_color': display_color,
+            'accent_color': accent_color,
+            'livery_color': vis.get('livery_color', '') or display_color,
             'sticker_emoji': vis.get('sticker_emoji', ''),
             'trail_color': vis.get('trail_color', ''),
         })
@@ -450,6 +554,15 @@ FUEL_QUESTIONS = [
 ]
 
 
+def _prepare_fuel_quiz(quiz_id, today, attempt_idx):
+    from app.services.content_bank import shuffle_quiz_choices
+    q_raw = next((x for x in FUEL_QUESTIONS if x['id'] == quiz_id), None)
+    if not q_raw:
+        return None
+    seed = f'fuel-{today}-{attempt_idx}-{quiz_id}'
+    return shuffle_quiz_choices(dict(q_raw), seed=seed)
+
+
 def get_fuel_quiz(prog):
     extras = _meta(prog)
     _ensure_daily_reset(extras)
@@ -460,9 +573,10 @@ def get_fuel_quiz(prog):
         return None, '오늘 연료 퀴즈는 3개까지! 내일 다시 도전해요.'
     seed = f'fuel-{today}-{done_today}'
     rng = random.Random(seed)
-    q = dict(rng.choice(FUEL_QUESTIONS))
-    q.pop('answer', None)
-    return q, None
+    picked = dict(rng.choice(FUEL_QUESTIONS))
+    from app.services.content_bank import quiz_public_dict
+    prepared = _prepare_fuel_quiz(picked['id'], today, done_today)
+    return quiz_public_dict(prepared), None
 
 
 def submit_fuel_quiz(prog, quiz_id, answer_idx):
@@ -471,10 +585,18 @@ def submit_fuel_quiz(prog, quiz_id, answer_idx):
     today = today_str()
     if extras.get('fuel_quiz_today', 0) >= 3:
         return False, '오늘은 3개까지 풀었어요!'
+    attempt_idx = extras.get('fuel_quiz_today', 0)
+    prepared = _prepare_fuel_quiz(quiz_id, today, attempt_idx)
+    if not prepared:
+        return False, '문제를 찾을 수 없어요.'
+    try:
+        ans = int(answer_idx)
+    except (TypeError, ValueError):
+        return False, '답을 선택해주세요!'
+    correct = ans == prepared['answer']
     q = next((x for x in FUEL_QUESTIONS if x['id'] == quiz_id), None)
     if not q:
         return False, '문제를 찾을 수 없어요.'
-    correct = int(answer_idx) == q['answer']
     extras['fuel_quiz_today'] = extras.get('fuel_quiz_today', 0) + 1
     extras['fuel_quiz_history'] = (extras.get('fuel_quiz_history', []) + [{
         'date': today, 'id': quiz_id, 'correct': correct,

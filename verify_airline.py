@@ -5,7 +5,7 @@ app = create_app()
 c = app.test_client()
 errors = []
 
-for path in ['/airline', '/guide', '/api/airline/dashboard', '/api/guide/sections',
+for path in ['/airline', '/guide', '/api/airline/dashboard', '/api/airline/revenue', '/api/guide/sections',
              '/api/guide/onboarding', '/api/player/stats', '/api/airline/radar-flights']:
     r = c.get(path)
     ok = r.status_code == 200
@@ -24,7 +24,43 @@ with app.app_context():
     assert get_player_stats(prog)['stats']
     assert get_onboarding_state(prog)['total'] >= 5
     add_stat_xp(prog, 'flying', 10)
-    get_airline_dashboard(prog)
+    dash = get_airline_dashboard(prog)
+    from app.services.airline_revenue import fetch_revenue_dashboard
+    from app.services.airline_company import build_company_board, allocate_weekly_profit
+    rev = fetch_revenue_dashboard(prog)
+    assert rev.get('revenue_panel'), 'revenue_panel missing'
+    assert len(rev['revenue_panel'].get('cargo_offers', [])) == 3, 'cargo offers'
+    assert len(rev['revenue_panel'].get('briefings', [])) == 5, 'briefings'
+    print(f"  OK: revenue panel ({len(rev['revenue_panel']['cargo_offers'])} cargo, {len(rev['revenue_panel']['briefings'])} briefings)")
+    if dash.get('airline', {}).get('founded'):
+        cb = dash['ops'].get('company_board') or build_company_board(prog)
+        assert cb and cb.get('story') and len(cb['story']) == 3, 'company board story'
+        assert 'allocation' in cb, 'company allocation'
+        print(f"  OK: company board (vault={cb.get('vault', 0)}, alloc_done={cb['allocation'].get('done')})")
+        r = c.get('/api/guide/sections')
+        secs = (r.get_json() or {}).get('sections') or []
+        assert any(s.get('id') == 'company_layer2' for s in secs), 'guide company_layer2'
+        print('  OK: guide has company_layer2')
+    crew = dash['ops']['hireable_crew']
+    assert len(crew) >= 50, 'hireable crew pool'
+    assert crew[0].get('profile', {}).get('overall'), 'crew profile missing'
+    print(f"  OK: crew profiles ({crew[0]['name']} = {crew[0]['profile']['grade']} {crew[0]['profile']['overall']})")
+    assert all(c.get('profile', {}).get('overall') for c in crew[:5]), 'all crew need profile'
+    unlocked = [c for c in crew if c.get('unlocked')]
+    if unlocked:
+        from app.services.airline_ops import hire_crew, fire_crew
+        from app.services.pilot_features import get_airline_info
+        if get_airline_info(prog).get('founded'):
+            cid = unlocked[0]['id']
+            h_ok, _ = hire_crew(prog, cid)
+            if h_ok:
+                ok, _ = fire_crew(prog, cid)
+                assert ok, 'fire_crew failed'
+                print(f'  OK: fire_crew ({unlocked[0]["name"]})')
+            else:
+                print('  SKIP: fire_crew (already hired)')
+        else:
+            print('  SKIP: fire_crew (airline not founded)')
     get_space_status(prog)
     print("  OK: service layer")
 

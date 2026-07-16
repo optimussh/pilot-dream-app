@@ -16,7 +16,15 @@ def load_badges():
 def get_all_badges():
     return load_badges()
 
+# 모듈 로드 시점 스냅샷 (하위 호환). 최신 목록은 get_all_badges() 사용 권장
 ALL_BADGES = load_badges()
+
+
+def refresh_badge_cache():
+    """badges.json 변경 후 캐시 갱신"""
+    global ALL_BADGES
+    ALL_BADGES = load_badges()
+    return ALL_BADGES
 
 def get_unlocked_badge_ids():
     return [b.badge_id for b in UserBadge.query.all()]

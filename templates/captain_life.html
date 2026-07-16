@@ -27,6 +27,10 @@
 .crew-card { background:#0a0a0a; border:1px solid #2c2c2e; border-radius:12px; padding:12px; }
 .crew-card.unlocked { border-color:#33ff33/50; }
 .crew-card.locked { opacity:0.45; }
+.crew-grade-S { color:#ffaa00; } .crew-grade-A { color:#a78bfa; } .crew-grade-B { color:#0A84FF; }
+.crew-grade-C { color:#33ff33; } .crew-grade-D { color:#888; }
+.crew-skill-mini { height:3px; background:#111; border-radius:2px; margin-top:2px; }
+.crew-skill-mini div { height:100%; border-radius:2px; background:#0A84FF; }
 .codex-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px; }
 .codex-card {
     border-radius:14px; padding:10px 8px; min-height:108px;
@@ -48,7 +52,8 @@
 .codex-badge { font-size:8px; margin-top:5px; padding:2px 6px; border-radius:999px; font-weight:700; }
 .codex-legend { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
 .codex-legend span { font-size:10px; padding:3px 8px; border-radius:999px; border:1px solid; }
-.codex-entry { display:flex; flex-direction:column; align-items:center; }
+.codex-entry { display:flex; flex-direction:column; align-items:center; width:100%; }
+.codex-entry .ac-preview { width:100%; }
 .slot-cell { min-height:60px; }
 </style>
 {% endblock %}
@@ -59,6 +64,7 @@
 <script>
 if (window.AircraftVisual) document.getElementById('ac-visual-styles-codex').textContent = AircraftVisual.previewCss();
 let data = {};
+let crewRoleFilter = '전체';
 
 function fmt(n) { return '₩' + (n||0).toLocaleString('ko-KR'); }
 
@@ -119,19 +125,49 @@ function renderAirport() {
     </div>`;
 }
 
+function setCrewFilter(role) {
+    crewRoleFilter = role;
+    renderTab('crew');
+}
+
 function renderCrew() {
     const cards = data.crew_cards || [];
     const n = data.crew_unlocked_count || 0;
-    return `<div class="mb-4 text-sm">수집 <b class="text-[#33ff33]">${n}</b> / ${cards.length}</div>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-        ${cards.map(c => `
-            <div class="crew-card ${c.unlocked?'unlocked':'locked'}">
-                <div class="text-3xl">${c.emoji}</div>
+    const roles = ['전체', ...new Set(cards.map(c => c.role))];
+    const filtered = crewRoleFilter === '전체' ? cards : cards.filter(c => c.role === crewRoleFilter);
+    const roleCounts = roles.slice(1).map(r => {
+        const all = cards.filter(c => c.role === r);
+        const got = all.filter(c => c.unlocked).length;
+        return `${r} ${got}/${all.length}`;
+    }).join(' · ');
+    return `<div class="mb-3 text-sm">수집 <b class="text-[#33ff33]">${n}</b> / ${cards.length}명</div>
+    <p class="text-[10px] text-gray-500 mb-3">${roleCounts}</p>
+    <div class="flex gap-1 mb-4 flex-wrap">
+        ${roles.map(r => `<button onclick="setCrewFilter('${r}')" class="px-2 py-1 rounded-full text-[10px] border ${crewRoleFilter===r?'border-[#0A84FF] text-[#0A84FF]':'border-[#333] text-gray-400'}">${r}</button>`).join('')}
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+        ${filtered.map(c => {
+            const p = c.profile || {};
+            const g = p.grade || '?';
+            const skills = (p.skills||[]).slice(0,2).map(s => `
+                <div class="text-[9px] mt-1"><span>${s.emoji} ${s.name}</span> <span class="text-gray-500">${s.value}</span>
+                    <div class="crew-skill-mini"><div style="width:${s.value}%"></div></div></div>`).join('');
+            return `<div class="crew-card ${c.unlocked?'unlocked':'locked'}">
+                <div class="flex justify-between items-start">
+                    <span class="text-3xl">${c.emoji}</span>
+                    ${c.unlocked ? `<span class="text-[10px] font-bold crew-grade-${g}">${p.grade_emoji||''} ${g}</span>` : ''}
+                </div>
                 <div class="font-bold text-sm mt-1">${c.name}</div>
                 <div class="text-[10px] text-gray-500">${c.role}</div>
-                ${c.unlocked ? '<div class="text-[10px] text-[#33ff33] mt-1">✓ 동료!</div>' :
-                  `<div class="text-[10px] text-[#ffaa00] mt-2">${c.bonus_tip}</div>`}
-            </div>`).join('')}
+                ${c.unlocked ? `
+                    <div class="text-[9px] text-gray-400 mt-1">${p.experience_years||0}년 · ${(p.flight_hours||0).toLocaleString()}h</div>
+                    <div class="text-[9px] text-[#a78bfa]">${p.specialty||''}</div>
+                    ${skills}
+                    <div class="text-[9px] text-gray-500 mt-1">주급 ₩${(p.weekly_pay||0).toLocaleString('ko-KR')}</div>
+                    <div class="text-[10px] text-[#33ff33] mt-1">✓ 동료!</div>` :
+                  `<div class="text-[10px] text-[#ffaa00] mt-2">🔒 ${c.bonus_tip}</div>`}
+            </div>`;
+        }).join('')}
     </div>`;
 }
 
@@ -160,26 +196,31 @@ function renderCodex() {
     </div>
     <div class="codex-grid mb-6">
         ${list.map(a => {
-            const preview = (window.AircraftVisual)
-                ? AircraftVisual.buildPreviewHtml(a, a.loadout_details || {}, { large: false, preferImage: a.owned })
+            const preview = (window.AircraftVisual && AircraftVisual.buildCodexHtml)
+                ? AircraftVisual.buildCodexHtml(a, a.loadout_details || {})
                 : (() => { const v = codexVisual(a.category); return `<div class="codex-card ${v.cls}"><div class="codex-icon">${v.icon}</div></div>`; })();
             const decoHint = a.sticker_emoji ? ` ${a.sticker_emoji}` : '';
-            return `<div class="codex-entry" title="${a.name}">
+            const colorDot = a.display_color ? `<span class="inline-block w-2 h-2 rounded-full ml-1 border border-white/30" style="background:${a.display_color}"></span>` : '';
+            return `<div class="codex-entry" title="${a.name} · ${a.category}">
                 ${preview}
-                <div class="codex-name mt-1">${a.name}${decoHint}</div>
-                <div class="codex-meta text-gray-500">${a.manufacturer||''}</div>
+                <div class="codex-name mt-1">${a.name}${colorDot}${decoHint}</div>
+                <div class="codex-meta text-gray-500">${a.manufacturer||''} · ${a.category||''}</div>
                 ${a.owned ? '<div class="codex-badge" style="background:#33ff3322;color:#33ff33;border:1px solid #33ff33">내 비행기</div>' : ''}
                 ${a.owned && a.loadout_details?.livery ? `<div class="text-[9px] text-purple-300 mt-1">${a.loadout_details.livery.name||'리버리'}</div>` : ''}
             </div>`;
         }).join('')}
-        ${locked.slice(0,8).map(() => `
-            <div class="codex-card locked-card">
-                <div class="codex-icon text-gray-600">❓</div>
-                <div class="codex-name text-gray-500">미발견</div>
+        ${locked.slice(0,8).map(a => {
+            const preview = (window.AircraftVisual && AircraftVisual.buildLockedCodexHtml)
+                ? AircraftVisual.buildLockedCodexHtml(a.category)
+                : `<div class="codex-card locked-card"><div class="codex-icon text-gray-600">❓</div></div>`;
+            return `<div class="codex-entry">
+                ${preview}
+                <div class="codex-name text-gray-500 mt-1">???</div>
                 <div class="codex-meta text-gray-600">비행·연습으로 해금</div>
-            </div>`).join('')}
+            </div>`;
+        }).join('')}
     </div>
-    <p class="text-xs text-gray-500">창고에서 꾸민 리버리·스티커가 도감에도 반영돼요! <a href="/hangar" class="text-[#0A84FF]">비행기 창고 →</a></p>`;
+    <p class="text-xs text-gray-500">기종마다 다른 색 비행기 실루엣! 소형·중형·대형·화물기 모양이 달라요. <a href="/hangar" class="text-[#0A84FF]">비행기 창고 →</a></p>`;
 }
 
 function renderSchedule() {
@@ -273,9 +314,18 @@ async function claimDuty() {
     alert(d.error || d.message); await loadAll();
 }
 async function submitAirportQuiz(ans) {
-    const res = await fetch('/api/extras/daily-airport/quiz', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({answer:ans})});
-    const d = await res.json();
-    alert(d.error || d.message); await loadAll();
+    try {
+        const res = await fetch('/api/extras/daily-airport/quiz', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({answer:ans})});
+        const d = await res.json().catch(() => ({}));
+        if (!res.ok) {
+            alert(d.error || '퀴즈 제출에 실패했어요. 다시 시도해주세요!');
+            return;
+        }
+        alert(d.message || (d.correct ? '정답!' : '아쉬워요!'));
+        await loadAll();
+    } catch (e) {
+        alert('네트워크 오류가 났어요. 다시 시도해주세요!');
+    }
 }
 async function setSlot(slot_id, aircraft_id) {
     await fetch('/api/extras/schedule', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({slot_id, aircraft_id: aircraft_id||null})});

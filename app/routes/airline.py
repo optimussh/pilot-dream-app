@@ -4,8 +4,14 @@ from app.services.economy import get_wallet_summary
 from app.services.pilot_features import found_airline, get_airline_info
 from app.services.airline_ops import (
     get_airline_dashboard, set_hub, set_mode, deploy_aircraft,
-    create_route, assign_route_staff, delete_route, hire_crew,
-    settle_weekly_revenue, get_flights_for_radar,
+    create_route, assign_route_staff, delete_route, hire_crew, fire_crew,
+    settle_weekly_revenue, get_flights_for_radar, set_ancillary,
+)
+from app.services.airline_company import allocate_weekly_profit, withdraw_company_vault
+from app.services.airline_revenue import (
+    accept_cargo, complete_cargo, toggle_lease, set_mro_desk, set_fleet_maintain,
+    answer_briefing, toggle_codeshare, run_training, claim_seasonal,
+    fetch_revenue_dashboard,
 )
 from app.services.space_ops import (
     get_space_status, found_space_division, buy_rocket, launch_mission,
@@ -58,6 +64,159 @@ def mode_api():
     return jsonify({'status': 'ok', 'message': msg})
 
 
+@bp.route('/api/airline/ancillary', methods=['POST'])
+def ancillary_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg = set_ancillary(prog, data.get('tier', 'basic'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({'status': 'ok', 'message': msg, 'dashboard': get_airline_dashboard(prog)})
+
+
+@bp.route('/api/airline/company/allocate', methods=['POST'])
+def company_allocate_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg = allocate_weekly_profit(prog, data.get('choice'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({
+        'status': 'ok', 'message': msg,
+        'dashboard': get_airline_dashboard(prog),
+        'wallet': get_wallet_summary(prog),
+    })
+
+
+@bp.route('/api/airline/company/vault/withdraw', methods=['POST'])
+def company_vault_withdraw_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    amount = data.get('amount')
+    ok, msg = withdraw_company_vault(prog, amount if amount is not None else None)
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({
+        'status': 'ok', 'message': msg,
+        'dashboard': get_airline_dashboard(prog),
+        'wallet': get_wallet_summary(prog),
+    })
+
+
+@bp.route('/api/airline/revenue')
+def revenue_api():
+    prog = get_or_create_progress()
+    try:
+        return jsonify(fetch_revenue_dashboard(prog))
+    except Exception as e:
+        return jsonify({'error': f'수입원 로드 실패: {e}', 'founded': get_airline_info(prog).get('founded')}), 500
+
+
+@bp.route('/api/airline/revenue/cargo/accept', methods=['POST'])
+def cargo_accept_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg = accept_cargo(prog, data.get('offer_id'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({'status': 'ok', 'message': msg, 'dashboard': get_airline_dashboard(prog)})
+
+
+@bp.route('/api/airline/revenue/cargo/complete', methods=['POST'])
+def cargo_complete_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg, pay = complete_cargo(prog, data.get('offer_id'), data.get('answer'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({
+        'status': 'ok', 'message': msg, 'pay': pay,
+        'dashboard': get_airline_dashboard(prog),
+        'wallet': get_wallet_summary(prog),
+    })
+
+
+@bp.route('/api/airline/revenue/lease', methods=['POST'])
+def lease_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg = toggle_lease(prog, data.get('aircraft_id'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({'status': 'ok', 'message': msg, 'dashboard': get_airline_dashboard(prog)})
+
+
+@bp.route('/api/airline/revenue/mro', methods=['POST'])
+def mro_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg = set_mro_desk(prog, data.get('enabled', True))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({'status': 'ok', 'message': msg, 'dashboard': get_airline_dashboard(prog)})
+
+
+@bp.route('/api/airline/revenue/maintain', methods=['POST'])
+def maintain_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg = set_fleet_maintain(prog, data.get('enabled', True))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({'status': 'ok', 'message': msg, 'dashboard': get_airline_dashboard(prog)})
+
+
+@bp.route('/api/airline/revenue/briefing', methods=['POST'])
+def briefing_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg, fee = answer_briefing(prog, data.get('idx'), data.get('answer'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({
+        'status': 'ok', 'message': msg, 'fee': fee,
+        'dashboard': get_airline_dashboard(prog),
+        'wallet': get_wallet_summary(prog),
+    })
+
+
+@bp.route('/api/airline/revenue/codeshare', methods=['POST'])
+def codeshare_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg = toggle_codeshare(prog, data.get('partner_id'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({'status': 'ok', 'message': msg, 'dashboard': get_airline_dashboard(prog)})
+
+
+@bp.route('/api/airline/revenue/training', methods=['POST'])
+def training_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg, fee = run_training(prog, data.get('module_id'), data.get('answer'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({
+        'status': 'ok', 'message': msg, 'fee': fee,
+        'dashboard': get_airline_dashboard(prog),
+        'wallet': get_wallet_summary(prog),
+    })
+
+
+@bp.route('/api/airline/revenue/seasonal', methods=['POST'])
+def seasonal_api():
+    prog = get_or_create_progress()
+    ok, msg, bonus = claim_seasonal(prog)
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({
+        'status': 'ok', 'message': msg, 'bonus': bonus,
+        'dashboard': get_airline_dashboard(prog),
+        'wallet': get_wallet_summary(prog),
+    })
+
+
 @bp.route('/api/airline/deploy', methods=['POST'])
 def deploy_api():
     data = request.get_json() or {}
@@ -94,12 +253,33 @@ def route_delete_api(route_id):
 @bp.route('/api/airline/route/staff', methods=['POST'])
 def route_staff_api():
     data = request.get_json() or {}
-    ok, msg = assign_route_staff(
-        get_or_create_progress(), data.get('route_id'), data.get('staff', {})
-    )
+    prog = get_or_create_progress()
+    ok, msg = assign_route_staff(prog, data.get('route_id'), data.get('staff', {}))
     if not ok:
         return jsonify({'error': msg}), 400
-    return jsonify({'status': 'ok', 'message': msg})
+    return jsonify({'status': 'ok', 'message': msg, 'dashboard': get_airline_dashboard(prog)})
+
+
+@bp.route('/api/airline/route/staff/auto-assign', methods=['POST'])
+def route_staff_auto_api():
+    """모든 활성 노선에 채용 직원을 랜덤·균등 배치"""
+    from app.services.airline_ops import auto_assign_all_routes
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    max_per = data.get('max_per_crew')
+    try:
+        max_per = int(max_per) if max_per is not None else None
+    except (TypeError, ValueError):
+        max_per = None
+    ok, msg, extra = auto_assign_all_routes(prog, max_per_crew=max_per)
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({
+        'status': 'ok',
+        'message': msg,
+        'result': extra or {},
+        'dashboard': get_airline_dashboard(prog),
+    })
 
 
 @bp.route('/api/airline/hire', methods=['POST'])
@@ -108,7 +288,18 @@ def hire_api():
     ok, msg = hire_crew(get_or_create_progress(), data.get('crew_id'))
     if not ok:
         return jsonify({'error': msg}), 400
-    return jsonify({'status': 'ok', 'message': msg})
+    prog = get_or_create_progress()
+    return jsonify({'status': 'ok', 'message': msg, 'dashboard': get_airline_dashboard(prog)})
+
+
+@bp.route('/api/airline/fire', methods=['POST'])
+def fire_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg = fire_crew(prog, data.get('crew_id'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({'status': 'ok', 'message': msg, 'dashboard': get_airline_dashboard(prog)})
 
 
 @bp.route('/api/airline/settle', methods=['POST'])
@@ -116,7 +307,10 @@ def settle_api():
     prog = get_or_create_progress()
     result = settle_weekly_revenue(prog, force=True)
     if not result:
-        return jsonify({'error': '정산할 노선이 없어요.'}), 400
+        from app.services.pilot_features import get_airline_info
+        if not get_airline_info(prog).get('founded'):
+            return jsonify({'error': '먼저 항공사를 창업해주세요!'}), 400
+        return jsonify({'error': '오늘은 이미 운영 수익을 받았어요. 내일 다시 확인해주세요!'}), 400
     return jsonify({'status': 'ok', **result, 'wallet': get_wallet_summary(prog)})
 
 
@@ -162,4 +356,8 @@ def stats_allocate_api():
     ok, msg = allocate_stat_point(get_or_create_progress(), data.get('stat_id'))
     if not ok:
         return jsonify({'error': msg}), 400
-    return jsonify({'status': 'ok', 'message': msg, 'stats': get_player_stats(get_or_create_progress())})
+    stats = get_player_stats(get_or_create_progress())
+    payload = {'status': 'ok', 'stats': stats}
+    if msg:
+        payload['message'] = msg
+    return jsonify(payload)

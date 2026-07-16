@@ -7,12 +7,19 @@
         문제은행 <span id="pool-size" class="text-[#ffaa00] font-bold">1000</span>문항 중
         오늘의 문제 <span class="text-[#33ff33] font-bold">5</span>개
     </p>
-    <p class="text-xs text-gray-500 mb-6">매일 같은 5문제 · 제출 후 정답·해설 확인 · 완료 시 내일까지 잠금</p>
+    <p class="text-xs text-gray-500 mb-6">완료 후 보상받기 · 학습 더하기로 한번 더 도전 (보상 50%)</p>
 
     <div id="daily-done-banner" class="hidden mb-6 info-card p-5 rounded-2xl border border-[#33ff33]/50 text-center">
         <div class="text-3xl mb-2">✅</div>
-        <div class="font-bold text-[#33ff33] text-lg">오늘의 퀴즈 완료!</div>
-        <p class="text-sm text-gray-400 mt-1">내일 새로운 5문제가 열립니다</p>
+        <div class="font-bold text-[#33ff33] text-lg" id="quiz-banner-title">오늘의 퀴즈 완료!</div>
+        <p class="text-sm text-gray-400 mt-1" id="quiz-banner-desc">내일 새로운 5문제가 열립니다</p>
+        <div id="quiz-actions" class="hidden flex flex-col gap-1 mt-4"></div>
+    </div>
+
+    <div id="extra-banner" class="hidden mb-6 info-card p-5 rounded-2xl border border-[#0A84FF]/50 text-center">
+        <div class="text-3xl mb-2">🔁</div>
+        <div class="font-bold text-[#0A84FF] text-lg">학습 더하기 진행 중</div>
+        <p class="text-sm text-gray-400 mt-1">새로운 5문제 · 완료 시 보상 지급</p>
     </div>
 
     <div id="quiz-area" class="space-y-4"></div>
@@ -21,11 +28,13 @@
     </div>
     <div id="quiz-result" class="hidden mt-6 info-card p-6 rounded-2xl"></div>
 </div>
+<script src="/static/js/gamification.js"></script>
 <script>
 let questions = [];
 let answers = {};
 let poolSize = 1000;
 let dailyDone = false;
+let quizMode = 'daily';
 
 async function loadQuiz() {
     answers = {};
@@ -35,11 +44,15 @@ async function loadQuiz() {
     questions = data.questions || [];
     poolSize = data.pool_size || 1000;
     dailyDone = data.daily_done || false;
+    quizMode = data.mode || 'daily';
     document.getElementById('pool-size').textContent = poolSize;
 
     const banner = document.getElementById('daily-done-banner');
     const area = document.getElementById('quiz-area');
     const submitBtn = document.getElementById('submit-btn');
+
+    banner.classList.add('hidden');
+    document.getElementById('extra-banner').classList.add('hidden');
 
     if (!questions.length) {
         area.innerHTML = '<p class="text-gray-400">문제를 불러오지 못했습니다.</p>';
@@ -47,15 +60,22 @@ async function loadQuiz() {
         return;
     }
 
-    if (dailyDone) {
-        banner.classList.remove('hidden');
-        submitBtn.classList.add('hidden');
-        renderQuestions(true);
-        showResults(data);
+    if (quizMode === 'extra') {
+        showLearningExtraMode('quiz');
+        renderQuestions(false);
+        submitBtn.classList.remove('hidden');
         return;
     }
 
-    banner.classList.add('hidden');
+    if (dailyDone) {
+        submitBtn.classList.add('hidden');
+        renderQuestions(true);
+        showResults(data);
+        storeLearningReward(data);
+        applyLearningCompleteUI('quiz', { ...data, daily_done: true });
+        return;
+    }
+
     renderQuestions(false);
     submitBtn.classList.remove('hidden');
 }
@@ -86,10 +106,11 @@ function showResults(data) {
     const correct = data.correct ?? 0;
     const total = data.total ?? questions.length;
     const emoji = score >= 80 ? '🏆' : score >= 50 ? '👍' : '💪';
+    const extraLabel = data.mode === 'extra' ? ' <span class="text-[#0A84FF]">(추가 학습)</span>' : '';
     result.innerHTML = `
         <div class="text-center mb-4">
             <div class="text-5xl mb-2">${emoji}</div>
-            <div class="text-3xl font-bold text-[#0A84FF]">${score}점</div>
+            <div class="text-3xl font-bold text-[#0A84FF]">${score}점${extraLabel}</div>
             <div class="text-sm text-gray-400">${correct} / ${total} 정답</div>
             ${data.money_earned ? `<div class="text-sm text-[#ffaa00] mt-2 font-bold">💰 +₩${data.money_earned.toLocaleString()} 획득!</div>` : ''}
         </div>`;
@@ -99,19 +120,13 @@ function showResults(data) {
         if (!card) return;
         const review = card.querySelector('.review');
         review.classList.remove('hidden');
-
         const labels = card.querySelectorAll('.choice-label');
         labels.forEach(lbl => {
             const idx = parseInt(lbl.dataset.idx);
             lbl.classList.remove('bg-green-900/30', 'bg-red-900/30', 'border', 'border-green-500', 'border-red-500');
-            if (idx === r.correct_answer) {
-                lbl.classList.add('bg-green-900/30', 'border', 'border-green-500');
-            }
-            if (!r.correct && idx === r.user_answer) {
-                lbl.classList.add('bg-red-900/30', 'border', 'border-red-500');
-            }
+            if (idx === r.correct_answer) lbl.classList.add('bg-green-900/30', 'border', 'border-green-500');
+            if (!r.correct && idx === r.user_answer) lbl.classList.add('bg-red-900/30', 'border', 'border-red-500');
         });
-
         if (r.correct) {
             review.innerHTML = `<div class="text-[#33ff33] font-bold">✅ 정답!</div><div class="text-gray-300 mt-1">${r.explanation}</div>`;
         } else {
@@ -121,7 +136,6 @@ function showResults(data) {
                 <div class="text-gray-300">정답: <span class="text-[#33ff33] font-semibold">${r.correct_choice}</span></div>
                 <div class="mt-2 text-[#ffaa00]">💡 ${r.explanation}</div>`;
         }
-
         const radio = card.querySelector(`input[value="${r.user_answer}"]`);
         if (radio) radio.checked = true;
     });
@@ -135,21 +149,31 @@ async function submitQuiz() {
     const res = await fetch('/api/gamification/quiz/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            answers,
-            question_ids: questions.map(q => q.id)
-        })
+        body: JSON.stringify({ answers, question_ids: questions.map(q => q.id) })
     });
     const data = await res.json();
     if (data.error) { alert(data.error); return; }
 
-    dailyDone = true;
-    document.getElementById('daily-done-banner').classList.remove('hidden');
     document.getElementById('submit-btn').classList.add('hidden');
     renderQuestions(true);
     showResults(data);
+
+    const isExtra = data.mode === 'extra';
+    if (isExtra) {
+        data.extra_done = true;
+        finishLearningSession('quiz', data, {
+            showPopup: true,
+            rewardTitle: '추가 학습 보상!',
+            rewardSubtitle: `${data.score}점 · 보상 50% 지급`,
+            emoji: data.score >= 80 ? '🏆' : '💰',
+        });
+    } else {
+        dailyDone = true;
+        finishLearningSession('quiz', data, { showPopup: false });
+    }
 }
 
+setLearningPageReload(loadQuiz);
 loadQuiz();
 </script>
 {% endblock %}

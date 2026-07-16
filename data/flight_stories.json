@@ -1,0 +1,17 @@
+[
+  {"id": "s_grandma_jeju", "match": ["CJU", "제주"], "type": "tourism", "emoji": "👵", "title": "할머니의 제주 여행", "story": "할머니가 손주 얼굴을 보러 제주로 가요. 짧은 비행 한 편이 가족을 이어 줘요.", "economy": "국내 관광·가족 방문 수요가 국내선을 떠받쳐요."},
+  {"id": "s_student_jp", "match": ["NRT", "HND", "KIX", "일본"], "type": "tourism", "emoji": "🎒", "title": "수학여행·벚꽃 여행", "story": "학생들이 일본 문화를 배우러 떠나요. 봄이면 자리가 빨리 차요.", "economy": "계절 관광이 국제선 수요를 만들어요."},
+  {"id": "s_chip_lax", "match": ["LAX", "SFO", "SEA"], "type": "cargo", "emoji": "💾", "title": "반도체 부품 긴급 수송", "story": "작은 상자 안에 아주 비싼 칩이 들어 있어요. 시간이 생명이라 배로 못 보내고 비행기로 가요.", "economy": "고가·긴급 화물은 항공 화물 수요를 만들어요."},
+  {"id": "s_fruit_bkk", "match": ["BKK", "SIN", "MNL"], "type": "cargo", "emoji": "🥭", "title": "신선한 망고 수송", "story": "동남아 망고가 한국 식탁에 오르려면 빨리 도착해야 해요.", "economy": "신선식품 무역 = 항공 화물."},
+  {"id": "s_biz_sin", "match": ["SIN", "HKG", "TPE"], "type": "biz", "emoji": "💼", "title": "아시아 허브 출장", "story": "회의가 있어 아침에 출발해 저녁에 돌아오는 출장객이에요.", "economy": "비즈니스 승객은 정시와 연결편을 중요하게 봐요."},
+  {"id": "s_europe_dream", "match": ["LHR", "CDG", "FRA", "AMS"], "type": "tourism", "emoji": "🗼", "title": "유럽 첫 여행", "story": "에펠탑·박물관을 꿈꾸며 장거리 비행에 올라요. 밤하늘에서 별을 봐요.", "economy": "장거리 관광은 유가·환율에 민감해요."},
+  {"id": "s_nyc", "match": ["JFK", "EWR", "NYC"], "type": "biz", "emoji": "🗽", "title": "뉴욕 비즈니스", "story": "금융·패션 도시로 가는 손님과 화물이 함께 타요.", "economy": "대도시 허브는 사람과 돈이 모이는 곳이에요."},
+  {"id": "s_dxb_hub", "match": ["DXB", "DOH", "AUH"], "type": "hub", "emoji": "🏜️", "title": "중동 환승 허브", "story": "유럽과 아시아를 잇는 중간 공항에서 많은 손님이 갈아타요.", "economy": "허브 공항은 '연결' 자체로 가치가 생겨요."},
+  {"id": "s_sydney", "match": ["SYD", "MEL", "호주"], "type": "tourism", "emoji": "🦘", "title": "오세아니아 휴가", "story": "긴 남반구 비행 끝에서 오페라하우스와 바다를 만나요.", "economy": "장거리 여객 + 시즌 관광."},
+  {"id": "s_busan_japan", "match": ["PUS", "부산", "FUK"], "type": "tourism", "emoji": "🌊", "title": "부산-일본 근거리", "story": "남부에서 일본으로 가는 짧은 국제선, 주말에 손님이 많아요.", "economy": "지역 공항도 국제 관광 수요를 만들어요."},
+  {"id": "s_gmp_dom", "match": ["GMP", "김포"], "type": "domestic", "emoji": "🏙️", "title": "김포 국내선", "story": "서울 가까운 공항에서 출장·제주·지방 손님들이 오가요.", "economy": "도심 접근성이 국내선 경쟁력이에요."},
+  {"id": "s_icn_world", "match": ["ICN", "인천"], "type": "hub", "emoji": "🇰🇷", "title": "인천 세계 관문", "story": "한국으로 들어오고 나가는 거의 모든 장거리 이야기가 여기서 시작돼요.", "economy": "허브 = 환승 + 화물 + 국가 관문."},
+  {"id": "s_medical", "match": ["default"], "type": "human", "emoji": "🏥", "title": "의료·긴급 이동", "story": "때로는 치료를 받으러, 때로는 가족을 보러 급히 이동하는 손님도 있어요.", "economy": "항공은 위급 상황의 '시간'을 팔기도 해요."},
+  {"id": "s_crew", "match": ["default"], "type": "ops", "emoji": "👩‍✈️", "title": "승무원 교대 비행", "story": "승무원도 비행기로 근무지에 가요. 항공사 안에도 작은 이동 네트워크가 있어요.", "economy": "항공사 자체도 큰 '이동 경제'예요."},
+  {"id": "s_mail", "match": ["default"], "type": "cargo", "emoji": "✉️", "title": "편지와 온라인 쇼핑", "story": "어제 주문한 물건이 하늘 위를 날아 내일 도착할 수도 있어요.", "economy": "전자상거래가 항공 화물을 키워요."}
+]

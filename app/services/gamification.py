@@ -71,7 +71,7 @@ def award_virtual_hours(prog, hours, reason):
 
 
 def try_unlock_badges(prog):
-    from app.routes.badges import ALL_BADGES
+    from app.routes.badges import get_all_badges
     unlocked = {b.badge_id for b in UserBadge.query.all()}
     entries = LogbookEntry.query.all()
     total_hours = sum(e.hours for e in entries) + (prog.virtual_hours or 0)
@@ -90,7 +90,7 @@ def try_unlock_badges(prog):
         'flashcard_20': len(prog._json('flashcards_learned', [])) >= 20,
     }
 
-    for badge in ALL_BADGES:
+    for badge in get_all_badges():
         if badge['id'] in unlocked:
             continue
         req = badge.get('requirement', {})
@@ -179,6 +179,21 @@ def complete_mission(prog, mission_id):
         money += award_money(prog, LEARNING_REWARDS['mission_all_bonus'], '오늘의 미션 전부 완료 보너스')
     db.session.commit()
     return prog.virtual_hours, '미션 완료!', money
+
+
+def auto_claim_daily_mission(prog, mission_id):
+    """학습 완료 시 오늘의 해당 미션 보상을 자동 수령."""
+    today = today_str()
+    completed = prog._json('completed_missions', {}).get(today, [])
+    if mission_id in completed:
+        return 0
+    daily = get_daily_missions(prog)
+    if mission_id not in [m['id'] for m in daily]:
+        return 0
+    hours, msg, money = complete_mission(prog, mission_id)
+    if hours is None:
+        return 0
+    return money
 
 
 def get_weekly_challenges(prog):

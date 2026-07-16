@@ -19,11 +19,15 @@
 
     <!-- 아바타 미리보기 -->
     <div class="info-card p-5 mb-6 flex flex-wrap items-center gap-6 border border-purple-500/30">
-        <div class="text-6xl" id="avatar-preview">👨‍✈️</div>
+        <button type="button" onclick="openAvatarModal()" class="avatar-stage-card hover:border-[#0A84FF]/50 transition cursor-pointer" title="클릭해서 꾸미기">
+            <div id="avatar-preview"></div>
+            <div class="text-[10px] text-[#0A84FF] mt-2">👆 클릭해서 크게 보기</div>
+        </button>
         <div class="flex-1 min-w-[200px]">
             <div class="font-bold text-lg">내 파일럿 아바타</div>
-            <div class="text-xs text-gray-400 mt-1" id="avatar-slots">장착 슬롯: 머리 · 유니폼 · 악세서리 · 윙</div>
+            <div class="text-xs text-gray-400 mt-1">머리·유니폼·악세서리·윙 — 장착하면 몸에 붙어요!</div>
             <div class="flex gap-2 mt-3 flex-wrap" id="avatar-equip-btns"></div>
+            <button onclick="openAvatarModal()" class="mt-3 text-xs px-3 py-1.5 bg-purple-600 rounded font-bold">🪞 아바타 꾸미기</button>
         </div>
         <div class="text-right text-xs text-gray-500">
             <div>주력 기체</div>
@@ -57,6 +61,29 @@
 
     <div id="shop-content" class="min-h-[400px]">
         <p class="text-gray-400">로딩 중...</p>
+    </div>
+</div>
+
+<!-- 파일럿 아바타 꾸미기 모달 -->
+<div id="avatar-modal" class="hidden fixed inset-0 bg-black/80 flex items-center justify-center z-[5000] p-4" onclick="if(event.target===this)closeAvatarModal()">
+    <div class="info-card w-full max-w-4xl max-h-[92vh] overflow-y-auto p-0 border border-purple-500/40" onclick="event.stopPropagation()">
+        <div class="p-5 border-b border-purple-500/20 flex justify-between items-center sticky top-0 bg-[#1c1c1e] z-10">
+            <div>
+                <h2 class="text-xl font-bold">🪞 파일럿 아바타 꾸미기</h2>
+                <p class="text-xs text-gray-400">아이템을 고르면 해당 위치로 날아가서 장착돼요!</p>
+            </div>
+            <button onclick="closeAvatarModal()" class="text-2xl text-gray-400 hover:text-white px-2">×</button>
+        </div>
+        <div class="p-5 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="avatar-stage-card">
+                <div id="avatar-modal-stage"></div>
+                <div class="flex gap-2 mt-4 flex-wrap justify-center" id="avatar-modal-equip-btns"></div>
+            </div>
+            <div>
+                <div class="flex gap-1 mb-3 flex-wrap" id="avatar-modal-slot-tabs"></div>
+                <div id="avatar-modal-items" class="grid grid-cols-2 gap-2 max-h-[340px] overflow-y-auto"></div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -95,9 +122,12 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="/static/js/pilot_avatar.js"></script>
 <script src="/static/js/aircraft_visual.js"></script>
+<style id="pa-visual-styles"></style>
 <style id="ac-visual-styles"></style>
 <script>
+if (window.PilotAvatar) document.getElementById('pa-visual-styles').textContent = PilotAvatar.previewCss();
 if (window.AircraftVisual && !document.getElementById('ac-visual-styles').textContent) {
     document.getElementById('ac-visual-styles').textContent = AircraftVisual.previewCss();
 }
@@ -114,7 +144,9 @@ let routeData = {};
 let airlineData = {};
 let currentTab = 'avatar';
 let hangarModalAcId = null;
+let avatarModalSlot = 'head';
 const CAT_LABELS = { avatar:'아바타', livery:'리버리', deco:'데코', lounge:'라운지', boost:'가속권' };
+const AVATAR_SLOT_LABELS = { head:'머리', uniform:'유니폼', accessory:'악세서리', wings:'윙' };
 const RARITY_LABELS = { common:'일반', uncommon:'고급', rare:'희귀', epic:'영웅', legendary:'전설' };
 const HANGAR_SLOTS = [
     { slot: 'livery', label: '🎨 리버리', hint: '비행기 몸체 색' },
@@ -147,21 +179,96 @@ async function loadAll() {
     document.getElementById('shop-hour-boost').textContent = `연습 도우미 +${walletData.hour_boosts}h · 연습 ${walletData.effective_hours}h`;
     document.getElementById('shop-balance').textContent = walletData.balance_formatted;
     document.getElementById('shop-hour-boost').textContent = `가속 +${walletData.hour_boosts}h · 유효 ${walletData.effective_hours}h`;
-    document.getElementById('avatar-preview').textContent = walletData.avatar_preview || '👨‍✈️';
+    refreshAvatarPreview();
     document.getElementById('active-aircraft-name').textContent = walletData.active_aircraft_name || '—';
-    renderAvatarBtns();
+    renderAvatarBtns('avatar-equip-btns');
+    if (!document.getElementById('avatar-modal').classList.contains('hidden')) refreshAvatarModal();
 }
 
-function renderAvatarBtns() {
+function avatarEquippedVisual() {
+    return walletData.avatar_visual || walletData.equipped_avatar || {};
+}
+
+function refreshAvatarPreview() {
+    const el = document.getElementById('avatar-preview');
+    if (!window.PilotAvatar || !el) return;
+    PilotAvatar.mount(el, avatarEquippedVisual(), { size: 'lg', interactive: true });
+    el.querySelectorAll('.pa-hotspot').forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+            avatarModalSlot = btn.dataset.slot;
+            openAvatarModal();
+        });
+    });
+}
+
+function renderAvatarBtns(targetId) {
     const eq = walletData.equipped_avatar || {};
     const slots = ['head','uniform','accessory','wings'];
-    const labels = {head:'머리',uniform:'유니폼',accessory:'악세서리',wings:'윙'};
-    document.getElementById('avatar-equip-btns').innerHTML = slots.map(s => {
+    const el = document.getElementById(targetId);
+    if (!el) return;
+    el.innerHTML = slots.map(s => {
         const item = eq[s];
         return `<button onclick="unequipSlot('${s}')" class="text-xs px-2 py-1 border border-gray-600 rounded hover:border-red-400" title="해제">
-            ${labels[s]}: ${item ? item.emoji || item.name : '없음'} ✕
+            ${AVATAR_SLOT_LABELS[s]}: ${item ? item.emoji || item.name : '없음'} ✕
         </button>`;
     }).join('');
+}
+
+function openAvatarModal() {
+    avatarModalSlot = avatarModalSlot || 'head';
+    const modal = document.getElementById('avatar-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    refreshAvatarModal();
+}
+
+function closeAvatarModal() {
+    const modal = document.getElementById('avatar-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+function refreshAvatarModal() {
+    const stage = document.getElementById('avatar-modal-stage');
+    if (window.PilotAvatar && stage) {
+        PilotAvatar.mount(stage, avatarEquippedVisual(), { size: 'lg', interactive: true, highlightSlot: avatarModalSlot });
+        stage.querySelectorAll('.pa-hotspot').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.slot === avatarModalSlot);
+            btn.onclick = e => { e.stopPropagation(); setAvatarModalSlot(btn.dataset.slot); };
+        });
+    }
+    renderAvatarBtns('avatar-modal-equip-btns');
+    const tabs = document.getElementById('avatar-modal-slot-tabs');
+    if (tabs) {
+        tabs.innerHTML = Object.entries(AVATAR_SLOT_LABELS).map(([k, label]) =>
+            `<button onclick="setAvatarModalSlot('${k}')" class="avatar-modal-slot text-xs px-3 py-1 rounded-full border ${avatarModalSlot===k?'active border-[#0A84FF] text-[#0A84FF]':'border-[#333]'}">${label}</button>`
+        ).join('');
+    }
+    renderAvatarModalItems();
+}
+
+function setAvatarModalSlot(slot) {
+    avatarModalSlot = slot;
+    refreshAvatarModal();
+}
+
+function renderAvatarModalItems() {
+    const el = document.getElementById('avatar-modal-items');
+    if (!el) return;
+    const items = (shopData.categories?.avatar || []).filter(i => i.slot === avatarModalSlot && i.owned);
+    const eq = walletData.equipped_avatar || {};
+    const equippedId = eq[avatarModalSlot]?.id;
+    if (!items.length) {
+        el.innerHTML = `<p class="text-sm text-gray-400 col-span-2 p-3">이 슬롯 아이템이 없어요. 아래 아바타 탭에서 구매하세요!</p>`;
+        return;
+    }
+    el.innerHTML = items.map(item => `
+        <button onclick="equipItem('${item.slot}','${item.id}', this)" class="item-card text-left ${equippedId===item.id?'border border-purple-500':''}">
+            <div class="text-2xl">${item.emoji||'📦'}</div>
+            <div class="font-bold text-xs">${item.name}</div>
+            ${equippedId===item.id ? '<div class="text-[10px] text-[#33ff33]">✓ 장착 중</div>' : '<div class="text-[10px] text-[#0A84FF]">장착하기 →</div>'}
+        </button>`).join('');
 }
 
 async function unequipSlot(slot) {
@@ -270,7 +377,7 @@ function renderItemCard(item, tab) {
     const rarity = item.rarity || 'common';
     let actions = '';
     if (tab === 'avatar') {
-        if (owned) actions = `<button onclick="equipItem('${item.slot}','${item.id}')" class="text-xs px-3 py-1 bg-purple-600 rounded font-bold">장착</button>
+        if (owned) actions = `<button onclick="equipItem('${item.slot}','${item.id}', this)" class="text-xs px-3 py-1 bg-purple-600 rounded font-bold">장착</button>
             <button onclick="sellItem('${item.id}')" class="text-xs px-3 py-1 border border-gray-500 rounded">판매 ${fmt(item.sell_price)}</button>`;
         else actions = `<button onclick="buyItem('${item.id}')" class="text-xs px-3 py-1 bg-[#ffaa00] text-black rounded font-bold">구매 ${fmt(item.price)}</button>`;
     } else if (tab === 'boost') {
@@ -479,7 +586,7 @@ function renderInventory() {
             <div class="font-bold text-sm">${item.name}</div>
             <div class="text-[10px] text-gray-500">${item.desc||''}</div>
             <div class="flex gap-2 mt-2 flex-wrap">
-                ${item.category==='avatar' ? `<button onclick="equipItem('${item.slot}','${item.id}')" class="text-xs px-2 py-1 bg-purple-600 rounded">장착</button>` : ''}
+                ${item.category==='avatar' ? `<button onclick="equipItem('${item.slot}','${item.id}', this)" class="text-xs px-2 py-1 bg-purple-600 rounded">장착</button>` : ''}
                 ${item.sellable!==false ? `<button onclick="sellItem('${item.id}')" class="text-xs px-2 py-1 border border-gray-500 rounded">판매</button>` : ''}
             </div>
         </div>`).join('')}
@@ -614,8 +721,16 @@ async function createGift() {
     const res = await fetch('/api/features/gift/create', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({item_id, message, from_name:'나'}) });
     const d = await res.json();
     if (d.error) { alert(d.error); return; }
-    alert(`선물 코드: ${d.code}\n${d.item_name}을(를) 선물했어요! 코드를 친구에게 알려주세요.`);
-    await loadAll(); renderTab('gifts');
+    const code = d.code || '';
+    await loadAll();
+    renderTab('gifts');
+    // 생성한 코드를 「선물 코드 받기」 입력칸에 바로 채움 (팝업 없음)
+    const input = document.getElementById('gift-code-input');
+    if (input && code) {
+        input.value = code;
+        input.focus();
+        input.select();
+    }
 }
 async function redeemGift() {
     const code = document.getElementById('gift-code-input').value;
@@ -686,12 +801,30 @@ async function sellItem(id) {
     renderTab(document.querySelector('.shop-tab.active').dataset.tab);
 }
 
-async function equipItem(slot, id) {
+async function equipItem(slot, id, sourceEl) {
+    const item = (shopData.categories?.avatar || []).find(i => i.id === id) ||
+        (walletData.inventory || []).find(i => i.id === id);
+    const emoji = item?.emoji || '✨';
+    const previewRoot = document.getElementById('avatar-preview');
+    const modalStage = document.getElementById('avatar-modal-stage');
+    const flyTarget = !document.getElementById('avatar-modal').classList.contains('hidden') && modalStage
+        ? modalStage : previewRoot;
     const res = await fetch('/api/shop/equip', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({slot, item_id:id}) });
     const d = await res.json();
     if (d.error) { alert(d.error); return; }
-    await loadAll();
-    renderTab('avatar');
+    if (d.wallet) walletData = d.wallet;
+    const afterUpdate = async () => {
+        document.getElementById('shop-balance').textContent = walletData.balance_formatted;
+        refreshAvatarPreview();
+        renderAvatarBtns('avatar-equip-btns');
+        if (!document.getElementById('avatar-modal').classList.contains('hidden')) refreshAvatarModal();
+        renderTab(document.querySelector('.shop-tab.active')?.dataset.tab || 'avatar');
+    };
+    if (window.PilotAvatar && sourceEl && flyTarget) {
+        PilotAvatar.playEquipFly(sourceEl, flyTarget, slot, emoji, afterUpdate);
+    } else {
+        await afterUpdate();
+    }
 }
 
 async function buyAircraft(id) {

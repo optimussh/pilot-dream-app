@@ -1,0 +1,572 @@
+{% extends "base.html" %}
+{% block title %}세계 · 경제 · 꿈 - Pilot Dream{% endblock %}
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <div class="flex flex-wrap justify-between items-start gap-4 mb-4">
+        <div>
+            <h1 class="text-3xl font-bold mb-1">🌍 세계 스카이 아카데미</h1>
+            <p class="text-gray-400 text-sm">하늘을 보면 세계 경제가 보여요 · 기장의 꿈과 상상력, 운영 감각을 키워요</p>
+        </div>
+        <div class="flex gap-2 items-center flex-wrap">
+            <div class="info-card px-3 py-2 text-center border border-[#ffaa00]/40">
+                <div class="text-[10px] text-gray-400">지갑</div>
+                <div class="text-sm font-bold text-[#ffaa00]" id="w-wallet">—</div>
+            </div>
+            <label class="info-card px-3 py-2 text-xs flex items-center gap-2 cursor-pointer border border-purple-500/30">
+                <input type="checkbox" id="w-parent" onchange="toggleParent(this.checked)"> 👨‍👩‍👧 부모 모드
+            </label>
+        </div>
+    </div>
+
+    <!-- 스카이 타임즈 + 유가 -->
+    <div class="info-card p-5 mb-4 border border-[#0A84FF]/40">
+        <div class="flex flex-wrap justify-between gap-2 mb-3">
+            <div>
+                <div class="text-xs text-[#0A84FF] font-bold tracking-widest">SKY TIMES</div>
+                <h2 class="font-bold text-xl" id="st-title">📰 스카이 타임즈</h2>
+                <div class="text-xs text-gray-500" id="st-sub"></div>
+            </div>
+            <div class="text-right">
+                <div class="text-xs text-gray-400">⛽ 가상 유가</div>
+                <div class="text-2xl font-bold text-[#ffaa00]" id="oil-price">—</div>
+                <div class="text-[10px] text-gray-500" id="oil-level"></div>
+            </div>
+        </div>
+        <div id="st-papers" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+        <div class="mt-3 text-xs text-purple-300" id="st-keyword"></div>
+    </div>
+
+    <!-- 탭 -->
+    <div class="flex gap-1 mb-4 flex-wrap" id="w-tabs">
+        <button data-tab="events" class="w-tab active px-3 py-2 rounded-lg text-xs font-bold">📡 세계 이벤트</button>
+        <button data-tab="trade" class="w-tab px-3 py-2 rounded-lg text-xs font-bold">📦 무역 미션</button>
+        <button data-tab="pricing" class="w-tab px-3 py-2 rounded-lg text-xs font-bold">💰 요금 실험실</button>
+        <button data-tab="hub" class="w-tab px-3 py-2 rounded-lg text-xs font-bold">🕸️ 허브 미션</button>
+        <button data-tab="tradeoff" class="w-tab px-3 py-2 rounded-lg text-xs font-bold">⚖️ 운영 결정</button>
+        <button data-tab="alliance" class="w-tab px-3 py-2 rounded-lg text-xs font-bold">🤝 동맹 지도</button>
+        <button data-tab="codex" class="w-tab px-3 py-2 rounded-lg text-xs font-bold">🗺️ 공항 도감</button>
+        <button data-tab="night" class="w-tab px-3 py-2 rounded-lg text-xs font-bold">🌙 밤하늘 항로</button>
+        <button data-tab="quiz" class="w-tab px-3 py-2 rounded-lg text-xs font-bold">🧠 경제 퀴즈</button>
+        <button data-tab="letters" class="w-tab px-3 py-2 rounded-lg text-xs font-bold">💌 미래 편지</button>
+        <button data-tab="ceo" class="w-tab px-3 py-2 rounded-lg text-xs font-bold">📊 CEO 리포트</button>
+        <button data-tab="tourism" class="w-tab px-3 py-2 rounded-lg text-xs font-bold">📅 관광 캘린더</button>
+        <button data-tab="parent" class="w-tab px-3 py-2 rounded-lg text-xs font-bold">👨‍👩‍👧 부모</button>
+    </div>
+
+    <div id="w-content" class="min-h-[320px]"></div>
+</div>
+
+<style>
+.w-tab { background:#1c1c1e; border:1px solid #2c2c2e; color:#8e8e93; }
+.w-tab.active, .w-tab:hover { background:#001a33; border-color:#0A84FF; color:#0A84FF; }
+.w-card { background:#0a0a0a; border:1px solid #2c2c2e; border-radius:12px; padding:14px; }
+.oil-bar { height:8px; background:#222; border-radius:4px; overflow:hidden; }
+.oil-bar > div { height:100%; background:linear-gradient(90deg,#33ff33,#ffaa00,#ff4444); border-radius:4px; }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let W = {};
+let currentTab = 'events';
+
+function fmt(n) {
+    if (n == null) return '—';
+    return '₩' + Number(n).toLocaleString();
+}
+
+async function loadWorld() {
+    const res = await fetch('/api/world/summary');
+    W = await res.json();
+    document.getElementById('w-wallet').textContent = (W.wallet && (W.wallet.balance_formatted || W.wallet.formatted)) || fmt(W.wallet?.balance);
+    document.getElementById('w-parent').checked = !!W.parent_mode;
+    renderSky(W.sky_times, W.oil);
+    renderTab(currentTab);
+}
+
+function renderSky(st, oil) {
+    if (!st) return;
+    document.getElementById('st-title').textContent = '📰 ' + (st.masthead || '스카이 타임즈');
+    document.getElementById('st-sub').textContent = (st.date || '') + ' · ' + (st.subtitle || '');
+    if (oil) {
+        document.getElementById('oil-price').textContent = oil.label || ('$' + oil.price);
+        document.getElementById('oil-level').textContent = oil.kid || oil.level;
+    }
+    document.getElementById('st-keyword').textContent = '🔑 이번 주 키워드: ' + (st.keyword_of_week || '');
+    const papers = st.papers || [];
+    document.getElementById('st-papers').innerHTML = papers.map(p => `
+        <div class="w-card border border-[#2c2c2e]">
+            <div class="text-[10px] text-gray-500">${p.section || ''}</div>
+            <div class="font-bold text-sm mt-1">${p.icon || ''} ${p.title || ''}</div>
+            <div class="text-xs text-gray-300 mt-2">${p.headline || ''}</div>
+            <div class="text-[11px] text-[#88aacc] mt-2">💡 ${p.why || ''}</div>
+            <div class="text-[11px] text-[#ffaa00] mt-1">📚 ${p.lesson || ''}</div>
+            <div class="text-[10px] text-gray-500 mt-1">팁: ${p.tip || ''}</div>
+        </div>
+    `).join('');
+}
+
+document.getElementById('w-tabs').addEventListener('click', e => {
+    const btn = e.target.closest('[data-tab]');
+    if (!btn) return;
+    currentTab = btn.dataset.tab;
+    document.querySelectorAll('.w-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === currentTab));
+    renderTab(currentTab);
+});
+
+async function renderTab(tab) {
+    const el = document.getElementById('w-content');
+    el.innerHTML = '<div class="text-gray-500 text-sm p-4">불러오는 중…</div>';
+    try {
+        if (tab === 'events') return renderEvents(el);
+        if (tab === 'trade') return await renderTrade(el);
+        if (tab === 'pricing') return await renderPricing(el);
+        if (tab === 'hub') return await renderHub(el);
+        if (tab === 'tradeoff') return await renderTradeoff(el);
+        if (tab === 'alliance') return await renderAlliance(el);
+        if (tab === 'codex') return await renderCodex(el);
+        if (tab === 'night') return await renderNight(el);
+        if (tab === 'quiz') return await renderQuiz(el);
+        if (tab === 'letters') return await renderLetters(el);
+        if (tab === 'ceo') return await renderCeo(el);
+        if (tab === 'tourism') return await renderTourism(el);
+        if (tab === 'parent') return await renderParent(el);
+    } catch (err) {
+        el.innerHTML = `<div class="text-red-400 text-sm">${err.message || err}</div>`;
+    }
+}
+
+function renderEvents(el) {
+    const events = W.events || [];
+    const m = W.multipliers || {};
+    el.innerHTML = `
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-2 mb-4">
+            <div class="w-card text-center"><div class="text-[10px] text-gray-500">수요</div><div class="font-bold text-[#33ff33]">×${m.demand ?? '—'}</div></div>
+            <div class="w-card text-center"><div class="text-[10px] text-gray-500">장거리</div><div class="font-bold">×${m.longhaul ?? '—'}</div></div>
+            <div class="w-card text-center"><div class="text-[10px] text-gray-500">화물</div><div class="font-bold">×${m.cargo ?? '—'}</div></div>
+            <div class="w-card text-center"><div class="text-[10px] text-gray-500">관광</div><div class="font-bold">×${m.tourism ?? '—'}</div></div>
+            <div class="w-card text-center"><div class="text-[10px] text-gray-500">연료비</div><div class="font-bold text-[#ffaa00]">×${m.fuel_cost ?? '—'}</div></div>
+        </div>
+        <div class="space-y-3">
+            ${events.map(e => `
+                <div class="w-card">
+                    <div class="font-bold">${e.icon || ''} ${e.kid_title || e.title}</div>
+                    <div class="text-xs text-gray-400 mt-1">${e.headline || ''}</div>
+                    <div class="text-xs mt-2 text-[#88aacc]">${e.why || ''}</div>
+                    <div class="text-xs mt-1 text-[#ffaa00]">📚 ${e.lesson || ''}</div>
+                    <div class="text-[10px] text-gray-500 mt-1">→ ${e.tip || ''}</div>
+                </div>
+            `).join('') || '<div class="text-gray-500">이벤트 없음</div>'}
+        </div>
+        <p class="text-xs text-gray-500 mt-3">이 배수들은 <a href="/airline" class="text-[#0A84FF]">항공사 노선 수익</a>에 자연스럽게 반영돼요.</p>
+    `;
+}
+
+async function renderTrade(el) {
+    const data = await (await fetch('/api/world/trade')).json();
+    const missions = data.missions || [];
+    el.innerHTML = `<div class="space-y-3">${missions.map(m => {
+        const done = m.done ? '✅ 완료' : `단계 ${m.step||0}/${m.total_steps||0}`;
+        return `<div class="w-card">
+            <div class="flex justify-between gap-2">
+                <div class="font-bold">${m.icon||''} ${m.title}</div>
+                <div class="text-xs text-gray-400">${done}</div>
+            </div>
+            <div class="text-xs text-gray-400 mt-1">${m.desc||''} · ${m.from}→${m.to} (${m.cargo_type||''})</div>
+            ${m.current_step ? `<div class="text-xs mt-2 p-2 bg-[#111] rounded">📍 ${m.current_step.text}<br><span class="text-[#88aacc]">${m.current_step.learn||''}</span></div>` : ''}
+            ${!m.done ? `<button class="mt-2 px-3 py-1.5 bg-[#0A84FF] text-white rounded text-xs font-bold" onclick="advanceTrade('${m.id}')">다음 단계 / 퀴즈</button>` : `<div class="text-xs text-[#33ff33] mt-2">${m.lesson||''}</div>`}
+            <div id="trade-quiz-${m.id}" class="mt-2"></div>
+        </div>`;
+    }).join('')}</div>`;
+}
+
+async function advanceTrade(id, answer) {
+    const body = { mission_id: id };
+    if (answer !== undefined) body.answer = answer;
+    const res = await fetch('/api/world/trade/advance', {
+        method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    if (!res.ok) {
+        if (data.need_quiz && data.quiz) {
+            showTradeQuiz(id, data.quiz);
+            return alert(data.error || '퀴즈에 답해주세요');
+        }
+        return alert(data.error || '실패');
+    }
+    if (data.need_quiz && data.quiz) {
+        showTradeQuiz(id, data.quiz);
+        alert(data.message);
+        return;
+    }
+    alert(data.message);
+    if (data.wallet) document.getElementById('w-wallet').textContent = data.wallet.balance_formatted || data.wallet.formatted || fmt(data.wallet.balance);
+    renderTab('trade');
+}
+
+function showTradeQuiz(id, quiz) {
+    const box = document.getElementById('trade-quiz-' + id);
+    if (!box || !quiz) return;
+    box.innerHTML = `<div class="p-2 border border-[#ffaa00]/40 rounded">
+        <div class="text-xs font-bold mb-2">${quiz.q}</div>
+        ${(quiz.choices||[]).map((c,i) =>
+            `<button class="block w-full text-left text-xs px-2 py-1.5 mb-1 bg-[#1a1a1a] rounded hover:border-[#0A84FF] border border-transparent" onclick="advanceTrade('${id}', ${i})">${i+1}. ${c}</button>`
+        ).join('')}
+    </div>`;
+}
+
+async function renderPricing(el) {
+    const data = await (await fetch('/api/world/pricing')).json();
+    const scenarios = data.scenarios || [];
+    const opts = data.price_options_pct || [0.7,1,1.3];
+    el.innerHTML = `
+        <p class="text-xs text-gray-400 mb-3">같은 노선도 표 값에 따라 손님 수와 이익이 달라져요. (수요와 공급 실험)</p>
+        <div class="space-y-4">${scenarios.map(s => `
+            <div class="w-card">
+                <div class="font-bold">${s.icon||''} ${s.name}</div>
+                <div class="text-xs text-gray-400 mt-1">${s.desc||''}</div>
+                <div class="text-[10px] text-[#ffaa00] mt-1">💡 ${s.hint||''}</div>
+                <div class="flex flex-wrap gap-2 mt-3">
+                    ${opts.map(p => `<button class="px-2 py-1 text-xs rounded bg-[#1a1a1a] border border-[#333] hover:border-[#0A84FF]"
+                        onclick="runPricing('${s.id}', ${p})">가격 ×${p} (${fmt(Math.round(s.base_price*p))})</button>`).join('')}
+                </div>
+                <div id="price-result-${s.id}" class="text-xs mt-2 text-gray-300"></div>
+            </div>
+        `).join('')}</div>
+        <div id="price-last" class="mt-3 text-sm"></div>
+    `;
+}
+
+async function runPricing(sid, pct) {
+    const res = await fetch('/api/world/pricing/run', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({scenario_id: sid, price_pct: pct})
+    });
+    const data = await res.json();
+    if (!res.ok) return alert(data.error || '실패');
+    const r = data.result || {};
+    const box = document.getElementById('price-result-' + sid);
+    if (box) box.innerHTML = `✅ ${r.kid_summary || ''}<br>매출 ${r.formatted_revenue} − 비용 ${r.formatted_cost} = <b class="text-[#33ff33]">${r.formatted_profit}</b>
+        ${r.is_best ? ' 🏆 최고 기록!' : ''}`;
+    if (data.wallet) document.getElementById('w-wallet').textContent = data.wallet.balance_formatted || data.wallet.formatted || fmt(data.wallet.balance);
+}
+
+async function renderHub(el) {
+    const data = await (await fetch('/api/world/hub-missions')).json();
+    el.innerHTML = `<div class="space-y-3">${(data.missions||[]).map(m => `
+        <div class="w-card">
+            <div class="font-bold">${m.icon||''} ${m.title} ${m.done?'✅':''}</div>
+            <div class="text-xs text-gray-400 mt-1">${m.desc||''}</div>
+            <ul class="text-xs mt-2 space-y-1 text-gray-300">${(m.lessons||[]).map(l=>`<li>· ${l}</li>`).join('')}</ul>
+            ${m.compare ? `<div class="grid grid-cols-2 gap-2 mt-3 text-xs">
+                <div class="p-2 bg-[#1a0000] rounded border border-red-900/40">직항형<br>노선 ${m.compare.direct.routes} / 도시 ${m.compare.direct.cities}<br><span class="text-gray-500">${m.compare.direct.label}</span></div>
+                <div class="p-2 bg-[#001a00] rounded border border-green-900/40">허브형<br>노선 ${m.compare.hub.routes} / 도시 ${m.compare.hub.cities}<br><span class="text-gray-500">${m.compare.hub.label}</span></div>
+            </div>` : ''}
+            ${!m.done && m.quiz ? `<div class="mt-3">
+                <div class="text-xs font-bold mb-1">${m.quiz.q}</div>
+                ${(m.quiz.choices||[]).map((c,i)=>
+                    `<button class="block w-full text-left text-xs px-2 py-1.5 mb-1 bg-[#1a1a1a] rounded" onclick="completeHub('${m.id}',${i})">${i+1}. ${c}</button>`
+                ).join('')}
+            </div>` : ''}
+        </div>
+    `).join('')}</div>`;
+}
+
+async function completeHub(id, answer) {
+    const res = await fetch('/api/world/hub-missions/complete', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({mission_id:id, answer})
+    });
+    const data = await res.json();
+    if (!res.ok) return alert(data.error);
+    alert(data.message);
+    if (data.wallet) document.getElementById('w-wallet').textContent = data.wallet.balance_formatted || data.wallet.formatted || fmt(data.wallet.balance);
+    renderTab('hub');
+}
+
+async function renderTradeoff(el) {
+    const data = await (await fetch('/api/world/tradeoffs')).json();
+    const items = data.items || [];
+    el.innerHTML = `
+        <p class="text-xs text-gray-400 mb-3">기장·CEO는 매일 선택해요. 정비·연료·정시·가격 — 무엇이 더 중요할까요? (하루 최대 2회)</p>
+        <div class="space-y-3">${items.map(t => {
+            const done = (data.done_ids_today||[]).includes(t.id);
+            return `<div class="w-card ${data.featured && data.featured.id===t.id ? 'border border-[#ffaa00]/40':''}">
+                <div class="font-bold">${t.icon||''} ${t.title} ${done?'✅':''}</div>
+                <div class="text-xs text-gray-400 mt-1">${t.situation||''}</div>
+                ${!done ? `<div class="grid gap-2 mt-3">${(t.choices||[]).map(c =>
+                    `<button class="text-left text-xs p-2 bg-[#1a1a1a] rounded border border-[#333] hover:border-[#0A84FF]"
+                        onclick="chooseTradeoff('${t.id}','${c.id}')">
+                        <b>${c.label}</b><div class="text-gray-500">${c.short||''}</div>
+                    </button>`
+                ).join('')}</div>` : '<div class="text-xs text-gray-500 mt-2">오늘 완료</div>'}
+            </div>`;
+        }).join('')}</div>
+        <div id="tradeoff-result" class="mt-3 text-sm text-[#33ff33]"></div>
+    `;
+}
+
+async function chooseTradeoff(tid, cid) {
+    const res = await fetch('/api/world/tradeoffs/choose', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({tradeoff_id:tid, choice_id:cid})
+    });
+    const data = await res.json();
+    if (!res.ok) return alert(data.error);
+    document.getElementById('tradeoff-result').textContent = '📚 ' + (data.lesson || data.message);
+    if (data.wallet) document.getElementById('w-wallet').textContent = data.wallet.balance_formatted || data.wallet.formatted || fmt(data.wallet.balance);
+    setTimeout(() => renderTab('tradeoff'), 800);
+}
+
+async function renderAlliance(el) {
+    const data = await (await fetch('/api/world/alliance')).json();
+    el.innerHTML = `
+        <p class="text-xs text-gray-400 mb-2">${data.kid||''}</p>
+        <p class="text-xs text-[#88aacc] mb-4">${data.lesson||''}</p>
+        <div class="relative w-full h-72 bg-[#0a0a12] rounded-xl border border-[#2c2c2e] overflow-hidden mb-4">
+            ${(data.edges||[]).map(e => {
+                const a = (data.nodes||[]).find(n=>n.id===e.from);
+                const b = (data.nodes||[]).find(n=>n.id===e.to);
+                if (!a||!b) return '';
+                return `<svg class="absolute inset-0 w-full h-full pointer-events-none"><line x1="${a.x}%" y1="${a.y}%" x2="${b.x}%" y2="${b.y}%"
+                    stroke="${e.active?'#0A84FF':'#333'}" stroke-width="${e.active?2:1}" stroke-dasharray="${e.active?'0':'4 4'}"/></svg>`;
+            }).join('')}
+            ${(data.nodes||[]).map(n => `
+                <div class="absolute transform -translate-x-1/2 -translate-y-1/2 text-center" style="left:${n.x}%;top:${n.y}%;">
+                    <div class="text-2xl">${n.emoji||'✈️'}</div>
+                    <div class="text-[10px] font-bold ${n.self?'text-[#ffaa00]':(n.active?'text-[#0A84FF]':'text-gray-500')}">${n.name}</div>
+                    <div class="text-[9px] text-gray-600">${n.region||''}</div>
+                </div>
+            `).join('')}
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+            ${(data.nodes||[]).filter(n=>!n.self).map(n => `
+                <div class="w-card text-xs">
+                    <b>${n.emoji} ${n.name}</b> · ${n.active?'🟢 연결됨':'⚪ 미연결'}
+                    <div class="text-gray-400 mt-1">${n.desc||''}</div>
+                    <a href="/airline" class="text-[#0A84FF] text-[10px]">항공사에서 코드셰어 켜기 →</a>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+async function renderCodex(el) {
+    const data = await (await fetch('/api/world/airport-codex')).json();
+    el.innerHTML = `
+        <div class="text-xs text-gray-400 mb-3">도장 ${data.stamped_count||0} / ${data.total||0} · 공항마다 한 줄 경제를 배워요</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            ${(data.items||[]).map(a => `
+                <div class="w-card ${a.stamped?'border border-[#33ff33]/40':''}">
+                    <div class="font-bold text-sm">${a.emoji||''} ${a.name} <span class="text-gray-500 text-[10px]">${a.id}</span>
+                        ${a.stamped?'✅':''}</div>
+                    <div class="text-[11px] text-gray-300 mt-1">${a.economy||''}</div>
+                    <div class="text-[10px] text-gray-500 mt-1">역할: ${a.role||''}</div>
+                    <div class="text-[10px] mt-1">수출 느낌: ${a.exports||'—'} · 수입 느낌: ${a.imports||'—'}</div>
+                    ${!a.stamped ? `<button class="mt-2 text-xs px-2 py-1 bg-[#0A84FF] text-white rounded" onclick="stampAirport('${a.id}')">도장 찍기</button>` : ''}
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+async function stampAirport(id) {
+    const res = await fetch('/api/world/airport-codex/stamp', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({airport_id:id})
+    });
+    const data = await res.json();
+    if (!res.ok) return alert(data.error);
+    alert(data.message);
+    if (data.wallet) document.getElementById('w-wallet').textContent = data.wallet.balance_formatted || data.wallet.formatted || fmt(data.wallet.balance);
+    renderTab('codex');
+}
+
+async function renderNight(el) {
+    const data = await (await fetch('/api/world/night-sky')).json();
+    el.innerHTML = `<div class="space-y-3">${(data.stories||[]).map(s => `
+        <div class="w-card">
+            <div class="font-bold">${s.emoji||'🌙'} ${s.title} ${s.done?'✅':''}</div>
+            <div class="text-xs text-gray-400">${s.route||''} · 약 ${s.hours||'?'}시간</div>
+            <div class="mt-2 space-y-2">${(s.chapters||[]).map((c,i) => `
+                <div class="text-xs p-2 bg-[#111] rounded">
+                    <b>${i+1}. ${c.title}</b> — ${c.text}
+                    <div class="text-[#88aacc] mt-1">스킬: ${c.skill||''}</div>
+                </div>
+            `).join('')}</div>
+            <div class="text-xs text-[#ffaa00] mt-2">🌍 ${s.economy_note||''}</div>
+            ${!s.done ? `<button class="mt-2 px-3 py-1.5 bg-purple-600 text-white rounded text-xs font-bold" onclick="completeNight('${s.id}')">항로 완주하기</button>` : ''}
+        </div>
+    `).join('')}</div>`;
+}
+
+async function completeNight(id) {
+    const res = await fetch('/api/world/night-sky/complete', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({story_id:id})
+    });
+    const data = await res.json();
+    if (!res.ok) return alert(data.error);
+    alert(data.message);
+    if (data.wallet) document.getElementById('w-wallet').textContent = data.wallet.balance_formatted || data.wallet.formatted || fmt(data.wallet.balance);
+    renderTab('night');
+}
+
+async function renderQuiz(el) {
+    const data = await (await fetch('/api/world/economy-quiz')).json();
+    el.innerHTML = `
+        <div class="flex justify-between text-xs mb-3">
+            <span>점수: <b class="text-[#33ff33]">${data.score||0}</b> / ${data.total||0} ${data.done?'· 완료!':''}</span>
+            <span class="text-gray-500">${data.parent_blurb||''}</span>
+        </div>
+        <div class="space-y-3">${(data.questions||[]).map(q => `
+            <div class="w-card">
+                <div class="text-sm font-bold mb-2">${q.question}</div>
+                ${q.answered
+                    ? `<div class="text-xs text-gray-500">답함 (선택 ${ (q.user_answer??0)+1 })</div>`
+                    : (q.choices||[]).map((c,i) =>
+                        `<button class="block w-full text-left text-xs px-2 py-1.5 mb-1 bg-[#1a1a1a] rounded" onclick="submitQuiz('${q.id}',${i})">${i+1}. ${c}</button>`
+                    ).join('')
+                }
+            </div>
+        `).join('')}</div>
+        <div id="quiz-msg" class="mt-2 text-sm text-[#ffaa00]"></div>
+    `;
+}
+
+async function submitQuiz(qid, ans) {
+    const res = await fetch('/api/world/economy-quiz/submit', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({question_id:qid, answer:ans})
+    });
+    const data = await res.json();
+    if (!res.ok) return alert(data.error);
+    document.getElementById('quiz-msg').textContent =
+        (data.correct ? '✅ 정답! ' : '❌ 아쉬워요. ') + (data.explanation || data.message || '');
+    if (data.wallet) document.getElementById('w-wallet').textContent = data.wallet.balance_formatted || data.wallet.formatted || fmt(data.wallet.balance);
+    setTimeout(() => renderTab('quiz'), 900);
+}
+
+async function renderLetters(el) {
+    const data = await (await fetch('/api/world/letters')).json();
+    el.innerHTML = `
+        <div class="w-card mb-3 border border-purple-500/30">
+            <div class="font-bold">💌 미래의 나에게 보내는 첫 편지</div>
+            <div class="text-xs text-gray-400 mt-1">${data.has_root_letter ? (data.root_opened ? '열림' : '잠금 — 성장하면 열려요') : '대시보드에서 첫 편지를 쓸 수 있어요'}</div>
+            ${data.root_content ? `<div class="text-sm mt-2 p-2 bg-[#111] rounded whitespace-pre-wrap">${data.root_content}</div>` : ''}
+            <a href="/" class="text-xs text-[#0A84FF]">대시보드 편지 →</a>
+        </div>
+        <div class="space-y-3">${(data.milestones||[]).map(m => `
+            <div class="w-card ${m.unlocked?'border border-[#0A84FF]/30':''}">
+                <div class="font-bold">${m.icon||''} ${m.title} ${m.completed?'✅':(m.unlocked?'🔓':'🔒')}</div>
+                <div class="text-xs text-gray-400 mt-1">${m.prompt||''}</div>
+                ${m.completed ? `<div class="text-xs mt-2 p-2 bg-[#111] rounded">${m.response||''}<div class="text-purple-300 mt-1">${m.future_voice||''}</div></div>` : ''}
+                ${m.unlocked && !m.completed ? `
+                    <textarea id="ml-${m.id}" class="w-full mt-2 p-2 bg-black border border-[#333] rounded text-xs" rows="2" placeholder="한 줄 이상 적어보세요"></textarea>
+                    <button class="mt-1 px-3 py-1 bg-purple-600 text-white rounded text-xs" onclick="writeMilestone('${m.id}')">미래의 나에게 보내기</button>
+                ` : ''}
+                ${!m.unlocked ? `<div class="text-[10px] text-gray-600 mt-1">조건 미달성</div>` : ''}
+            </div>
+        `).join('')}</div>
+    `;
+}
+
+async function writeMilestone(id) {
+    const text = (document.getElementById('ml-' + id) || {}).value || '';
+    const res = await fetch('/api/world/letters/milestone', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({milestone_id:id, text})
+    });
+    const data = await res.json();
+    if (!res.ok) return alert(data.error);
+    alert(data.message);
+    if (data.wallet) document.getElementById('w-wallet').textContent = data.wallet.balance_formatted || data.wallet.formatted || fmt(data.wallet.balance);
+    renderTab('letters');
+}
+
+async function renderCeo(el) {
+    const data = await (await fetch('/api/world/ceo-report')).json();
+    el.innerHTML = `
+        <div class="w-card border border-[#ffaa00]/30">
+            <div class="font-bold text-lg">📊 ${data.title||'주간 CEO 리포트'}</div>
+            <div class="text-xs text-gray-500">${data.week||''} · 키워드: ${data.keyword_of_week||''}</div>
+            <div class="mt-3">
+                <div class="text-xs text-gray-400">이번 주 잘한 점</div>
+                <ul class="text-sm mt-1">${(data.good_choices||[]).map(g=>`<li>· ${g}</li>`).join('')}</ul>
+            </div>
+            <div class="mt-3">
+                <div class="text-xs text-gray-400">세계 뉴스 영향</div>
+                ${(data.news_impact||[]).map(n=>`<div class="text-xs mt-1 p-2 bg-[#111] rounded"><b>${n.title}</b><div class="text-gray-400">${n.tip||''}</div><div class="text-[#ffaa00]">${n.lesson||''}</div></div>`).join('')}
+            </div>
+            <div class="mt-3 text-sm">⛽ ${(data.oil&&data.oil.kid)||''}</div>
+            <div class="mt-2 text-xs text-[#0A84FF]">다음 주 힌트: ${data.next_hint||''}</div>
+            ${data.can_claim ? `<button class="mt-4 px-4 py-2 bg-[#ffaa00] text-black font-bold rounded" onclick="claimCeo()">리포트 보상 받기</button>` : `<div class="mt-3 text-xs text-gray-500">이번 주 보상 완료</div>`}
+        </div>
+    `;
+}
+
+async function claimCeo() {
+    const res = await fetch('/api/world/ceo-report/claim', {method:'POST'});
+    const data = await res.json();
+    if (!res.ok) return alert(data.error);
+    alert(data.message);
+    if (data.wallet) document.getElementById('w-wallet').textContent = data.wallet.balance_formatted || data.wallet.formatted || fmt(data.wallet.balance);
+    renderTab('ceo');
+}
+
+async function renderTourism(el) {
+    const data = await (await fetch('/api/world/tourism')).json();
+    const cur = data.current;
+    el.innerHTML = `
+        ${cur ? `<div class="w-card border border-[#0A84FF]/40 mb-4">
+            <div class="text-xs text-gray-500">이번 달</div>
+            <div class="font-bold text-xl">${cur.icon||''} ${cur.month}월 · ${cur.theme}</div>
+            <div class="text-sm mt-2">${cur.desc||''}</div>
+            <div class="text-xs text-[#ffaa00] mt-2">🌍 ${cur.economy||''}</div>
+            <div class="text-xs mt-1">핫 노선: ${(cur.hot_routes||[]).join(', ')}</div>
+        </div>` : ''}
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+            ${(data.year||[]).map(m => `
+                <div class="w-card text-xs ${m.month===data.month?'border border-[#0A84FF]':''}">
+                    <div class="font-bold">${m.icon||''} ${m.month}월</div>
+                    <div class="text-gray-300 mt-1">${m.theme}</div>
+                    <div class="text-gray-500 mt-1">${(m.hot_routes||[]).slice(0,3).join(' · ')}</div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+async function renderParent(el) {
+    const data = await (await fetch('/api/world/parent')).json();
+    el.innerHTML = `
+        <div class="w-card border border-purple-500/40">
+            <div class="font-bold">👨‍👩‍👧 부모 모드 요약</div>
+            <div class="text-xs text-gray-400 mt-1">오늘 헤드라인: ${data.today_headline||'—'}</div>
+            <div class="mt-3">
+                <div class="text-xs text-gray-400">오늘 대화 키워드</div>
+                <div class="flex flex-wrap gap-1 mt-1">${(data.keywords||[]).map(k=>`<span class="text-[10px] px-2 py-1 bg-[#1a1a2a] rounded">${k}</span>`).join('')||'<span class="text-xs text-gray-500">아직 없어요 — 세계 탭을 탐험해 보세요</span>'}</div>
+            </div>
+            <div class="mt-3">
+                <div class="text-xs text-gray-400">대화 질문 제안</div>
+                <ul class="text-sm mt-1 space-y-1">${(data.talk_prompts||[]).map(p=>`<li>· ${p}</li>`).join('')}</ul>
+            </div>
+            <div class="mt-3">
+                <div class="text-xs text-gray-400">최근 배운 것</div>
+                <ul class="text-xs text-gray-300 mt-1">${(data.lessons_learned||[]).map(l=>`<li>· ${l}</li>`).join('')||'<li class="text-gray-600">—</li>'}</ul>
+            </div>
+        </div>
+    `;
+}
+
+async function toggleParent(on) {
+    await fetch('/api/world/parent/mode', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({enabled: on})
+    });
+    if (currentTab === 'parent') renderTab('parent');
+}
+
+loadWorld();
+</script>
+{% endblock %}

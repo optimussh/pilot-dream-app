@@ -1,10 +1,1002 @@
 [
-  {"id": "dom_cju", "route": "ICN-CJU", "name": "인천↔제주", "type": "domestic", "demand": 100, "min_category": "소형", "fa_need": 2, "kid_label": "제주 휴양 노선"},
-  {"id": "dom_pus", "route": "ICN-PUS", "name": "인천↔부산", "type": "domestic", "demand": 70, "min_category": "소형", "fa_need": 2, "kid_label": "부산 바다 노선"},
-  {"id": "dom_gmp", "route": "GMP-CJU", "name": "김포↔제주", "type": "domestic", "demand": 90, "min_category": "소형", "fa_need": 2, "kid_label": "국내 busiest"},
-  {"id": "intl_nrt", "route": "ICN-NRT", "name": "인천↔도쿄", "type": "international", "demand": 85, "min_category": "소형", "fa_need": 3, "kid_label": "일본 노선"},
-  {"id": "intl_bkk", "route": "ICN-BKK", "name": "인천↔방콕", "type": "international", "demand": 75, "min_category": "중형", "fa_need": 4, "kid_label": "동남아 노선"},
-  {"id": "intl_lax", "route": "ICN-LAX", "name": "인천↔LA", "type": "longhaul", "demand": 60, "min_category": "대형", "fa_need": 6, "kid_label": "태평양 횡단"},
-  {"id": "cargo_icn", "route": "ICN-ANC", "name": "인천↔앵커리지 화물", "type": "cargo", "demand": 50, "min_category": "화물기", "fa_need": 0, "kid_label": "화물 전용"},
-  {"id": "reg_cjj", "route": "ICN-CJJ", "name": "인천↔청주", "type": "regional", "demand": 45, "min_category": "리저널", "fa_need": 1, "kid_label": "짧은 국내선"}
+  {
+    "id": "dom_001",
+    "route": "ICN-CJU",
+    "name": "인천↔제주",
+    "type": "domestic",
+    "demand": 52,
+    "min_category": "소형",
+    "fa_need": 3,
+    "kid_label": "제주 노선"
+  },
+  {
+    "id": "dom_002",
+    "route": "GMP-CJU",
+    "name": "김포↔제주",
+    "type": "domestic",
+    "demand": 52,
+    "min_category": "소형",
+    "fa_need": 3,
+    "kid_label": "지방 연결"
+  },
+  {
+    "id": "dom_003",
+    "route": "ICN-PUS",
+    "name": "인천↔부산",
+    "type": "domestic",
+    "demand": 53,
+    "min_category": "소형",
+    "fa_need": 3,
+    "kid_label": "출장 국내선"
+  },
+  {
+    "id": "dom_004",
+    "route": "GMP-PUS",
+    "name": "김포↔부산",
+    "type": "domestic",
+    "demand": 87,
+    "min_category": "소형",
+    "fa_need": 4,
+    "kid_label": "출장 국내선"
+  },
+  {
+    "id": "dom_005",
+    "route": "ICN-TAE",
+    "name": "인천↔대구",
+    "type": "domestic",
+    "demand": 51,
+    "min_category": "소형",
+    "fa_need": 3,
+    "kid_label": "부산 노선"
+  },
+  {
+    "id": "dom_006",
+    "route": "ICN-CJJ",
+    "name": "인천↔청주",
+    "type": "domestic",
+    "demand": 63,
+    "min_category": "소형",
+    "fa_need": 3,
+    "kid_label": "부산 노선"
+  },
+  {
+    "id": "dom_007",
+    "route": "ICN-KWJ",
+    "name": "인천↔광주",
+    "type": "domestic",
+    "demand": 65,
+    "min_category": "소형",
+    "fa_need": 3,
+    "kid_label": "제주 노선"
+  },
+  {
+    "id": "dom_008",
+    "route": "GMP-KWJ",
+    "name": "김포↔광주",
+    "type": "domestic",
+    "demand": 87,
+    "min_category": "소형",
+    "fa_need": 4,
+    "kid_label": "지방 연결"
+  },
+  {
+    "id": "dom_009",
+    "route": "PUS-CJU",
+    "name": "부산↔제주",
+    "type": "domestic",
+    "demand": 98,
+    "min_category": "소형",
+    "fa_need": 4,
+    "kid_label": "휴양 국내선"
+  },
+  {
+    "id": "dom_010",
+    "route": "CJU-KWJ",
+    "name": "제주↔광주",
+    "type": "domestic",
+    "demand": 78,
+    "min_category": "소형",
+    "fa_need": 4,
+    "kid_label": "제주 노선"
+  },
+  {
+    "id": "dom_011",
+    "route": "ICN-RSU",
+    "name": "인천↔여수",
+    "type": "domestic",
+    "demand": 81,
+    "min_category": "소형",
+    "fa_need": 4,
+    "kid_label": "휴양 국내선"
+  },
+  {
+    "id": "dom_012",
+    "route": "ICN-USN",
+    "name": "인천↔울산",
+    "type": "domestic",
+    "demand": 70,
+    "min_category": "소형",
+    "fa_need": 4,
+    "kid_label": "바쁜 국내선"
+  },
+  {
+    "id": "dom_013",
+    "route": "GMP-CJJ",
+    "name": "김포↔청주",
+    "type": "domestic",
+    "demand": 57,
+    "min_category": "소형",
+    "fa_need": 3,
+    "kid_label": "휴양 국내선"
+  },
+  {
+    "id": "dom_014",
+    "route": "PUS-TAE",
+    "name": "부산↔대구",
+    "type": "domestic",
+    "demand": 74,
+    "min_category": "소형",
+    "fa_need": 4,
+    "kid_label": "지방 연결"
+  },
+  {
+    "id": "dom_015",
+    "route": "CJJ-CJU",
+    "name": "청주↔제주",
+    "type": "domestic",
+    "demand": 88,
+    "min_category": "소형",
+    "fa_need": 4,
+    "kid_label": "제주 노선"
+  },
+  {
+    "id": "dom_016",
+    "route": "TAE-CJU",
+    "name": "대구↔제주",
+    "type": "domestic",
+    "demand": 98,
+    "min_category": "소형",
+    "fa_need": 4,
+    "kid_label": "지방 연결"
+  },
+  {
+    "id": "dom_017",
+    "route": "WJU-CJU",
+    "name": "원주↔제주",
+    "type": "domestic",
+    "demand": 56,
+    "min_category": "소형",
+    "fa_need": 3,
+    "kid_label": "제주 노선"
+  },
+  {
+    "id": "dom_018",
+    "route": "GMP-WJU",
+    "name": "김포↔원주",
+    "type": "domestic",
+    "demand": 66,
+    "min_category": "소형",
+    "fa_need": 3,
+    "kid_label": "출장 국내선"
+  },
+  {
+    "id": "dom_019",
+    "route": "PUS-KWJ",
+    "name": "부산↔광주",
+    "type": "domestic",
+    "demand": 83,
+    "min_category": "소형",
+    "fa_need": 4,
+    "kid_label": "부산 노선"
+  },
+  {
+    "id": "dom_020",
+    "route": "ICN-WJU",
+    "name": "인천↔원주",
+    "type": "domestic",
+    "demand": 77,
+    "min_category": "소형",
+    "fa_need": 4,
+    "kid_label": "바쁜 국내선"
+  },
+  {
+    "id": "dom_021",
+    "route": "USN-CJU",
+    "name": "울산↔제주",
+    "type": "domestic",
+    "demand": 87,
+    "min_category": "소형",
+    "fa_need": 4,
+    "kid_label": "출장 국내선"
+  },
+  {
+    "id": "dom_022",
+    "route": "RSU-CJU",
+    "name": "여수↔제주",
+    "type": "domestic",
+    "demand": 61,
+    "min_category": "소형",
+    "fa_need": 3,
+    "kid_label": "지방 연결"
+  },
+  {
+    "id": "dom_023",
+    "route": "TAE-PUS",
+    "name": "대구↔부산",
+    "type": "domestic",
+    "demand": 76,
+    "min_category": "소형",
+    "fa_need": 4,
+    "kid_label": "바쁜 국내선"
+  },
+  {
+    "id": "dom_024",
+    "route": "KWJ-PUS",
+    "name": "광주↔부산",
+    "type": "domestic",
+    "demand": 57,
+    "min_category": "소형",
+    "fa_need": 3,
+    "kid_label": "출장 국내선"
+  },
+  {
+    "id": "dom_025",
+    "route": "CJJ-PUS",
+    "name": "청주↔부산",
+    "type": "domestic",
+    "demand": 54,
+    "min_category": "소형",
+    "fa_need": 3,
+    "kid_label": "휴양 국내선"
+  },
+  {
+    "id": "intl_026",
+    "route": "ICN-TAS",
+    "name": "인천↔타슈켄트",
+    "type": "international",
+    "demand": 89,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "중동 노선"
+  },
+  {
+    "id": "intl_027",
+    "route": "ICN-FUK",
+    "name": "인천↔후쿠오카",
+    "type": "international",
+    "demand": 90,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "중동 노선"
+  },
+  {
+    "id": "intl_028",
+    "route": "ICN-BOM",
+    "name": "인천↔뭄바이",
+    "type": "international",
+    "demand": 75,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "호주 노선"
+  },
+  {
+    "id": "intl_029",
+    "route": "ICN-KIX",
+    "name": "인천↔오사카",
+    "type": "international",
+    "demand": 72,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "호주 노선"
+  },
+  {
+    "id": "intl_030",
+    "route": "ICN-CGK",
+    "name": "인천↔자카르타",
+    "type": "international",
+    "demand": 73,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "중국 노선"
+  },
+  {
+    "id": "intl_031",
+    "route": "ICN-CAN",
+    "name": "인천↔광저우",
+    "type": "international",
+    "demand": 85,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "대만 노선"
+  },
+  {
+    "id": "intl_032",
+    "route": "ICN-BKK",
+    "name": "인천↔방콕",
+    "type": "international",
+    "demand": 86,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "대만 노선"
+  },
+  {
+    "id": "intl_033",
+    "route": "ICN-MFM",
+    "name": "인천↔마카오",
+    "type": "international",
+    "demand": 74,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "호주 노선"
+  },
+  {
+    "id": "intl_034",
+    "route": "ICN-CTS",
+    "name": "인천↔삿포로",
+    "type": "international",
+    "demand": 74,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "대만 노선"
+  },
+  {
+    "id": "intl_035",
+    "route": "ICN-IST",
+    "name": "인천↔이스탄불",
+    "type": "international",
+    "demand": 89,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "중동 노선"
+  },
+  {
+    "id": "intl_036",
+    "route": "ICN-DOH",
+    "name": "인천↔도하",
+    "type": "international",
+    "demand": 85,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "중국 노선"
+  },
+  {
+    "id": "intl_037",
+    "route": "ICN-SIN",
+    "name": "인천↔싱가포르",
+    "type": "international",
+    "demand": 85,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "호주 노선"
+  },
+  {
+    "id": "intl_038",
+    "route": "ICN-HAN",
+    "name": "인천↔하노이",
+    "type": "international",
+    "demand": 85,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "동남아 노선"
+  },
+  {
+    "id": "intl_039",
+    "route": "ICN-SYD",
+    "name": "인천↔시드니",
+    "type": "international",
+    "demand": 77,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "동남아 노선"
+  },
+  {
+    "id": "intl_040",
+    "route": "ICN-TPE",
+    "name": "인천↔타이베이",
+    "type": "international",
+    "demand": 88,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "일본 노선"
+  },
+  {
+    "id": "intl_041",
+    "route": "ICN-HKG",
+    "name": "인천↔홍콩",
+    "type": "international",
+    "demand": 62,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "호주 노선"
+  },
+  {
+    "id": "intl_042",
+    "route": "ICN-NRT",
+    "name": "인천↔도쿄",
+    "type": "international",
+    "demand": 56,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "호주 노선"
+  },
+  {
+    "id": "intl_043",
+    "route": "ICN-SGN",
+    "name": "인천↔호치민",
+    "type": "international",
+    "demand": 61,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "호주 노선"
+  },
+  {
+    "id": "intl_044",
+    "route": "ICN-MEL",
+    "name": "인천↔멜버른",
+    "type": "international",
+    "demand": 72,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "동남아 노선"
+  },
+  {
+    "id": "intl_045",
+    "route": "ICN-HND",
+    "name": "인천↔하네다",
+    "type": "international",
+    "demand": 75,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "호주 노선"
+  },
+  {
+    "id": "intl_046",
+    "route": "ICN-CEB",
+    "name": "인천↔세부",
+    "type": "international",
+    "demand": 82,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "호주 노선"
+  },
+  {
+    "id": "intl_047",
+    "route": "ICN-KUL",
+    "name": "인천↔쿠알라룸푸르",
+    "type": "international",
+    "demand": 83,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "일본 노선"
+  },
+  {
+    "id": "intl_048",
+    "route": "ICN-DAD",
+    "name": "인천↔다낭",
+    "type": "international",
+    "demand": 62,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "대만 노선"
+  },
+  {
+    "id": "intl_049",
+    "route": "ICN-DEL",
+    "name": "인천↔델리",
+    "type": "international",
+    "demand": 68,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "일본 노선"
+  },
+  {
+    "id": "intl_050",
+    "route": "ICN-MNL",
+    "name": "인천↔마닐라",
+    "type": "international",
+    "demand": 81,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "대만 노선"
+  },
+  {
+    "id": "intl_051",
+    "route": "ICN-DPS",
+    "name": "인천↔발리",
+    "type": "international",
+    "demand": 81,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "중국 노선"
+  },
+  {
+    "id": "intl_052",
+    "route": "ICN-NGO",
+    "name": "인천↔나고야",
+    "type": "international",
+    "demand": 63,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "호주 노선"
+  },
+  {
+    "id": "intl_053",
+    "route": "ICN-PEK",
+    "name": "인천↔베이징",
+    "type": "international",
+    "demand": 60,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "중동 노선"
+  },
+  {
+    "id": "intl_054",
+    "route": "ICN-DXB",
+    "name": "인천↔두바이",
+    "type": "international",
+    "demand": 70,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "중국 노선"
+  },
+  {
+    "id": "intl_055",
+    "route": "ICN-PVG",
+    "name": "인천↔상하이",
+    "type": "international",
+    "demand": 90,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "일본 노선"
+  },
+  {
+    "id": "lh_056",
+    "route": "ICN-LAX",
+    "name": "인천↔LA",
+    "type": "longhaul",
+    "demand": 67,
+    "min_category": "대형",
+    "fa_need": 7,
+    "kid_label": "미주 노선"
+  },
+  {
+    "id": "lh_057",
+    "route": "ICN-JFK",
+    "name": "인천↔뉴욕",
+    "type": "longhaul",
+    "demand": 68,
+    "min_category": "대형",
+    "fa_need": 7,
+    "kid_label": "남미 노선"
+  },
+  {
+    "id": "lh_058",
+    "route": "ICN-SFO",
+    "name": "인천↔샌프란시스코",
+    "type": "longhaul",
+    "demand": 45,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "남미 노선"
+  },
+  {
+    "id": "lh_059",
+    "route": "ICN-SEA",
+    "name": "인천↔시애틀",
+    "type": "longhaul",
+    "demand": 52,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "남미 노선"
+  },
+  {
+    "id": "lh_060",
+    "route": "ICN-ORD",
+    "name": "인천↔시카고",
+    "type": "longhaul",
+    "demand": 61,
+    "min_category": "대형",
+    "fa_need": 7,
+    "kid_label": "장거리 프리미엄"
+  },
+  {
+    "id": "lh_061",
+    "route": "ICN-ATL",
+    "name": "인천↔애틀랜타",
+    "type": "longhaul",
+    "demand": 61,
+    "min_category": "대형",
+    "fa_need": 7,
+    "kid_label": "남미 노선"
+  },
+  {
+    "id": "lh_062",
+    "route": "ICN-YVR",
+    "name": "인천↔밴쿠버",
+    "type": "longhaul",
+    "demand": 72,
+    "min_category": "대형",
+    "fa_need": 7,
+    "kid_label": "대서양 횡단"
+  },
+  {
+    "id": "lh_063",
+    "route": "ICN-YYZ",
+    "name": "인천↔토론토",
+    "type": "longhaul",
+    "demand": 55,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "미주 노선"
+  },
+  {
+    "id": "lh_064",
+    "route": "ICN-LHR",
+    "name": "인천↔런던",
+    "type": "longhaul",
+    "demand": 48,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "남미 노선"
+  },
+  {
+    "id": "lh_065",
+    "route": "ICN-CDG",
+    "name": "인천↔파리",
+    "type": "longhaul",
+    "demand": 58,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "남미 노선"
+  },
+  {
+    "id": "lh_066",
+    "route": "ICN-FRA",
+    "name": "인천↔프랑크푸르트",
+    "type": "longhaul",
+    "demand": 50,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "태평양 횡단"
+  },
+  {
+    "id": "lh_067",
+    "route": "ICN-AMS",
+    "name": "인천↔암스테르담",
+    "type": "longhaul",
+    "demand": 49,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "태평양 횡단"
+  },
+  {
+    "id": "lh_068",
+    "route": "ICN-MUC",
+    "name": "인천↔뮌헨",
+    "type": "longhaul",
+    "demand": 57,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "남미 노선"
+  },
+  {
+    "id": "lh_069",
+    "route": "ICN-FCO",
+    "name": "인천↔로마",
+    "type": "longhaul",
+    "demand": 74,
+    "min_category": "대형",
+    "fa_need": 7,
+    "kid_label": "장거리 프리미엄"
+  },
+  {
+    "id": "lh_070",
+    "route": "ICN-MAD",
+    "name": "인천↔마드리드",
+    "type": "longhaul",
+    "demand": 52,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "미주 노선"
+  },
+  {
+    "id": "lh_071",
+    "route": "ICN-ZRH",
+    "name": "인천↔취리히",
+    "type": "longhaul",
+    "demand": 46,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "미주 노선"
+  },
+  {
+    "id": "lh_072",
+    "route": "ICN-GRU",
+    "name": "인천↔상파울루",
+    "type": "longhaul",
+    "demand": 55,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "대서양 횡단"
+  },
+  {
+    "id": "lh_073",
+    "route": "ICN-EZE",
+    "name": "인천↔부에노스아이레스",
+    "type": "longhaul",
+    "demand": 68,
+    "min_category": "대형",
+    "fa_need": 7,
+    "kid_label": "남미 노선"
+  },
+  {
+    "id": "lh_074",
+    "route": "ICN-JNB",
+    "name": "인천↔요하네스버그",
+    "type": "longhaul",
+    "demand": 72,
+    "min_category": "대형",
+    "fa_need": 7,
+    "kid_label": "장거리 프리미엄"
+  },
+  {
+    "id": "lh_075",
+    "route": "ICN-AKL",
+    "name": "인천↔오클랜드",
+    "type": "longhaul",
+    "demand": 56,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "미주 노선"
+  },
+  {
+    "id": "reg_076",
+    "route": "CJJ-KWJ",
+    "name": "청주↔광주",
+    "type": "regional",
+    "demand": 44,
+    "min_category": "리저널",
+    "fa_need": 1,
+    "kid_label": "지역 연결"
+  },
+  {
+    "id": "reg_077",
+    "route": "TAE-USN",
+    "name": "대구↔울산",
+    "type": "regional",
+    "demand": 55,
+    "min_category": "리저널",
+    "fa_need": 1,
+    "kid_label": "지역 연결"
+  },
+  {
+    "id": "reg_078",
+    "route": "RSU-KWJ",
+    "name": "여수↔광주",
+    "type": "regional",
+    "demand": 40,
+    "min_category": "리저널",
+    "fa_need": 1,
+    "kid_label": "짧은 국내선"
+  },
+  {
+    "id": "reg_079",
+    "route": "WJU-CJJ",
+    "name": "원주↔청주",
+    "type": "regional",
+    "demand": 50,
+    "min_category": "리저널",
+    "fa_need": 1,
+    "kid_label": "리저널 허브"
+  },
+  {
+    "id": "reg_080",
+    "route": "USN-TAE",
+    "name": "울산↔대구",
+    "type": "regional",
+    "demand": 35,
+    "min_category": "리저널",
+    "fa_need": 1,
+    "kid_label": "지역 연결"
+  },
+  {
+    "id": "reg_081",
+    "route": "GMP-RSU",
+    "name": "김포↔여수",
+    "type": "regional",
+    "demand": 35,
+    "min_category": "리저널",
+    "fa_need": 1,
+    "kid_label": "소도시 노선"
+  },
+  {
+    "id": "reg_082",
+    "route": "CJJ-TAE",
+    "name": "청주↔대구",
+    "type": "regional",
+    "demand": 37,
+    "min_category": "리저널",
+    "fa_need": 1,
+    "kid_label": "소도시 노선"
+  },
+  {
+    "id": "reg_083",
+    "route": "KWJ-RSU",
+    "name": "광주↔여수",
+    "type": "regional",
+    "demand": 45,
+    "min_category": "리저널",
+    "fa_need": 1,
+    "kid_label": "짧은 국내선"
+  },
+  {
+    "id": "reg_084",
+    "route": "PUS-USN",
+    "name": "부산↔울산",
+    "type": "regional",
+    "demand": 35,
+    "min_category": "리저널",
+    "fa_need": 1,
+    "kid_label": "소도시 노선"
+  },
+  {
+    "id": "cargo_085",
+    "route": "ICN-ANC",
+    "name": "인천↔앵커리지 화물",
+    "type": "cargo",
+    "demand": 41,
+    "min_category": "화물기",
+    "fa_need": 0,
+    "kid_label": "국제 화물"
+  },
+  {
+    "id": "cargo_086",
+    "route": "ICN-LGG",
+    "name": "인천↔리에주 화물",
+    "type": "cargo",
+    "demand": 64,
+    "min_category": "화물기",
+    "fa_need": 0,
+    "kid_label": "국제 화물"
+  },
+  {
+    "id": "cargo_087",
+    "route": "ICN-MEM",
+    "name": "인천↔멤피스 화물",
+    "type": "cargo",
+    "demand": 65,
+    "min_category": "화물기",
+    "fa_need": 0,
+    "kid_label": "특송 화물"
+  },
+  {
+    "id": "cargo_088",
+    "route": "ICN-CVG",
+    "name": "인천↔신시내티 화물",
+    "type": "cargo",
+    "demand": 61,
+    "min_category": "화물기",
+    "fa_need": 0,
+    "kid_label": "특송 화물"
+  },
+  {
+    "id": "intl_089",
+    "route": "GMP-KIX",
+    "name": "김포↔오사카",
+    "type": "international",
+    "demand": 70,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "중동 노선"
+  },
+  {
+    "id": "lh_090",
+    "route": "GMP-YVR",
+    "name": "김포↔밴쿠버",
+    "type": "longhaul",
+    "demand": 52,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "미주 노선"
+  },
+  {
+    "id": "extra_091",
+    "route": "ICN-ATL-91",
+    "name": "인천↔애틀랜타 특별",
+    "type": "longhaul",
+    "demand": 43,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "태평양 횡단"
+  },
+  {
+    "id": "intl_092",
+    "route": "PUS-BKK",
+    "name": "부산↔방콕",
+    "type": "international",
+    "demand": 56,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "동남아 노선"
+  },
+  {
+    "id": "extra_093",
+    "route": "GMP-KIX-93",
+    "name": "김포↔오사카 특별",
+    "type": "international",
+    "demand": 42,
+    "min_category": "중형",
+    "fa_need": 3,
+    "kid_label": "일본 노선"
+  },
+  {
+    "id": "extra_094",
+    "route": "ICN-FCO-94",
+    "name": "인천↔로마 특별",
+    "type": "longhaul",
+    "demand": 61,
+    "min_category": "대형",
+    "fa_need": 7,
+    "kid_label": "태평양 횡단"
+  },
+  {
+    "id": "intl_095",
+    "route": "GMP-SIN",
+    "name": "김포↔싱가포르",
+    "type": "international",
+    "demand": 59,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "일본 노선"
+  },
+  {
+    "id": "intl_096",
+    "route": "PUS-HAN",
+    "name": "부산↔하노이",
+    "type": "international",
+    "demand": 79,
+    "min_category": "중형",
+    "fa_need": 5,
+    "kid_label": "중동 노선"
+  },
+  {
+    "id": "lh_097",
+    "route": "GMP-EZE",
+    "name": "김포↔부에노스아이레스",
+    "type": "longhaul",
+    "demand": 46,
+    "min_category": "대형",
+    "fa_need": 6,
+    "kid_label": "유럽 노선"
+  },
+  {
+    "id": "extra_098",
+    "route": "ICN-MAD-98",
+    "name": "인천↔마드리드 특별",
+    "type": "longhaul",
+    "demand": 77,
+    "min_category": "대형",
+    "fa_need": 7,
+    "kid_label": "장거리 프리미엄"
+  },
+  {
+    "id": "intl_099",
+    "route": "GMP-DAD",
+    "name": "김포↔다낭",
+    "type": "international",
+    "demand": 67,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "동남아 노선"
+  },
+  {
+    "id": "intl_100",
+    "route": "PUS-CGK",
+    "name": "부산↔자카르타",
+    "type": "international",
+    "demand": 66,
+    "min_category": "중형",
+    "fa_need": 4,
+    "kid_label": "호주 노선"
+  }
 ]

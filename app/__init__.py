@@ -12,6 +12,9 @@ def create_app():
     
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'pilot-dream-dev-key')
     app.config['DEBUG'] = os.environ.get('FLASK_ENV') != 'production'
+    # 개발 중 HTML/템플릿 수정이 즉시 반영되도록 (캐시된 옛 JS 방지)
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.jinja_env.auto_reload = True
     
     # Database 설정 (Supabase PostgreSQL 우선, 없으면 로컬 SQLite)
     database_url = os.environ.get('DATABASE_URL')
@@ -84,7 +87,8 @@ def create_app():
         extras,
         airline,
         guide,
-    )  # noqa: airline, guide registered below
+        world,
+    )  # noqa: airline, guide, world registered below
 
     app.register_blueprint(main.bp)
     app.register_blueprint(radar.bp)
@@ -99,6 +103,7 @@ def create_app():
     app.register_blueprint(extras.bp)
     app.register_blueprint(airline.bp)
     app.register_blueprint(guide.bp)
+    app.register_blueprint(world.bp)
 
     from app.services.game_bridge import GAMES_ENABLED
     if GAMES_ENABLED:

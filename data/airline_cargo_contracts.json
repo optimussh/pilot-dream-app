@@ -1,0 +1,27 @@
+{
+  "templates": [
+    {"id": "c_med", "name": "의료 물자", "emoji": "🏥", "weight_t": 8, "urgency": "high", "min_category": "소형", "base_pay": 420000, "fuel_hint": "긴급 화물은 연료 여유 15% 필요"},
+    {"id": "c_elec", "name": "전자부품", "emoji": "💻", "weight_t": 12, "urgency": "normal", "min_category": "소형", "base_pay": 380000, "fuel_hint": "중량 10t 이상이면 중형기 권장"},
+    {"id": "c_fresh", "name": "신선식품", "emoji": "🥬", "weight_t": 6, "urgency": "high", "min_category": "소형", "base_pay": 350000, "fuel_hint": "신선 화물은 정시 운송이 중요해요"},
+    {"id": "c_auto", "name": "자동차 부품", "emoji": "🚗", "weight_t": 18, "urgency": "normal", "min_category": "중형", "base_pay": 520000, "fuel_hint": "18t 화물은 중형 이상 필요"},
+    {"id": "c_live", "name": "생활용품", "emoji": "📦", "weight_t": 15, "urgency": "low", "min_category": "소형", "base_pay": 300000, "fuel_hint": "저가 화물은 연료 절약이 이익"},
+    {"id": "c_heavy", "name": "중장비", "emoji": "🏗️", "weight_t": 35, "urgency": "normal", "min_category": "화물기", "base_pay": 780000, "fuel_hint": "35t는 화물기 전용"},
+    {"id": "c_pharma", "name": "의약품", "emoji": "💊", "weight_t": 4, "urgency": "high", "min_category": "소형", "base_pay": 480000, "fuel_hint": "온도 관리 화물, 직항 권장"},
+    {"id": "c_mail", "name": "국제 우편", "emoji": "✉️", "weight_t": 9, "urgency": "normal", "min_category": "소형", "base_pay": 340000, "fuel_hint": "국제선 연료 계획 확인"}
+  ],
+  "routes": [
+    {"route": "ICN-CJU", "name": "인천↔제주", "dist_km": 450},
+    {"route": "ICN-PUS", "name": "인천↔부산", "dist_km": 325},
+    {"route": "ICN-NRT", "name": "인천↔도쿄", "dist_km": 1260},
+    {"route": "ICN-BKK", "name": "인천↔방콕", "dist_km": 3660},
+    {"route": "ICN-SIN", "name": "인천↔싱가포르", "dist_km": 4660},
+    {"route": "GMP-CJU", "name": "김포↔제주", "dist_km": 450},
+    {"route": "ICN-HKG", "name": "인천↔홍콩", "dist_km": 2060}
+  ],
+  "quiz": [
+    {"q": "8t 화물을 운송할 때 가장 적합한 기종은?", "choices": ["리저널 제트", "소형 여객기", "대형 화물기"], "answer": 1, "tip": "10t 미만은 소형기로도 가능해요"},
+    {"q": "긴급 화물 운송 시 연료는?", "choices": ["최소 연료만", "15% 여유 연료", "연료 무관"], "answer": 1, "tip": "긴급 화물은 지연 시 패널티가 커요"},
+    {"q": "35t 중장비 화물에 필요한 기종은?", "choices": ["소형기", "중형기", "화물기"], "answer": 2, "tip": "대형 화물은 전용 화물기가 안전해요"}
+  ],
+  "daily_limit": 3
+}

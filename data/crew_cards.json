@@ -1,18 +1,3926 @@
 [
-  {"id": "crew_trainee", "name": "민준이", "role": "비행 학생", "emoji": "📘", "unlock": {"type": "logbook_count", "value": 1}, "desc": "첫 비행을 꿈꾸는 친구", "bonus_tip": "로그북 1회 기록"},
-  {"id": "crew_student", "name": "서연", "role": "조종 학생", "emoji": "🎓", "unlock": {"type": "quiz_done", "value": 1}, "desc": "퀴즈를 좋아하는 공부벌레", "bonus_tip": "퀴즈 1회 완료"},
-  {"id": "crew_fo_lee", "name": "이부기장", "role": "부기장", "emoji": "👨‍✈️", "unlock": {"type": "flashcard_count", "value": 10}, "desc": "기장을 돕는 조종사", "bonus_tip": "플래시카드 10개"},
-  {"id": "crew_fo_park", "name": "박부기장", "role": "부기장", "emoji": "👩‍✔️", "unlock": {"type": "logbook_count", "value": 10}, "desc": "국내선 전문 부기장", "bonus_tip": "로그북 10회"},
-  {"id": "crew_captain_kim", "name": "김기장", "role": "기장", "emoji": "👑", "unlock": {"type": "rank_id", "value": "captain"}, "desc": "20년 경력 베테랑 기장", "bonus_tip": "기장 랭크 달성"},
-  {"id": "crew_captain_choi", "name": "최기장", "role": "기장", "emoji": "⭐", "unlock": {"type": "quiz_score", "value": 90}, "desc": "완벽한 점수를 좋아하는 기장", "bonus_tip": "퀴즈 90점+"},
-  {"id": "crew_fa_hana", "name": "하나", "role": "승무원", "emoji": "💁", "unlock": {"type": "mission_count", "value": 5}, "desc": "승객을 환하게 맞이해요", "bonus_tip": "미션 5회 완료"},
-  {"id": "crew_fa_jun", "name": "준호", "role": "승무원", "emoji": "🧑‍✈️", "unlock": {"type": "journal_count", "value": 3}, "desc": "비행 일기를 응원하는 승무원", "bonus_tip": "비행 일기 3개"},
-  {"id": "crew_mechanic", "name": "정비사 오", "role": "정비사", "emoji": "🔧", "unlock": {"type": "owned_aircraft", "value": 5}, "desc": "비행기를 건강하게 지켜요", "bonus_tip": "비행기 5대 보유"},
-  {"id": "crew_atc", "name": "관제사 이", "role": "관제사", "emoji": "📡", "unlock": {"type": "airport_quiz", "value": 5}, "desc": "안전한 이륙·착륙을 도와요", "bonus_tip": "공항 퀴즈 5회"},
-  {"id": "crew_dispatcher", "name": "운항관리 정", "role": "운항관리", "emoji": "📋", "unlock": {"type": "schedule_week", "value": 1}, "desc": "스케줄을 짜는 전문가", "bonus_tip": "스케줄 보드 1주 채우기"},
-  {"id": "crew_fuel", "name": "연료담당 한", "role": "연료사", "emoji": "⛽", "unlock": {"type": "fuel_quiz", "value": 3}, "desc": "연료 계산의 달인", "bonus_tip": "연료 퀴즈 3회"},
-  {"id": "crew_cargo", "name": "화물기장 강", "role": "화물기장", "emoji": "📦", "unlock": {"type": "demand_claim", "value": 1}, "desc": "화물을 실어 나르는 파일럿", "bonus_tip": "주간 이벤트 1회"},
-  {"id": "crew_intl", "name": "국제선 기장 윤", "role": "국제선 기장", "emoji": "🌏", "unlock": {"type": "intl_route", "value": 1}, "desc": "세계를 날아다녀요", "bonus_tip": "국제선 1회 비행"},
-  {"id": "crew_ontime", "name": "정시왕 배", "role": "정시 전문", "emoji": "⏰", "unlock": {"type": "on_time_week", "value": 3}, "desc": "정시 운항의 달인", "bonus_tip": "이번 주 정시 3회"},
-  {"id": "crew_senior", "name": "전설의 한", "role": "최고 기장", "emoji": "💫", "unlock": {"type": "crew_count", "value": 10}, "desc": "모든 승무원을 모은 전설", "bonus_tip": "승무원 카드 10장"}
+  {
+    "id": "crew_gen_001",
+    "name": "이하준",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 1,
+      "starter": true
+    },
+    "desc": "기장을 든든히 돕는 이하준",
+    "bonus_tip": "스타터 동료 · 바로 채용 가능!",
+    "free_unlock": true
+  },
+  {
+    "id": "crew_gen_011",
+    "name": "오지호",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 1,
+      "starter": true
+    },
+    "desc": "조종을 배우는 오지호",
+    "bonus_tip": "스타터 동료 · 바로 채용 가능!",
+    "free_unlock": true
+  },
+  {
+    "id": "crew_gen_014",
+    "name": "권채원",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 1
+    },
+    "desc": "기장을 든든히 돕는 권채원",
+    "bonus_tip": "로그북 1회"
+  },
+  {
+    "id": "crew_gen_024",
+    "name": "손연우",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 2
+    },
+    "desc": "조종을 배우는 손연우",
+    "bonus_tip": "로그북 2회"
+  },
+  {
+    "id": "crew_gen_027",
+    "name": "백현준",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 2
+    },
+    "desc": "기장을 든든히 돕는 백현준",
+    "bonus_tip": "로그북 2회"
+  },
+  {
+    "id": "crew_gen_037",
+    "name": "차하율",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 3
+    },
+    "desc": "조종을 배우는 차하율",
+    "bonus_tip": "로그북 3회"
+  },
+  {
+    "id": "crew_gen_040",
+    "name": "구로운",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 3
+    },
+    "desc": "기장을 든든히 돕는 구로운",
+    "bonus_tip": "로그북 3회"
+  },
+  {
+    "id": "crew_gen_050",
+    "name": "이서준",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 5
+    },
+    "desc": "조종을 배우는 이서준",
+    "bonus_tip": "로그북 5회"
+  },
+  {
+    "id": "crew_gen_053",
+    "name": "정은우",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 6
+    },
+    "desc": "기장을 든든히 돕는 정은우",
+    "bonus_tip": "로그북 6회"
+  },
+  {
+    "id": "crew_gen_063",
+    "name": "권시윤",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 9
+    },
+    "desc": "조종을 배우는 권시윤",
+    "bonus_tip": "로그북 9회"
+  },
+  {
+    "id": "crew_gen_066",
+    "name": "송윤서",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 11
+    },
+    "desc": "기장을 든든히 돕는 송윤서",
+    "bonus_tip": "로그북 11회"
+  },
+  {
+    "id": "crew_gen_076",
+    "name": "백지훈",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 13
+    },
+    "desc": "조종을 배우는 백지훈",
+    "bonus_tip": "로그북 13회"
+  },
+  {
+    "id": "crew_gen_079",
+    "name": "남태윤",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 16
+    },
+    "desc": "기장을 든든히 돕는 남태윤",
+    "bonus_tip": "로그북 16회"
+  },
+  {
+    "id": "crew_gen_089",
+    "name": "구서아",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 19
+    },
+    "desc": "조종을 배우는 구서아",
+    "bonus_tip": "로그북 19회"
+  },
+  {
+    "id": "crew_gen_092",
+    "name": "나다온",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 21
+    },
+    "desc": "기장을 든든히 돕는 나다온",
+    "bonus_tip": "로그북 21회"
+  },
+  {
+    "id": "crew_gen_102",
+    "name": "정도윤",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 25
+    },
+    "desc": "조종을 배우는 정도윤",
+    "bonus_tip": "로그북 25회"
+  },
+  {
+    "id": "crew_gen_105",
+    "name": "윤주원",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 3
+    },
+    "desc": "기장을 든든히 돕는 윤주원",
+    "bonus_tip": "퀴즈 3회"
+  },
+  {
+    "id": "crew_gen_115",
+    "name": "송다은",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 3
+    },
+    "desc": "조종을 배우는 송다은",
+    "bonus_tip": "퀴즈 3회"
+  },
+  {
+    "id": "crew_gen_118",
+    "name": "전하린",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 4
+    },
+    "desc": "기장을 든든히 돕는 전하린",
+    "bonus_tip": "퀴즈 4회"
+  },
+  {
+    "id": "crew_gen_128",
+    "name": "남승현",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 4
+    },
+    "desc": "조종을 배우는 남승현",
+    "bonus_tip": "퀴즈 4회"
+  },
+  {
+    "id": "crew_gen_131",
+    "name": "정서현",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 5
+    },
+    "desc": "기장을 든든히 돕는 정서현",
+    "bonus_tip": "퀴즈 5회"
+  },
+  {
+    "id": "crew_gen_141",
+    "name": "나하늘",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 5
+    },
+    "desc": "조종을 배우는 나하늘",
+    "bonus_tip": "퀴즈 5회"
+  },
+  {
+    "id": "crew_gen_144",
+    "name": "유시현",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 7
+    },
+    "desc": "기장을 든든히 돕는 유시현",
+    "bonus_tip": "퀴즈 7회"
+  },
+  {
+    "id": "crew_gen_154",
+    "name": "윤시우",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 7
+    },
+    "desc": "조종을 배우는 윤시우",
+    "bonus_tip": "퀴즈 7회"
+  },
+  {
+    "id": "crew_gen_157",
+    "name": "한서연",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 11
+    },
+    "desc": "기장을 든든히 돕는 한서연",
+    "bonus_tip": "퀴즈 11회"
+  },
+  {
+    "id": "crew_gen_167",
+    "name": "전지안",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 6
+    },
+    "desc": "조종을 배우는 전지안",
+    "bonus_tip": "플래시카드 6개"
+  },
+  {
+    "id": "crew_gen_170",
+    "name": "양현우",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 8
+    },
+    "desc": "기장을 든든히 돕는 양현우",
+    "bonus_tip": "플래시카드 8개"
+  },
+  {
+    "id": "crew_gen_180",
+    "name": "정예은",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 8
+    },
+    "desc": "조종을 배우는 정예은",
+    "bonus_tip": "플래시카드 8개"
+  },
+  {
+    "id": "crew_gen_183",
+    "name": "성유진",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 11
+    },
+    "desc": "기장을 든든히 돕는 성유진",
+    "bonus_tip": "플래시카드 11개"
+  },
+  {
+    "id": "crew_gen_193",
+    "name": "유이안",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 13
+    },
+    "desc": "조종을 배우는 유이안",
+    "bonus_tip": "플래시카드 13개"
+  },
+  {
+    "id": "crew_gen_196",
+    "name": "김나윤",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 15
+    },
+    "desc": "기장을 든든히 돕는 김나윤",
+    "bonus_tip": "플래시카드 15개"
+  },
+  {
+    "id": "crew_gen_206",
+    "name": "한하은",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 18
+    },
+    "desc": "조종을 배우는 한하은",
+    "bonus_tip": "플래시카드 18개"
+  },
+  {
+    "id": "crew_gen_209",
+    "name": "신수아",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 24
+    },
+    "desc": "기장을 든든히 돕는 신수아",
+    "bonus_tip": "플래시카드 24개"
+  },
+  {
+    "id": "crew_gen_219",
+    "name": "양소율",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 25
+    },
+    "desc": "조종을 배우는 양소율",
+    "bonus_tip": "플래시카드 25개"
+  },
+  {
+    "id": "crew_gen_222",
+    "name": "조우진",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 25
+    },
+    "desc": "기장을 든든히 돕는 조우진",
+    "bonus_tip": "플래시카드 25개"
+  },
+  {
+    "id": "crew_gen_232",
+    "name": "성지원",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "mission_count",
+      "value": 5
+    },
+    "desc": "조종을 배우는 성지원",
+    "bonus_tip": "미션 5회"
+  },
+  {
+    "id": "crew_gen_235",
+    "name": "우예린",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "mission_count",
+      "value": 5
+    },
+    "desc": "기장을 든든히 돕는 우예린",
+    "bonus_tip": "미션 5회"
+  },
+  {
+    "id": "crew_gen_245",
+    "name": "김주하",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "mission_count",
+      "value": 6
+    },
+    "desc": "조종을 배우는 김주하",
+    "bonus_tip": "미션 6회"
+  },
+  {
+    "id": "crew_gen_248",
+    "name": "최도하",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "mission_count",
+      "value": 7
+    },
+    "desc": "기장을 든든히 돕는 최도하",
+    "bonus_tip": "미션 7회"
+  },
+  {
+    "id": "crew_gen_258",
+    "name": "신지유",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "mission_count",
+      "value": 7
+    },
+    "desc": "조종을 배우는 신지유",
+    "bonus_tip": "미션 7회"
+  },
+  {
+    "id": "crew_gen_261",
+    "name": "안지호",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "mission_count",
+      "value": 10
+    },
+    "desc": "기장을 든든히 돕는 안지호",
+    "bonus_tip": "미션 10회"
+  },
+  {
+    "id": "crew_gen_271",
+    "name": "조건우",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "mission_count",
+      "value": 10
+    },
+    "desc": "조종을 배우는 조건우",
+    "bonus_tip": "미션 10회"
+  },
+  {
+    "id": "crew_gen_274",
+    "name": "유연우",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "mission_count",
+      "value": 13
+    },
+    "desc": "기장을 든든히 돕는 유연우",
+    "bonus_tip": "미션 13회"
+  },
+  {
+    "id": "crew_gen_284",
+    "name": "우수빈",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "mission_count",
+      "value": 15
+    },
+    "desc": "조종을 배우는 우수빈",
+    "bonus_tip": "미션 15회"
+  },
+  {
+    "id": "crew_gen_287",
+    "name": "임하율",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "mission_count",
+      "value": 17
+    },
+    "desc": "기장을 든든히 돕는 임하율",
+    "bonus_tip": "미션 17회"
+  },
+  {
+    "id": "crew_gen_297",
+    "name": "최아인",
+    "role": "조종 학생",
+    "airline_role": "fo",
+    "emoji": "🎓",
+    "unlock": {
+      "type": "journal_count",
+      "value": 6
+    },
+    "desc": "조종을 배우는 최아인",
+    "bonus_tip": "비행 일기 6개"
+  },
+  {
+    "id": "crew_gen_300",
+    "name": "조서준",
+    "role": "부기장",
+    "airline_role": "fo",
+    "emoji": "👨‍✈️",
+    "unlock": {
+      "type": "journal_count",
+      "value": 6
+    },
+    "desc": "기장을 든든히 돕는 조서준",
+    "bonus_tip": "비행 일기 6개"
+  },
+  {
+    "id": "crew_gen_002",
+    "name": "박도윤",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 1,
+      "starter": true
+    },
+    "desc": "안전을 책임지는 박도윤",
+    "bonus_tip": "스타터 동료 · 바로 채용 가능!",
+    "free_unlock": true
+  },
+  {
+    "id": "crew_gen_003",
+    "name": "최은우",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 1,
+      "starter": true
+    },
+    "desc": "장거리를 이끄는 최은우",
+    "bonus_tip": "스타터 동료 · 바로 채용 가능!",
+    "free_unlock": true
+  },
+  {
+    "id": "crew_gen_004",
+    "name": "정시우",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "journal_count",
+      "value": 3
+    },
+    "desc": "화물을 안전하게 나르는 정시우",
+    "bonus_tip": "비행 일기 3개"
+  },
+  {
+    "id": "crew_gen_012",
+    "name": "서예준",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "journal_count",
+      "value": 5
+    },
+    "desc": "베테랑 기장 서예준",
+    "bonus_tip": "비행 일기 5개"
+  },
+  {
+    "id": "crew_gen_015",
+    "name": "황다은",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "journal_count",
+      "value": 5
+    },
+    "desc": "안전을 책임지는 황다은",
+    "bonus_tip": "비행 일기 5개"
+  },
+  {
+    "id": "crew_gen_016",
+    "name": "안윤서",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "journal_count",
+      "value": 8
+    },
+    "desc": "장거리를 이끄는 안윤서",
+    "bonus_tip": "비행 일기 8개"
+  },
+  {
+    "id": "crew_gen_017",
+    "name": "송지안",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 1
+    },
+    "desc": "화물을 안전하게 나르는 송지안",
+    "bonus_tip": "공항 퀴즈 1회"
+  },
+  {
+    "id": "crew_gen_025",
+    "name": "배준서",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 1
+    },
+    "desc": "베테랑 기장 배준서",
+    "bonus_tip": "공항 퀴즈 1회"
+  },
+  {
+    "id": "crew_gen_028",
+    "name": "허승현",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 3
+    },
+    "desc": "안전을 책임지는 허승현",
+    "bonus_tip": "공항 퀴즈 3회"
+  },
+  {
+    "id": "crew_gen_029",
+    "name": "유태윤",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 4
+    },
+    "desc": "장거리를 이끄는 유태윤",
+    "bonus_tip": "공항 퀴즈 4회"
+  },
+  {
+    "id": "crew_gen_030",
+    "name": "남예은",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 6
+    },
+    "desc": "화물을 안전하게 나르는 남예은",
+    "bonus_tip": "공항 퀴즈 6회"
+  },
+  {
+    "id": "crew_gen_038",
+    "name": "주지민",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 6
+    },
+    "desc": "베테랑 기장 주지민",
+    "bonus_tip": "공항 퀴즈 6회"
+  },
+  {
+    "id": "crew_gen_041",
+    "name": "신하늘",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 9
+    },
+    "desc": "안전을 책임지는 신하늘",
+    "bonus_tip": "공항 퀴즈 9회"
+  },
+  {
+    "id": "crew_gen_042",
+    "name": "임다온",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 11
+    },
+    "desc": "장거리를 이끄는 임다온",
+    "bonus_tip": "공항 퀴즈 11회"
+  },
+  {
+    "id": "crew_gen_043",
+    "name": "나이안",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 2
+    },
+    "desc": "화물을 안전하게 나르는 나이안",
+    "bonus_tip": "연료 퀴즈 2회"
+  },
+  {
+    "id": "crew_gen_051",
+    "name": "박하준",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 2
+    },
+    "desc": "베테랑 기장 박하준",
+    "bonus_tip": "연료 퀴즈 2회"
+  },
+  {
+    "id": "crew_gen_054",
+    "name": "강시우",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 4
+    },
+    "desc": "안전을 책임지는 강시우",
+    "bonus_tip": "연료 퀴즈 4회"
+  },
+  {
+    "id": "crew_gen_055",
+    "name": "조주원",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 5
+    },
+    "desc": "장거리를 이끄는 조주원",
+    "bonus_tip": "연료 퀴즈 5회"
+  },
+  {
+    "id": "crew_gen_056",
+    "name": "윤하은",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 7
+    },
+    "desc": "화물을 안전하게 나르는 윤하은",
+    "bonus_tip": "연료 퀴즈 7회"
+  },
+  {
+    "id": "crew_gen_064",
+    "name": "황채원",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 10
+    },
+    "desc": "베테랑 기장 황채원",
+    "bonus_tip": "연료 퀴즈 10회"
+  },
+  {
+    "id": "crew_gen_067",
+    "name": "류지안",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 4
+    },
+    "desc": "안전을 책임지는 류지안",
+    "bonus_tip": "기체 4대"
+  },
+  {
+    "id": "crew_gen_068",
+    "name": "홍하린",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 4
+    },
+    "desc": "장거리를 이끄는 홍하린",
+    "bonus_tip": "기체 4대"
+  },
+  {
+    "id": "crew_gen_069",
+    "name": "전소율",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 5
+    },
+    "desc": "화물을 안전하게 나르는 전소율",
+    "bonus_tip": "기체 5대"
+  },
+  {
+    "id": "crew_gen_077",
+    "name": "허현준",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 5
+    },
+    "desc": "베테랑 기장 허현준",
+    "bonus_tip": "기체 5대"
+  },
+  {
+    "id": "crew_gen_080",
+    "name": "심예은",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 7
+    },
+    "desc": "안전을 책임지는 심예은",
+    "bonus_tip": "기체 7대"
+  },
+  {
+    "id": "crew_gen_081",
+    "name": "노서현",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 8
+    },
+    "desc": "장거리를 이끄는 노서현",
+    "bonus_tip": "기체 8대"
+  },
+  {
+    "id": "crew_gen_082",
+    "name": "정지원",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 8
+    },
+    "desc": "화물을 안전하게 나르는 정지원",
+    "bonus_tip": "기체 8대"
+  },
+  {
+    "id": "crew_gen_090",
+    "name": "신로운",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 9
+    },
+    "desc": "베테랑 기장 신로운",
+    "bonus_tip": "기체 9대"
+  },
+  {
+    "id": "crew_gen_093",
+    "name": "전이안",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 11
+    },
+    "desc": "안전을 책임지는 전이안",
+    "bonus_tip": "기체 11대"
+  },
+  {
+    "id": "crew_gen_094",
+    "name": "민시현",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "intl_route",
+      "value": 4
+    },
+    "desc": "장거리를 이끄는 민시현",
+    "bonus_tip": "국제선 4회"
+  },
+  {
+    "id": "crew_gen_095",
+    "name": "유주하",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "intl_route",
+      "value": 4
+    },
+    "desc": "화물을 안전하게 나르는 유주하",
+    "bonus_tip": "국제선 4회"
+  },
+  {
+    "id": "crew_gen_103",
+    "name": "강은우",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "intl_route",
+      "value": 4
+    },
+    "desc": "베테랑 기장 강은우",
+    "bonus_tip": "국제선 4회"
+  },
+  {
+    "id": "crew_gen_106",
+    "name": "장하은",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "intl_route",
+      "value": 6
+    },
+    "desc": "안전을 책임지는 장하은",
+    "bonus_tip": "국제선 6회"
+  },
+  {
+    "id": "crew_gen_107",
+    "name": "임서연",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "intl_route",
+      "value": 6
+    },
+    "desc": "장거리를 이끄는 임서연",
+    "bonus_tip": "국제선 6회"
+  },
+  {
+    "id": "crew_gen_108",
+    "name": "한지유",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "intl_route",
+      "value": 7
+    },
+    "desc": "화물을 안전하게 나르는 한지유",
+    "bonus_tip": "국제선 7회"
+  },
+  {
+    "id": "crew_gen_116",
+    "name": "류윤서",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "schedule_week",
+      "value": 5
+    },
+    "desc": "베테랑 기장 류윤서",
+    "bonus_tip": "스케줄 주 5회"
+  },
+  {
+    "id": "crew_gen_119",
+    "name": "고소율",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "schedule_week",
+      "value": 5
+    },
+    "desc": "안전을 책임지는 고소율",
+    "bonus_tip": "스케줄 주 5회"
+  },
+  {
+    "id": "crew_gen_120",
+    "name": "문현우",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "schedule_week",
+      "value": 6
+    },
+    "desc": "장거리를 이끄는 문현우",
+    "bonus_tip": "스케줄 주 6회"
+  },
+  {
+    "id": "crew_gen_121",
+    "name": "양건우",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "schedule_week",
+      "value": 6
+    },
+    "desc": "화물을 안전하게 나르는 양건우",
+    "bonus_tip": "스케줄 주 6회"
+  },
+  {
+    "id": "crew_gen_129",
+    "name": "심태윤",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "schedule_week",
+      "value": 7
+    },
+    "desc": "베테랑 기장 심태윤",
+    "bonus_tip": "스케줄 주 7회"
+  },
+  {
+    "id": "crew_gen_132",
+    "name": "하지원",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "crew_count",
+      "value": 7
+    },
+    "desc": "안전을 책임지는 하지원",
+    "bonus_tip": "동료 7명 해금"
+  },
+  {
+    "id": "crew_gen_133",
+    "name": "곽유진",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "crew_count",
+      "value": 8
+    },
+    "desc": "장거리를 이끄는 곽유진",
+    "bonus_tip": "동료 8명 해금"
+  },
+  {
+    "id": "crew_gen_134",
+    "name": "성수빈",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "crew_count",
+      "value": 9
+    },
+    "desc": "화물을 안전하게 나르는 성수빈",
+    "bonus_tip": "동료 9명 해금"
+  },
+  {
+    "id": "crew_gen_142",
+    "name": "전다온",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "crew_count",
+      "value": 10
+    },
+    "desc": "베테랑 기장 전다온",
+    "bonus_tip": "동료 10명 해금"
+  },
+  {
+    "id": "crew_gen_145",
+    "name": "진주하",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "crew_count",
+      "value": 11
+    },
+    "desc": "안전을 책임지는 진주하",
+    "bonus_tip": "동료 11명 해금"
+  },
+  {
+    "id": "crew_gen_146",
+    "name": "선나윤",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "crew_count",
+      "value": 13
+    },
+    "desc": "장거리를 이끄는 선나윤",
+    "bonus_tip": "동료 13명 해금"
+  },
+  {
+    "id": "crew_gen_147",
+    "name": "김아인",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "crew_count",
+      "value": 15
+    },
+    "desc": "화물을 안전하게 나르는 김아인",
+    "bonus_tip": "동료 15명 해금"
+  },
+  {
+    "id": "crew_gen_155",
+    "name": "장주원",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "crew_count",
+      "value": 17
+    },
+    "desc": "베테랑 기장 장주원",
+    "bonus_tip": "동료 17명 해금"
+  },
+  {
+    "id": "crew_gen_158",
+    "name": "오지유",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "crew_count",
+      "value": 21
+    },
+    "desc": "안전을 책임지는 오지유",
+    "bonus_tip": "동료 21명 해금"
+  },
+  {
+    "id": "crew_gen_159",
+    "name": "서수아",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "crew_count",
+      "value": 25
+    },
+    "desc": "장거리를 이끄는 서수아",
+    "bonus_tip": "동료 25명 해금"
+  },
+  {
+    "id": "crew_gen_160",
+    "name": "신민",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 7
+    },
+    "desc": "화물을 안전하게 나르는 신민",
+    "bonus_tip": "로그북 7회"
+  },
+  {
+    "id": "crew_gen_168",
+    "name": "고하린",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 7
+    },
+    "desc": "베테랑 기장 고하린",
+    "bonus_tip": "로그북 7회"
+  },
+  {
+    "id": "crew_gen_171",
+    "name": "손건우",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 7
+    },
+    "desc": "안전을 책임지는 손건우",
+    "bonus_tip": "로그북 7회"
+  },
+  {
+    "id": "crew_gen_172",
+    "name": "배우진",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 8
+    },
+    "desc": "장거리를 이끄는 배우진",
+    "bonus_tip": "로그북 8회"
+  },
+  {
+    "id": "crew_gen_173",
+    "name": "조선우",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 8
+    },
+    "desc": "화물을 안전하게 나르는 조선우",
+    "bonus_tip": "로그북 8회"
+  },
+  {
+    "id": "crew_gen_181",
+    "name": "하서현",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 9
+    },
+    "desc": "베테랑 기장 하서현",
+    "bonus_tip": "로그북 9회"
+  },
+  {
+    "id": "crew_gen_184",
+    "name": "차수빈",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 10
+    },
+    "desc": "안전을 책임지는 차수빈",
+    "bonus_tip": "로그북 10회"
+  },
+  {
+    "id": "crew_gen_185",
+    "name": "주예린",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 12
+    },
+    "desc": "장거리를 이끄는 주예린",
+    "bonus_tip": "로그북 12회"
+  },
+  {
+    "id": "crew_gen_186",
+    "name": "우소윤",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 12
+    },
+    "desc": "화물을 안전하게 나르는 우소윤",
+    "bonus_tip": "로그북 12회"
+  },
+  {
+    "id": "crew_gen_194",
+    "name": "진시현",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 15
+    },
+    "desc": "베테랑 기장 진시현",
+    "bonus_tip": "로그북 15회"
+  },
+  {
+    "id": "crew_gen_197",
+    "name": "이아인",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 17
+    },
+    "desc": "안전을 책임지는 이아인",
+    "bonus_tip": "로그북 17회"
+  },
+  {
+    "id": "crew_gen_198",
+    "name": "박도하",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 19
+    },
+    "desc": "장거리를 이끄는 박도하",
+    "bonus_tip": "로그북 19회"
+  },
+  {
+    "id": "crew_gen_199",
+    "name": "최재이",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 22
+    },
+    "desc": "화물을 안전하게 나르는 최재이",
+    "bonus_tip": "로그북 22회"
+  },
+  {
+    "id": "crew_gen_207",
+    "name": "오서연",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 25
+    },
+    "desc": "베테랑 기장 오서연",
+    "bonus_tip": "로그북 25회"
+  },
+  {
+    "id": "crew_gen_210",
+    "name": "권민",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 25
+    },
+    "desc": "안전을 책임지는 권민",
+    "bonus_tip": "로그북 25회"
+  },
+  {
+    "id": "crew_gen_211",
+    "name": "황지호",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 25
+    },
+    "desc": "장거리를 이끄는 황지호",
+    "bonus_tip": "로그북 25회"
+  },
+  {
+    "id": "crew_gen_212",
+    "name": "안예준",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 9
+    },
+    "desc": "화물을 안전하게 나르는 안예준",
+    "bonus_tip": "퀴즈 9회"
+  },
+  {
+    "id": "crew_gen_220",
+    "name": "손현우",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 9
+    },
+    "desc": "베테랑 기장 손현우",
+    "bonus_tip": "퀴즈 9회"
+  },
+  {
+    "id": "crew_gen_223",
+    "name": "백선우",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 10
+    },
+    "desc": "안전을 책임지는 백선우",
+    "bonus_tip": "퀴즈 10회"
+  },
+  {
+    "id": "crew_gen_224",
+    "name": "허연우",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 10
+    },
+    "desc": "장거리를 이끄는 허연우",
+    "bonus_tip": "퀴즈 10회"
+  },
+  {
+    "id": "crew_gen_225",
+    "name": "유준서",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 11
+    },
+    "desc": "화물을 안전하게 나르는 유준서",
+    "bonus_tip": "퀴즈 11회"
+  },
+  {
+    "id": "crew_gen_233",
+    "name": "차유진",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 11
+    },
+    "desc": "베테랑 기장 차유진",
+    "bonus_tip": "퀴즈 11회"
+  },
+  {
+    "id": "crew_gen_236",
+    "name": "구소윤",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 14
+    },
+    "desc": "안전을 책임지는 구소윤",
+    "bonus_tip": "퀴즈 14회"
+  },
+  {
+    "id": "crew_gen_237",
+    "name": "신하율",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 14
+    },
+    "desc": "장거리를 이끄는 신하율",
+    "bonus_tip": "퀴즈 14회"
+  },
+  {
+    "id": "crew_gen_238",
+    "name": "임지민",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 17
+    },
+    "desc": "화물을 안전하게 나르는 임지민",
+    "bonus_tip": "퀴즈 17회"
+  },
+  {
+    "id": "crew_gen_246",
+    "name": "이나윤",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 12
+    },
+    "desc": "베테랑 기장 이나윤",
+    "bonus_tip": "플래시카드 12개"
+  },
+  {
+    "id": "crew_gen_249",
+    "name": "정재이",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 14
+    },
+    "desc": "안전을 책임지는 정재이",
+    "bonus_tip": "플래시카드 14개"
+  },
+  {
+    "id": "crew_gen_250",
+    "name": "강서준",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 14
+    },
+    "desc": "장거리를 이끄는 강서준",
+    "bonus_tip": "플래시카드 14개"
+  },
+  {
+    "id": "crew_gen_251",
+    "name": "조하준",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 17
+    },
+    "desc": "화물을 안전하게 나르는 조하준",
+    "bonus_tip": "플래시카드 17개"
+  },
+  {
+    "id": "crew_gen_259",
+    "name": "권수아",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 19
+    },
+    "desc": "베테랑 기장 권수아",
+    "bonus_tip": "플래시카드 19개"
+  },
+  {
+    "id": "crew_gen_262",
+    "name": "송예준",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 22
+    },
+    "desc": "안전을 책임지는 송예준",
+    "bonus_tip": "플래시카드 22개"
+  },
+  {
+    "id": "crew_gen_263",
+    "name": "류시윤",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 25
+    },
+    "desc": "장거리를 이끄는 류시윤",
+    "bonus_tip": "플래시카드 25개"
+  },
+  {
+    "id": "crew_gen_264",
+    "name": "홍채원",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 25
+    },
+    "desc": "화물을 안전하게 나르는 홍채원",
+    "bonus_tip": "플래시카드 25개"
+  },
+  {
+    "id": "crew_gen_272",
+    "name": "백우진",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 25
+    },
+    "desc": "베테랑 기장 백우진",
+    "bonus_tip": "플래시카드 25개"
+  },
+  {
+    "id": "crew_gen_275",
+    "name": "남준서",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 25
+    },
+    "desc": "안전을 책임지는 남준서",
+    "bonus_tip": "플래시카드 25개"
+  },
+  {
+    "id": "crew_gen_276",
+    "name": "심지훈",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "mission_count",
+      "value": 11
+    },
+    "desc": "장거리를 이끄는 심지훈",
+    "bonus_tip": "미션 11회"
+  },
+  {
+    "id": "crew_gen_277",
+    "name": "노현준",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "mission_count",
+      "value": 11
+    },
+    "desc": "화물을 안전하게 나르는 노현준",
+    "bonus_tip": "미션 11회"
+  },
+  {
+    "id": "crew_gen_285",
+    "name": "구예린",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "mission_count",
+      "value": 12
+    },
+    "desc": "베테랑 기장 구예린",
+    "bonus_tip": "미션 12회"
+  },
+  {
+    "id": "crew_gen_288",
+    "name": "나지민",
+    "role": "기장",
+    "airline_role": "captain",
+    "emoji": "👩‍✈️",
+    "unlock": {
+      "type": "mission_count",
+      "value": 14
+    },
+    "desc": "안전을 책임지는 나지민",
+    "bonus_tip": "미션 14회"
+  },
+  {
+    "id": "crew_gen_289",
+    "name": "전서아",
+    "role": "국제선 기장",
+    "airline_role": "captain",
+    "emoji": "🌐",
+    "unlock": {
+      "type": "mission_count",
+      "value": 14
+    },
+    "desc": "장거리를 이끄는 전서아",
+    "bonus_tip": "미션 14회"
+  },
+  {
+    "id": "crew_gen_290",
+    "name": "민로운",
+    "role": "화물기장",
+    "airline_role": "captain",
+    "emoji": "📦",
+    "unlock": {
+      "type": "mission_count",
+      "value": 16
+    },
+    "desc": "화물을 안전하게 나르는 민로운",
+    "bonus_tip": "미션 16회"
+  },
+  {
+    "id": "crew_gen_298",
+    "name": "정도하",
+    "role": "최고 기장",
+    "airline_role": "captain",
+    "emoji": "⭐",
+    "unlock": {
+      "type": "mission_count",
+      "value": 16
+    },
+    "desc": "베테랑 기장 정도하",
+    "bonus_tip": "미션 16회"
+  },
+  {
+    "id": "crew_gen_005",
+    "name": "강주원",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 1,
+      "starter": true
+    },
+    "desc": "비행기를 꼼꼼히 고치는 강주원",
+    "bonus_tip": "스타터 동료 · 바로 채용 가능!",
+    "free_unlock": true
+  },
+  {
+    "id": "crew_gen_018",
+    "name": "류하린",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 1,
+      "starter": true
+    },
+    "desc": "비행기를 꼼꼼히 고치는 류하린",
+    "bonus_tip": "스타터 동료 · 바로 채용 가능!",
+    "free_unlock": true
+  },
+  {
+    "id": "crew_gen_031",
+    "name": "심서현",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "mission_count",
+      "value": 12
+    },
+    "desc": "비행기를 꼼꼼히 고치는 심서현",
+    "bonus_tip": "미션 12회"
+  },
+  {
+    "id": "crew_gen_044",
+    "name": "전시현",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "journal_count",
+      "value": 1
+    },
+    "desc": "비행기를 꼼꼼히 고치는 전시현",
+    "bonus_tip": "비행 일기 1개"
+  },
+  {
+    "id": "crew_gen_057",
+    "name": "장서연",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "journal_count",
+      "value": 1
+    },
+    "desc": "비행기를 꼼꼼히 고치는 장서연",
+    "bonus_tip": "비행 일기 1개"
+  },
+  {
+    "id": "crew_gen_070",
+    "name": "고현우",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "journal_count",
+      "value": 2
+    },
+    "desc": "비행기를 꼼꼼히 고치는 고현우",
+    "bonus_tip": "비행 일기 2개"
+  },
+  {
+    "id": "crew_gen_083",
+    "name": "하유진",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "journal_count",
+      "value": 2
+    },
+    "desc": "비행기를 꼼꼼히 고치는 하유진",
+    "bonus_tip": "비행 일기 2개"
+  },
+  {
+    "id": "crew_gen_096",
+    "name": "진나윤",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "journal_count",
+      "value": 3
+    },
+    "desc": "비행기를 꼼꼼히 고치는 진나윤",
+    "bonus_tip": "비행 일기 3개"
+  },
+  {
+    "id": "crew_gen_109",
+    "name": "오수아",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "journal_count",
+      "value": 6
+    },
+    "desc": "비행기를 꼼꼼히 고치는 오수아",
+    "bonus_tip": "비행 일기 6개"
+  },
+  {
+    "id": "crew_gen_122",
+    "name": "손우진",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "journal_count",
+      "value": 6
+    },
+    "desc": "비행기를 꼼꼼히 고치는 손우진",
+    "bonus_tip": "비행 일기 6개"
+  },
+  {
+    "id": "crew_gen_135",
+    "name": "차예린",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "journal_count",
+      "value": 9
+    },
+    "desc": "비행기를 꼼꼼히 고치는 차예린",
+    "bonus_tip": "비행 일기 9개"
+  },
+  {
+    "id": "crew_gen_148",
+    "name": "이도하",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 2
+    },
+    "desc": "비행기를 꼼꼼히 고치는 이도하",
+    "bonus_tip": "공항 퀴즈 2회"
+  },
+  {
+    "id": "crew_gen_161",
+    "name": "권지호",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 2
+    },
+    "desc": "비행기를 꼼꼼히 고치는 권지호",
+    "bonus_tip": "공항 퀴즈 2회"
+  },
+  {
+    "id": "crew_gen_174",
+    "name": "백연우",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 3
+    },
+    "desc": "비행기를 꼼꼼히 고치는 백연우",
+    "bonus_tip": "공항 퀴즈 3회"
+  },
+  {
+    "id": "crew_gen_187",
+    "name": "구하율",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 4
+    },
+    "desc": "비행기를 꼼꼼히 고치는 구하율",
+    "bonus_tip": "공항 퀴즈 4회"
+  },
+  {
+    "id": "crew_gen_200",
+    "name": "정서준",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 6
+    },
+    "desc": "비행기를 꼼꼼히 고치는 정서준",
+    "bonus_tip": "공항 퀴즈 6회"
+  },
+  {
+    "id": "crew_gen_213",
+    "name": "송시윤",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 7
+    },
+    "desc": "비행기를 꼼꼼히 고치는 송시윤",
+    "bonus_tip": "공항 퀴즈 7회"
+  },
+  {
+    "id": "crew_gen_226",
+    "name": "남지훈",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 10
+    },
+    "desc": "비행기를 꼼꼼히 고치는 남지훈",
+    "bonus_tip": "공항 퀴즈 10회"
+  },
+  {
+    "id": "crew_gen_239",
+    "name": "나서아",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 12
+    },
+    "desc": "비행기를 꼼꼼히 고치는 나서아",
+    "bonus_tip": "공항 퀴즈 12회"
+  },
+  {
+    "id": "crew_gen_252",
+    "name": "윤도윤",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 3
+    },
+    "desc": "비행기를 꼼꼼히 고치는 윤도윤",
+    "bonus_tip": "연료 퀴즈 3회"
+  },
+  {
+    "id": "crew_gen_265",
+    "name": "전다은",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 3
+    },
+    "desc": "비행기를 꼼꼼히 고치는 전다은",
+    "bonus_tip": "연료 퀴즈 3회"
+  },
+  {
+    "id": "crew_gen_278",
+    "name": "정승현",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 4
+    },
+    "desc": "비행기를 꼼꼼히 고치는 정승현",
+    "bonus_tip": "연료 퀴즈 4회"
+  },
+  {
+    "id": "crew_gen_291",
+    "name": "유하늘",
+    "role": "정비사",
+    "airline_role": "mechanic",
+    "emoji": "🔧",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 5
+    },
+    "desc": "비행기를 꼼꼼히 고치는 유하늘",
+    "bonus_tip": "연료 퀴즈 5회"
+  },
+  {
+    "id": "crew_gen_006",
+    "name": "조하은",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 1,
+      "starter": true
+    },
+    "desc": "스케줄을 짜는 조하은",
+    "bonus_tip": "스타터 동료 · 바로 채용 가능!",
+    "free_unlock": true
+  },
+  {
+    "id": "crew_gen_007",
+    "name": "윤서연",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 1,
+      "starter": true
+    },
+    "desc": "하늘을 안내하는 윤서연",
+    "bonus_tip": "스타터 동료 · 바로 채용 가능!",
+    "free_unlock": true
+  },
+  {
+    "id": "crew_gen_008",
+    "name": "장지유",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 2
+    },
+    "desc": "정시 운항을 지키는 장지유",
+    "bonus_tip": "기체 2대"
+  },
+  {
+    "id": "crew_gen_019",
+    "name": "홍소율",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 2
+    },
+    "desc": "스케줄을 짜는 홍소율",
+    "bonus_tip": "기체 2대"
+  },
+  {
+    "id": "crew_gen_020",
+    "name": "전현우",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 3
+    },
+    "desc": "하늘을 안내하는 전현우",
+    "bonus_tip": "기체 3대"
+  },
+  {
+    "id": "crew_gen_021",
+    "name": "고건우",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 3
+    },
+    "desc": "정시 운항을 지키는 고건우",
+    "bonus_tip": "기체 3대"
+  },
+  {
+    "id": "crew_gen_032",
+    "name": "노지원",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 4
+    },
+    "desc": "스케줄을 짜는 노지원",
+    "bonus_tip": "기체 4대"
+  },
+  {
+    "id": "crew_gen_033",
+    "name": "정유진",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 5
+    },
+    "desc": "하늘을 안내하는 정유진",
+    "bonus_tip": "기체 5대"
+  },
+  {
+    "id": "crew_gen_034",
+    "name": "하수빈",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 6
+    },
+    "desc": "정시 운항을 지키는 하수빈",
+    "bonus_tip": "기체 6대"
+  },
+  {
+    "id": "crew_gen_045",
+    "name": "민주하",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 7
+    },
+    "desc": "스케줄을 짜는 민주하",
+    "bonus_tip": "기체 7대"
+  },
+  {
+    "id": "crew_gen_046",
+    "name": "유나윤",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 9
+    },
+    "desc": "하늘을 안내하는 유나윤",
+    "bonus_tip": "기체 9대"
+  },
+  {
+    "id": "crew_gen_047",
+    "name": "진아인",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "intl_route",
+      "value": 2
+    },
+    "desc": "정시 운항을 지키는 진아인",
+    "bonus_tip": "국제선 2회"
+  },
+  {
+    "id": "crew_gen_058",
+    "name": "임지유",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "intl_route",
+      "value": 2
+    },
+    "desc": "스케줄을 짜는 임지유",
+    "bonus_tip": "국제선 2회"
+  },
+  {
+    "id": "crew_gen_059",
+    "name": "한수아",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "intl_route",
+      "value": 2
+    },
+    "desc": "하늘을 안내하는 한수아",
+    "bonus_tip": "국제선 2회"
+  },
+  {
+    "id": "crew_gen_060",
+    "name": "오민",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "intl_route",
+      "value": 3
+    },
+    "desc": "정시 운항을 지키는 오민",
+    "bonus_tip": "국제선 3회"
+  },
+  {
+    "id": "crew_gen_071",
+    "name": "문건우",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "intl_route",
+      "value": 3
+    },
+    "desc": "스케줄을 짜는 문건우",
+    "bonus_tip": "국제선 3회"
+  },
+  {
+    "id": "crew_gen_072",
+    "name": "양우진",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "intl_route",
+      "value": 5
+    },
+    "desc": "하늘을 안내하는 양우진",
+    "bonus_tip": "국제선 5회"
+  },
+  {
+    "id": "crew_gen_073",
+    "name": "손선우",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "schedule_week",
+      "value": 3
+    },
+    "desc": "정시 운항을 지키는 손선우",
+    "bonus_tip": "스케줄 주 3회"
+  },
+  {
+    "id": "crew_gen_084",
+    "name": "곽수빈",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "schedule_week",
+      "value": 3
+    },
+    "desc": "스케줄을 짜는 곽수빈",
+    "bonus_tip": "스케줄 주 3회"
+  },
+  {
+    "id": "crew_gen_085",
+    "name": "성예린",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "schedule_week",
+      "value": 4
+    },
+    "desc": "하늘을 안내하는 성예린",
+    "bonus_tip": "스케줄 주 4회"
+  },
+  {
+    "id": "crew_gen_086",
+    "name": "차소윤",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "schedule_week",
+      "value": 4
+    },
+    "desc": "정시 운항을 지키는 차소윤",
+    "bonus_tip": "스케줄 주 4회"
+  },
+  {
+    "id": "crew_gen_097",
+    "name": "선아인",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "schedule_week",
+      "value": 5
+    },
+    "desc": "스케줄을 짜는 선아인",
+    "bonus_tip": "스케줄 주 5회"
+  },
+  {
+    "id": "crew_gen_098",
+    "name": "김도하",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "crew_count",
+      "value": 4
+    },
+    "desc": "하늘을 안내하는 김도하",
+    "bonus_tip": "동료 4명 해금"
+  },
+  {
+    "id": "crew_gen_099",
+    "name": "이재이",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "crew_count",
+      "value": 5
+    },
+    "desc": "정시 운항을 지키는 이재이",
+    "bonus_tip": "동료 5명 해금"
+  },
+  {
+    "id": "crew_gen_110",
+    "name": "서민",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "crew_count",
+      "value": 7
+    },
+    "desc": "스케줄을 짜는 서민",
+    "bonus_tip": "동료 7명 해금"
+  },
+  {
+    "id": "crew_gen_111",
+    "name": "신지호",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "crew_count",
+      "value": 8
+    },
+    "desc": "하늘을 안내하는 신지호",
+    "bonus_tip": "동료 8명 해금"
+  },
+  {
+    "id": "crew_gen_112",
+    "name": "권예준",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "crew_count",
+      "value": 9
+    },
+    "desc": "정시 운항을 지키는 권예준",
+    "bonus_tip": "동료 9명 해금"
+  },
+  {
+    "id": "crew_gen_123",
+    "name": "배선우",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "crew_count",
+      "value": 11
+    },
+    "desc": "스케줄을 짜는 배선우",
+    "bonus_tip": "동료 11명 해금"
+  },
+  {
+    "id": "crew_gen_124",
+    "name": "조연우",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "crew_count",
+      "value": 13
+    },
+    "desc": "하늘을 안내하는 조연우",
+    "bonus_tip": "동료 13명 해금"
+  },
+  {
+    "id": "crew_gen_125",
+    "name": "백준서",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "crew_count",
+      "value": 15
+    },
+    "desc": "정시 운항을 지키는 백준서",
+    "bonus_tip": "동료 15명 해금"
+  },
+  {
+    "id": "crew_gen_136",
+    "name": "주소윤",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "crew_count",
+      "value": 18
+    },
+    "desc": "스케줄을 짜는 주소윤",
+    "bonus_tip": "동료 18명 해금"
+  },
+  {
+    "id": "crew_gen_137",
+    "name": "우하율",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "crew_count",
+      "value": 23
+    },
+    "desc": "하늘을 안내하는 우하율",
+    "bonus_tip": "동료 23명 해금"
+  },
+  {
+    "id": "crew_gen_138",
+    "name": "구지민",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 5
+    },
+    "desc": "정시 운항을 지키는 구지민",
+    "bonus_tip": "로그북 5회"
+  },
+  {
+    "id": "crew_gen_149",
+    "name": "박재이",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 5
+    },
+    "desc": "스케줄을 짜는 박재이",
+    "bonus_tip": "로그북 5회"
+  },
+  {
+    "id": "crew_gen_150",
+    "name": "최서준",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 5
+    },
+    "desc": "하늘을 안내하는 최서준",
+    "bonus_tip": "로그북 5회"
+  },
+  {
+    "id": "crew_gen_151",
+    "name": "정하준",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 6
+    },
+    "desc": "정시 운항을 지키는 정하준",
+    "bonus_tip": "로그북 6회"
+  },
+  {
+    "id": "crew_gen_162",
+    "name": "황예준",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 6
+    },
+    "desc": "스케줄을 짜는 황예준",
+    "bonus_tip": "로그북 6회"
+  },
+  {
+    "id": "crew_gen_163",
+    "name": "안시윤",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 7
+    },
+    "desc": "하늘을 안내하는 안시윤",
+    "bonus_tip": "로그북 7회"
+  },
+  {
+    "id": "crew_gen_164",
+    "name": "송채원",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 7
+    },
+    "desc": "정시 운항을 지키는 송채원",
+    "bonus_tip": "로그북 7회"
+  },
+  {
+    "id": "crew_gen_175",
+    "name": "허준서",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 9
+    },
+    "desc": "스케줄을 짜는 허준서",
+    "bonus_tip": "로그북 9회"
+  },
+  {
+    "id": "crew_gen_176",
+    "name": "유지훈",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 10
+    },
+    "desc": "하늘을 안내하는 유지훈",
+    "bonus_tip": "로그북 10회"
+  },
+  {
+    "id": "crew_gen_177",
+    "name": "남현준",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 13
+    },
+    "desc": "정시 운항을 지키는 남현준",
+    "bonus_tip": "로그북 13회"
+  },
+  {
+    "id": "crew_gen_188",
+    "name": "신지민",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 15
+    },
+    "desc": "스케줄을 짜는 신지민",
+    "bonus_tip": "로그북 15회"
+  },
+  {
+    "id": "crew_gen_189",
+    "name": "임서아",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 17
+    },
+    "desc": "하늘을 안내하는 임서아",
+    "bonus_tip": "로그북 17회"
+  },
+  {
+    "id": "crew_gen_190",
+    "name": "나로운",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 20
+    },
+    "desc": "정시 운항을 지키는 나로운",
+    "bonus_tip": "로그북 20회"
+  },
+  {
+    "id": "crew_gen_201",
+    "name": "강하준",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 23
+    },
+    "desc": "스케줄을 짜는 강하준",
+    "bonus_tip": "로그북 23회"
+  },
+  {
+    "id": "crew_gen_202",
+    "name": "조도윤",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 25
+    },
+    "desc": "하늘을 안내하는 조도윤",
+    "bonus_tip": "로그북 25회"
+  },
+  {
+    "id": "crew_gen_203",
+    "name": "윤은우",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 25
+    },
+    "desc": "정시 운항을 지키는 윤은우",
+    "bonus_tip": "로그북 25회"
+  },
+  {
+    "id": "crew_gen_214",
+    "name": "류채원",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 7
+    },
+    "desc": "스케줄을 짜는 류채원",
+    "bonus_tip": "퀴즈 7회"
+  },
+  {
+    "id": "crew_gen_215",
+    "name": "홍다은",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 7
+    },
+    "desc": "하늘을 안내하는 홍다은",
+    "bonus_tip": "퀴즈 7회"
+  },
+  {
+    "id": "crew_gen_216",
+    "name": "전윤서",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 8
+    },
+    "desc": "정시 운항을 지키는 전윤서",
+    "bonus_tip": "퀴즈 8회"
+  },
+  {
+    "id": "crew_gen_227",
+    "name": "심현준",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 8
+    },
+    "desc": "스케줄을 짜는 심현준",
+    "bonus_tip": "퀴즈 8회"
+  },
+  {
+    "id": "crew_gen_228",
+    "name": "노승현",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 9
+    },
+    "desc": "하늘을 안내하는 노승현",
+    "bonus_tip": "퀴즈 9회"
+  },
+  {
+    "id": "crew_gen_229",
+    "name": "정태윤",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 9
+    },
+    "desc": "정시 운항을 지키는 정태윤",
+    "bonus_tip": "퀴즈 9회"
+  },
+  {
+    "id": "crew_gen_240",
+    "name": "전로운",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 11
+    },
+    "desc": "스케줄을 짜는 전로운",
+    "bonus_tip": "퀴즈 11회"
+  },
+  {
+    "id": "crew_gen_241",
+    "name": "민하늘",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 11
+    },
+    "desc": "하늘을 안내하는 민하늘",
+    "bonus_tip": "퀴즈 11회"
+  },
+  {
+    "id": "crew_gen_242",
+    "name": "유다온",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "quiz_done",
+      "value": 15
+    },
+    "desc": "정시 운항을 지키는 유다온",
+    "bonus_tip": "퀴즈 15회"
+  },
+  {
+    "id": "crew_gen_253",
+    "name": "장은우",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 10
+    },
+    "desc": "스케줄을 짜는 장은우",
+    "bonus_tip": "플래시카드 10개"
+  },
+  {
+    "id": "crew_gen_254",
+    "name": "임시우",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 12
+    },
+    "desc": "하늘을 안내하는 임시우",
+    "bonus_tip": "플래시카드 12개"
+  },
+  {
+    "id": "crew_gen_255",
+    "name": "한주원",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 12
+    },
+    "desc": "정시 운항을 지키는 한주원",
+    "bonus_tip": "플래시카드 12개"
+  },
+  {
+    "id": "crew_gen_266",
+    "name": "고윤서",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 15
+    },
+    "desc": "스케줄을 짜는 고윤서",
+    "bonus_tip": "플래시카드 15개"
+  },
+  {
+    "id": "crew_gen_267",
+    "name": "문지안",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 17
+    },
+    "desc": "하늘을 안내하는 문지안",
+    "bonus_tip": "플래시카드 17개"
+  },
+  {
+    "id": "crew_gen_268",
+    "name": "양하린",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 19
+    },
+    "desc": "정시 운항을 지키는 양하린",
+    "bonus_tip": "플래시카드 19개"
+  },
+  {
+    "id": "crew_gen_279",
+    "name": "하태윤",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 22
+    },
+    "desc": "스케줄을 짜는 하태윤",
+    "bonus_tip": "플래시카드 22개"
+  },
+  {
+    "id": "crew_gen_280",
+    "name": "곽예은",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 25
+    },
+    "desc": "하늘을 안내하는 곽예은",
+    "bonus_tip": "플래시카드 25개"
+  },
+  {
+    "id": "crew_gen_281",
+    "name": "성서현",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 25
+    },
+    "desc": "정시 운항을 지키는 성서현",
+    "bonus_tip": "플래시카드 25개"
+  },
+  {
+    "id": "crew_gen_292",
+    "name": "진다온",
+    "role": "운항관리",
+    "airline_role": "dispatcher",
+    "emoji": "📋",
+    "unlock": {
+      "type": "flashcard_count",
+      "value": 25
+    },
+    "desc": "스케줄을 짜는 진다온",
+    "bonus_tip": "플래시카드 25개"
+  },
+  {
+    "id": "crew_gen_293",
+    "name": "선이안",
+    "role": "관제사",
+    "airline_role": "dispatcher",
+    "emoji": "📡",
+    "unlock": {
+      "type": "mission_count",
+      "value": 9
+    },
+    "desc": "하늘을 안내하는 선이안",
+    "bonus_tip": "미션 9회"
+  },
+  {
+    "id": "crew_gen_294",
+    "name": "김시현",
+    "role": "정시 전문",
+    "airline_role": "dispatcher",
+    "emoji": "⏰",
+    "unlock": {
+      "type": "mission_count",
+      "value": 9
+    },
+    "desc": "정시 운항을 지키는 김시현",
+    "bonus_tip": "미션 9회"
+  },
+  {
+    "id": "crew_gen_009",
+    "name": "임수아",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 1,
+      "starter": true
+    },
+    "desc": "연료를 정확히 넣는 임수아",
+    "bonus_tip": "스타터 동료 · 바로 채용 가능!",
+    "free_unlock": true
+  },
+  {
+    "id": "crew_gen_010",
+    "name": "한민",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 1,
+      "starter": true
+    },
+    "desc": "꿈을 키우는 한민",
+    "bonus_tip": "스타터 동료 · 바로 채용 가능!",
+    "free_unlock": true
+  },
+  {
+    "id": "crew_gen_022",
+    "name": "문우진",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "mission_count",
+      "value": 3
+    },
+    "desc": "연료를 정확히 넣는 문우진",
+    "bonus_tip": "미션 3회"
+  },
+  {
+    "id": "crew_gen_023",
+    "name": "양선우",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "mission_count",
+      "value": 5
+    },
+    "desc": "꿈을 키우는 양선우",
+    "bonus_tip": "미션 5회"
+  },
+  {
+    "id": "crew_gen_035",
+    "name": "곽예린",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "mission_count",
+      "value": 5
+    },
+    "desc": "연료를 정확히 넣는 곽예린",
+    "bonus_tip": "미션 5회"
+  },
+  {
+    "id": "crew_gen_036",
+    "name": "성소윤",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "mission_count",
+      "value": 8
+    },
+    "desc": "꿈을 키우는 성소윤",
+    "bonus_tip": "미션 8회"
+  },
+  {
+    "id": "crew_gen_048",
+    "name": "선도하",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "mission_count",
+      "value": 10
+    },
+    "desc": "연료를 정확히 넣는 선도하",
+    "bonus_tip": "미션 10회"
+  },
+  {
+    "id": "crew_gen_049",
+    "name": "김재이",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "mission_count",
+      "value": 12
+    },
+    "desc": "꿈을 키우는 김재이",
+    "bonus_tip": "미션 12회"
+  },
+  {
+    "id": "crew_gen_061",
+    "name": "서지호",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "journal_count",
+      "value": 2
+    },
+    "desc": "연료를 정확히 넣는 서지호",
+    "bonus_tip": "비행 일기 2개"
+  },
+  {
+    "id": "crew_gen_062",
+    "name": "신예준",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "journal_count",
+      "value": 2
+    },
+    "desc": "꿈을 키우는 신예준",
+    "bonus_tip": "비행 일기 2개"
+  },
+  {
+    "id": "crew_gen_074",
+    "name": "배연우",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "journal_count",
+      "value": 3
+    },
+    "desc": "연료를 정확히 넣는 배연우",
+    "bonus_tip": "비행 일기 3개"
+  },
+  {
+    "id": "crew_gen_075",
+    "name": "조준서",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "journal_count",
+      "value": 3
+    },
+    "desc": "꿈을 키우는 조준서",
+    "bonus_tip": "비행 일기 3개"
+  },
+  {
+    "id": "crew_gen_087",
+    "name": "주하율",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "journal_count",
+      "value": 4
+    },
+    "desc": "연료를 정확히 넣는 주하율",
+    "bonus_tip": "비행 일기 4개"
+  },
+  {
+    "id": "crew_gen_088",
+    "name": "우지민",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "journal_count",
+      "value": 6
+    },
+    "desc": "꿈을 키우는 우지민",
+    "bonus_tip": "비행 일기 6개"
+  },
+  {
+    "id": "crew_gen_100",
+    "name": "박서준",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "journal_count",
+      "value": 6
+    },
+    "desc": "연료를 정확히 넣는 박서준",
+    "bonus_tip": "비행 일기 6개"
+  },
+  {
+    "id": "crew_gen_101",
+    "name": "최하준",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "journal_count",
+      "value": 9
+    },
+    "desc": "꿈을 키우는 최하준",
+    "bonus_tip": "비행 일기 9개"
+  },
+  {
+    "id": "crew_gen_113",
+    "name": "황시윤",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 3
+    },
+    "desc": "연료를 정확히 넣는 황시윤",
+    "bonus_tip": "공항 퀴즈 3회"
+  },
+  {
+    "id": "crew_gen_114",
+    "name": "안채원",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 3
+    },
+    "desc": "꿈을 키우는 안채원",
+    "bonus_tip": "공항 퀴즈 3회"
+  },
+  {
+    "id": "crew_gen_126",
+    "name": "허지훈",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 4
+    },
+    "desc": "연료를 정확히 넣는 허지훈",
+    "bonus_tip": "공항 퀴즈 4회"
+  },
+  {
+    "id": "crew_gen_127",
+    "name": "유현준",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 5
+    },
+    "desc": "꿈을 키우는 유현준",
+    "bonus_tip": "공항 퀴즈 5회"
+  },
+  {
+    "id": "crew_gen_139",
+    "name": "신서아",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 7
+    },
+    "desc": "연료를 정확히 넣는 신서아",
+    "bonus_tip": "공항 퀴즈 7회"
+  },
+  {
+    "id": "crew_gen_140",
+    "name": "임로운",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 7
+    },
+    "desc": "꿈을 키우는 임로운",
+    "bonus_tip": "공항 퀴즈 7회"
+  },
+  {
+    "id": "crew_gen_152",
+    "name": "강도윤",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 10
+    },
+    "desc": "연료를 정확히 넣는 강도윤",
+    "bonus_tip": "공항 퀴즈 10회"
+  },
+  {
+    "id": "crew_gen_153",
+    "name": "조은우",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "airport_quiz",
+      "value": 12
+    },
+    "desc": "꿈을 키우는 조은우",
+    "bonus_tip": "공항 퀴즈 12회"
+  },
+  {
+    "id": "crew_gen_165",
+    "name": "류다은",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 4
+    },
+    "desc": "연료를 정확히 넣는 류다은",
+    "bonus_tip": "연료 퀴즈 4회"
+  },
+  {
+    "id": "crew_gen_166",
+    "name": "홍윤서",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 4
+    },
+    "desc": "꿈을 키우는 홍윤서",
+    "bonus_tip": "연료 퀴즈 4회"
+  },
+  {
+    "id": "crew_gen_178",
+    "name": "심승현",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 5
+    },
+    "desc": "연료를 정확히 넣는 심승현",
+    "bonus_tip": "연료 퀴즈 5회"
+  },
+  {
+    "id": "crew_gen_179",
+    "name": "노태윤",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 6
+    },
+    "desc": "꿈을 키우는 노태윤",
+    "bonus_tip": "연료 퀴즈 6회"
+  },
+  {
+    "id": "crew_gen_191",
+    "name": "전하늘",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 8
+    },
+    "desc": "연료를 정확히 넣는 전하늘",
+    "bonus_tip": "연료 퀴즈 8회"
+  },
+  {
+    "id": "crew_gen_192",
+    "name": "민다온",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "fuel_quiz",
+      "value": 11
+    },
+    "desc": "꿈을 키우는 민다온",
+    "bonus_tip": "연료 퀴즈 11회"
+  },
+  {
+    "id": "crew_gen_204",
+    "name": "장시우",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 5
+    },
+    "desc": "연료를 정확히 넣는 장시우",
+    "bonus_tip": "기체 5대"
+  },
+  {
+    "id": "crew_gen_205",
+    "name": "임주원",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 5
+    },
+    "desc": "꿈을 키우는 임주원",
+    "bonus_tip": "기체 5대"
+  },
+  {
+    "id": "crew_gen_217",
+    "name": "고지안",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 7
+    },
+    "desc": "연료를 정확히 넣는 고지안",
+    "bonus_tip": "기체 7대"
+  },
+  {
+    "id": "crew_gen_218",
+    "name": "문하린",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 7
+    },
+    "desc": "꿈을 키우는 문하린",
+    "bonus_tip": "기체 7대"
+  },
+  {
+    "id": "crew_gen_230",
+    "name": "하예은",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 8
+    },
+    "desc": "연료를 정확히 넣는 하예은",
+    "bonus_tip": "기체 8대"
+  },
+  {
+    "id": "crew_gen_231",
+    "name": "곽서현",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 9
+    },
+    "desc": "꿈을 키우는 곽서현",
+    "bonus_tip": "기체 9대"
+  },
+  {
+    "id": "crew_gen_243",
+    "name": "진이안",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 9
+    },
+    "desc": "연료를 정확히 넣는 진이안",
+    "bonus_tip": "기체 9대"
+  },
+  {
+    "id": "crew_gen_244",
+    "name": "선시현",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 10
+    },
+    "desc": "꿈을 키우는 선시현",
+    "bonus_tip": "기체 10대"
+  },
+  {
+    "id": "crew_gen_256",
+    "name": "오하은",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "owned_aircraft",
+      "value": 12
+    },
+    "desc": "연료를 정확히 넣는 오하은",
+    "bonus_tip": "기체 12대"
+  },
+  {
+    "id": "crew_gen_257",
+    "name": "서서연",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "intl_route",
+      "value": 5
+    },
+    "desc": "꿈을 키우는 서서연",
+    "bonus_tip": "국제선 5회"
+  },
+  {
+    "id": "crew_gen_269",
+    "name": "손소율",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "intl_route",
+      "value": 6
+    },
+    "desc": "연료를 정확히 넣는 손소율",
+    "bonus_tip": "국제선 6회"
+  },
+  {
+    "id": "crew_gen_270",
+    "name": "배현우",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "intl_route",
+      "value": 6
+    },
+    "desc": "꿈을 키우는 배현우",
+    "bonus_tip": "국제선 6회"
+  },
+  {
+    "id": "crew_gen_282",
+    "name": "차지원",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "intl_route",
+      "value": 7
+    },
+    "desc": "연료를 정확히 넣는 차지원",
+    "bonus_tip": "국제선 7회"
+  },
+  {
+    "id": "crew_gen_283",
+    "name": "주유진",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "intl_route",
+      "value": 7
+    },
+    "desc": "꿈을 키우는 주유진",
+    "bonus_tip": "국제선 7회"
+  },
+  {
+    "id": "crew_gen_295",
+    "name": "이주하",
+    "role": "연료사",
+    "airline_role": "ground",
+    "emoji": "⛽",
+    "unlock": {
+      "type": "intl_route",
+      "value": 8
+    },
+    "desc": "연료를 정확히 넣는 이주하",
+    "bonus_tip": "국제선 8회"
+  },
+  {
+    "id": "crew_gen_296",
+    "name": "박나윤",
+    "role": "비행 학생",
+    "airline_role": "ground",
+    "emoji": "📘",
+    "unlock": {
+      "type": "schedule_week",
+      "value": 6
+    },
+    "desc": "꿈을 키우는 박나윤",
+    "bonus_tip": "스케줄 주 6회"
+  },
+  {
+    "id": "crew_gen_013",
+    "name": "신시윤",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 1,
+      "starter": true
+    },
+    "desc": "승객을 환하게 맞이하는 신시윤",
+    "bonus_tip": "스타터 동료 · 바로 채용 가능!",
+    "free_unlock": true
+  },
+  {
+    "id": "crew_gen_026",
+    "name": "조지훈",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 1,
+      "starter": true
+    },
+    "desc": "승객을 환하게 맞이하는 조지훈",
+    "bonus_tip": "스타터 동료 · 바로 채용 가능!",
+    "free_unlock": true
+  },
+  {
+    "id": "crew_gen_039",
+    "name": "우서아",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "schedule_week",
+      "value": 2
+    },
+    "desc": "승객을 환하게 맞이하는 우서아",
+    "bonus_tip": "스케줄 주 2회"
+  },
+  {
+    "id": "crew_gen_052",
+    "name": "최도윤",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "schedule_week",
+      "value": 3
+    },
+    "desc": "승객을 환하게 맞이하는 최도윤",
+    "bonus_tip": "스케줄 주 3회"
+  },
+  {
+    "id": "crew_gen_065",
+    "name": "안다은",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "crew_count",
+      "value": 2
+    },
+    "desc": "승객을 환하게 맞이하는 안다은",
+    "bonus_tip": "동료 2명 해금"
+  },
+  {
+    "id": "crew_gen_078",
+    "name": "유승현",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "crew_count",
+      "value": 3
+    },
+    "desc": "승객을 환하게 맞이하는 유승현",
+    "bonus_tip": "동료 3명 해금"
+  },
+  {
+    "id": "crew_gen_091",
+    "name": "임하늘",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "crew_count",
+      "value": 4
+    },
+    "desc": "승객을 환하게 맞이하는 임하늘",
+    "bonus_tip": "동료 4명 해금"
+  },
+  {
+    "id": "crew_gen_104",
+    "name": "조시우",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "crew_count",
+      "value": 5
+    },
+    "desc": "승객을 환하게 맞이하는 조시우",
+    "bonus_tip": "동료 5명 해금"
+  },
+  {
+    "id": "crew_gen_117",
+    "name": "홍지안",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "crew_count",
+      "value": 7
+    },
+    "desc": "승객을 환하게 맞이하는 홍지안",
+    "bonus_tip": "동료 7명 해금"
+  },
+  {
+    "id": "crew_gen_130",
+    "name": "노예은",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "crew_count",
+      "value": 9
+    },
+    "desc": "승객을 환하게 맞이하는 노예은",
+    "bonus_tip": "동료 9명 해금"
+  },
+  {
+    "id": "crew_gen_143",
+    "name": "민이안",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "crew_count",
+      "value": 11
+    },
+    "desc": "승객을 환하게 맞이하는 민이안",
+    "bonus_tip": "동료 11명 해금"
+  },
+  {
+    "id": "crew_gen_156",
+    "name": "임하은",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "crew_count",
+      "value": 13
+    },
+    "desc": "승객을 환하게 맞이하는 임하은",
+    "bonus_tip": "동료 13명 해금"
+  },
+  {
+    "id": "crew_gen_169",
+    "name": "문소율",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "crew_count",
+      "value": 16
+    },
+    "desc": "승객을 환하게 맞이하는 문소율",
+    "bonus_tip": "동료 16명 해금"
+  },
+  {
+    "id": "crew_gen_182",
+    "name": "곽지원",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "crew_count",
+      "value": 21
+    },
+    "desc": "승객을 환하게 맞이하는 곽지원",
+    "bonus_tip": "동료 21명 해금"
+  },
+  {
+    "id": "crew_gen_195",
+    "name": "선주하",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 2
+    },
+    "desc": "승객을 환하게 맞이하는 선주하",
+    "bonus_tip": "로그북 2회"
+  },
+  {
+    "id": "crew_gen_208",
+    "name": "서지유",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 2
+    },
+    "desc": "승객을 환하게 맞이하는 서지유",
+    "bonus_tip": "로그북 2회"
+  },
+  {
+    "id": "crew_gen_221",
+    "name": "배건우",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 3
+    },
+    "desc": "승객을 환하게 맞이하는 배건우",
+    "bonus_tip": "로그북 3회"
+  },
+  {
+    "id": "crew_gen_234",
+    "name": "주수빈",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 4
+    },
+    "desc": "승객을 환하게 맞이하는 주수빈",
+    "bonus_tip": "로그북 4회"
+  },
+  {
+    "id": "crew_gen_247",
+    "name": "박아인",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 4
+    },
+    "desc": "승객을 환하게 맞이하는 박아인",
+    "bonus_tip": "로그북 4회"
+  },
+  {
+    "id": "crew_gen_260",
+    "name": "황민",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 5
+    },
+    "desc": "승객을 환하게 맞이하는 황민",
+    "bonus_tip": "로그북 5회"
+  },
+  {
+    "id": "crew_gen_273",
+    "name": "허선우",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 5
+    },
+    "desc": "승객을 환하게 맞이하는 허선우",
+    "bonus_tip": "로그북 5회"
+  },
+  {
+    "id": "crew_gen_286",
+    "name": "신소윤",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 7
+    },
+    "desc": "승객을 환하게 맞이하는 신소윤",
+    "bonus_tip": "로그북 7회"
+  },
+  {
+    "id": "crew_gen_299",
+    "name": "강재이",
+    "role": "승무원",
+    "airline_role": "fa",
+    "emoji": "💁‍♀️",
+    "unlock": {
+      "type": "logbook_count",
+      "value": 7
+    },
+    "desc": "승객을 환하게 맞이하는 강재이",
+    "bonus_tip": "로그북 7회"
+  }
 ]

@@ -15,6 +15,24 @@
         <div class="h-1.5 bg-black rounded mt-2"><div id="dash-onboard-bar" class="h-1.5 bg-[#0A84FF] rounded" style="width:0%"></div></div>
     </div>
 
+    <!-- 스카이 타임즈 (세계 경제) -->
+    <div id="dash-sky-times" class="info-card p-4 mb-4 border border-[#0A84FF]/40">
+        <div class="flex flex-wrap justify-between items-start gap-3">
+            <div class="flex-1 min-w-[200px]">
+                <div class="text-[10px] text-[#0A84FF] font-bold tracking-widest">SKY TIMES</div>
+                <div class="font-bold text-lg" id="dash-st-title">📰 오늘의 하늘 신문</div>
+                <div class="text-sm text-gray-300 mt-1" id="dash-st-headline">불러오는 중…</div>
+                <div class="text-xs text-[#88aacc] mt-1" id="dash-st-why"></div>
+            </div>
+            <div class="text-right">
+                <div class="text-[10px] text-gray-500">⛽ 가상 유가</div>
+                <div class="text-xl font-bold text-[#ffaa00]" id="dash-oil">—</div>
+                <a href="/world" class="text-xs text-[#0A84FF] hover:underline">세계 탭 전체 보기 →</a>
+            </div>
+        </div>
+        <div class="text-[10px] text-purple-300 mt-2" id="dash-st-keyword"></div>
+    </div>
+
     <div class="mb-6 flex flex-wrap justify-between items-start gap-4">
         <div>
             <h1 class="text-4xl font-bold mb-2">안녕하세요, 강로운 미래의 기장님 ✈️</h1>
@@ -55,7 +73,9 @@
             </div>
         </div>
         <div class="info-card p-4 flex items-center gap-4 border border-purple-500/30 md:col-span-1">
-            <div class="text-5xl" id="dash-avatar">👨‍✈️</div>
+            <a href="/shop" class="shrink-0 hover:opacity-90 transition" title="아바타 꾸미기">
+                <div id="dash-avatar"></div>
+            </a>
             <div>
                 <div class="text-xs text-gray-400">내 파일럿</div>
                 <div class="font-bold text-sm" id="dash-active-ac">주력 기체 —</div>
@@ -180,6 +200,7 @@
     <div class="info-card p-6 rounded-2xl mb-6">
         <h3 class="font-bold text-xl mb-4">빠른 시작</h3>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 text-center text-sm">
+            <a href="/world" class="p-3 bg-[#001a33] hover:bg-[#002244] rounded border border-[#0A84FF]/40">🌍 세계·경제</a>
             <a href="/learn" class="p-3 bg-[#002200] hover:bg-[#003300] rounded">🎓 학습 허브</a>
             <a href="/captain-life" class="p-3 bg-[#1a1a00] hover:bg-[#2a2a00] rounded border border-[#ffaa00]/30">👑 기장생활</a>
             <a href="/airline" class="p-3 bg-[#1a1a00] hover:bg-[#2a2a00] rounded border border-[#ffaa00]/30">🏢 항공사</a>
@@ -205,13 +226,17 @@
     </div>
 </div>
 
+<script src="/static/js/pilot_avatar.js"></script>
+<style id="pa-dash-styles"></style>
 <script src="/static/js/gamification.js"></script>
 <script>
+if (window.PilotAvatar) document.getElementById('pa-dash-styles').textContent = PilotAvatar.previewCss();
 async function loadDashboard() {
-    const [gRes, bRes, oRes] = await Promise.all([
+    const [gRes, bRes, oRes, stRes] = await Promise.all([
         fetch('/api/gamification/status'),
         fetch('/badges/api/progress'),
-        fetch('/api/guide/onboarding')
+        fetch('/api/guide/onboarding'),
+        fetch('/api/world/sky-times')
     ]);
     try {
         const od = await oRes.json();
@@ -221,6 +246,17 @@ async function loadDashboard() {
             document.getElementById('dash-onboard-text').textContent =
                 `${ob.completed_count}/${ob.total} 완료 — 다음 미션을 가이드에서 확인하세요!`;
             document.getElementById('dash-onboard-bar').style.width = (ob.pct||0) + '%';
+        }
+    } catch (e) {}
+    try {
+        const st = await stRes.json();
+        const paper = (st.papers || [])[0] || {};
+        document.getElementById('dash-st-title').textContent = '📰 ' + (paper.title || st.masthead || '스카이 타임즈');
+        document.getElementById('dash-st-headline').textContent = paper.headline || '';
+        document.getElementById('dash-st-why').textContent = paper.why ? ('💡 ' + paper.why) : '';
+        document.getElementById('dash-st-keyword').textContent = st.keyword_of_week ? ('🔑 이번 주: ' + st.keyword_of_week) : '';
+        if (st.oil) {
+            document.getElementById('dash-oil').textContent = st.oil.label || ('$' + st.oil.price);
         }
     } catch (e) {}
     const g = await gRes.json();
@@ -236,7 +272,12 @@ async function loadDashboard() {
     }
     if (g.wallet) {
         document.getElementById('dash-wallet').textContent = g.wallet.balance_formatted || '₩0';
-        document.getElementById('dash-avatar').textContent = g.wallet.avatar_preview || '👨‍✈️';
+        const dashAv = document.getElementById('dash-avatar');
+        if (window.PilotAvatar && dashAv) {
+            PilotAvatar.mount(dashAv, g.wallet.avatar_visual || g.wallet.equipped_avatar || {}, { size: 'sm' });
+        } else if (dashAv) {
+            dashAv.textContent = g.wallet.avatar_preview || '👨‍✈️';
+        }
         document.getElementById('dash-active-ac').textContent = g.wallet.active_aircraft_name || '—';
         document.getElementById('dash-owned-count').textContent = (g.wallet.owned_aircraft || []).length;
     }
@@ -287,9 +328,9 @@ async function loadDashboard() {
                 <div class="text-[10px] text-gray-500">${m.desc} · +${m.reward_hours}h · +₩250,000</div>
             </div>
             ${m.completed
-                ? '<span class="text-[#33ff33] text-xs">✓</span>'
-                : `<button onclick="completeMission('${m.id}')" class="text-xs px-2 py-1 border border-[#ffaa00] rounded hover:bg-[#332200]">완료</button>
-                   <a href="${m.link}" class="text-xs text-[#0A84FF]">→</a>`}
+                ? '<span class="text-[#33ff33] text-xs">✓ 보상 수령</span>'
+                : `<a href="${m.link}" class="text-xs px-2 py-1 border border-[#ffaa00] rounded hover:bg-[#332200]">학습하기 →</a>
+                   <button onclick="completeMission('${m.id}')" class="text-xs px-2 py-1 border border-[#33ff33]/50 rounded text-gray-500" title="학습 완료 시 자동 지급됩니다">보상받기</button>`}
         </div>
     `).join('');
 
@@ -376,10 +417,13 @@ async function completeMission(id) {
     });
     const data = await res.json();
     if (data.error) { alert(data.error); return; }
-    let msg = data.message + ` (가상시간: ${data.virtual_hours}h)`;
-    if (data.money_earned) msg += ` +${(data.money_earned).toLocaleString()}원`;
-    alert(msg);
-    loadDashboard();
+    handleLearningReward(data, {
+        title: data.message || '미션 완료!',
+        subtitle: `가상시간 ${data.virtual_hours}h`,
+        emoji: '🎯',
+        onClose: () => loadDashboard()
+    });
+    if (!data.money_earned) loadDashboard();
 }
 
 async function completeWeekly(id) {
@@ -390,10 +434,13 @@ async function completeWeekly(id) {
     });
     const data = await res.json();
     if (data.error) { alert(data.error); return; }
-    let msg = data.message;
-    if (data.money_earned) msg += ` +₩${data.money_earned.toLocaleString()}`;
-    alert(msg);
-    loadDashboard();
+    handleLearningReward(data, {
+        title: data.message || '주간 챌린지 완료!',
+        subtitle: '주간 보상이 지갑에 입금되었습니다',
+        emoji: '🏅',
+        onClose: () => loadDashboard()
+    });
+    if (!data.money_earned) loadDashboard();
 }
 
 document.addEventListener('DOMContentLoaded', () => {

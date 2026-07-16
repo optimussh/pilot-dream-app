@@ -103,6 +103,7 @@ with app.app_context():
     check('balance_formatted' in wallet, 'wallet summary')
     check('salary' in wallet, 'salary in wallet')
     check('avatar_preview' in wallet, 'avatar preview')
+    check('avatar_visual' in wallet, 'avatar visual')
 
     # API routes
     client = app.test_client()

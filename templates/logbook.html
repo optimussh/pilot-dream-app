@@ -154,6 +154,13 @@
 
         </div>
         <p class="text-[10px] text-center text-gray-500 mt-2">두 입력 방식 모두 사용 가능합니다. 스마트는 실제 항공편 데이터 기반, 수동은 자유 기록.</p>
+        <div id="route-story-box" class="hidden mt-4 info-card p-4 border border-[#0A84FF]/40">
+            <div class="text-[10px] text-[#0A84FF] font-bold">이 비행의 이야기</div>
+            <div class="font-bold text-sm mt-1" id="route-story-title"></div>
+            <div class="text-xs text-gray-300 mt-1" id="route-story-text"></div>
+            <div class="text-xs text-[#ffaa00] mt-2" id="route-story-econ"></div>
+            <div class="text-[10px] text-[#88aacc] mt-1" id="route-story-why"></div>
+        </div>
     </div>
 
     <!-- Flight history - Motivational redesign -->
@@ -744,13 +751,35 @@ function applySelectedFlight(airlineCode, flightNumber) {
         routeEl.value = '';
         aircraftEl.value = '';
         hoursEl.value = '';
+        loadRouteStory('');
         return false;
     }
 
     routeEl.value = selected.route || '';
     aircraftEl.value = selected.aircraft || '';
     hoursEl.value = selected.typical_duration != null ? selected.typical_duration : '';
+    loadRouteStory(selected.route || '');
     return true;
+}
+
+async function loadRouteStory(route) {
+    const box = document.getElementById('route-story-box');
+    if (!box) return;
+    if (!route) {
+        box.classList.add('hidden');
+        return;
+    }
+    try {
+        const res = await fetch('/api/world/flight-story?route=' + encodeURIComponent(route));
+        const s = await res.json();
+        box.classList.remove('hidden');
+        document.getElementById('route-story-title').textContent = (s.emoji || '✈️') + ' ' + (s.title || '');
+        document.getElementById('route-story-text').textContent = s.story || '';
+        document.getElementById('route-story-econ').textContent = s.economy ? ('📚 ' + s.economy) : '';
+        document.getElementById('route-story-why').textContent = s.why_text || '';
+    } catch (e) {
+        box.classList.add('hidden');
+    }
 }
 
 function populateFlightNumbers(airlineCode) {
@@ -923,7 +952,12 @@ function initLogbookEnhancements() {
                 const result = await res.json().catch(() => ({}));
 
                 if (res.ok && result.status === 'success') {
-                    alert(formatRewardAlert(result, '스마트 입력으로 비행이 기록되었습니다!'));
+                    let msg = formatRewardAlert(result, '스마트 입력으로 비행이 기록되었습니다!');
+                    if (result.flight_story && result.flight_story.story) {
+                        msg += '\n\n' + (result.flight_story.emoji || '✈️') + ' ' + result.flight_story.title +
+                            '\n' + result.flight_story.story;
+                    }
+                    alert(msg);
                     logbookFilterMode = 'day';
                     logbookSelectedDate = data.date;
                     resetSmartForm();

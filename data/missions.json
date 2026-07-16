@@ -1,12 +1,542 @@
 [
-  {"id": "m_logbook", "title": "오늘의 비행 기록하기", "desc": "로그북에 비행 1회를 기록하세요", "reward_hours": 0.5, "type": "logbook", "link": "/logbook", "icon": "📖"},
-  {"id": "m_atc", "title": "ATC 영어 3문장 듣기", "desc": "항공영어 페이지에서 문장 3개를 들어보세요", "reward_hours": 0.3, "type": "atc", "link": "/atc-english", "icon": "🎧"},
-  {"id": "m_radar", "title": "레이더에서 한국편 찾기", "desc": "레이더에서 주황색 한국 항공편 3대를 클릭해보세요", "reward_hours": 0.3, "type": "radar", "link": "/radar", "icon": "📡"},
-  {"id": "m_planner", "title": "비행 계획 세우기", "desc": "플래너에서 노선을 계산해보세요", "reward_hours": 0.4, "type": "planner", "link": "/flight-planner", "icon": "✈️"},
-  {"id": "m_quiz", "title": "기장 퀴즈 도전", "desc": "1000문항 은행에서 랜덤 10문제 풀기", "reward_hours": 0.5, "type": "quiz", "link": "/quiz", "icon": "🧠"},
-  {"id": "m_flashcard", "title": "항공 용어 10개 학습", "desc": "오늘의 항공용어 카드 10개 학습하기", "reward_hours": 0.4, "type": "flashcard", "link": "/flashcards", "icon": "📇"},
-  {"id": "m_aircraft", "title": "기종 탐험", "desc": "기종 페이지에서 항공기 1대 정보를 읽어보세요", "reward_hours": 0.3, "type": "aircraft", "link": "/aircraft", "icon": "🛩️"},
-  {"id": "m_scenario", "title": "비상 상황 훈련", "desc": "시나리오 모드에서 의사결정을 해보세요", "reward_hours": 0.6, "type": "scenario", "link": "/scenarios", "icon": "🚨"},
-  {"id": "m_career", "title": "커리어 로드맵 읽기", "desc": "한국 기장 되는 길을 확인해보세요", "reward_hours": 0.2, "type": "career", "link": "/korea-career", "icon": "🇰🇷"},
-  {"id": "m_captain_day", "title": "기장의 하루 체험", "desc": "기장이 하루 동안 하는 일을 따라가 보세요", "reward_hours": 0.3, "type": "captain_day", "link": "/captain-day", "icon": "⏰"}
+  {
+    "id": "m_logbook",
+    "title": "오늘의 비행 기록하기",
+    "desc": "로그북에 비행 1회를 기록하세요",
+    "reward_hours": 0.5,
+    "type": "logbook",
+    "link": "/logbook",
+    "icon": "📖"
+  },
+  {
+    "id": "m_atc",
+    "title": "ATC 영어 3문장 듣기",
+    "desc": "항공영어 페이지에서 문장 3개를 들어보세요",
+    "reward_hours": 0.3,
+    "type": "atc",
+    "link": "/atc-english",
+    "icon": "🎧"
+  },
+  {
+    "id": "m_radar",
+    "title": "레이더에서 한국편 찾기",
+    "desc": "레이더에서 주황색 한국 항공편 3대를 클릭해보세요",
+    "reward_hours": 0.3,
+    "type": "radar",
+    "link": "/radar",
+    "icon": "📡"
+  },
+  {
+    "id": "m_planner",
+    "title": "비행 계획 세우기",
+    "desc": "플래너에서 노선을 계산해보세요",
+    "reward_hours": 0.4,
+    "type": "planner",
+    "link": "/flight-planner",
+    "icon": "✈️"
+  },
+  {
+    "id": "m_quiz",
+    "title": "기장 퀴즈 도전",
+    "desc": "1000문항 은행에서 랜덤 10문제 풀기",
+    "reward_hours": 0.5,
+    "type": "quiz",
+    "link": "/quiz",
+    "icon": "🧠"
+  },
+  {
+    "id": "m_flashcard",
+    "title": "항공 용어 10개 학습",
+    "desc": "오늘의 항공용어 카드 10개 학습하기",
+    "reward_hours": 0.4,
+    "type": "flashcard",
+    "link": "/flashcards",
+    "icon": "📇"
+  },
+  {
+    "id": "m_aircraft",
+    "title": "기종 탐험",
+    "desc": "기종 페이지에서 항공기 1대 정보를 읽어보세요",
+    "reward_hours": 0.3,
+    "type": "aircraft",
+    "link": "/aircraft",
+    "icon": "🛩️"
+  },
+  {
+    "id": "m_scenario",
+    "title": "비상 상황 훈련",
+    "desc": "시나리오 모드에서 의사결정을 해보세요",
+    "reward_hours": 0.6,
+    "type": "scenario",
+    "link": "/scenarios",
+    "icon": "🚨"
+  },
+  {
+    "id": "m_career",
+    "title": "커리어 로드맵 읽기",
+    "desc": "한국 기장 되는 길을 확인해보세요",
+    "reward_hours": 0.2,
+    "type": "career",
+    "link": "/korea-career",
+    "icon": "🇰🇷"
+  },
+  {
+    "id": "m_captain_day",
+    "title": "기장의 하루 체험",
+    "desc": "기장이 하루 동안 하는 일을 따라가 보세요",
+    "reward_hours": 0.3,
+    "type": "captain_day",
+    "link": "/captain-day",
+    "icon": "⏰"
+  },
+  {
+    "id": "m_gen_atc_1",
+    "title": "ATC 연습 #1",
+    "desc": "항공 영어를 연습해요",
+    "icon": "📻",
+    "link": "/atc-english",
+    "reward_hours": 0.25,
+    "type": "atc"
+  },
+  {
+    "id": "m_gen_radar_2",
+    "title": "레이더 관찰 #1",
+    "desc": "하늘을 살펴봐요",
+    "icon": "📡",
+    "link": "/radar",
+    "reward_hours": 0.2,
+    "type": "radar"
+  },
+  {
+    "id": "m_gen_planner_3",
+    "title": "비행 계획 #1",
+    "desc": "플래너로 계획을 세워봐요",
+    "icon": "🗺️",
+    "link": "/flight-planner",
+    "reward_hours": 0.25,
+    "type": "planner"
+  },
+  {
+    "id": "m_gen_quiz_4",
+    "title": "퀴즈 풀기 #1",
+    "desc": "기장 퀴즈에 도전",
+    "icon": "🧠",
+    "link": "/quiz",
+    "reward_hours": 0.3,
+    "type": "quiz"
+  },
+  {
+    "id": "m_gen_flashcard_5",
+    "title": "용어 카드 #1",
+    "desc": "플래시카드를 학습",
+    "icon": "📇",
+    "link": "/flashcards",
+    "reward_hours": 0.2,
+    "type": "flashcard"
+  },
+  {
+    "id": "m_gen_aircraft_6",
+    "title": "기종 공부 #1",
+    "desc": "기종 설계도를 봐요",
+    "icon": "✈️",
+    "link": "/aircraft",
+    "reward_hours": 0.2,
+    "type": "aircraft"
+  },
+  {
+    "id": "m_gen_scenario_7",
+    "title": "시나리오 #1",
+    "desc": "비상 상황을 연습",
+    "icon": "🚨",
+    "link": "/scenarios",
+    "reward_hours": 0.35,
+    "type": "scenario"
+  },
+  {
+    "id": "m_gen_career_8",
+    "title": "커리어 탐색 #1",
+    "desc": "한국 기장 루트를 확인",
+    "icon": "🎓",
+    "link": "/korea-career",
+    "reward_hours": 0.2,
+    "type": "career"
+  },
+  {
+    "id": "m_gen_captain_day_9",
+    "title": "기장의 하루 #1",
+    "desc": "하루 일과를 따라가요",
+    "icon": "⏰",
+    "link": "/captain-day",
+    "reward_hours": 0.25,
+    "type": "captain_day"
+  },
+  {
+    "id": "m_world",
+    "title": "세계 뉴스 #1",
+    "desc": "스카이 타임즈를 읽어요",
+    "icon": "🌍",
+    "link": "/world",
+    "reward_hours": 0.25,
+    "type": "world"
+  },
+  {
+    "id": "m_airline",
+    "title": "항공사 운영 #1",
+    "desc": "내 항공사를 살펴봐요",
+    "icon": "🏢",
+    "link": "/airline",
+    "reward_hours": 0.3,
+    "type": "airline"
+  },
+  {
+    "id": "m_gen_logbook_12",
+    "title": "로그북 기록 #2",
+    "desc": "비행 한 편을 기록해요",
+    "icon": "📖",
+    "link": "/logbook",
+    "reward_hours": 0.3,
+    "type": "logbook"
+  },
+  {
+    "id": "m_gen_atc_13",
+    "title": "ATC 연습 #2",
+    "desc": "항공 영어를 연습해요",
+    "icon": "📻",
+    "link": "/atc-english",
+    "reward_hours": 0.25,
+    "type": "atc"
+  },
+  {
+    "id": "m_gen_radar_14",
+    "title": "레이더 관찰 #2",
+    "desc": "하늘을 살펴봐요",
+    "icon": "📡",
+    "link": "/radar",
+    "reward_hours": 0.2,
+    "type": "radar"
+  },
+  {
+    "id": "m_gen_planner_15",
+    "title": "비행 계획 #2",
+    "desc": "플래너로 계획을 세워봐요",
+    "icon": "🗺️",
+    "link": "/flight-planner",
+    "reward_hours": 0.25,
+    "type": "planner"
+  },
+  {
+    "id": "m_gen_quiz_16",
+    "title": "퀴즈 풀기 #2",
+    "desc": "기장 퀴즈에 도전",
+    "icon": "🧠",
+    "link": "/quiz",
+    "reward_hours": 0.3,
+    "type": "quiz"
+  },
+  {
+    "id": "m_gen_flashcard_17",
+    "title": "용어 카드 #2",
+    "desc": "플래시카드를 학습",
+    "icon": "📇",
+    "link": "/flashcards",
+    "reward_hours": 0.2,
+    "type": "flashcard"
+  },
+  {
+    "id": "m_gen_aircraft_18",
+    "title": "기종 공부 #2",
+    "desc": "기종 설계도를 봐요",
+    "icon": "✈️",
+    "link": "/aircraft",
+    "reward_hours": 0.2,
+    "type": "aircraft"
+  },
+  {
+    "id": "m_gen_scenario_19",
+    "title": "시나리오 #2",
+    "desc": "비상 상황을 연습",
+    "icon": "🚨",
+    "link": "/scenarios",
+    "reward_hours": 0.35,
+    "type": "scenario"
+  },
+  {
+    "id": "m_gen_career_20",
+    "title": "커리어 탐색 #2",
+    "desc": "한국 기장 루트를 확인",
+    "icon": "🎓",
+    "link": "/korea-career",
+    "reward_hours": 0.2,
+    "type": "career"
+  },
+  {
+    "id": "m_gen_captain_day_21",
+    "title": "기장의 하루 #2",
+    "desc": "하루 일과를 따라가요",
+    "icon": "⏰",
+    "link": "/captain-day",
+    "reward_hours": 0.25,
+    "type": "captain_day"
+  },
+  {
+    "id": "m_gen_world_22",
+    "title": "세계 뉴스 #2",
+    "desc": "스카이 타임즈를 읽어요",
+    "icon": "🌍",
+    "link": "/world",
+    "reward_hours": 0.25,
+    "type": "world"
+  },
+  {
+    "id": "m_gen_airline_23",
+    "title": "항공사 운영 #2",
+    "desc": "내 항공사를 살펴봐요",
+    "icon": "🏢",
+    "link": "/airline",
+    "reward_hours": 0.3,
+    "type": "airline"
+  },
+  {
+    "id": "m_gen_logbook_24",
+    "title": "로그북 기록 #3",
+    "desc": "비행 한 편을 기록해요",
+    "icon": "📖",
+    "link": "/logbook",
+    "reward_hours": 0.3,
+    "type": "logbook"
+  },
+  {
+    "id": "m_gen_atc_25",
+    "title": "ATC 연습 #3",
+    "desc": "항공 영어를 연습해요",
+    "icon": "📻",
+    "link": "/atc-english",
+    "reward_hours": 0.25,
+    "type": "atc"
+  },
+  {
+    "id": "m_gen_radar_26",
+    "title": "레이더 관찰 #3",
+    "desc": "하늘을 살펴봐요",
+    "icon": "📡",
+    "link": "/radar",
+    "reward_hours": 0.2,
+    "type": "radar"
+  },
+  {
+    "id": "m_gen_planner_27",
+    "title": "비행 계획 #3",
+    "desc": "플래너로 계획을 세워봐요",
+    "icon": "🗺️",
+    "link": "/flight-planner",
+    "reward_hours": 0.25,
+    "type": "planner"
+  },
+  {
+    "id": "m_gen_quiz_28",
+    "title": "퀴즈 풀기 #3",
+    "desc": "기장 퀴즈에 도전",
+    "icon": "🧠",
+    "link": "/quiz",
+    "reward_hours": 0.3,
+    "type": "quiz"
+  },
+  {
+    "id": "m_gen_flashcard_29",
+    "title": "용어 카드 #3",
+    "desc": "플래시카드를 학습",
+    "icon": "📇",
+    "link": "/flashcards",
+    "reward_hours": 0.2,
+    "type": "flashcard"
+  },
+  {
+    "id": "m_gen_aircraft_30",
+    "title": "기종 공부 #3",
+    "desc": "기종 설계도를 봐요",
+    "icon": "✈️",
+    "link": "/aircraft",
+    "reward_hours": 0.2,
+    "type": "aircraft"
+  },
+  {
+    "id": "m_gen_scenario_31",
+    "title": "시나리오 #3",
+    "desc": "비상 상황을 연습",
+    "icon": "🚨",
+    "link": "/scenarios",
+    "reward_hours": 0.35,
+    "type": "scenario"
+  },
+  {
+    "id": "m_gen_career_32",
+    "title": "커리어 탐색 #3",
+    "desc": "한국 기장 루트를 확인",
+    "icon": "🎓",
+    "link": "/korea-career",
+    "reward_hours": 0.2,
+    "type": "career"
+  },
+  {
+    "id": "m_gen_captain_day_33",
+    "title": "기장의 하루 #3",
+    "desc": "하루 일과를 따라가요",
+    "icon": "⏰",
+    "link": "/captain-day",
+    "reward_hours": 0.25,
+    "type": "captain_day"
+  },
+  {
+    "id": "m_gen_world_34",
+    "title": "세계 뉴스 #3",
+    "desc": "스카이 타임즈를 읽어요",
+    "icon": "🌍",
+    "link": "/world",
+    "reward_hours": 0.25,
+    "type": "world"
+  },
+  {
+    "id": "m_gen_airline_35",
+    "title": "항공사 운영 #3",
+    "desc": "내 항공사를 살펴봐요",
+    "icon": "🏢",
+    "link": "/airline",
+    "reward_hours": 0.3,
+    "type": "airline"
+  },
+  {
+    "id": "m_gen_logbook_36",
+    "title": "로그북 기록 #4",
+    "desc": "비행 한 편을 기록해요",
+    "icon": "📖",
+    "link": "/logbook",
+    "reward_hours": 0.3,
+    "type": "logbook"
+  },
+  {
+    "id": "m_gen_atc_37",
+    "title": "ATC 연습 #4",
+    "desc": "항공 영어를 연습해요",
+    "icon": "📻",
+    "link": "/atc-english",
+    "reward_hours": 0.25,
+    "type": "atc"
+  },
+  {
+    "id": "m_gen_radar_38",
+    "title": "레이더 관찰 #4",
+    "desc": "하늘을 살펴봐요",
+    "icon": "📡",
+    "link": "/radar",
+    "reward_hours": 0.2,
+    "type": "radar"
+  },
+  {
+    "id": "m_gen_planner_39",
+    "title": "비행 계획 #4",
+    "desc": "플래너로 계획을 세워봐요",
+    "icon": "🗺️",
+    "link": "/flight-planner",
+    "reward_hours": 0.25,
+    "type": "planner"
+  },
+  {
+    "id": "m_gen_quiz_40",
+    "title": "퀴즈 풀기 #4",
+    "desc": "기장 퀴즈에 도전",
+    "icon": "🧠",
+    "link": "/quiz",
+    "reward_hours": 0.3,
+    "type": "quiz"
+  },
+  {
+    "id": "m_gen_flashcard_41",
+    "title": "용어 카드 #4",
+    "desc": "플래시카드를 학습",
+    "icon": "📇",
+    "link": "/flashcards",
+    "reward_hours": 0.2,
+    "type": "flashcard"
+  },
+  {
+    "id": "m_gen_aircraft_42",
+    "title": "기종 공부 #4",
+    "desc": "기종 설계도를 봐요",
+    "icon": "✈️",
+    "link": "/aircraft",
+    "reward_hours": 0.2,
+    "type": "aircraft"
+  },
+  {
+    "id": "m_gen_scenario_43",
+    "title": "시나리오 #4",
+    "desc": "비상 상황을 연습",
+    "icon": "🚨",
+    "link": "/scenarios",
+    "reward_hours": 0.35,
+    "type": "scenario"
+  },
+  {
+    "id": "m_gen_career_44",
+    "title": "커리어 탐색 #4",
+    "desc": "한국 기장 루트를 확인",
+    "icon": "🎓",
+    "link": "/korea-career",
+    "reward_hours": 0.2,
+    "type": "career"
+  },
+  {
+    "id": "m_gen_captain_day_45",
+    "title": "기장의 하루 #4",
+    "desc": "하루 일과를 따라가요",
+    "icon": "⏰",
+    "link": "/captain-day",
+    "reward_hours": 0.25,
+    "type": "captain_day"
+  },
+  {
+    "id": "m_gen_world_46",
+    "title": "세계 뉴스 #4",
+    "desc": "스카이 타임즈를 읽어요",
+    "icon": "🌍",
+    "link": "/world",
+    "reward_hours": 0.25,
+    "type": "world"
+  },
+  {
+    "id": "m_gen_airline_47",
+    "title": "항공사 운영 #4",
+    "desc": "내 항공사를 살펴봐요",
+    "icon": "🏢",
+    "link": "/airline",
+    "reward_hours": 0.3,
+    "type": "airline"
+  },
+  {
+    "id": "m_gen_logbook_48",
+    "title": "로그북 기록 #5",
+    "desc": "비행 한 편을 기록해요",
+    "icon": "📖",
+    "link": "/logbook",
+    "reward_hours": 0.3,
+    "type": "logbook"
+  },
+  {
+    "id": "m_gen_atc_49",
+    "title": "ATC 연습 #5",
+    "desc": "항공 영어를 연습해요",
+    "icon": "📻",
+    "link": "/atc-english",
+    "reward_hours": 0.25,
+    "type": "atc"
+  },
+  {
+    "id": "m_gen_radar_50",
+    "title": "레이더 관찰 #5",
+    "desc": "하늘을 살펴봐요",
+    "icon": "📡",
+    "link": "/radar",
+    "reward_hours": 0.2,
+    "type": "radar"
+  }
 ]

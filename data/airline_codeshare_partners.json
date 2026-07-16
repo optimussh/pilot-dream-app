@@ -1,0 +1,6 @@
+[
+  {"id": "cs_sky", "name": "스카이퍼시픽", "emoji": "🌊", "region": "동남아", "share_pct": 40, "weekly_base": 120000, "min_intl_routes": 1, "desc": "동남아 노선 공동 판매"},
+  {"id": "cs_euro", "name": "유로링크", "emoji": "🇪🇺", "region": "유럽", "share_pct": 35, "weekly_base": 180000, "min_intl_routes": 2, "desc": "유럽 장거리 코드셰어"},
+  {"id": "cs_japan", "name": "일본에어웨이즈", "emoji": "🇯🇵", "region": "일본", "share_pct": 45, "weekly_base": 100000, "min_intl_routes": 1, "desc": "일본 국내 연결"},
+  {"id": "cs_cargo", "name": "글로벌카고", "emoji": "📦", "region": "화물", "share_pct": 30, "weekly_base": 150000, "min_cargo_routes": 1, "desc": "화물 belly 공동 운송"}
+]

@@ -607,6 +607,7 @@ def get_wallet_summary(prog):
         'aircraft_loadouts': loadouts,
         'transactions': list(reversed(prog._json('transaction_log', [])[-20:])),
         'avatar_preview': build_avatar_preview(equipped, catalog),
+        'avatar_visual': build_avatar_visual(equipped, catalog),
     }
     try:
         from app.services.pilot_features import get_features_summary, KID_TERMS
@@ -617,15 +618,32 @@ def get_wallet_summary(prog):
     return summary
 
 
-def build_avatar_preview(equipped, catalog):
-    defaults = {'head': '👨‍✈️', 'uniform': '', 'accessory': '', 'wings': ''}
-    parts = []
-    for slot in ('wings', 'head', 'uniform', 'accessory'):
+def build_avatar_visual(equipped, catalog):
+    """슬롯별 장착 상세 (프론트 아바타 렌더용)"""
+    visual = {}
+    for slot in ('head', 'uniform', 'accessory', 'wings'):
         iid = equipped.get(slot)
         if iid and iid in catalog:
-            parts.append(catalog[iid].get('emoji', defaults.get(slot, '')))
-        elif slot == 'head':
-            parts.append('👨‍✈️')
+            item = catalog[iid]
+            visual[slot] = {
+                'id': iid,
+                'name': item.get('name', ''),
+                'emoji': item.get('emoji', ''),
+                'slot': slot,
+                'rarity': item.get('rarity', 'common'),
+                'color': item.get('color'),
+            }
+    return visual
+
+
+def build_avatar_preview(equipped, catalog):
+    visual = build_avatar_visual(equipped, catalog)
+    parts = []
+    for slot in ('wings', 'head', 'uniform', 'accessory'):
+        if slot in visual:
+            parts.append(visual[slot].get('emoji', ''))
+    if not parts:
+        parts.append('👨‍✈️')
     return ' '.join(p for p in parts if p)
 
 

@@ -1,0 +1,623 @@
+[
+  {
+    "id": "ICN",
+    "name": "인천",
+    "emoji": "🇰🇷",
+    "economy": "한국 관문. 환승·화물·장거리의 중심.",
+    "exports": "반도체·자동차·문화",
+    "imports": "에너지·식료·부품",
+    "role": "글로벌 허브"
+  },
+  {
+    "id": "GMP",
+    "name": "김포",
+    "emoji": "🏙️",
+    "economy": "서울 가까운 국내·근거리 허브.",
+    "exports": "비즈니스 승객",
+    "imports": "지방·제주 연결",
+    "role": "도심 국내선"
+  },
+  {
+    "id": "CJU",
+    "name": "제주",
+    "emoji": "🏝️",
+    "economy": "관광 특화. 국내선 수요의 별.",
+    "exports": "관광 경험·감귤",
+    "imports": "생활물자·관광객",
+    "role": "관광 거점"
+  },
+  {
+    "id": "PUS",
+    "name": "부산",
+    "emoji": "🌊",
+    "economy": "항구+공항. 물류·일본 근거리.",
+    "exports": "자동차·부품·관광",
+    "imports": "에너지·원자재",
+    "role": "남부 관문"
+  },
+  {
+    "id": "NRT",
+    "name": "나리타",
+    "emoji": "🇯🇵",
+    "economy": "도쿄 국제 관문. 관광·비즈.",
+    "exports": "자동차·전자·문화",
+    "imports": "에너지·식료",
+    "role": "국제 허브"
+  },
+  {
+    "id": "HND",
+    "name": "하네다",
+    "emoji": "🗼",
+    "economy": "도심 접근성 최고. 단거리 강자.",
+    "exports": "출장·관광",
+    "imports": "국내 연결",
+    "role": "도심 허브"
+  },
+  {
+    "id": "KIX",
+    "name": "간사이",
+    "emoji": "🎡",
+    "economy": "오사카 관광·유니버셜.",
+    "exports": "관광·전자",
+    "imports": "관광객",
+    "role": "관광 허브"
+  },
+  {
+    "id": "LAX",
+    "name": "LA",
+    "emoji": "🇺🇸",
+    "economy": "태평양 횡단 종착. 엔터·무역.",
+    "exports": "영화·IT·농산",
+    "imports": "아시아 제품",
+    "role": "미서부 허브"
+  },
+  {
+    "id": "JFK",
+    "name": "뉴욕JFK",
+    "emoji": "🗽",
+    "economy": "금융·외교·패션 도시 관문.",
+    "exports": "금융·서비스",
+    "imports": "세계 상품",
+    "role": "글로벌 도시"
+  },
+  {
+    "id": "LHR",
+    "name": "히드로",
+    "emoji": "🇬🇧",
+    "economy": "유럽 대표 허브. 환승 왕.",
+    "exports": "금융·교육",
+    "imports": "에너지·상품",
+    "role": "유럽 허브"
+  },
+  {
+    "id": "CDG",
+    "name": "파리CDG",
+    "emoji": "🇫🇷",
+    "economy": "관광·패션·항공 화물.",
+    "exports": "명품·관광",
+    "imports": "에너지·원자재",
+    "role": "문화 허브"
+  },
+  {
+    "id": "SIN",
+    "name": "싱가포르",
+    "emoji": "🇸🇬",
+    "economy": "아시아 금융·환승 챔피언.",
+    "exports": "금융·무역 서비스",
+    "imports": "에너지·식료",
+    "role": "아시아 허브"
+  },
+  {
+    "id": "HKG",
+    "name": "홍콩",
+    "emoji": "🏙️",
+    "economy": "무역·금융·화물 강자.",
+    "exports": "무역·금융",
+    "imports": "세계 상품",
+    "role": "무역 허브"
+  },
+  {
+    "id": "SYD",
+    "name": "시드니",
+    "emoji": "🇦🇺",
+    "economy": "오세아니아 관문. 관광·자원.",
+    "exports": "자원·교육",
+    "imports": "제조품",
+    "role": "오세아니아"
+  },
+  {
+    "id": "DXB",
+    "name": "두바이",
+    "emoji": "🏜️",
+    "economy": "중동 슈퍼 허브. 환승·화물.",
+    "exports": "에너지·물류",
+    "imports": "소비재",
+    "role": "중동 허브"
+  },
+  {
+    "id": "FRA",
+    "name": "프랑크푸르트",
+    "emoji": "🇩🇪",
+    "economy": "유럽 화물·환승 핵심.",
+    "exports": "기계·자동차",
+    "imports": "에너지·부품",
+    "role": "유럽 물류"
+  },
+  {
+    "id": "BKK",
+    "name": "방콕",
+    "emoji": "🇹🇭",
+    "economy": "동남아 관광·신선화물.",
+    "exports": "관광·농산",
+    "imports": "제조품",
+    "role": "관광·화물"
+  },
+  {
+    "id": "TPE",
+    "name": "타이베이",
+    "emoji": "🇹🇼",
+    "economy": "반도체·전자 무역 거점.",
+    "exports": "반도체·전자",
+    "imports": "에너지·원자재",
+    "role": "테크 허브"
+  },
+  {
+    "id": "ORD",
+    "name": "시카고",
+    "emoji": "🌆",
+    "economy": "미국 중부 연결 허브.",
+    "exports": "농업·물류",
+    "imports": "제조품",
+    "role": "중부 허브"
+  },
+  {
+    "id": "ATL",
+    "name": "애틀랜타",
+    "emoji": "✈️",
+    "economy": "세계 최다 운항 공항 중 하나.",
+    "exports": "물류·항공 허브 서비스",
+    "imports": "국내 연결",
+    "role": "미국 허브"
+  },
+  {
+    "id": "SFO",
+    "name": "샌프란",
+    "emoji": "🌉",
+    "economy": "IT·벤처 도시. 비즈 수요.",
+    "exports": "IT·소프트웨어",
+    "imports": "인재·부품",
+    "role": "테크 관문"
+  },
+  {
+    "id": "AMS",
+    "name": "암스테르담",
+    "emoji": "🌷",
+    "economy": "유럽 화물·환승. 물류 강국.",
+    "exports": "물류·농산",
+    "imports": "에너지",
+    "role": "물류 허브"
+  },
+  {
+    "id": "CJJ",
+    "name": "청주",
+    "emoji": "🇰🇷",
+    "economy": "중부 관문. 화물·저가항공 거점.",
+    "exports": "전자·자동차",
+    "imports": "생활물자",
+    "role": "중부 허브"
+  },
+  {
+    "id": "TAE",
+    "name": "대구",
+    "emoji": "🇰🇷",
+    "economy": "영남 내륙 거점.",
+    "exports": "섬유·기계",
+    "imports": "부품",
+    "role": "내륙 관문"
+  },
+  {
+    "id": "KWJ",
+    "name": "광주",
+    "emoji": "🇰🇷",
+    "economy": "호남 항공 관문.",
+    "exports": "자동차·문화",
+    "imports": "에너지",
+    "role": "호남"
+  },
+  {
+    "id": "RSU",
+    "name": "여수",
+    "emoji": "🇰🇷",
+    "economy": "남해 관광·산업.",
+    "exports": "관광·석유화학",
+    "imports": "에너지",
+    "role": "남해"
+  },
+  {
+    "id": "USN",
+    "name": "울산",
+    "emoji": "🇰🇷",
+    "economy": "산업 도시 공항.",
+    "exports": "자동차·조선",
+    "imports": "원자재",
+    "role": "산업"
+  },
+  {
+    "id": "MWX",
+    "name": "무안",
+    "emoji": "🇰🇷",
+    "economy": "서남 국제공항.",
+    "exports": "관광·농산",
+    "imports": "수입소비재",
+    "role": "서남"
+  },
+  {
+    "id": "FUK",
+    "name": "후쿠오카",
+    "emoji": "🇯🇵",
+    "economy": "규슈 관문. 한일 근거리.",
+    "exports": "관광·자동차",
+    "imports": "식료",
+    "role": "규슈"
+  },
+  {
+    "id": "CTS",
+    "name": "신치토세",
+    "emoji": "🇯🇵",
+    "economy": "홋카이도 관광.",
+    "exports": "관광·농산",
+    "imports": "소비재",
+    "role": "북해도"
+  },
+  {
+    "id": "OKA",
+    "name": "나하",
+    "emoji": "🇯🇵",
+    "economy": "오키나와 휴양.",
+    "exports": "관광",
+    "imports": "생활물자",
+    "role": "휴양"
+  },
+  {
+    "id": "NGO",
+    "name": "나고야",
+    "emoji": "🇯🇵",
+    "economy": "중부 일본 산업.",
+    "exports": "자동차·항공",
+    "imports": "부품",
+    "role": "산업"
+  },
+  {
+    "id": "PVG",
+    "name": "상하이푸동",
+    "emoji": "🇨🇳",
+    "economy": "중국 동부 허브.",
+    "exports": "전자·무역",
+    "imports": "원자재",
+    "role": "무역 허브"
+  },
+  {
+    "id": "PEK",
+    "name": "베이징",
+    "emoji": "🇨🇳",
+    "economy": "수도 관문.",
+    "exports": "정치·비즈",
+    "imports": "에너지",
+    "role": "수도"
+  },
+  {
+    "id": "CAN",
+    "name": "광저우",
+    "emoji": "🇨🇳",
+    "economy": "남중국 무역.",
+    "exports": "제조·무역",
+    "imports": "원자재",
+    "role": "주강"
+  },
+  {
+    "id": "MNL",
+    "name": "마닐라",
+    "emoji": "🇵🇭",
+    "economy": "필리핀 관문.",
+    "exports": "인력·관광",
+    "imports": "전자",
+    "role": "동남아"
+  },
+  {
+    "id": "HAN",
+    "name": "하노이",
+    "emoji": "🇻🇳",
+    "economy": "베트남 수도.",
+    "exports": "제조·비즈",
+    "imports": "부품",
+    "role": "인도차이나"
+  },
+  {
+    "id": "SGN",
+    "name": "호치민",
+    "emoji": "🇻🇳",
+    "economy": "베트남 경제 수도.",
+    "exports": "제조·수출",
+    "imports": "부품",
+    "role": "남부"
+  },
+  {
+    "id": "KUL",
+    "name": "쿠알라룸푸르",
+    "emoji": "🇲🇾",
+    "economy": "말레이 허브.",
+    "exports": "무역·이슬람 금융",
+    "imports": "에너지",
+    "role": "허브"
+  },
+  {
+    "id": "CGK",
+    "name": "자카르타",
+    "emoji": "🇮🇩",
+    "economy": "인도네시아 관문.",
+    "exports": "자원·인구",
+    "imports": "소비재",
+    "role": "도서"
+  },
+  {
+    "id": "DPS",
+    "name": "덴파사르",
+    "emoji": "🇮🇩",
+    "economy": "발리 관광.",
+    "exports": "관광",
+    "imports": "생활물자",
+    "role": "휴양"
+  },
+  {
+    "id": "DEL",
+    "name": "델리",
+    "emoji": "🇮🇳",
+    "economy": "인도 수도 관문.",
+    "exports": "IT·서비스",
+    "imports": "에너지",
+    "role": "남아시아"
+  },
+  {
+    "id": "BOM",
+    "name": "뭄바이",
+    "emoji": "🇮🇳",
+    "economy": "인도 금융 도시.",
+    "exports": "금융·영화",
+    "imports": "에너지",
+    "role": "금융"
+  },
+  {
+    "id": "DOH",
+    "name": "도하",
+    "emoji": "🇶🇦",
+    "economy": "중동 허브.",
+    "exports": "에너지·환승",
+    "imports": "소비재",
+    "role": "허브"
+  },
+  {
+    "id": "AUH",
+    "name": "아부다비",
+    "emoji": "🇦🇪",
+    "economy": "UAE 수도 관문.",
+    "exports": "에너지·항공",
+    "imports": "소비재",
+    "role": "걸프"
+  },
+  {
+    "id": "IST",
+    "name": "이스탄불",
+    "emoji": "🇹🇷",
+    "economy": "유럽-아시아 다리.",
+    "exports": "환승·무역",
+    "imports": "에너지",
+    "role": "교차로"
+  },
+  {
+    "id": "MAD",
+    "name": "마드리드",
+    "emoji": "🇪🇸",
+    "economy": "이베리아 허브.",
+    "exports": "관광·라틴 연결",
+    "imports": "에너지",
+    "role": "이베리아"
+  },
+  {
+    "id": "FCO",
+    "name": "로마",
+    "emoji": "🇮🇹",
+    "economy": "이탈리아 관문.",
+    "exports": "관광·패션",
+    "imports": "에너지",
+    "role": "관광"
+  },
+  {
+    "id": "ZRH",
+    "name": "취리히",
+    "emoji": "🇨🇭",
+    "economy": "금융·정밀 허브.",
+    "exports": "금융·정밀",
+    "imports": "에너지",
+    "role": "금융"
+  },
+  {
+    "id": "VIE",
+    "name": "비엔나",
+    "emoji": "🇦🇹",
+    "economy": "중동부 유럽 연결.",
+    "exports": "환승·문화",
+    "imports": "에너지",
+    "role": "중유럽"
+  },
+  {
+    "id": "ARN",
+    "name": "스톡홀름",
+    "emoji": "🇸🇪",
+    "economy": "북유럽 관문.",
+    "exports": "IT·청정",
+    "imports": "에너지",
+    "role": "북유럽"
+  },
+  {
+    "id": "HEL",
+    "name": "헬싱키",
+    "emoji": "🇫🇮",
+    "economy": "아시아-유럽 북극 항로.",
+    "exports": "환승·IT",
+    "imports": "에너지",
+    "role": "북극항로"
+  },
+  {
+    "id": "YVR",
+    "name": "밴쿠버",
+    "emoji": "🇨🇦",
+    "economy": "캐나다 서부.",
+    "exports": "자원·아시아 연결",
+    "imports": "소비재",
+    "role": "태평양"
+  },
+  {
+    "id": "YYZ",
+    "name": "토론토",
+    "emoji": "🇨🇦",
+    "economy": "캐나다 동부 허브.",
+    "exports": "금융·이민",
+    "imports": "에너지",
+    "role": "동부"
+  },
+  {
+    "id": "SEA",
+    "name": "시애틀",
+    "emoji": "🇺🇸",
+    "economy": "항공기·IT.",
+    "exports": "항공·클라우드",
+    "imports": "부품",
+    "role": "NW"
+  },
+  {
+    "id": "DFW",
+    "name": "댈러스",
+    "emoji": "🇺🇸",
+    "economy": "남부 허브.",
+    "exports": "에너지·물류",
+    "imports": "제조",
+    "role": "남부"
+  },
+  {
+    "id": "MIA",
+    "name": "마이애미",
+    "emoji": "🇺🇸",
+    "economy": "라틴 연결.",
+    "exports": "관광·무역",
+    "imports": "라틴 상품",
+    "role": "게이트웨이"
+  },
+  {
+    "id": "BOS",
+    "name": "보스턴",
+    "emoji": "🇺🇸",
+    "economy": "교육·바이오.",
+    "exports": "교육·바이오",
+    "imports": "인재",
+    "role": "동북"
+  },
+  {
+    "id": "HNL",
+    "name": "호놀룰루",
+    "emoji": "🇺🇸",
+    "economy": "태평양 휴양.",
+    "exports": "관광",
+    "imports": "생활물자",
+    "role": "휴양"
+  },
+  {
+    "id": "GUM",
+    "name": "괌",
+    "emoji": "🇬🇺",
+    "economy": "미군·관광 섬.",
+    "exports": "관광",
+    "imports": "생활물자",
+    "role": "휴양"
+  },
+  {
+    "id": "AKL",
+    "name": "오클랜드",
+    "emoji": "🇳🇿",
+    "economy": "뉴질랜드 관문.",
+    "exports": "관광·낙농",
+    "imports": "제조품",
+    "role": "오세아니아"
+  },
+  {
+    "id": "BNE",
+    "name": "브리즈번",
+    "emoji": "🇦🇺",
+    "economy": "호주 동부.",
+    "exports": "관광·자원",
+    "imports": "제조",
+    "role": "동부"
+  },
+  {
+    "id": "MEL",
+    "name": "멜버른",
+    "emoji": "🇦🇺",
+    "economy": "문화·교육 도시.",
+    "exports": "교육·문화",
+    "imports": "제조",
+    "role": "남부"
+  },
+  {
+    "id": "PER",
+    "name": "퍼스",
+    "emoji": "🇦🇺",
+    "economy": "서호주 자원.",
+    "exports": "광업·자원",
+    "imports": "장비",
+    "role": "자원"
+  },
+  {
+    "id": "CAI",
+    "name": "카이로",
+    "emoji": "🇪🇬",
+    "economy": "아프리카-중동 연결.",
+    "exports": "관광·물류",
+    "imports": "에너지",
+    "role": "아프리카"
+  },
+  {
+    "id": "JNB",
+    "name": "요하네스버그",
+    "emoji": "🇿🇦",
+    "economy": "남아프리카 허브.",
+    "exports": "광업·금융",
+    "imports": "제조",
+    "role": "남아프리카"
+  },
+  {
+    "id": "GRU",
+    "name": "상파울루",
+    "emoji": "🇧🇷",
+    "economy": "남미 경제 관문.",
+    "exports": "농산·항공기",
+    "imports": "제조",
+    "role": "남미"
+  },
+  {
+    "id": "EZE",
+    "name": "부에노스아이레스",
+    "emoji": "🇦🇷",
+    "economy": "남미 남부.",
+    "exports": "농산·관광",
+    "imports": "제조",
+    "role": "남미"
+  },
+  {
+    "id": "MEX",
+    "name": "멕시코시티",
+    "emoji": "🇲🇽",
+    "economy": "중미 허브.",
+    "exports": "제조·무역",
+    "imports": "에너지",
+    "role": "중미"
+  }
+]

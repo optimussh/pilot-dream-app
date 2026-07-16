@@ -12,9 +12,16 @@
     </div>
 
     <div id="daily-done-banner" class="hidden mb-6 info-card p-5 rounded-2xl border border-[#33ff33]/50 text-center">
-        <div class="text-3xl mb-2">🎖️</div>
-        <div class="font-bold text-[#33ff33] text-lg">오늘의 비상 훈련 완료!</div>
-        <p class="text-sm text-gray-400 mt-1">4개 시나리오를 모두 마쳤습니다 · 내일 새 훈련이 열립니다</p>
+        <div class="text-3xl mb-2">✅</div>
+        <div class="font-bold text-[#33ff33] text-lg" id="sc-banner-title">오늘의 비상 훈련 완료!</div>
+        <p class="text-sm text-gray-400 mt-1" id="sc-banner-desc">내일 새로운 4개 훈련이 열립니다</p>
+        <div id="sc-actions" class="hidden flex flex-col gap-1 mt-4"></div>
+    </div>
+
+    <div id="extra-banner" class="hidden mb-6 info-card p-5 rounded-2xl border border-[#0A84FF]/50 text-center">
+        <div class="text-3xl mb-2">🔁</div>
+        <div class="font-bold text-[#0A84FF] text-lg">학습 더하기 진행 중</div>
+        <p class="text-sm text-gray-400 mt-1">새로운 4개 시나리오 · 완료 시 보상 지급</p>
     </div>
 
     <div id="scenario-list" class="grid gap-4 mb-8"></div>
@@ -25,7 +32,7 @@
 let scenarios = [];
 let current = null;
 let selectedScore = 0;
-let dailyDone = false;
+let scenarioMode = 'daily';
 
 async function loadScenarios() {
     document.getElementById('scenario-play').classList.add('hidden');
@@ -34,7 +41,7 @@ async function loadScenarios() {
     const res = await fetch('/api/gamification/scenarios');
     const data = await res.json();
     scenarios = data.scenarios || [];
-    dailyDone = data.daily_done || false;
+    scenarioMode = data.mode || 'daily';
     const poolSize = data.pool_size || 100;
     const completed = data.completed_count || 0;
     const total = data.total || scenarios.length;
@@ -42,11 +49,18 @@ async function loadScenarios() {
     document.getElementById('pool-size').textContent = poolSize;
     document.getElementById('sc-progress').textContent = `${completed} / ${total}`;
 
-    const banner = document.getElementById('daily-done-banner');
-    if (dailyDone) {
-        banner.classList.remove('hidden');
-    } else {
-        banner.classList.add('hidden');
+    document.getElementById('daily-done-banner').classList.add('hidden');
+    document.getElementById('extra-banner').classList.add('hidden');
+
+    if (scenarioMode === 'extra') {
+        showLearningExtraMode('scenarios');
+    } else if ((data.daily_done || data.extra_done) && completed >= total && total > 0) {
+        storeLearningReward(data);
+        applyLearningCompleteUI('scenarios', {
+            ...data,
+            daily_done: data.daily_done || data.extra_done,
+            extra_done: data.extra_done,
+        });
     }
 
     document.getElementById('scenario-list').innerHTML = scenarios.map((s, i) => `
@@ -56,7 +70,7 @@ async function loadScenarios() {
                     <div class="text-[10px] text-gray-500 mb-1">훈련 ${i + 1} / ${total}</div>
                     <div class="text-lg font-bold">${s.icon} ${s.title}</div>
                     <p class="text-xs text-gray-400 mt-2">${s.intro}</p>
-                    ${s.completed_today ? '<span class="text-[10px] text-[#33ff33] mt-2 inline-block">✓ 오늘 완료</span>' : ''}
+                    ${s.completed_today ? '<span class="text-[10px] text-[#33ff33] mt-2 inline-block">✓ 완료</span>' : ''}
                 </div>
                 ${s.completed_today
                     ? '<span class="text-2xl shrink-0">✅</span>'
@@ -67,19 +81,17 @@ async function loadScenarios() {
 }
 
 function startScenario(id) {
-    if (dailyDone) return;
     current = scenarios.find(s => s.id === id);
     if (!current || current.completed_today) return;
     selectedScore = 0;
     document.getElementById('scenario-list').classList.add('hidden');
-    const play = document.getElementById('scenario-play');
-    play.classList.remove('hidden');
+    document.getElementById('scenario-play').classList.remove('hidden');
 
     const situation = current.situation || current.intro;
     const choices = current.choices || [];
     const best = choices.reduce((a, b) => (b.score > a.score ? b : a), choices[0]);
 
-    play.innerHTML = `
+    document.getElementById('scenario-play').innerHTML = `
         <div class="text-sm text-[#ffaa00] mb-2">${current.icon} ${current.title}</div>
         <p class="text-sm text-gray-300 mb-4 leading-relaxed">${situation}</p>
         <div class="font-semibold mb-3">당신의 선택은?</div>
@@ -90,9 +102,8 @@ function startScenario(id) {
         </div>
         <div id="feedback-area" class="hidden mt-4 p-4 bg-black/50 rounded text-sm"></div>
         <button id="finish-btn" onclick="finishScenario()" class="hidden mt-4 w-full py-2 bg-[#33ff33] text-black font-bold rounded">다음으로</button>
-        <div id="best-answer" class="hidden text-xs text-gray-500 mt-3">모범 답안: ${best ? best.label : ''}</div>
     `;
-    play.dataset.bestIdx = choices.indexOf(best);
+    document.getElementById('scenario-play').dataset.bestIdx = choices.indexOf(best);
 }
 
 function pickChoice(i) {
@@ -104,7 +115,7 @@ function pickChoice(i) {
     document.querySelectorAll('.choice-btn').forEach(btn => {
         const idx = parseInt(btn.dataset.idx);
         btn.disabled = true;
-        btn.classList.remove('border', 'border-green-500', 'border-red-500', 'border-yellow-500');
+        btn.classList.remove('border', 'border-green-500', 'border-red-500');
         if (idx === bestIdx) btn.classList.add('border', 'border-green-500', 'bg-green-900/20');
         if (idx === i && !isBest) btn.classList.add('border', 'border-red-500', 'bg-red-900/20');
         if (idx === i && isBest) btn.classList.add('border', 'border-green-500');
@@ -112,12 +123,11 @@ function pickChoice(i) {
 
     const fb = document.getElementById('feedback-area');
     fb.classList.remove('hidden');
-    const grade = ch.score >= 10 ? 'A' : ch.score >= 5 ? 'B' : 'C';
     const icon = isBest ? '🏆' : ch.score >= 5 ? '👍' : '⚠️';
     const best = current.choices[bestIdx];
     fb.innerHTML = `
         <div class="text-2xl mb-2">${icon}</div>
-        <div class="font-bold mb-1">${isBest ? '최적의 판단!' : '등급: ' + grade}</div>
+        <div class="font-bold mb-1">${isBest ? '최적의 판단!' : '등급: ' + (ch.score >= 10 ? 'A' : ch.score >= 5 ? 'B' : 'C')}</div>
         <p class="mb-2">${ch.feedback}</p>
         ${!isBest ? `<div class="mt-3 p-2 bg-black/40 rounded border border-[#33ff33]/30">
             <div class="text-[#33ff33] font-semibold text-xs mb-1">✅ 모범 답안</div>
@@ -132,22 +142,33 @@ async function finishScenario() {
     const res = await fetch('/api/gamification/scenario/complete', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            scenario_id: current.id,
-            grade,
-            score: selectedScore
-        })
+        body: JSON.stringify({ scenario_id: current.id, grade, score: selectedScore })
     });
     const data = await res.json();
     if (data.error) { alert(data.error); return; }
 
-    let msg = `시나리오 완료! (+${data.reward_hours}h 가상시간)`;
-    if (data.money_earned) msg += `\n💰 +₩${data.money_earned.toLocaleString()} 획득!`;
-    if (data.daily_done) msg += '\n🎖️ 오늘의 비상 훈련 4개 전부 완료 보너스!';
-    alert(msg);
-    loadScenarios();
+    const isExtra = data.mode === 'extra';
+    const allDone = data.completed_count >= data.total;
+    const dailySetComplete = data.daily_done && !isExtra;
+    const extraSetComplete = isExtra && allDone;
+
+    if (dailySetComplete || extraSetComplete) {
+        const payload = { ...data, money_earned: data.session_money || data.money_earned };
+        if (extraSetComplete) payload.extra_done = true;
+        finishLearningSession('scenarios', payload, {
+            showPopup: extraSetComplete,
+            rewardTitle: extraSetComplete ? '추가 학습 보상!' : undefined,
+            rewardSubtitle: extraSetComplete ? '4개 훈련 완료 · 보상 50%' : undefined,
+            emoji: '🎖️',
+            onClose: () => loadScenarios(),
+        });
+    } else {
+        if (data.wallet_balance != null) updateWalletDisplay(data.wallet_balance);
+        loadScenarios();
+    }
 }
 
+setLearningPageReload(loadScenarios);
 loadScenarios();
 </script>
 {% endblock %}

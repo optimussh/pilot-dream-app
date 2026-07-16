@@ -242,19 +242,28 @@ function getAirlineTypeLabel(type) {
     return '';
 }
 
-function buildFlightPopupContent(f) {
+function buildFlightPopupContent(f, story) {
     const code = extractAirlineCode(f.callsign);
     const airline = code ? airlineInfoMap[code] : null;
     const matchedFlight = findFlightByCallsign(f.callsign);
     const eta = Math.round((1 - f.prog) * 8);
 
-    let html = `<div style="min-width:210px; line-height:1.45;">`;
+    let html = `<div style="min-width:240px; max-width:300px; line-height:1.45;">`;
     html += `<b style="font-size:13px;">${f.callsign}</b><br>`;
     html += `<span style="color:#ccc;">${f.acName}</span><br>`;
     html += `<span style="color:#ffaa00;">${f.org.id} → ${f.dest.id}</span><br>`;
     html += `<span style="font-size:11px; color:#aaa;">예상 도착: 약 ${eta}시간 후</span>`;
 
-    if (airline) {
+    if (f.isAirlineFlight) {
+        html += `<div style="margin-top:8px; padding-top:8px; border-top:1px solid #444;">`;
+        html += `<span style="color:#a855f7; font-weight:bold; font-size:13px;">${f.airlineLogo || '✈️'} ${f.airlineName || '내 항공사'}</span>`;
+        html += `<span style="font-size:10px; color:#c4b5fd;"> · CEO 운영</span><br>`;
+        if (f.routeName) {
+            html += `<span style="font-size:10px; color:#ddd;">노선: ${f.routeName}</span><br>`;
+        }
+        html += `<span style="font-size:10px; color:#888;">내가 운영하는 항공사 편이에요!</span>`;
+        html += `</div>`;
+    } else if (airline) {
         const typeLabel = getAirlineTypeLabel(airline.type);
         const alliance = airline.alliance ? ` · ${airline.alliance}` : '';
         html += `<div style="margin-top:8px; padding-top:8px; border-top:1px solid #444;">`;
@@ -280,6 +289,19 @@ function buildFlightPopupContent(f) {
         html += `</div>`;
     }
 
+    // 왜 이 비행이 떴을까? + 손님/화물 이야기
+    if (story) {
+        html += `<div style="margin-top:8px; padding:8px; background:#0a1628; border-radius:8px; border:1px solid #1e3a5f;">`;
+        html += `<div style="font-size:11px; font-weight:bold; color:#0A84FF;">${story.emoji || '🌍'} ${story.why_title || '왜 이 비행이 떴을까?'}</div>`;
+        html += `<div style="font-size:10px; color:#ccc; margin-top:4px;">${story.why_text || ''}</div>`;
+        html += `<div style="font-size:10px; color:#ffaa00; margin-top:6px;"><b>${story.title || ''}</b></div>`;
+        html += `<div style="font-size:10px; color:#bbb; margin-top:2px;">${story.story || ''}</div>`;
+        html += `<div style="font-size:9px; color:#88aacc; margin-top:4px;">📚 ${story.economy || ''}</div>`;
+        html += `</div>`;
+    } else {
+        html += `<div style="margin-top:8px; font-size:10px; color:#666;">이야기 불러오는 중…</div>`;
+    }
+
     if (f.isUserFlight) {
         html += `
             <div style="margin-top:10px; display:flex; gap:6px;">
@@ -297,6 +319,24 @@ function buildFlightPopupContent(f) {
 
     html += `</div>`;
     return html;
+}
+
+const flightStoryCache = {};
+async function fetchFlightStory(f) {
+    const key = `${f.org.id}-${f.dest.id}-${f.callsign}`;
+    if (flightStoryCache[key]) return flightStoryCache[key];
+    try {
+        const q = new URLSearchParams({
+            org: f.org.id || '', dest: f.dest.id || '',
+            callsign: f.callsign || '', route: `${f.org.id}-${f.dest.id}`
+        });
+        const res = await fetch('/api/world/flight-story?' + q.toString());
+        const data = await res.json();
+        flightStoryCache[key] = data;
+        return data;
+    } catch (e) {
+        return null;
+    }
 }
 
 function highlightFlightRoute(f) {
@@ -319,19 +359,28 @@ function highlightFlightRoute(f) {
     }
 }
 
-function onFlightMarkerClick(flightId) {
+async function onFlightMarkerClick(flightId) {
     const marker = markers[flightId];
     const f = marker?._flight;
     if (!f || !marker) return;
 
     highlightFlightRoute(f);
-    marker.bindPopup(buildFlightPopupContent(f)).openPopup();
+    marker.bindPopup(buildFlightPopupContent(f, null)).openPopup();
+    const story = await fetchFlightStory(f);
+    if (marker._flight === f) {
+        marker.bindPopup(buildFlightPopupContent(f, story)).openPopup();
+    }
 }
 
 function openFlightPopup(f) {
     if (!markers[f.id]) return;
     highlightFlightRoute(f);
-    markers[f.id].bindPopup(buildFlightPopupContent(f)).openPopup();
+    markers[f.id].bindPopup(buildFlightPopupContent(f, null)).openPopup();
+    fetchFlightStory(f).then(story => {
+        if (markers[f.id] && markers[f.id]._flight === f) {
+            markers[f.id].bindPopup(buildFlightPopupContent(f, story)).openPopup();
+        }
+    });
 }
 
 function initMap() {
@@ -520,7 +569,7 @@ function mergeUserFlightsIntoRadar() {
         const dest = radarAirports.find(a => a.id === af.dest_id) || { id: af.dest_id, lat: 33.51, lng: 126.49, name: af.dest_id, country: '' };
         flights.push({
             id: 'AIRLINE-' + idx,
-            callsign: String(af.callsign || 'AL') + (200 + idx),
+            callsign: af.callsign || ('AL' + (100 + idx)),
             org, dest,
             prog: 0.2 + Math.random() * 0.5,
             spd: 0.0009 + Math.random() * 0.0003,
@@ -528,6 +577,8 @@ function mergeUserFlightsIntoRadar() {
             acName: af.ac_name || 'B737',
             isAirlineFlight: true,
             airlineName: af.airline_name || '',
+            airlineLogo: af.airline_logo || '✈️',
+            routeName: af.route_name || '',
         });
     });
 
@@ -557,7 +608,7 @@ function buildFlightIcon(f) {
     if (f.isUserFlight) {
         finalColor = pilotCosmetics.livery_color || pilotCosmetics.trail_color || '#a855f7';
     } else if (f.isAirlineFlight) {
-        finalColor = pilotCosmetics.livery_color || '#ffaa00';
+        finalColor = '#a855f7';
     } else if (f.isKorea) {
         finalColor = '#ffaa00';
     } else {
@@ -567,15 +618,27 @@ function buildFlightIcon(f) {
         else finalColor = '#33ff33';
     }
 
-    const size = f.isUserFlight ? 44 : (f.isKorea && highlightKorea ? 24 : 18);
-    const showLabel = f.isUserFlight || f.isKorea;
+    const size = f.isUserFlight ? 44
+        : f.isAirlineFlight ? 36
+        : (f.isKorea && highlightKorea ? 24 : 18);
+    const showLabel = f.isUserFlight || f.isAirlineFlight || f.isKorea;
 
     const sticker = f.isUserFlight && pilotCosmetics.sticker_emoji ? pilotCosmetics.sticker_emoji + ' ' : '';
-    const labelHtml = showLabel
-        ? `<div style="position:absolute; top:${f.isUserFlight ? -20 : -14}px; left:${size + 2}px; white-space:nowrap; background:rgba(0,0,0,0.8); color:#fff; font-size:${f.isUserFlight ? 10 : 9}px; padding:2px 5px; border-radius:3px; line-height:1.1; border:1px solid ${finalColor};">
-            ${sticker}${f.callsign}<br><span style="color:#4da8da; font-size:8px">${f.acName}</span>
-           </div>`
-        : '';
+    let labelHtml = '';
+    if (showLabel) {
+        const top = f.isUserFlight ? -20 : (f.isAirlineFlight ? -18 : -14);
+        const fs = f.isUserFlight ? 10 : (f.isAirlineFlight ? 10 : 9);
+        const subColor = f.isAirlineFlight ? '#c4b5fd' : '#4da8da';
+        const title = f.isAirlineFlight
+            ? `${f.airlineLogo || '✈️'} ${f.airlineName || '내 항공사'}`
+            : `${sticker}${f.callsign}`;
+        const sub = f.isAirlineFlight
+            ? `${f.org.id}→${f.dest.id} · ${f.acName}`
+            : f.acName;
+        labelHtml = `<div style="position:absolute; top:${top}px; left:${size + 2}px; white-space:nowrap; background:rgba(0,0,0,0.85); color:#fff; font-size:${fs}px; padding:2px 6px; border-radius:3px; line-height:1.15; border:1px solid ${finalColor};">
+            ${title}<br><span style="color:${subColor}; font-size:8px">${sub}</span>
+           </div>`;
+    }
 
     const html = `
         <div style="position:relative; width:${size}px; height:${size}px;">
@@ -626,12 +689,13 @@ function updateFlights() {
 
         let col = '#33ff33';
         if (f.isUserFlight) col = pilotCosmetics.trail_color || '#a855f7';
+        else if (f.isAirlineFlight) col = '#a855f7';
         else if (f.isKorea) col = '#ffaa00';
 
         const icon = buildFlightIcon(f);
 
         const roundedHdg = Math.round(f.hdg);
-        const needsIconUpdate = f.isUserFlight || f.isKorea || f._lastHdg !== roundedHdg;
+        const needsIconUpdate = f.isUserFlight || f.isAirlineFlight || f.isKorea || f._lastHdg !== roundedHdg;
 
         if (markers[f.id]) {
             markers[f.id].setLatLng([f.lat, f.lng]);
@@ -647,17 +711,19 @@ function updateFlights() {
         }
 
         // === 4. Short Recent Trail (사용자/한국편만 — 대량 항공편 성능 최적화) ===
-        const drawTrail = f.isUserFlight || f.isKorea;
+        const drawTrail = f.isUserFlight || f.isAirlineFlight || f.isKorea;
         if (drawTrail) {
             if (!trails[f.id]) trails[f.id] = [];
             trails[f.id].push([f.lat, f.lng]);
-            const maxTrailLength = f.isUserFlight ? 28 : 12;
+            const maxTrailLength = f.isUserFlight ? 28 : (f.isAirlineFlight ? 16 : 12);
             if (trails[f.id].length > maxTrailLength) trails[f.id].shift();
 
             if (f.trailLine) map.removeLayer(f.trailLine);
             const userTrail = pilotCosmetics.trail_color || pilotCosmetics.radar_skin_color || '#a855f7';
             const trailOptions = f.isUserFlight
                 ? { color: userTrail, weight: 3, opacity: 0.65, dashArray: '5,4' }
+                : f.isAirlineFlight
+                ? { color: '#a855f7', weight: 2.5, opacity: 0.55, dashArray: '4,4' }
                 : { color: col, weight: 1.8, opacity: 0.38, dashArray: '2,4' };
             f.trailLine = L.polyline(trails[f.id], trailOptions).addTo(map);
         } else if (f.trailLine) {
@@ -692,7 +758,7 @@ function updateFlights() {
                 }
 
                 // 사용자 항공편은 항상 위 레이어로 bringToFront
-                if (f.isUserFlight) {
+                if (f.isUserFlight || f.isAirlineFlight) {
                     if (markers[f.id]) markers[f.id].bringToFront();
                     if (f.trailLine) f.trailLine.bringToFront();
                     if (f.fullRouteLine) f.fullRouteLine.bringToFront();
@@ -716,15 +782,17 @@ function updateFlights() {
             const item = document.createElement('div');
             let itemClass = `text-[10px] px-1 py-0.5 cursor-pointer hover:bg-[#003300] rounded `;
 
-            if (f.isUserFlight) {
+            if (f.isUserFlight || f.isAirlineFlight) {
                 itemClass += 'text-[#a855f7] font-bold';
             } else if (f.isKorea) {
                 itemClass += 'text-[#ffaa00]';
             }
 
             item.className = itemClass;
-            const prefix = f.isUserFlight ? '★ ' : '';
-            item.innerHTML = `${prefix}${f.callsign} ${f.org.id}→${f.dest.id} <span class="text-[#4da8da]">[${f.acName}]</span>`;
+            const prefix = f.isUserFlight ? '★ ' : (f.isAirlineFlight ? '🏢 ' : '');
+            const title = f.isAirlineFlight ? (f.airlineName || f.callsign) : f.callsign;
+            const acColor = f.isAirlineFlight ? 'text-[#c4b5fd]' : 'text-[#4da8da]';
+            item.innerHTML = `${prefix}${title} ${f.org.id}→${f.dest.id} <span class="${acColor}">[${f.acName}]</span>`;
             item.onclick = () => {
                 map.flyTo([f.lat, f.lng], 6, { duration: 1.2 });
                 setTimeout(() => openFlightPopup(f), 1300);
