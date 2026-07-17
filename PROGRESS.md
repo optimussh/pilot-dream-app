@@ -4,6 +4,36 @@
 
 ---
 
+## 2026-07-17 — 항공사 3층: 투자 교실 (주식회사·친구 시장·이사회)
+
+### What / Why
+- 조각 발행, NPC 지분, 하늘 친구 시장, 주간 배당, 이사회 카드
+- 중독 방지: 일 2회 시장, 당주 매도 금지, 7일 인내 보너스, 주 단위 시세
+- 탭 `📈 투자`, API `/api/airline/invest/*`, 가이드·가이드.md 연동
+
+### Files
+- `app/services/airline_invest.py`
+- `data/airline_market_firms.json`, `airline_npc_investors.json`, `airline_board_cards.json`
+- `app/routes/airline.py`, `app/services/airline_ops.py`, `templates/airline.html`
+- `data/guide_sections.json`, `가이드.md`
+
+---
+
+## 2026-07-17 — UX 편의: 완료 접기 / 할 일 펼치기
+
+### What / Why
+- 뱃지 패턴을 앱 전반에 확대: **끝낸 것은 접고, 남은 일을 먼저**
+- 공통 `uxCollapseHtml` / `bindUxCollapses` (`gamification.js`)
+- 적용: 뱃지, 기장생활(동료·도감·정시·탭 ✓), 상점 보너스, 대시보드 미션, 항공사 채용, 학습 허브 완료 표시
+- 가이드 `ux_collapse` 섹션 추가
+
+### Files
+- `static/js/gamification.js`
+- `templates/badges.html`, `captain_life.html`, `shop.html`, `dashboard.html`, `airline.html`, `learn.html`
+- `data/guide_sections.json`
+
+---
+
 ## 2026-07-17 — 성능 최적화 2단계 (지연 로딩 + tick 분리)
 
 ### What / Why

@@ -6,8 +6,9 @@ c = app.test_client()
 errors = []
 
 for path in ['/airline', '/guide', '/api/airline/dashboard', '/api/airline/revenue',
-             '/api/airline/route-templates', '/api/airline/crew', '/api/guide/sections',
-             '/api/guide/onboarding', '/api/player/stats', '/api/airline/radar-flights']:
+             '/api/airline/invest', '/api/airline/route-templates', '/api/airline/crew',
+             '/api/guide/sections', '/api/guide/onboarding', '/api/player/stats',
+             '/api/airline/radar-flights']:
     r = c.get(path)
     ok = r.status_code == 200
     print(f"  {'OK' if ok else 'FAIL'}: GET {path} -> {r.status_code}")
@@ -38,10 +39,22 @@ with app.app_context():
         assert cb and cb.get('story') and len(cb['story']) == 3, 'company board story'
         assert 'allocation' in cb, 'company allocation'
         print(f"  OK: company board (vault={cb.get('vault', 0)}, alloc_done={cb['allocation'].get('done')})")
+        from app.services.airline_invest import build_invest_panel, issue_shares
+        inv = build_invest_panel(prog)
+        assert inv and inv.get('market') and len(inv['market']) >= 4, 'invest market'
+        assert inv.get('shares') is not None, 'invest shares'
+        print(f"  OK: invest panel (firms={len(inv['market'])}, issued={inv['shares'].get('issued')})")
+        if inv['shares'].get('can_issue'):
+            ok, msg = issue_shares(prog)
+            assert ok, msg
+            inv2 = build_invest_panel(prog)
+            assert inv2['shares']['issued'] and inv2['shares']['my_pct'] == 100
+            print('  OK: issue shares 100%')
         r = c.get('/api/guide/sections')
         secs = (r.get_json() or {}).get('sections') or []
         assert any(s.get('id') == 'company_layer2' for s in secs), 'guide company_layer2'
-        print('  OK: guide has company_layer2')
+        assert any(s.get('id') == 'invest_layer3' for s in secs), 'guide invest_layer3'
+        print('  OK: guide has company_layer2 + invest_layer3')
     # 대시보드는 only_active — 전체 풀은 /api/airline/crew
     from app.services.airline_ops import get_hireable_crew
     full_crew = get_hireable_crew(prog, slim=True, only_active=False)

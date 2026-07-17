@@ -1,0 +1,22 @@
+[
+  {"id": "board_div", "emoji": "💎", "q": "이번 주 이익이 조금 남았어요. 어떻게 할까요?", "choices": [
+    {"id": "div_more", "label": "조각 주인에게 배당 조금 더", "effect": "dividend_boost", "kid": "주주에게 나눠 주기"},
+    {"id": "plane", "label": "비행기·노선에 더 쓰기", "effect": "reinvest_soft", "kid": "성장에 쓰기"},
+    {"id": "safe", "label": "금고에 안전하게 모으기", "effect": "vault_soft", "kid": "저축"}
+  ]},
+  {"id": "board_safety", "emoji": "🛡️", "q": "정비를 더 하면 비용이 들지만 안전해져요.", "choices": [
+    {"id": "maint", "label": "정비 강화 (평판+)", "effect": "reputation", "kid": "안전 우선"},
+    {"id": "balance", "label": "적당히 유지", "effect": "none", "kid": "균형"},
+    {"id": "speed", "label": "운항 늘리기 (매출 보너스 작음)", "effect": "reinvest_soft", "kid": "성장"}
+  ]},
+  {"id": "board_crew", "emoji": "👥", "q": "직원들이 힘들어 보여요.", "choices": [
+    {"id": "bonus", "label": "보너스 주기", "effect": "staff_soft", "kid": "사람 투자"},
+    {"id": "train", "label": "훈련으로 실력 키우기", "effect": "xp", "kid": "교육"},
+    {"id": "wait", "label": "이번 주는 지켜보기", "effect": "none", "kid": "신중"}
+  ]},
+  {"id": "board_risk", "emoji": "🌦️", "q": "날씨가 안 좋을 수 있어요. 투자는?", "choices": [
+    {"id": "hold", "label": "친구 시장 조각은 그대로 두기", "effect": "patience", "kid": "기다려 보기"},
+    {"id": "diversify", "label": "여러 회사 조금씩 (개념만)", "effect": "learn", "kid": "분산"},
+    {"id": "cash", "label": "현금(금고) 비중 늘리기", "effect": "vault_soft", "kid": "안전"}
+  ]}
+]

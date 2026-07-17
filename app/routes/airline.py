@@ -9,6 +9,10 @@ from app.services.airline_ops import (
     get_hireable_crew, tick_airline_economy, get_crew_pool_meta,
 )
 from app.services.airline_company import allocate_weekly_profit, withdraw_company_vault
+from app.services.airline_invest import (
+    build_invest_panel, issue_shares, accept_npc_investor, market_trade,
+    claim_weekly_dividends, answer_board,
+)
 from app.services.airline_revenue import (
     accept_cargo, complete_cargo, toggle_lease, set_mro_desk, set_fleet_maintain,
     answer_briefing, toggle_codeshare, run_training, claim_seasonal,
@@ -139,6 +143,88 @@ def company_vault_withdraw_api():
         return jsonify({'error': msg}), 400
     return jsonify({
         'status': 'ok', 'message': msg,
+        'dashboard': get_airline_dashboard(prog, light=True),
+        'wallet': get_wallet_summary(prog),
+    })
+
+
+@bp.route('/api/airline/invest')
+def invest_api():
+    prog = get_or_create_progress()
+    panel = build_invest_panel(prog)
+    if not panel:
+        return jsonify({'error': '먼저 항공사를 창업해주세요!', 'invest_panel': None}), 400
+    return jsonify({'invest_panel': panel, 'wallet': get_wallet_summary(prog)})
+
+
+@bp.route('/api/airline/invest/issue', methods=['POST'])
+def invest_issue_api():
+    prog = get_or_create_progress()
+    ok, msg = issue_shares(prog)
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({
+        'status': 'ok', 'message': msg,
+        'invest_panel': build_invest_panel(prog),
+        'dashboard': get_airline_dashboard(prog, light=True),
+        'wallet': get_wallet_summary(prog),
+    })
+
+
+@bp.route('/api/airline/invest/npc', methods=['POST'])
+def invest_npc_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg = accept_npc_investor(prog, data.get('npc_id'), data.get('accept', True))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({
+        'status': 'ok', 'message': msg,
+        'invest_panel': build_invest_panel(prog),
+        'dashboard': get_airline_dashboard(prog, light=True),
+        'wallet': get_wallet_summary(prog),
+    })
+
+
+@bp.route('/api/airline/invest/market', methods=['POST'])
+def invest_market_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg = market_trade(prog, data.get('firm_id'), data.get('action'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({
+        'status': 'ok', 'message': msg,
+        'invest_panel': build_invest_panel(prog),
+        'dashboard': get_airline_dashboard(prog, light=True),
+        'wallet': get_wallet_summary(prog),
+    })
+
+
+@bp.route('/api/airline/invest/dividend', methods=['POST'])
+def invest_dividend_api():
+    prog = get_or_create_progress()
+    ok, msg, amount = claim_weekly_dividends(prog)
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({
+        'status': 'ok', 'message': msg, 'amount': amount,
+        'invest_panel': build_invest_panel(prog),
+        'dashboard': get_airline_dashboard(prog, light=True),
+        'wallet': get_wallet_summary(prog),
+    })
+
+
+@bp.route('/api/airline/invest/board', methods=['POST'])
+def invest_board_api():
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg = answer_board(prog, data.get('choice_id'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    return jsonify({
+        'status': 'ok', 'message': msg,
+        'invest_panel': build_invest_panel(prog),
         'dashboard': get_airline_dashboard(prog, light=True),
         'wallet': get_wallet_summary(prog),
     })

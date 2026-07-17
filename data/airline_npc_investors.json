@@ -1,0 +1,5 @@
+[
+  {"id": "npc_bank", "name": "하늘은행 아저씨", "emoji": "🏦", "shares": 10, "kid": "조각 10개를 살게요. 회사가 잘되면 배당을 나눠 받아요.", "min_level": 2},
+  {"id": "npc_friend", "name": "친구 항공 민수", "emoji": "🤝", "shares": 8, "kid": "같이 키워요! 조각 8개만 살게요.", "min_level": 3},
+  {"id": "npc_teacher", "name": "경제 선생님", "emoji": "📚", "shares": 5, "kid": "배우는 마음으로 조각 5개 투자할게요.", "min_level": 2}
+]

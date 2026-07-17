@@ -30,7 +30,8 @@
             <button data-tab="routes" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">🗺️ 노선</button>
             <button data-tab="staff" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">👥 채용</button>
             <button data-tab="revenue" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">💰 수입원</button>
-            <button data-tab="stats" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">📈 능력</button>
+            <button data-tab="invest" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">📈 투자</button>
+            <button data-tab="stats" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">📊 능력</button>
             <button data-tab="space" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">🚀 우주</button>
         </div>
         <div id="al-content" class="min-h-[360px]"></div>
@@ -79,6 +80,7 @@
 </style>
 {% endblock %}
 {% block scripts %}
+<script src="/static/js/gamification.js"></script>
 <script>
 let D = {};
 let staffRoleFilter = '전체';
@@ -108,6 +110,9 @@ async function loadDash(opts = {}) {
         }
         if (!next.ops?.revenue_panel && D.ops.revenue_panel) {
             next.ops.revenue_panel = D.ops.revenue_panel;
+        }
+        if (!next.ops?.invest_panel && D.ops.invest_panel) {
+            next.ops.invest_panel = D.ops.invest_panel;
         }
         // 전체 동료 풀은 대시보드에 안 옴 → 캐시 유지
         if (D.ops.crew_full && (D.ops.hireable_crew || []).length > (next.ops?.hireable_crew || []).length) {
@@ -170,14 +175,19 @@ async function openAlTab(tab) {
         el.innerHTML = renderRevenue();
         if (!D.ops?.revenue_panel) loadRevenuePanel();
         return;
+    } else if (tab === 'invest') {
+        el.innerHTML = renderInvest();
+        if (!D.ops?.invest_panel) loadInvestPanel();
+        return;
     } else if (tab === 'stats' && !(D.player_stats && Object.keys(D.player_stats).length)) {
         try {
             const res = await fetch('/api/player/stats');
             D.player_stats = await res.json();
         } catch (e) {}
     }
-    const r = { overview: renderOverview, fleet: renderFleet, routes: renderRoutes, staff: renderStaff, revenue: renderRevenue, stats: renderStats, space: renderSpace };
+    const r = { overview: renderOverview, fleet: renderFleet, routes: renderRoutes, staff: renderStaff, revenue: renderRevenue, invest: renderInvest, stats: renderStats, space: renderSpace };
     el.innerHTML = (r[tab] || renderOverview)();
+    if (typeof bindUxCollapses === 'function') bindUxCollapses(el);
 }
 
 function showEconomyTick(tick) {
@@ -291,7 +301,8 @@ function renderCompanyBoard() {
         <div class="mt-3 pt-2 border-t border-[#222]">
             <div class="text-[10px] text-gray-500 mb-1">📖 쉬운 단어장</div>
             <div>${terms}</div>
-            <p class="text-[9px] text-gray-600 mt-2">더 자세한 설명은 <a href="/guide" class="text-[#0A84FF]">📖 가이드 → 회사 경영</a>을 보세요!</p>
+            <p class="text-[9px] text-gray-600 mt-2">더 자세한 설명은 <a href="/guide" class="text-[#0A84FF]">📖 가이드 → 회사 경영</a>을 보세요!
+            · 조각·투자는 <button type="button" onclick="openAlTab('invest')" class="text-[#0A84FF] underline">📈 투자 탭</button>!</p>
         </div>
     </div>`;
 }
@@ -526,6 +537,160 @@ function answerBriefing(idx, ans) { apiPost('/api/airline/revenue/briefing', { i
 function toggleCodeshare(id) { apiPost('/api/airline/revenue/codeshare', { partner_id: id }); }
 function runTraining(id, ans) { apiPost('/api/airline/revenue/training', { module_id: id, answer: ans }); }
 function claimSeasonal() { apiPost('/api/airline/revenue/seasonal', {}); }
+
+let _investLoading = false;
+async function loadInvestPanel(force) {
+    if (_investLoading && !force) return;
+    _investLoading = true;
+    const el = document.getElementById('al-content');
+    try {
+        const res = await fetch('/api/airline/invest');
+        const data = await res.json();
+        if (!res.ok || data.error) {
+            if (el) el.innerHTML = `<div class="al-card"><p class="text-red-400 text-sm">${data.error||'투자 정보를 불러오지 못했어요.'}</p>
+                <button onclick="loadInvestPanel(true)" class="mt-2 text-xs px-3 py-1 border rounded">다시 시도</button></div>`;
+            return;
+        }
+        D.ops = D.ops || {};
+        D.ops.invest_panel = data.invest_panel;
+        if (data.wallet) D.wallet = data.wallet;
+        if (document.querySelector('.al-tab.active')?.dataset.tab === 'invest') {
+            el.innerHTML = renderInvest();
+        }
+    } catch (e) {
+        if (el) el.innerHTML = '<p class="text-red-400 text-sm">투자 탭 연결 오류</p>';
+    } finally {
+        _investLoading = false;
+    }
+}
+
+function renderInvest() {
+    const ip = D.ops?.invest_panel;
+    if (!ip) {
+        loadInvestPanel();
+        return '<p class="text-gray-400 text-sm animate-pulse">투자 교실 불러오는 중...</p>';
+    }
+    const sh = ip.shares || {};
+    const mm = ip.market_meta || {};
+    const ev = mm.week_event || {};
+    const div = ip.dividend || {};
+    const board = ip.board || {};
+
+    const shareHtml = !sh.issued ? `
+        <div class="al-card mb-4 border border-purple-500/40">
+            <div class="font-bold text-sm mb-1">🧩 회사 조각 만들기 (주식회사 입문)</div>
+            <p class="text-[10px] text-gray-400 mb-2">${sh.kid||''}</p>
+            <p class="text-[10px] text-gray-500 mb-3">${sh.issue_hint||''}</p>
+            <button onclick="investIssue()" class="px-4 py-2 rounded-lg font-bold text-sm ${sh.can_issue?'bg-purple-600 text-white':'border opacity-50'}" ${sh.can_issue?'':'disabled'}>
+                조각 100개 발행하기
+            </button>
+        </div>` : `
+        <div class="al-card mb-4 border border-purple-500/40">
+            <div class="font-bold text-sm mb-1">🧩 내 회사 조각</div>
+            <div class="text-2xl font-bold text-purple-300">${sh.my_pct}% <span class="text-sm text-gray-400">내 몫 (${sh.my_shares}/${sh.total}개)</span></div>
+            <p class="text-[10px] text-gray-400 mt-1">조각 주인 = 주주. 지금은 교육용 놀이예요.</p>
+        </div>`;
+
+    const npcHtml = (ip.npc_investors||[]).map(n => {
+        if (n.joined) return `<div class="p-2 bg-black/40 rounded mb-2 text-sm">${n.emoji} <b>${n.name}</b> · 조각 ${n.held_shares}개 보유 중 ✓</div>`;
+        if (n.declined) return `<div class="p-2 bg-black/30 rounded mb-2 text-xs text-gray-500">${n.emoji} ${n.name} — 거절함 (괜찮아요)</div>`;
+        if (!n.eligible) return `<div class="p-2 bg-black/30 rounded mb-2 text-xs text-gray-500 opacity-60">${n.emoji} ${n.name} · Lv.${n.min_level}+ 필요</div>`;
+        if (!sh.issued) return `<div class="p-2 bg-black/30 rounded mb-2 text-xs text-gray-500">${n.emoji} ${n.name} · 조각 발행 후 만나요</div>`;
+        return `<div class="p-3 bg-black/40 rounded mb-2 border border-[#333]">
+            <div class="font-bold text-sm">${n.emoji} ${n.name}</div>
+            <p class="text-[10px] text-gray-400 mt-1">${n.kid}</p>
+            <div class="flex gap-2 mt-2">
+                <button onclick="investNpc('${n.id}', true)" class="text-[10px] px-3 py-1 bg-[#0A84FF] rounded font-bold">조각 ${n.shares}개 팔기</button>
+                <button onclick="investNpc('${n.id}', false)" class="text-[10px] px-3 py-1 border rounded">괜찮아요</button>
+            </div>
+        </div>`;
+    }).join('');
+
+    const marketHtml = (ip.market||[]).map(f => `
+        <div class="p-3 bg-black/40 rounded-xl border border-[#2c2c2e] mb-2">
+            <div class="flex justify-between items-start gap-2">
+                <div>
+                    <div class="font-bold text-sm">${f.emoji} ${f.name}</div>
+                    <div class="text-[10px] text-gray-500">${f.sector} · ${f.kid||''}</div>
+                    <div class="text-[10px] text-[#88aacc] mt-1">💡 ${f.why||''}</div>
+                </div>
+                <div class="text-right">
+                    <div class="font-bold text-[#ffaa00]">${f.price_formatted}</div>
+                    <div class="text-[9px] text-gray-500">보유 ${f.owned||0}개</div>
+                </div>
+            </div>
+            <div class="flex gap-2 mt-2 flex-wrap">
+                <button onclick="investMarket('${f.id}','buy')" class="text-[10px] px-2 py-1 bg-[#33ff33] text-black rounded font-bold" ${(mm.actions_left||0)<=0?'disabled':''}>사기</button>
+                <button onclick="investMarket('${f.id}','sell')" class="text-[10px] px-2 py-1 border rounded" ${!f.can_sell?'disabled title="다음 주부터 팔 수 있어요"':''}>팔기</button>
+                ${f.owned ? `<span class="text-[9px] text-gray-500 self-center">보유 ${f.hold_days||0}일${f.near_hold_bonus?` · ${f.hold_bonus_days}일 인내 보너스 도전 중`:''}</span>` : ''}
+            </div>
+        </div>`).join('');
+
+    const boardHtml = !board.q ? '' : (board.done ? `
+        <div class="al-card mb-4">
+            <div class="font-bold text-sm">📋 이번 주 이사회 ✓</div>
+            <p class="text-[10px] text-gray-400 mt-1">${(board.last&&board.last.label)||'결정 완료'} · 다음 주에 새 안건</p>
+        </div>` : `
+        <div class="al-card mb-4 border border-[#ffaa00]/40">
+            <div class="font-bold text-sm mb-1">${board.emoji||'📋'} 이사회 (주 1회)</div>
+            <p class="text-sm mb-3">${board.q}</p>
+            <div class="space-y-2">${(board.choices||[]).map(ch => `
+                <button onclick="investBoard('${ch.id}')" class="w-full text-left p-2 border rounded hover:border-[#ffaa00] text-xs">
+                    <b>${ch.label}</b><span class="text-gray-500"> · ${ch.kid||''}</span>
+                </button>`).join('')}
+            </div>
+        </div>`);
+
+    const rules = (mm.kid_rules||[]).map(r => `<li class="text-[10px] text-gray-400">${r}</li>`).join('');
+    const terms = (ip.terms||[]).map(t =>
+        `<span class="inline-block text-[9px] px-2 py-1 m-0.5 rounded-full border border-[#333]"><b class="text-[#ffaa00]">${t.word}</b> ${t.meaning}</span>`
+    ).join('');
+
+    return `<div class="space-y-3">
+        <div class="al-card border border-purple-500/30">
+            <div class="font-bold text-sm">📈 투자 교실 (3층)</div>
+            <p class="text-[10px] text-gray-400 mt-1">${ip.kid_summary||''}</p>
+            <p class="text-[9px] text-gray-600 mt-1">중독 방지: 주 단위 시세 · 하루 2번 · 단타 없음 · 교육용</p>
+        </div>
+        ${shareHtml}
+        <div class="al-card">
+            <div class="font-bold text-sm mb-2">🤝 NPC 투자자 (선택)</div>
+            ${npcHtml || '<p class="text-xs text-gray-500">조각 발행 후 친구들이 찾아와요.</p>'}
+        </div>
+        <div class="al-card">
+            <div class="flex flex-wrap justify-between gap-2 mb-2">
+                <div class="font-bold text-sm">🌤️ 하늘 친구 시장</div>
+                <div class="text-[10px] text-gray-400">오늘 ${mm.actions_today||0}/${mm.daily_limit||2}회 · 남음 ${mm.actions_left||0}</div>
+            </div>
+            ${ev.name ? `<div class="text-[10px] text-purple-300 mb-2">${ev.icon||'📰'} 이번 주 뉴스: <b>${ev.name}</b> — 시세 이야기의 힌트</div>` : ''}
+            <ul class="mb-3 list-disc pl-4">${rules}</ul>
+            ${marketHtml}
+        </div>
+        <div class="al-card">
+            <div class="font-bold text-sm mb-2">💎 주간 배당</div>
+            <p class="text-[10px] text-gray-400 mb-2">내 회사 조각 + 친구 시장 보유분 · 주 1회만</p>
+            <button onclick="investDividend()" class="text-xs px-4 py-2 rounded font-bold ${div.available&&!div.claimed_this_week?'bg-[#ffaa00] text-black':'border opacity-50'}"
+                ${div.available&&!div.claimed_this_week?'':'disabled'}>
+                ${div.claimed_this_week?'이번 주 수령 완료':'이번 주 배당 받기'}
+            </button>
+        </div>
+        ${boardHtml}
+        <div class="al-card text-[10px]">
+            <div class="text-gray-500 mb-1">📖 쉬운 단어장</div>
+            ${terms}
+            <p class="mt-2 text-gray-600"><a href="/guide" class="text-[#0A84FF]">가이드 → 투자 교실</a></p>
+        </div>
+    </div>`;
+}
+function investIssue() { apiPost('/api/airline/invest/issue', {}); }
+function investNpc(id, accept) { apiPost('/api/airline/invest/npc', { npc_id: id, accept }); }
+function investMarket(firmId, action) {
+    if (action === 'buy' && !confirm('조각 1개를 살까요? (오늘 횟수가 줄어들어요)')) return;
+    if (action === 'sell' && !confirm('조각 1개를 팔까요?')) return;
+    apiPost('/api/airline/invest/market', { firm_id: firmId, action });
+}
+function investDividend() { apiPost('/api/airline/invest/dividend', {}); }
+function investBoard(choiceId) { apiPost('/api/airline/invest/board', { choice_id: choiceId }); }
 
 function renderFleet() {
     const ops = D.ops || {};
@@ -941,25 +1106,39 @@ function renderStaff() {
         return `${label} ${inPool}명${avail ? ` (+${avail})` : ''}`;
     }).join(' · ');
     const hiredList = crew.filter(c => c.hired);
-    const hiredBar = hiredList.length ? `<div class="al-card mb-4 p-3 border border-red-500/30">
-        <div class="flex justify-between items-center mb-2">
-            <h3 class="text-sm font-bold text-white">👥 채용된 승무원 <span class="text-red-400">${hiredList.length}명</span></h3>
-            <button type="button" onclick="setStaffFilter('채용됨')" class="text-[10px] text-gray-400 hover:text-white">전체 보기 →</button>
-        </div>
-        <div class="space-y-2">${hiredList.map(c => {
-            const p = c.profile || {};
-            const roleLabel = STAFF_ROLE_LABELS[c.airline_role] || c.role;
-            return `<div class="crew-hired-row">
-                <div class="min-w-0">
-                    <span class="text-sm">${c.emoji} <b>${c.name}</b></span>
-                    <span class="text-[10px] text-gray-500 ml-1">${roleLabel} · ${p.grade||'?'}등급 · ${fmtPay(p.weekly_pay)}/주</span>
-                </div>
-                <button type="button" onclick="fireCrew('${c.id}')" class="crew-fire-btn">해고</button>
-            </div>`;
-        }).join('')}</div>
-    </div>` : '';
+    const readyList = crew.filter(c => c.unlocked && !c.hired);
+    const lockedList = crew.filter(c => !c.unlocked);
+    const hiredInner = hiredList.map(c => {
+        const p = c.profile || {};
+        const roleLabel = STAFF_ROLE_LABELS[c.airline_role] || c.role;
+        return `<div class="crew-hired-row">
+            <div class="min-w-0">
+                <span class="text-sm">${c.emoji} <b>${c.name}</b></span>
+                <span class="text-[10px] text-gray-500 ml-1">${roleLabel} · ${p.grade||'?'}등급 · ${fmtPay(p.weekly_pay)}/주</span>
+            </div>
+            <button type="button" onclick="fireCrew('${c.id}')" class="crew-fire-btn">해고</button>
+        </div>`;
+    }).join('');
+    const hiredBar = hiredList.length && typeof uxCollapseHtml === 'function'
+        ? uxCollapseHtml('al-hired', '👥 채용된 승무원', `(${hiredList.length}명)`, `<div class="space-y-2">${hiredInner}</div>
+            <button type="button" onclick="setStaffFilter('채용됨')" class="text-[10px] text-gray-400 hover:text-white mt-2">필터: 채용됨만 보기 →</button>`, { color: '#f87171' })
+        : (hiredList.length ? `<div class="al-card mb-4 p-3 border border-red-500/30"><div class="space-y-2">${hiredInner}</div></div>` : '');
     const unlockedN = crew.filter(c => c.unlocked).length;
-    const readyN = crew.filter(c => c.unlocked && !c.hired).length;
+    const readyN = readyList.length;
+    // 기본 목록: 채용 가능 우선, 잠긴 건 접기
+    let listHtml = '';
+    if (staffRoleFilter === '채용됨') {
+        listHtml = `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${filtered.map(c => renderCrewHireCard(c)).join('')}</div>`;
+    } else {
+        const showReady = filtered.filter(c => c.unlocked && !c.hired);
+        const showLocked = filtered.filter(c => !c.unlocked);
+        const showHired = filtered.filter(c => c.hired);
+        listHtml = `
+            <h3 class="text-sm font-bold text-purple-300 mb-2">✨ 지금 채용 가능 (${showReady.length})</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-4">${showReady.map(c => renderCrewHireCard(c)).join('') || '<p class="text-xs text-gray-500 col-span-full">채용 가능한 동료가 없어요. 기장생활에서 더 만나세요!</p>'}</div>
+            ${showLocked.length && typeof uxCollapseHtml === 'function' ? uxCollapseHtml('al-locked-crew', '🔒 아직 못 만난 동료', `(${showLocked.length})`, `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${showLocked.map(c => renderCrewHireCard(c)).join('')}</div>`, { color: '#888' }) : ''}
+            ${showHired.length && staffRoleFilter !== '전체' ? '' : ''}`;
+    }
     return `${hiredBar}<div class="al-card mb-4 p-3 border border-purple-500/30 text-[10px] text-gray-400">
         🔗 <b class="text-white">기장생활 → 채용 연동</b><br>
         기장생활에서 <b class="text-[#33ff33]">만난(체크된) 동료</b>만 여기서 채용할 수 있어요.
@@ -980,7 +1159,7 @@ function renderStaff() {
             `<button onclick="setStaffSort('${k}')" class="px-2 py-1 rounded-full text-[10px] border ${staffSort===k?'border-purple-500 text-purple-400':'border-[#333] text-gray-400'}">${l}</button>`
         ).join('')}
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${filtered.map(c => renderCrewHireCard(c)).join('')}</div>
+    ${listHtml}
     <p class="text-xs text-gray-500 mt-4"><a href="/captain-life" class="text-[#0A84FF]">기장생활</a>에서 더 많은 동료를 만나요! 카드를 누르면 상세 스펙을 볼 수 있어요.</p>`;
 }
 
@@ -1044,13 +1223,14 @@ async function applyDashboard(dash) {
     const prevTab = document.querySelector('.al-tab.active')?.dataset.tab;
     const prevTpl = D.ops?.route_templates;
     const prevRev = D.ops?.revenue_panel;
+    const prevInv = D.ops?.invest_panel;
     const prevCrew = D.ops?.hireable_crew;
     const prevFull = D.ops?.crew_full;
     D = dash;
     if (D.ops) {
         if (!(D.ops.route_templates || []).length && prevTpl?.length) D.ops.route_templates = prevTpl;
         if (!D.ops.revenue_panel && prevRev) D.ops.revenue_panel = prevRev;
-        // 채용 후 대시보드는 active만 옴 → 전체 풀 캐시 무효화
+        if (!D.ops.invest_panel && prevInv) D.ops.invest_panel = prevInv;
         if (prevFull && prevCrew?.length) {
             D.ops.crew_full = false;
         }
@@ -1064,6 +1244,9 @@ async function applyDashboard(dash) {
     if (prevTab === 'revenue' && !ops.revenue_panel) {
         await loadRevenuePanel(true);
     }
+    if (prevTab === 'invest' && !ops.invest_panel) {
+        await loadInvestPanel(true);
+    }
 }
 
 async function apiPost(url, body) {
@@ -1075,13 +1258,21 @@ async function apiPost(url, body) {
         D.wallet = d.wallet;
         document.getElementById('al-wallet').textContent = fmt(d.wallet.balance);
     }
+    if (d.invest_panel) {
+        D.ops = D.ops || {};
+        D.ops.invest_panel = d.invest_panel;
+    }
     if (d.dashboard) {
         await applyDashboard(d.dashboard);
+        if (d.invest_panel) D.ops.invest_panel = d.invest_panel;
         const tab = document.querySelector('.al-tab.active')?.dataset.tab || 'overview';
         if (!document.getElementById('al-founded').classList.contains('hidden')) {
             if (tab === 'staff') D.ops.crew_full = false;
             await openAlTab(tab);
         }
+    } else if (d.invest_panel) {
+        const tab = document.querySelector('.al-tab.active')?.dataset.tab;
+        if (tab === 'invest') document.getElementById('al-content').innerHTML = renderInvest();
     } else {
         await loadDash({ light: true });
     }

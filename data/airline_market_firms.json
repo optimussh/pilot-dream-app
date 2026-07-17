@@ -1,0 +1,8 @@
+[
+  {"id": "firm_jeju", "name": "제주 구름항공", "emoji": "🏝️", "sector": "관광", "tags": ["제주", "CJU", "국내", "휴양"], "base_price": 80000, "kid": "제주 여행이 붐일 때 손님 많아요"},
+  {"id": "firm_cargo", "name": "글로벌 카고", "emoji": "📦", "sector": "화물", "tags": ["화물", "카고", "물류"], "base_price": 95000, "kid": "화물이 많을 때 힘이 세져요"},
+  {"id": "firm_japan", "name": "한일 스카이", "emoji": "🇯🇵", "sector": "국제", "tags": ["일본", "NRT", "HND", "KIX"], "base_price": 90000, "kid": "일본 노선이 바쁠 때 좋아요"},
+  {"id": "firm_long", "name": "대양 장거리", "emoji": "🌐", "sector": "장거리", "tags": ["장거리", "국제", "LAX", "장거리"], "base_price": 120000, "kid": "장거리 비행이 인기일 때 올라요"},
+  {"id": "firm_domestic", "name": "한반도 셔틀", "emoji": "🇰🇷", "sector": "국내", "tags": ["국내", "ICN", "GMP", "PUS"], "base_price": 70000, "kid": "국내 여행·주말에 강해요"},
+  {"id": "firm_safe", "name": "안심 정비 파트너", "emoji": "🔧", "sector": "안전", "tags": ["정비", "안전", "MRO"], "base_price": 75000, "kid": "안전·정비를 중요하게 생각할 때 좋아요"}
+]

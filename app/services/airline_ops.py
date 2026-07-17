@@ -1045,6 +1045,7 @@ def get_airline_dashboard(prog, light=False, run_tick=False):
     except Exception:
         pstats = {}
     company_board = None
+    invest_panel = None
     if info.get('founded'):
         try:
             from app.services.airline_company import build_company_board
@@ -1052,6 +1053,13 @@ def get_airline_dashboard(prog, light=False, run_tick=False):
         except Exception:
             import logging
             logging.getLogger(__name__).exception('company_board load failed')
+        if not light:
+            try:
+                from app.services.airline_invest import build_invest_panel
+                invest_panel = build_invest_panel(prog, ops)
+            except Exception:
+                import logging
+                logging.getLogger(__name__).exception('invest_panel load failed')
     return {
         'wallet': {'balance': prog.wallet_balance or 0},
         'economy_tick': economy_tick,
@@ -1086,6 +1094,7 @@ def get_airline_dashboard(prog, light=False, run_tick=False):
             'revenue_panel': None,  # 수입원 탭 전용 API
             'company_board': company_board,
             'company_vault': ops.get('company_vault', 0),
+            'invest_panel': invest_panel,
         },
         'player_stats': pstats,
         'space': space,
