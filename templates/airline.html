@@ -92,9 +92,30 @@ const STAFF_ROLE_LABELS = {
 };
 function fmt(n) { return '₩'+(n||0).toLocaleString('ko-KR'); }
 
-async function loadDash() {
-    const res = await fetch('/api/airline/dashboard');
-    D = await res.json();
+async function loadDash(opts = {}) {
+    // 기본 light — 템플릿·전체 동료·tick 분리
+    const light = opts.light !== false;
+    const qs = new URLSearchParams();
+    if (light) qs.set('light', '1');
+    if (opts.tick) qs.set('tick', '1');
+    const q = qs.toString() ? ('?' + qs.toString()) : '';
+    const res = await fetch('/api/airline/dashboard' + q);
+    const next = await res.json();
+    // 지연 로드 캐시 유지
+    if (D.ops) {
+        if (!(next.ops?.route_templates || []).length && (D.ops.route_templates || []).length) {
+            next.ops.route_templates = D.ops.route_templates;
+        }
+        if (!next.ops?.revenue_panel && D.ops.revenue_panel) {
+            next.ops.revenue_panel = D.ops.revenue_panel;
+        }
+        // 전체 동료 풀은 대시보드에 안 옴 → 캐시 유지
+        if (D.ops.crew_full && (D.ops.hireable_crew || []).length > (next.ops?.hireable_crew || []).length) {
+            next.ops.hireable_crew = D.ops.hireable_crew;
+            next.ops.crew_full = true;
+        }
+    }
+    D = next;
     const al = D.airline || {};
     const ops = D.ops || {};
     document.getElementById('al-wallet').textContent = fmt(D.wallet?.balance || 0);
@@ -109,7 +130,54 @@ async function loadDash() {
     document.getElementById('al-founded').classList.remove('hidden');
     document.getElementById('al-title').textContent = `${al.logo||'✈️'} ${al.name} · Lv.${ops.level||1}`;
     showEconomyTick(D.economy_tick);
-    renderAlTab(document.querySelector('.al-tab.active')?.dataset.tab || 'overview');
+    const tab = document.querySelector('.al-tab.active')?.dataset.tab || 'overview';
+    await openAlTab(tab);
+}
+
+/** 탭별 무거운 데이터 지연 로드 */
+async function ensureRouteTemplates() {
+    if ((D.ops?.route_templates || []).length) return;
+    try {
+        const res = await fetch('/api/airline/route-templates');
+        const d = await res.json();
+        D.ops = D.ops || {};
+        D.ops.route_templates = d.templates || [];
+    } catch (e) { /* ignore */ }
+}
+
+async function ensureFullCrew() {
+    if (D.ops?.crew_full) return;
+    try {
+        const res = await fetch('/api/airline/crew');
+        const d = await res.json();
+        D.ops = D.ops || {};
+        D.ops.hireable_crew = d.hireable_crew || [];
+        D.ops.crew_meta = d.crew_meta || D.ops.crew_meta;
+        D.ops.crew_full = true;
+    } catch (e) { /* ignore */ }
+}
+
+async function openAlTab(tab) {
+    document.querySelectorAll('.al-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+    const el = document.getElementById('al-content');
+    if (tab === 'routes') {
+        el.innerHTML = '<p class="text-gray-500 text-sm animate-pulse">노선 불러오는 중...</p>';
+        await ensureRouteTemplates();
+    } else if (tab === 'staff') {
+        el.innerHTML = '<p class="text-gray-500 text-sm animate-pulse">동료 목록 불러오는 중...</p>';
+        await ensureFullCrew();
+    } else if (tab === 'revenue') {
+        el.innerHTML = renderRevenue();
+        if (!D.ops?.revenue_panel) loadRevenuePanel();
+        return;
+    } else if (tab === 'stats' && !(D.player_stats && Object.keys(D.player_stats).length)) {
+        try {
+            const res = await fetch('/api/player/stats');
+            D.player_stats = await res.json();
+        } catch (e) {}
+    }
+    const r = { overview: renderOverview, fleet: renderFleet, routes: renderRoutes, staff: renderStaff, revenue: renderRevenue, stats: renderStats, space: renderSpace };
+    el.innerHTML = (r[tab] || renderOverview)();
 }
 
 function showEconomyTick(tick) {
@@ -127,14 +195,8 @@ function showEconomyTick(tick) {
 }
 
 function renderAlTab(tab) {
-    document.querySelectorAll('.al-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
-    const el = document.getElementById('al-content');
-    const r = { overview: renderOverview, fleet: renderFleet, routes: renderRoutes, staff: renderStaff, revenue: renderRevenue, stats: renderStats, space: renderSpace };
-    if (tab === 'revenue') {
-        el.innerHTML = (r.revenue || renderOverview)();
-        return;
-    }
-    el.innerHTML = (r[tab] || renderOverview)();
+    // 동기 호출 호환 — 내부는 openAlTab
+    openAlTab(tab);
 }
 
 let _revenueLoading = false;
@@ -864,8 +926,10 @@ function closeCrewModal() {
 
 function renderStaff() {
     const crew = D.ops?.hireable_crew || [];
+    const meta = D.ops?.crew_meta || {};
     const pool = D.ops?.staff_pool || {};
-    const hired = Object.values(pool).flat().length;
+    const hired = meta.hired_count ?? Object.values(pool).flat().length;
+    const poolTotal = meta.pool_total || crew.length;
     const roleKeys = ['전체', '채용됨', ...Object.keys(STAFF_ROLE_LABELS)];
     let filtered = staffRoleFilter === '전체' ? crew
         : staffRoleFilter === '채용됨' ? crew.filter(c => c.hired)
@@ -905,7 +969,7 @@ function renderStaff() {
     <div class="al-card mb-4 p-3 border border-[#ffaa00]/20 text-[10px] text-gray-400">
         💡 <b class="text-white">등급이 높을수록</b> 노선 수익이 올라가요! S·A급은 국제선에, B·C급은 국내선에 맞춰 뽑아보세요.
     </div>
-    <p class="text-xs text-gray-400 mb-1">동료 풀 <b>${crew.length}</b>명 · 해금 <b class="text-[#33ff33]">${unlockedN}</b> · 채용 <b>${hired}</b>명</p>
+    <p class="text-xs text-gray-400 mb-1">동료 풀 <b>${poolTotal}</b>명 · 해금 <b class="text-[#33ff33]">${unlockedN}</b> · 채용 <b>${hired}</b>명${D.ops?.crew_full ? '' : ' · <span class="text-gray-600">목록 로딩…</span>'}</p>
     <p class="text-[10px] text-gray-500 mb-3">${summary}</p>
     <div class="flex gap-1 mb-2 flex-wrap">
         ${roleKeys.map(r => `<button onclick="setStaffFilter('${r}')" class="px-2 py-1 rounded-full text-[10px] border ${staffRoleFilter===r?'border-[#ffaa00] text-[#ffaa00]':'border-[#333] text-gray-400'}">${r==='전체'||r==='채용됨'?r:STAFF_ROLE_LABELS[r]}</button>`).join('')}
@@ -978,7 +1042,19 @@ function renderSpace() {
 async function applyDashboard(dash) {
     if (!dash) return;
     const prevTab = document.querySelector('.al-tab.active')?.dataset.tab;
+    const prevTpl = D.ops?.route_templates;
+    const prevRev = D.ops?.revenue_panel;
+    const prevCrew = D.ops?.hireable_crew;
+    const prevFull = D.ops?.crew_full;
     D = dash;
+    if (D.ops) {
+        if (!(D.ops.route_templates || []).length && prevTpl?.length) D.ops.route_templates = prevTpl;
+        if (!D.ops.revenue_panel && prevRev) D.ops.revenue_panel = prevRev;
+        // 채용 후 대시보드는 active만 옴 → 전체 풀 캐시 무효화
+        if (prevFull && prevCrew?.length) {
+            D.ops.crew_full = false;
+        }
+    }
     const al = D.airline || {};
     const ops = D.ops || {};
     document.getElementById('al-wallet').textContent = fmt(D.wallet?.balance || 0);
@@ -1003,9 +1079,12 @@ async function apiPost(url, body) {
         await applyDashboard(d.dashboard);
         const tab = document.querySelector('.al-tab.active')?.dataset.tab || 'overview';
         if (!document.getElementById('al-founded').classList.contains('hidden')) {
-            renderAlTab(tab);
+            if (tab === 'staff') D.ops.crew_full = false;
+            await openAlTab(tab);
         }
-    } else await loadDash();
+    } else {
+        await loadDash({ light: true });
+    }
     return d;
 }
 function foundAirline() { apiPost('/api/airline/found', { name: document.getElementById('al-name').value, logo: document.getElementById('al-logo').value }); }
@@ -1022,7 +1101,7 @@ function withdrawVault() {
 }
 function deployAc(id, hub) { apiPost('/api/airline/deploy', { aircraft_id: id, hub_id: hub }); }
 function addRoute() { apiPost('/api/airline/route', { template_id: document.getElementById('new-route-tpl').value, aircraft_id: document.getElementById('new-route-ac').value, flights_per_week: 7 }); }
-function delRoute(id) { if(confirm('노선을 없앨까요?')) fetch('/api/airline/route/'+id,{method:'DELETE'}).then(()=>loadDash()); }
+function delRoute(id) { if(confirm('노선을 없앨까요?')) fetch('/api/airline/route/'+id,{method:'DELETE'}).then(()=>loadDash({ light: true })); }
 function hireCrew(id) { apiPost('/api/airline/hire', { crew_id: id }); }
 function fireCrew(id) {
     const c = (D.ops?.hireable_crew || []).find(x => x.id === id);
@@ -1048,8 +1127,7 @@ async function settleNow() {
         d.details.forEach(x => { msg += `\n· ${x.route}: ${fmt(x.money)} (보너스+${x.bonus_pct||0}%)`; });
     }
     alert(msg);
-    if (d.wallet) await loadDash();
-    else await loadDash();
+    await loadDash({ light: true });
 }
 async function allocStat(id) {
     const res = await fetch('/api/player/stats/allocate', {
@@ -1061,10 +1139,10 @@ async function allocStat(id) {
     if (d.error) { alert(d.error); return; }
     if (d.stats) {
         D.player_stats = d.stats;
-        renderAlTab('stats');
+        await openAlTab('stats');
     } else {
-        await loadDash();
-        renderAlTab('stats');
+        await loadDash({ light: true });
+        await openAlTab('stats');
     }
 }
 function foundSpace() { apiPost('/api/airline/space/found'); }
@@ -1074,9 +1152,26 @@ function launchMission(id) { apiPost('/api/airline/space/launch', { mission_id: 
 document.getElementById('al-tabs')?.addEventListener('click', e => {
     const t = e.target.closest('.al-tab');
     if (!t) return;
-    renderAlTab(t.dataset.tab);
-    if (t.dataset.tab === 'revenue' && !D.ops?.revenue_panel) loadRevenuePanel();
+    openAlTab(t.dataset.tab);
 });
-loadDash();
+// 첫 진입: light 대시보드 + 수익 tick 분리 호출
+(async function bootAirline() {
+    await loadDash({ light: true, tick: false });
+    // 백그라운드 일일 정산 (UI 막지 않음)
+    try {
+        const res = await fetch('/api/airline/tick', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+        const d = await res.json();
+        if (d.tick) showEconomyTick(d.tick);
+        if (d.wallet?.balance != null) {
+            D.wallet = d.wallet;
+            document.getElementById('al-wallet').textContent = fmt(d.wallet.balance);
+        }
+        if (d.dashboard) {
+            await applyDashboard(d.dashboard);
+            const tab = document.querySelector('.al-tab.active')?.dataset.tab || 'overview';
+            if (tab === 'overview') await openAlTab('overview');
+        }
+    } catch (e) { /* tick optional */ }
+})();
 </script>
 {% endblock %}

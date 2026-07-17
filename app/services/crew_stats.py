@@ -79,9 +79,15 @@ def _rng_for(crew_id):
     return random.Random(_seed(crew_id))
 
 
+_profile_cache = {}  # crew_id -> profile dict
+
+
 def generate_crew_profile(card):
-    """카드 dict → 스펙 프로필 (항상 동일 crew_id면 동일 결과)"""
+    """카드 dict → 스펙 프로필 (항상 동일 crew_id면 동일 결과, 캐시)"""
     cid = card['id']
+    cached = _profile_cache.get(cid)
+    if cached is not None:
+        return cached
     rng = _rng_for(cid)
     idx = _crew_index(cid)
     role = card.get('role', '승무원')
@@ -126,7 +132,7 @@ def generate_crew_profile(card):
     if role in ('비행 학생', '조종 학생'):
         kid = f'신입 {role} · {specialty}'
 
-    return {
+    result = {
         'grade': grade,
         'grade_emoji': GRADE_EMOJI.get(grade, '✈️'),
         'overall': overall,
@@ -141,13 +147,18 @@ def generate_crew_profile(card):
         'hire_tip': HIRE_TIPS.get(grade, ''),
         'route_bonus_pct': max(0, overall - 50),
     }
+    _profile_cache[cid] = result
+    return result
 
 
 def get_crew_profile(crew_id, card=None):
     if card and card.get('id') == crew_id:
         return generate_crew_profile(card)
-    from app.services.gamification import load_json
-    cards = {c['id']: c for c in load_json('crew_cards.json')}
+    cached = _profile_cache.get(crew_id)
+    if cached is not None:
+        return cached
+    from app.services.gamification import load_json_by_id
+    cards = load_json_by_id('crew_cards.json')
     c = cards.get(crew_id)
     if not c:
         return {'grade': 'C', 'overall': 50, 'skills': [], 'kid_summary': '동료'}

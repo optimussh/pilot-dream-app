@@ -7,13 +7,52 @@ from app.models import db, UserProgress, FutureLetter, UserBadge, LogbookEntry
 
 DATA_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'data')
 
+# data/*.json 디스크 읽기 캐시 (mtime 바뀌면 자동 갱신)
+_json_cache = {}  # filename -> (mtime, data)
+_json_by_id_cache = {}  # filename -> (mtime, {id: row})
+
 
 def load_json(filename):
+    """JSON 로드. 동일 파일이면 메모리 캐시 — 대시보드 렉 완화."""
     path = os.path.join(DATA_DIR, filename)
-    if os.path.exists(path):
+    try:
+        mtime = os.path.getmtime(path)
+    except OSError:
+        return []
+    hit = _json_cache.get(filename)
+    if hit and hit[0] == mtime:
+        return hit[1]
+    try:
         with open(path, encoding='utf-8') as f:
-            return json.load(f)
-    return []
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        data = []
+    _json_cache[filename] = (mtime, data)
+    return data
+
+
+def load_json_by_id(filename, id_key='id'):
+    """id → 행 dict 캐시 (crew_cards 등 반복 조회용)."""
+    path = os.path.join(DATA_DIR, filename)
+    try:
+        mtime = os.path.getmtime(path)
+    except OSError:
+        return {}
+    hit = _json_by_id_cache.get(filename)
+    if hit and hit[0] == mtime:
+        return hit[1]
+    rows = load_json(filename)
+    if not isinstance(rows, list):
+        by_id = {}
+    else:
+        by_id = {r[id_key]: r for r in rows if isinstance(r, dict) and id_key in r}
+    _json_by_id_cache[filename] = (mtime, by_id)
+    return by_id
+
+
+def clear_json_cache():
+    _json_cache.clear()
+    _json_by_id_cache.clear()
 
 
 def today_str():

@@ -5,7 +5,8 @@ app = create_app()
 c = app.test_client()
 errors = []
 
-for path in ['/airline', '/guide', '/api/airline/dashboard', '/api/airline/revenue', '/api/guide/sections',
+for path in ['/airline', '/guide', '/api/airline/dashboard', '/api/airline/revenue',
+             '/api/airline/route-templates', '/api/airline/crew', '/api/guide/sections',
              '/api/guide/onboarding', '/api/player/stats', '/api/airline/radar-flights']:
     r = c.get(path)
     ok = r.status_code == 200
@@ -41,12 +42,19 @@ with app.app_context():
         secs = (r.get_json() or {}).get('sections') or []
         assert any(s.get('id') == 'company_layer2' for s in secs), 'guide company_layer2'
         print('  OK: guide has company_layer2')
-    crew = dash['ops']['hireable_crew']
-    assert len(crew) >= 50, 'hireable crew pool'
-    assert crew[0].get('profile', {}).get('overall'), 'crew profile missing'
-    print(f"  OK: crew profiles ({crew[0]['name']} = {crew[0]['profile']['grade']} {crew[0]['profile']['overall']})")
-    assert all(c.get('profile', {}).get('overall') for c in crew[:5]), 'all crew need profile'
-    unlocked = [c for c in crew if c.get('unlocked')]
+    # 대시보드는 only_active — 전체 풀은 /api/airline/crew
+    from app.services.airline_ops import get_hireable_crew
+    full_crew = get_hireable_crew(prog, slim=True, only_active=False)
+    assert len(full_crew) >= 50, 'full crew pool'
+    active = dash['ops']['hireable_crew']
+    print(f"  OK: dashboard crew active={len(active)} full_pool={len(full_crew)}")
+    rcrew = c.get('/api/airline/crew')
+    assert rcrew.status_code == 200 and len(rcrew.get_json().get('hireable_crew', [])) >= 50
+    print('  OK: lazy crew API')
+    rt = c.get('/api/airline/route-templates')
+    assert rt.status_code == 200 and len(rt.get_json().get('templates', [])) >= 10
+    print('  OK: lazy route-templates API')
+    unlocked = [c for c in full_crew if c.get('unlocked')]
     if unlocked:
         from app.services.airline_ops import hire_crew, fire_crew
         from app.services.pilot_features import get_airline_info

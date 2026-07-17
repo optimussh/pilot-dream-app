@@ -4,6 +4,31 @@
 
 ---
 
+## 2026-07-17 — 성능 최적화 2단계 (지연 로딩 + tick 분리)
+
+### What / Why
+- 채용 풀·노선 템플릿을 **탭 열 때만** 로드 (`/api/airline/crew`, `/api/airline/route-templates`)
+- 일일 수익 tick을 대시보드에서 분리 (`POST /api/airline/tick`, 백그라운드)
+- 대시보드는 해금·채용 동료만 (only_active)
+- 1단계: JSON/프로필 캐시 + light 대시보드 유지
+
+### Files
+- `app/services/airline_ops.py`, `app/routes/airline.py`, `templates/airline.html`
+- `verify_airline.py`, `PROGRESS.md`
+
+### Deferred
+- 3층 주식/투자 — 의도적 보류
+
+---
+
+## 2026-07-17 — 성능 최적화 1단계 (클릭 렉)
+
+### What / Why
+- `load_json` mtime 캐시, 승무원 프로필 캐시, 미해금 슬림 프로필
+- 대시보드 light + POST light 응답
+
+---
+
 ## 2026-07-10 — 항공사 2층(회사 경영) 완성
 
 ### What / Why

@@ -92,8 +92,12 @@ def _crew_unlocked(prog):
     return set(pe_meta(prog).get('crew_unlocked', []))
 
 
-def get_hireable_crew(prog):
-    """기장생활에서 만난(해금된) 동료만 채용 가능. unlocked=True 가 채용 버튼."""
+def get_hireable_crew(prog, slim=True, only_active=False):
+    """기장생활에서 만난(해금된) 동료만 채용 가능. unlocked=True 가 채용 버튼.
+
+    slim=True: 미해금 카드는 프로필 생략.
+    only_active=True: 해금·채용된 동료만 반환 (대시보드 기본 — 300명 전체 제외).
+    """
     from app.services.crew_stats import generate_crew_profile
     from app.services.pilot_extras import _ease_crew_value
     cards = load_json('crew_cards.json')
@@ -108,29 +112,55 @@ def get_hireable_crew(prog):
     for card in cards:
         cid = card['id']
         role = _airline_role_for_crew(card)
-        profile = generate_crew_profile(card)
+        is_unlocked = cid in unlocked
+        is_hired = cid in hired_ids
+        if only_active and not is_unlocked and not is_hired:
+            continue
         req = card.get('unlock') or {}
         eased = _ease_crew_value(req.get('type'), req.get('value', 0))
         tip = card.get('bonus_tip') or ''
         if req.get('type') and not card.get('free_unlock'):
             tip = f"조건(완화): {req.get('type')} ≥ {eased}" + (f' · {tip}' if tip else '')
+        if slim and not is_unlocked and not is_hired:
+            profile = {
+                'grade': '—', 'overall': 0, 'skills': [], 'weekly_pay': 0,
+                'specialty': '', 'kid_summary': tip or '아직 만남 조건 미달성',
+                'hire_tip': tip, 'grade_emoji': '🔒',
+            }
+        else:
+            profile = generate_crew_profile(card)
         result.append({
             **card,
             'airline_role': role,
-            'unlocked': cid in unlocked,
-            'hired': cid in hired_ids,
+            'unlocked': is_unlocked,
+            'hired': is_hired,
             'profile': profile,
-            'hire_ready': cid in unlocked and cid not in hired_ids,
+            'hire_ready': is_unlocked and not is_hired,
             'unlock_eased_value': eased,
             'bonus_tip': tip or card.get('bonus_tip', ''),
         })
-    # 채용 가능 → 해금 → 잠금, 등급 높은 순
     result.sort(key=lambda c: (
         0 if c['hired'] else (1 if c['unlocked'] else 2),
-        -c['profile']['overall'],
+        -c['profile'].get('overall', 0),
         c['name'],
     ))
     return result
+
+
+def get_crew_pool_meta(prog):
+    cards = load_json('crew_cards.json')
+    unlocked = _crew_unlocked(prog)
+    ops = _ops(prog)
+    hired = set()
+    for ids in ops.get('staff_pool', {}).values():
+        if isinstance(ids, list):
+            hired.update(ids)
+    return {
+        'pool_total': len(cards) if isinstance(cards, list) else 0,
+        'unlocked_count': len(unlocked),
+        'hired_count': len(hired),
+        'locked_count': max(0, (len(cards) if isinstance(cards, list) else 0) - len(unlocked)),
+    }
 
 
 def hire_crew(prog, crew_id):
@@ -969,13 +999,22 @@ def get_flights_for_radar(prog):
     return flights
 
 
-def get_airline_dashboard(prog):
+def get_airline_dashboard(prog, light=False, run_tick=False):
+    """항공사 대시보드 (빠른 기본 경로).
+
+    - run_tick: True일 때만 일일 수익 tick (기본 False — 별도 /tick API)
+    - light: 템플릿·수입원·전체 승무원 풀 생략
+    - 승무원은 해금·채용분만 (only_active). 전체 풀은 /api/airline/crew
+    - 노선 템플릿은 /api/airline/route-templates
+    """
     info = get_airline_info(prog)
     ops = _ops(prog)
     wk = week_key()
-    economy_tick = tick_airline_economy(prog) if info.get('founded') else None
-    if economy_tick:
-        ops = _ops(prog)
+    economy_tick = None
+    if info.get('founded') and run_tick:
+        economy_tick = tick_airline_economy(prog)
+        if economy_tick:
+            ops = _ops(prog)
     revenue_preview = estimate_weekly_revenue(prog, ops) if info.get('founded') else None
     owned = get_owned_aircraft(prog)
     catalog = get_aircraft_catalog()
@@ -988,9 +1027,10 @@ def get_airline_dashboard(prog):
             'category': ac.get('category', ''),
             'hub': ops.get('fleet_deploy', {}).get(aid, ops.get('hub', 'ICN')),
         })
-    templates = load_json('airline_route_templates.json')
     roles = load_json('airline_staff_roles.json')
-    hireable = get_hireable_crew(prog)
+    # 대시보드: 해금·채용분만 (잠긴 300명 제외)
+    hireable = get_hireable_crew(prog, slim=True, only_active=True)
+    crew_meta = get_crew_pool_meta(prog)
     from app.services.crew_stats import calc_weekly_payroll
     payroll_total, payroll_breakdown = calc_weekly_payroll(ops)
     enriched_routes = enrich_routes(ops, hireable)
@@ -1001,23 +1041,11 @@ def get_airline_dashboard(prog):
         space = {'unlocked': False}
     try:
         from app.services.player_stats import get_player_stats
-        pstats = get_player_stats(prog)
+        pstats = {} if light else get_player_stats(prog)
     except Exception:
         pstats = {}
-    from app.services.economy import get_wallet_summary
-    revenue_panel = None
     company_board = None
     if info.get('founded'):
-        try:
-            from app.services.airline_revenue import fetch_revenue_dashboard
-            rd = fetch_revenue_dashboard(prog)
-            revenue_panel = rd.get('revenue_panel')
-            if rd.get('revenue_preview'):
-                revenue_preview = rd['revenue_preview']
-            ops = _ops(prog)
-        except Exception:
-            import logging
-            logging.getLogger(__name__).exception('revenue_panel load failed')
         try:
             from app.services.airline_company import build_company_board
             company_board = build_company_board(prog, ops, revenue_preview)
@@ -1028,18 +1056,21 @@ def get_airline_dashboard(prog):
         'wallet': {'balance': prog.wallet_balance or 0},
         'economy_tick': economy_tick,
         'airline': info,
+        'light': light,
         'ops': {
             **ops,
             'hubs': HUBS,
             'fleet': fleet,
             'routes': enriched_routes,
-            'route_templates': templates,
+            'route_templates': [],  # 지연 로드
             'staff_roles': roles,
             'hireable_crew': hireable,
+            'crew_meta': crew_meta,
+            'crew_full': False,
             'payroll_preview': {
                 'weekly_total': payroll_total,
                 'weekly_formatted': format_krw(payroll_total),
-                'hired_count': sum(len(v) for v in ops.get('staff_pool', {}).values() if isinstance(v, list)),
+                'hired_count': crew_meta.get('hired_count', 0),
                 'breakdown': payroll_breakdown[:10],
             },
             'revenue_preview': revenue_preview,
@@ -1052,7 +1083,7 @@ def get_airline_dashboard(prog):
                 'last_payroll': ops.get('last_payroll', 0),
                 'last_net': ops.get('last_net_revenue', ops.get('last_revenue', 0)),
             },
-            'revenue_panel': revenue_panel,
+            'revenue_panel': None,  # 수입원 탭 전용 API
             'company_board': company_board,
             'company_vault': ops.get('company_vault', 0),
         },
