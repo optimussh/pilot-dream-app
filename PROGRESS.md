@@ -4,6 +4,22 @@
 
 ---
 
+## 2026-08-09 — 항공사 자금관리 탭 (가수금·대여·차입)
+
+### What / Why
+- 내 항공사에 **🏦 자금** 탭 추가 (B + 가드레일)
+- 가수금(이자 0, 1:1 회수) / 대여금(주 0.5% 이자 수령) / 회사 차입(주 0.75%, 여유현금 50% 한도)
+- 주 1회 이자 정산 (`tick_airline_economy` + 자금 패널 오픈)
+- CEO 금고 적립·이사회 저축 → 가수금 장부 연동
+- 무료 1:1 금고 인출 폐지 → 가수금 회수 또는 자금 탭 이용
+
+### Files
+- `app/services/airline_treasury.py` (신규)
+- `app/routes/airline.py`, `airline_company.py`, `airline_ops.py`, `airline_invest.py`
+- `templates/airline.html`, `가이드.md`, `verify_treasury.py`
+
+---
+
 ## 2026-08-09 — 비행계획 단계별 시간 모델 (이·착륙 반영)
 
 ### What / Why

@@ -153,6 +153,8 @@ def build_company_board(prog, ops=None, preview=None):
         {'word': '이익', 'meaning': '들어온 돈 − 쓴 돈. 남는 몫!'},
         {'word': '재투자', 'meaning': '이익을 다시 회사에 넣어 키우기'},
         {'word': '금고', 'meaning': '나중에 쓰려고 모아 둔 회사 돈'},
+        {'word': '가수금', 'meaning': '내 돈을 회사에 보탠 출자 (자금 탭)'},
+        {'word': '대여금', 'meaning': '회사에 빌려주고 이자를 받는 돈'},
         {'word': '평판', 'meaning': '사람들이 회사를 얼마나 믿는지'},
     ]
 
@@ -175,6 +177,13 @@ def build_company_board(prog, ops=None, preview=None):
     if get_staff_bonus_active(ops):
         boosts.append('🎁 직원 보너스 주간 — 동료 사기 UP')
 
+    treasury_sum = {}
+    try:
+        from app.services.airline_treasury import get_treasury_summary
+        treasury_sum = get_treasury_summary(ops)
+    except Exception:
+        treasury_sum = {}
+
     return {
         'founded': True,
         'company_name': info.get('name', '내 항공사'),
@@ -184,6 +193,7 @@ def build_company_board(prog, ops=None, preview=None):
         'terms': terms,
         'vault': vault,
         'vault_formatted': format_krw(vault),
+        'treasury': treasury_sum,
         'gross': gross,
         'payroll': payroll,
         'net': net,
@@ -246,7 +256,12 @@ def allocate_weekly_profit(prog, choice_id):
         if not ok:
             return False, err
         ops['company_vault'] = int(ops.get('company_vault', 0) or 0) + move
-        msg = f'🏦 회사 금고에 {format_krw(move)}를 모았어요! (총 {format_krw(ops["company_vault"])})'
+        try:
+            from app.services.airline_treasury import credit_capital_from_external
+            credit_capital_from_external(ops, move, f'CEO 배치 ({wk})')
+        except Exception:
+            pass
+        msg = f'🏦 회사 금고(가수금)에 {format_krw(move)}를 모았어요! (총 {format_krw(ops["company_vault"])})'
 
     elif choice_id == 'reinvest':
         ops['reinvest_boost_week'] = wk
@@ -292,21 +307,19 @@ def allocate_weekly_profit(prog, choice_id):
 
 
 def withdraw_company_vault(prog, amount=None):
-    """금고 → 지갑 (전액 또는 일부)"""
-    from app.services.airline_ops import _ops, _save_ops
+    """금고 → 지갑: 가수금 회수 우선 (무료 1:1 인출 폐지 → 자금관리 규칙)."""
+    from app.services.airline_treasury import recover_capital, ensure_treasury
+    from app.services.airline_ops import _ops
+
     info = get_airline_info(prog)
     if not info.get('founded'):
         return False, '먼저 항공사를 창업해주세요!'
     ops = _ops(prog)
     ensure_company_fields(ops)
-    vault = int(ops.get('company_vault', 0) or 0)
-    if vault <= 0:
-        return False, '금고가 비어 있어요.'
-    take = vault if amount is None else min(vault, max(0, int(amount)))
-    if take <= 0:
-        return False, '꺼낼 금액을 확인해주세요.'
-    ops['company_vault'] = vault - take
-    award_money(prog, take, f'회사 금고 인출', 'company_vault')
-    _save_ops(prog, ops)
-    db.session.commit()
-    return True, f'🏦 금고에서 {format_krw(take)}를 지갑으로 옮겼어요! (남은 금고 {format_krw(ops["company_vault"])})'
+    t = ensure_treasury(ops)
+    if int(t.get('capital', 0) or 0) > 0:
+        return recover_capital(prog, amount)
+    return (
+        False,
+        '무료 인출 대신 🏦 자금 탭에서 가수금 회수·대여 회수·차입(이자)을 이용하세요!',
+    )

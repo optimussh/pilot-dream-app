@@ -31,6 +31,7 @@
             <button data-tab="staff" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">👥 채용</button>
             <button data-tab="revenue" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">💰 수입원</button>
             <button data-tab="invest" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">📈 투자</button>
+            <button data-tab="treasury" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">🏦 자금</button>
             <button data-tab="stats" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">📊 능력</button>
             <button data-tab="space" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">🚀 우주</button>
         </div>
@@ -85,12 +86,17 @@
 let D = {};
 let staffRoleFilter = '전체';
 let staffSort = 'rating';
+let staffDivision = 'airline'; // airline | space
 let routeStaffModalId = null;
 let routeGroupMode = 'all';
 let routeFilterKey = '';
 const STAFF_ROLE_LABELS = {
     captain: '기장', fo: '부기장', fa: '승무원',
     mechanic: '정비사', dispatcher: '운항관리', ground: '지상직',
+};
+const SPACE_ROLE_LABELS = {
+    mission_director: '발사 지휘', flight_dynamics: '궤도 계산', propulsion: '추진·연료',
+    payload: '위성·탑재', ground_control: '지상 관제', business: '계약 담당',
 };
 function fmt(n) { return '₩'+(n||0).toLocaleString('ko-KR'); }
 
@@ -171,13 +177,30 @@ async function openAlTab(tab) {
     } else if (tab === 'staff') {
         el.innerHTML = '<p class="text-gray-500 text-sm animate-pulse">동료 목록 불러오는 중...</p>';
         await ensureFullCrew();
+        if (staffDivision === 'space') {
+            try {
+                const res = await fetch('/api/airline/space');
+                D.space = await res.json();
+            } catch (e) {}
+        }
     } else if (tab === 'revenue') {
         el.innerHTML = renderRevenue();
         if (!D.ops?.revenue_panel) loadRevenuePanel();
         return;
     } else if (tab === 'invest') {
-        el.innerHTML = renderInvest();
-        if (!D.ops?.invest_panel) loadInvestPanel();
+        // 단어장 비어 있으면 패널 강제 재로딩
+        const needReload = !D.ops?.invest_panel || !(D.ops.invest_panel.glossary || []).length;
+        if (needReload) {
+            el.innerHTML = '<p class="text-gray-400 text-sm animate-pulse">투자 교실 불러오는 중...</p>';
+            await loadInvestPanel(true);
+        } else {
+            el.innerHTML = renderInvest();
+            await refreshInvestGlossary(false);
+        }
+        return;
+    } else if (tab === 'treasury') {
+        el.innerHTML = '<p class="text-gray-400 text-sm animate-pulse">자금관리 불러오는 중...</p>';
+        await loadTreasuryPanel(true);
         return;
     } else if (tab === 'stats' && !(D.player_stats && Object.keys(D.player_stats).length)) {
         try {
@@ -185,7 +208,7 @@ async function openAlTab(tab) {
             D.player_stats = await res.json();
         } catch (e) {}
     }
-    const r = { overview: renderOverview, fleet: renderFleet, routes: renderRoutes, staff: renderStaff, revenue: renderRevenue, invest: renderInvest, stats: renderStats, space: renderSpace };
+    const r = { overview: renderOverview, fleet: renderFleet, routes: renderRoutes, staff: renderStaff, revenue: renderRevenue, invest: renderInvest, treasury: renderTreasury, stats: renderStats, space: renderSpace };
     el.innerHTML = (r[tab] || renderOverview)();
     if (typeof bindUxCollapses === 'function') bindUxCollapses(el);
 }
@@ -292,7 +315,8 @@ function renderCompanyBoard() {
             <div class="text-right">
                 <div class="text-[10px] text-gray-500">회사 금고</div>
                 <div class="font-bold text-[#0A84FF]">${cb.vault_formatted||fmt(0)}</div>
-                ${(cb.vault||0)>0 ? `<button onclick="withdrawVault()" class="text-[9px] mt-1 px-2 py-0.5 border border-[#0A84FF]/50 text-[#0A84FF] rounded">금고→지갑</button>` : ''}
+                <button type="button" onclick="openAlTab('treasury')" class="text-[9px] mt-1 px-2 py-0.5 border border-[#0A84FF]/50 text-[#0A84FF] rounded">🏦 자금관리</button>
+                ${(cb.treasury?.capital||0)>0 ? `<button onclick="withdrawVault()" class="text-[9px] mt-1 ml-1 px-2 py-0.5 border border-[#33ff33]/40 text-[#33ff33] rounded">가수금 회수</button>` : ''}
             </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">${story}</div>
@@ -302,6 +326,7 @@ function renderCompanyBoard() {
             <div class="text-[10px] text-gray-500 mb-1">📖 쉬운 단어장</div>
             <div>${terms}</div>
             <p class="text-[9px] text-gray-600 mt-2">더 자세한 설명은 <a href="/guide" class="text-[#0A84FF]">📖 가이드 → 회사 경영</a>을 보세요!
+            · 가수금·대여·차입은 <button type="button" onclick="openAlTab('treasury')" class="text-[#0A84FF] underline">🏦 자금 탭</button>
             · 조각·투자는 <button type="button" onclick="openAlTab('invest')" class="text-[#0A84FF] underline">📈 투자 탭</button>!</p>
         </div>
     </div>`;
@@ -441,8 +466,11 @@ function renderRevenue() {
             <div class="grid grid-cols-3 gap-1 text-[9px] text-gray-400 mt-2">
                 <span>임대 +${fmt(side.lease||0)}</span><span>MRO +${fmt(side.mro_shop||0)}</span><span>제휴 +${fmt(side.codeshare_partners||0)}</span>
                 <span>시즌 +${fmt(side.seasonal||0)}</span><span>훈련 +${fmt(side.training_passive||0)}</span><span>정비비 −${fmt(side.maintain_cost||0)}</span>
+                <span class="text-[#ffaa00]">기내식 ${fmt(side.cabin_meals||side.cabin_meals_net||0)}</span>
             </div>
         </div>
+
+        ${renderCabinKitchen(rp.cabin_meals, side)}
 
         <div class="al-card">
             <div class="font-bold text-sm mb-2">📦 화물 전용 계약 <span class="text-[10px] text-gray-500">오늘 ${rp.cargo_done||0}/${rp.cargo_limit||3}</span></div>
@@ -538,6 +566,124 @@ function toggleCodeshare(id) { apiPost('/api/airline/revenue/codeshare', { partn
 function runTraining(id, ans) { apiPost('/api/airline/revenue/training', { module_id: id, answer: ans }); }
 function claimSeasonal() { apiPost('/api/airline/revenue/seasonal', {}); }
 
+function renderCabinKitchen(cm, side) {
+    if (!cm) {
+        return `<div class="al-card border border-[#ffaa00]/30">
+            <div class="font-bold text-sm">🍱 기내식 키친</div>
+            <p class="text-[10px] text-gray-500 mt-1">불러오는 중… 수입원 탭을 다시 열어 보세요.</p>
+        </div>`;
+    }
+    const est = cm.estimate || {};
+    const net = cm.estimate_net != null ? cm.estimate_net : (side?.cabin_meals || 0);
+    const netCls = net >= 0 ? 'text-[#33ff33]' : 'text-red-400';
+    const fb = cm.feedback || {};
+    const slotSet = new Set(cm.slots || []);
+    const unlocked = (cm.meals || []).filter(m => m.unlocked);
+    const locked = (cm.meals || []).filter(m => !m.unlocked);
+
+    const policyBtns = (cm.policies || []).map(p =>
+        `<button onclick="cabinPolicy('${p.id}')" class="text-[10px] px-2 py-1.5 rounded font-bold ${p.selected?'bg-[#ffaa00] text-black':'border border-[#444]'}">${p.emoji||''} ${p.label}</button>`
+    ).join('');
+    const prepBtns = (cm.preps || []).map(p =>
+        `<button onclick="cabinPrep('${p.id}')" class="text-[10px] px-2 py-1 rounded ${p.selected?'bg-purple-600 text-white':'border border-[#333] text-gray-400'}">${p.label}</button>`
+    ).join('');
+
+    const slotChips = (cm.slot_labels || []).map(s =>
+        `<span class="inline-flex items-center gap-1 px-2 py-1 bg-black/50 rounded text-[10px] mr-1 mb-1">${s.emoji} ${s.name}
+            <button onclick="cabinToggle('${s.id}')" class="text-red-400 ml-1" title="빼기">×</button></span>`
+    ).join('') || '<span class="text-[10px] text-gray-500">슬롯이 비었어요. 아래 메뉴를 눌러 올려 보세요!</span>';
+
+    const mealCard = (m) => {
+        const on = slotSet.has(m.id);
+        const lockedCls = m.unlocked ? '' : 'opacity-50';
+        const tip = String(m.unlock_tip || '잠김').replace(/'/g, '');
+        const click = m.unlocked ? `cabinToggle('${m.id}')` : `alert('🔒 ${tip}')`;
+        return `<button type="button" onclick="${click}"
+            class="p-2 rounded-xl border text-left ${on?'border-[#ffaa00] bg-[#2a2000]':'border-[#2c2c2e] bg-black/30'} ${lockedCls}">
+            <div class="text-xl">${m.emoji}</div>
+            <div class="text-[11px] font-bold truncate">${m.name}</div>
+            <div class="text-[9px] text-gray-500">${m.category}${on?' · ✓슬롯':''}</div>
+            ${m.unlocked
+                ? `<div class="text-[9px] mt-1">원가 ${m.cost_formatted} · 판매 ${m.price_formatted}<br>
+                    <span class="text-[#33ff33]">마진 ${m.margin_formatted} (${m.margin_pct}%)</span>
+                    · 만족 ${m.satisfaction}</div>
+                   <div class="text-[8px] text-gray-600 mt-0.5">${m.edu||m.kid||''}</div>`
+                : `<div class="text-[9px] text-[#ffaa00] mt-1">🔒 ${m.unlock_tip||''}</div>`}
+        </button>`;
+    };
+
+    const fbHtml = !fb.q ? '' : (fb.done
+        ? `<div class="text-[10px] text-[#33ff33] mt-2">✓ 이번 주 피드백 완료${fb.last?.ok?' · 정답!':''}</div>`
+        : `<div class="mt-3 p-2 border border-[#0A84FF]/40 rounded">
+            <div class="font-bold text-xs mb-1">🎓 주간 손님 피드백</div>
+            <p class="text-sm mb-2">${fb.q}</p>
+            <div class="flex flex-wrap gap-1">${(fb.choices||[]).map(ch =>
+                `<button onclick="cabinFeedback('${ch.id}')" class="text-[10px] px-2 py-1 border border-[#0A84FF]/50 rounded hover:bg-[#0A84FF]/20">${ch.label}</button>`
+            ).join('')}</div>
+            <p class="text-[9px] text-gray-600 mt-1">${fb.hint||''}</p>
+        </div>`);
+
+    const gloss = (cm.glossary || []).slice(0, 6).map(g =>
+        `<span class="inline-block text-[9px] px-2 py-1 bg-black/40 rounded mr-1 mb-1" title="${(g.meaning||'').replace(/"/g,'')}"><b class="text-[#ffaa00]">${g.word}</b> ${g.meaning||''}</span>`
+    ).join('');
+
+    return `<div class="al-card border border-[#ffaa00]/40">
+        <div class="flex flex-wrap justify-between gap-2 items-start">
+            <div>
+                <div class="font-bold text-sm">🍱 기내식 키친 <span class="text-[10px] text-gray-500 font-normal">도감 ${cm.unlocked_count||0}/${cm.total_meals||25}</span></div>
+                <p class="text-[10px] text-gray-400 mt-0.5">${cm.kid||''}</p>
+            </div>
+            <div class="text-right">
+                <div class="text-[10px] text-gray-500">주간 예상 순익</div>
+                <div class="text-lg font-bold ${netCls}">${cm.estimate_net_f||fmt(net)}</div>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3 text-[9px]">
+            <div class="p-2 bg-black/40 rounded">판매 마진<br><b class="text-white">${fmt(est.cabin_sales||0)}</b></div>
+            <div class="p-2 bg-black/40 rounded">포함 원가<br><b class="text-red-300">−${fmt(est.cabin_cost||0)}</b></div>
+            <div class="p-2 bg-black/40 rounded">폐기<br><b class="text-red-300">−${fmt(est.cabin_waste||0)}</b></div>
+            <div class="p-2 bg-black/40 rounded">만족 보너스<br><b class="text-[#33ff33]">+${fmt(est.cabin_sat_money||0)}</b></div>
+        </div>
+        <p class="text-[9px] text-gray-500 mt-2">${est.cabin_kid||''} · 매칭 ${est.cabin_match_pct!=null?est.cabin_match_pct+'%':''}
+            · 오늘 메뉴 변경 남음 ${cm.changes_left_today??20}회</p>
+        <p class="text-[9px] text-gray-600 mt-0.5">${est.cabin_edu||''} · 모드 ${cm.mode==='lcc'?'LCC(유료 유리)':'FSC(포함 서비스 유리)'}</p>
+
+        <div class="mt-3">
+            <div class="text-[10px] text-gray-400 mb-1">① 정책 (교육: 포함 vs 유료)</div>
+            <div class="flex flex-wrap gap-1">${policyBtns}</div>
+            <p class="text-[9px] text-gray-600 mt-1">${(cm.policies||[]).find(p=>p.selected)?.kid||''}</p>
+        </div>
+        <div class="mt-3">
+            <div class="text-[10px] text-gray-400 mb-1">② 준비량 (교육: 품절 vs 폐기)</div>
+            <div class="flex flex-wrap gap-1">${prepBtns}</div>
+        </div>
+        <div class="mt-3">
+            <div class="text-[10px] text-gray-400 mb-1">③ 메뉴 슬롯 (${(cm.slots||[]).length}/${cm.max_slots||4})
+                ${cm.mode ? '' : ''} · 프리미엄 부가면 슬롯 +1</div>
+            <div class="mb-2">${slotChips}</div>
+        </div>
+        ${!cm.signature_set ? `<button onclick="cabinSignature()" class="text-[10px] px-3 py-1.5 mb-2 bg-gradient-to-r from-purple-600 to-[#ffaa00] rounded font-bold">✨ 시그니처 도시락 만들기</button>` :
+            `<div class="text-[10px] text-purple-300 mb-2">✨ 시그니처 도시락 운영 중</div>`}
+        ${fbHtml}
+        <div class="mt-3">
+            <div class="text-[10px] font-bold text-[#ffaa00] mb-2">메뉴 도감 (클릭 = 슬롯 넣기/빼기)</div>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">${unlocked.map(mealCard).join('')}</div>
+            ${locked.length ? `<details class="mt-2"><summary class="text-[10px] text-gray-500 cursor-pointer">🔒 잠긴 메뉴 ${locked.length}개</summary>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-2">${locked.map(mealCard).join('')}</div></details>` : ''}
+        </div>
+        ${gloss ? `<div class="mt-3"><div class="text-[10px] text-gray-400 mb-1">📖 쉬운 단어</div>${gloss}</div>` : ''}
+        <p class="text-[9px] text-gray-600 mt-2"><a href="/guide#cabin_meals" class="text-[#0A84FF]">가이드 → 기내식 키친</a></p>
+    </div>`;
+}
+function cabinPolicy(p) { apiPost('/api/airline/cabin/policy', { policy: p }); }
+function cabinPrep(p) { apiPost('/api/airline/cabin/prep', { prep: p }); }
+function cabinToggle(id) { apiPost('/api/airline/cabin/slot', { meal_id: id }); }
+function cabinSignature() {
+    if (!confirm('우리 항공사 시그니처 도시락을 만들까요?')) return;
+    apiPost('/api/airline/cabin/signature', {});
+}
+function cabinFeedback(answer) { apiPost('/api/airline/cabin/feedback', { answer }); }
+
 let _investLoading = false;
 async function loadInvestPanel(force) {
     if (_investLoading && !force) return;
@@ -553,9 +699,17 @@ async function loadInvestPanel(force) {
         }
         D.ops = D.ops || {};
         D.ops.invest_panel = data.invest_panel;
-        if (data.wallet) D.wallet = data.wallet;
+        if (data.wallet) {
+            D.wallet = data.wallet;
+            const w = document.getElementById('al-wallet');
+            if (w && data.wallet.balance != null) w.textContent = fmt(data.wallet.balance);
+        }
+        if (data.invest_panel?.sale_backfill_message) {
+            alert(data.invest_panel.sale_backfill_message);
+        }
         if (document.querySelector('.al-tab.active')?.dataset.tab === 'invest') {
             el.innerHTML = renderInvest();
+            refreshInvestGlossary(false);
         }
     } catch (e) {
         if (el) el.innerHTML = '<p class="text-red-400 text-sm">투자 탭 연결 오류</p>';
@@ -571,10 +725,99 @@ function renderInvest() {
         return '<p class="text-gray-400 text-sm animate-pulse">투자 교실 불러오는 중...</p>';
     }
     const sh = ip.shares || {};
+    const val = ip.valuation || {};
     const mm = ip.market_meta || {};
     const ev = mm.week_event || {};
     const div = ip.dividend || {};
     const board = ip.board || {};
+
+    const dayChg = val.day_change_pct != null ? val.day_change_pct : 0;
+    const chgCls = dayChg >= 0 ? 'text-[#33ff33]' : 'text-red-400';
+    const disc = ip.disclosure;
+    const dil = ip.dilution;
+    const ceo = ip.ceo_report;
+    const vq = ip.value_quiz || {};
+    const bl = ip.buyback_limits || {};
+    const pol = (ip.dividend || {}).policy != null ? Number(ip.dividend.policy) : 1;
+
+    const disclosureHtml = disc ? `
+        <div class="al-card mb-4 border border-[#0A84FF]/40">
+            <div class="font-bold text-sm mb-1">📰 공시 카드</div>
+            <p class="text-sm text-[#88ccff]">${disc.headline||''}</p>
+            <p class="text-[10px] text-gray-400 mt-1">${disc.body||''}</p>
+            <p class="text-[9px] text-gray-600 mt-1">${disc.kid||''}</p>
+        </div>` : '';
+
+    const dilutionHtml = dil ? `
+        <div class="al-card mb-4 border border-purple-400/40">
+            <div class="font-bold text-sm mb-1">📊 희석 시뮬레이션 (최근 증자)</div>
+            <div class="grid grid-cols-2 gap-2 text-[10px] mt-2">
+                <div class="p-2 bg-black/40 rounded">내 지분 %<br><b class="text-white">${dil.pct_before}% → ${dil.pct_after}%</b></div>
+                <div class="p-2 bg-black/40 rounded">내 주식 수<br><b class="text-white">${dil.my_before} → ${dil.my_after}</b></div>
+                <div class="p-2 bg-black/40 rounded col-span-2">회사 파이(총 조각)<br><b class="text-purple-300">${dil.total_before} → ${dil.total_after}</b> (+${dil.add||0})</div>
+            </div>
+            <p class="text-[10px] text-gray-400 mt-2">${dil.kid||''}</p>
+            <p class="text-[9px] text-gray-600 mt-1">교육: 신주를 내가 받으면 %는 비슷해도 회사 파이는 커져요. 남에게 팔면 내 %가 줄 수 있어요(희석).</p>
+        </div>` : '';
+
+    const ceoHtml = ceo ? `
+        <div class="al-card mb-4 border border-[#33ff33]/30">
+            <div class="font-bold text-sm mb-1">📑 ${ceo.title||'주간 CEO 리포트'}</div>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-2 text-[10px] mt-2">
+                <div class="p-2 bg-black/40 rounded">항공 주간 매출<br><b>${ceo.airline_gross_f||fmt(ceo.airline_gross||0)}</b></div>
+                <div class="p-2 bg-black/40 rounded">항공 주간 순익<br><b>${ceo.airline_net_f||fmt(ceo.airline_net||0)}</b></div>
+                <div class="p-2 bg-black/40 rounded">우주 누적 수입<br><b class="text-purple-300">${ceo.space_lifetime_rev_f||fmt(0)}</b></div>
+                <div class="p-2 bg-black/40 rounded">위성<br><b>${ceo.satellites||0}기</b></div>
+                <div class="p-2 bg-black/40 rounded">우주 인원<br><b class="text-indigo-300">${ceo.space_staff||0}명</b></div>
+                <div class="p-2 bg-black/40 rounded">우주 주급<br><b class="text-[#ffaa00]">${ceo.space_payroll_f||fmt(0)}</b></div>
+                <div class="p-2 bg-black/40 rounded">회사 시총<br><b class="text-[#ffaa00]">${ceo.company_value_f||fmt(0)}</b></div>
+                <div class="p-2 bg-black/40 rounded">PER · 내 지분<br><b>${ceo.per||'-'}배 · ${ceo.my_pct||0}%</b></div>
+            </div>
+            <p class="text-[9px] text-gray-500 mt-2">${ceo.kid||''}</p>
+        </div>` : '';
+
+    const policyHtml = sh.issued ? `
+        <div class="al-card mb-4 border border-[#ffaa00]/30">
+            <div class="font-bold text-sm mb-1">⚖️ 배당 vs 성장 (정책)</div>
+            <p class="text-[10px] text-gray-400 mb-2">배당을 많이 주면 지금 용돈↑ · 회사 성장·PER 배수↓ 트레이드오프!</p>
+            <div class="flex flex-wrap gap-2">
+                ${[0,1,2].map(p => {
+                    const labels = {0:'🌱 성장 (배당↓ PER↑)', 1:'⚖️ 균형', 2:'💎 고배당 (배당↑ PER↓)'};
+                    const active = pol === p;
+                    return `<button onclick="investDivPolicy(${p})" class="text-[10px] px-3 py-1.5 rounded font-bold ${active?'bg-[#ffaa00] text-black':'border border-[#444]'}">${labels[p]}</button>`;
+                }).join('')}
+            </div>
+        </div>` : '';
+
+    const quizHtml = sh.issued ? `
+        <div class="al-card mb-4 border border-[#0A84FF]/30">
+            <div class="font-bold text-sm mb-1">🎓 오버/언더 밸류 퀴즈 (주 1회)</div>
+            <p class="text-[10px] text-gray-400 mb-2">${vq.kid||'내 주가 vs 친구 시장 평균'}</p>
+            ${vq.done ? `<p class="text-[10px] text-[#33ff33]">이번 주 완료${vq.last?` · ${vq.last.ok?'정답':'아쉬움'} (${vq.last.truth||''})`:''}</p>` :
+            `<div class="flex flex-wrap gap-2">${(vq.choices||[]).map(c =>
+                `<button onclick="investValueQuiz('${c.id}')" class="text-[10px] px-3 py-1.5 border border-[#0A84FF]/50 rounded hover:bg-[#0A84FF]/20">${c.label}</button>`
+            ).join('')}</div>`}
+        </div>` : '';
+
+    const valHtml = sh.issued ? `
+        <div class="al-card mb-4 border border-[#ffaa00]/40">
+            <div class="font-bold text-sm mb-1">💎 회사 가치 · PER 밸류 (매일 변동)</div>
+            <div class="text-2xl font-bold text-[#ffaa00]">${val.valuation_formatted||fmt(val.valuation||0)}
+                <span class="text-sm ${chgCls}">오늘 ${dayChg>=0?'+':''}${dayChg}%</span></div>
+            <div class="text-[11px] text-gray-300 mt-1">
+                공정가치 ${val.fair_value_formatted||fmt(val.fair_value||0)} · 이익 기준 ${val.base_formatted||fmt(val.base_earnings||0)} × <b class="text-[#ffaa00]">PER ${val.multiple||10}배</b>
+            </div>
+            <div class="grid grid-cols-2 gap-2 mt-3 text-[10px]">
+                <div class="p-2 bg-black/40 rounded">주간 예상 매출<br><b class="text-white">${val.weekly_gross_formatted||fmt(val.weekly_gross||0)}</b></div>
+                <div class="p-2 bg-black/40 rounded">주간 예상 순익<br><b class="text-white">${val.weekly_net_formatted||fmt(val.weekly_net||0)}</b></div>
+                <div class="p-2 bg-black/40 rounded">주가(시세)<br><b class="text-white">${val.share_price_formatted||fmt(val.share_price||0)}</b></div>
+                <div class="p-2 bg-black/40 rounded">주가(공정)<br><b class="text-gray-300">${val.share_price_fair_formatted||fmt(val.share_price_fair||0)}</b></div>
+                <div class="p-2 bg-black/40 rounded col-span-2">내 지분 가치<br><b class="text-purple-300">${val.my_stake_value_formatted||sh.my_stake_value_formatted||fmt(0)}</b>
+                    <span class="text-gray-500"> · 매각 시 성장 프리미엄 약 +${val.sale_premium_pct||0}%</span></div>
+            </div>
+            <p class="text-[9px] text-gray-500 mt-2">${val.kid||''}</p>
+            <p class="text-[9px] text-gray-600 mt-1">교육: PER=이익에 곱하는 배수 · 시세는 공정가치±일일 변동 · 팔 때 프리미엄, 되살 때 할인 · 자사주 매입 하루 ${bl.daily_limit||1}회 · 현금 ${bl.cash_ratio_pct||25}% 한도</p>
+        </div>` : '';
 
     const shareHtml = !sh.issued ? `
         <div class="al-card mb-4 border border-purple-500/40">
@@ -587,18 +830,26 @@ function renderInvest() {
         </div>` : `
         <div class="al-card mb-4 border border-purple-500/40">
             <div class="font-bold text-sm mb-1">🧩 내 회사 조각</div>
-            <div class="text-2xl font-bold text-purple-300">${sh.my_pct}% <span class="text-sm text-gray-400">내 몫 (${sh.my_shares}/${sh.total}개)</span></div>
-            <p class="text-[10px] text-gray-400 mt-1">조각 주인 = 주주. 지금은 교육용 놀이예요.</p>
+            <div class="text-2xl font-bold text-purple-300">${sh.my_pct}% <span class="text-sm text-gray-400">내 몫 (${sh.my_shares}/${sh.total}개 · 최대 ${sh.max_total||500})</span></div>
+            <p class="text-[10px] text-gray-400 mt-1">내 지분 가치 ≈ <b class="text-purple-200">${sh.my_stake_value_formatted||fmt(sh.my_stake_value||0)}</b></p>
+            ${sh.can_issue ? `<button onclick="investIssue()" class="mt-2 text-xs px-3 py-1.5 bg-purple-600 rounded font-bold">추가 발행 +${sh.issue_batch||50}개 (증자)</button>
+            <p class="text-[9px] text-gray-500 mt-1">${sh.issue_hint||''}</p>` : `<p class="text-[9px] text-gray-500 mt-1">추가 발행 한도 도달 또는 조건 미달</p>`}
         </div>`;
 
     const npcHtml = (ip.npc_investors||[]).map(n => {
-        if (n.joined) return `<div class="p-2 bg-black/40 rounded mb-2 text-sm">${n.emoji} <b>${n.name}</b> · 조각 ${n.held_shares}개 보유 중 ✓</div>`;
+        if (n.joined) return `<div class="p-2 bg-black/40 rounded mb-2 text-sm">
+            ${n.emoji} <b>${n.name}</b> · 조각 ${n.held_shares}개
+            ${n.paid_proceeds?` · 매각대금 ${n.paid_proceeds_formatted}`:''}
+            ${n.can_buyback?`<button onclick="investBuyback('${n.id}')" class="ml-2 text-[10px] px-2 py-0.5 border border-[#ffaa00] text-[#ffaa00] rounded">되사기 ${n.buyback_cost_formatted||''}</button>`:''}
+        </div>`;
         if (n.declined) return `<div class="p-2 bg-black/30 rounded mb-2 text-xs text-gray-500">${n.emoji} ${n.name} — 거절함 (괜찮아요)</div>`;
         if (!n.eligible) return `<div class="p-2 bg-black/30 rounded mb-2 text-xs text-gray-500 opacity-60">${n.emoji} ${n.name} · Lv.${n.min_level}+ 필요</div>`;
         if (!sh.issued) return `<div class="p-2 bg-black/30 rounded mb-2 text-xs text-gray-500">${n.emoji} ${n.name} · 조각 발행 후 만나요</div>`;
         return `<div class="p-3 bg-black/40 rounded mb-2 border border-[#333]">
             <div class="font-bold text-sm">${n.emoji} ${n.name}</div>
             <p class="text-[10px] text-gray-400 mt-1">${n.kid}</p>
+            <p class="text-[10px] text-gray-500 mt-1">내재 ${n.offer_intrinsic_formatted||''} + 프리미엄 ~${n.premium_pct||0}%</p>
+            <p class="text-[10px] text-[#ffaa00] mt-0.5">예상 매각 대금: <b>${n.offer_proceeds_formatted||fmt(n.offer_proceeds||0)}</b> (조각 ${n.shares}개)</p>
             <div class="flex gap-2 mt-2">
                 <button onclick="investNpc('${n.id}', true)" class="text-[10px] px-3 py-1 bg-[#0A84FF] rounded font-bold">조각 ${n.shares}개 팔기</button>
                 <button onclick="investNpc('${n.id}', false)" class="text-[10px] px-3 py-1 border rounded">괜찮아요</button>
@@ -606,25 +857,50 @@ function renderInvest() {
         </div>`;
     }).join('');
 
-    const marketHtml = (ip.market||[]).map(f => `
-        <div class="p-3 bg-black/40 rounded-xl border border-[#2c2c2e] mb-2">
+    const firmCard = (f) => `
+        <div class="p-3 bg-black/40 rounded-xl border border-[#2c2c2e]">
             <div class="flex justify-between items-start gap-2">
-                <div>
+                <div class="min-w-0">
                     <div class="font-bold text-sm">${f.emoji} ${f.name}</div>
-                    <div class="text-[10px] text-gray-500">${f.sector} · ${f.kid||''}</div>
+                    <div class="text-[10px] text-gray-500">${f.sector}${f.region?' · '+f.region:''} · ${f.kid||''}</div>
                     <div class="text-[10px] text-[#88aacc] mt-1">💡 ${f.why||''}</div>
                 </div>
-                <div class="text-right">
-                    <div class="font-bold text-[#ffaa00]">${f.price_formatted}</div>
-                    <div class="text-[9px] text-gray-500">보유 ${f.owned||0}개</div>
+                <div class="text-right shrink-0">
+                    <div class="font-bold text-[#ffaa00] text-sm">${f.price_formatted}</div>
+                    <div class="text-[9px] text-gray-500">보유 ${f.owned||0}</div>
                 </div>
             </div>
             <div class="flex gap-2 mt-2 flex-wrap">
                 <button onclick="investMarket('${f.id}','buy')" class="text-[10px] px-2 py-1 bg-[#33ff33] text-black rounded font-bold" ${(mm.actions_left||0)<=0?'disabled':''}>사기</button>
                 <button onclick="investMarket('${f.id}','sell')" class="text-[10px] px-2 py-1 border rounded" ${!f.can_sell?'disabled title="다음 주부터 팔 수 있어요"':''}>팔기</button>
-                ${f.owned ? `<span class="text-[9px] text-gray-500 self-center">보유 ${f.hold_days||0}일${f.near_hold_bonus?` · ${f.hold_bonus_days}일 인내 보너스 도전 중`:''}</span>` : ''}
+                ${f.owned ? `<span class="text-[9px] text-gray-500 self-center">${f.hold_days||0}일 보유${f.near_hold_bonus?` · ${f.hold_bonus_days}일 보너스 도전`:''}</span>` : ''}
             </div>
-        </div>`).join('');
+        </div>`;
+    // 섹터별 묶음
+    const sectorOrder = ['관광','국내','국제','장거리','화물','안전','교육','기술','환경','저가','프리미엄'];
+    const bySector = {};
+    (ip.market||[]).forEach(f => {
+        const s = f.sector || '기타';
+        (bySector[s] ||= []).push(f);
+    });
+    const sectorKeys = Object.keys(bySector).sort((a,b) => {
+        const ia = sectorOrder.indexOf(a), ib = sectorOrder.indexOf(b);
+        if (ia < 0 && ib < 0) return a.localeCompare(b,'ko');
+        if (ia < 0) return 1;
+        if (ib < 0) return -1;
+        return ia - ib;
+    });
+    const marketHtml = sectorKeys.map(sec => {
+        const list = bySector[sec];
+        const ownedN = list.filter(x => x.owned > 0).length;
+        return `<div class="mb-3">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs font-bold text-[#ffaa00]">${sec}</span>
+                <span class="text-[10px] text-gray-500">${list.length}곳${ownedN?` · 보유 ${ownedN}`:''}</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2">${list.map(firmCard).join('')}</div>
+        </div>`;
+    }).join('');
 
     const boardHtml = !board.q ? '' : (board.done ? `
         <div class="al-card mb-4">
@@ -642,48 +918,77 @@ function renderInvest() {
         </div>`);
 
     const rules = (mm.kid_rules||[]).map(r => `<li class="text-[10px] text-gray-400">${r}</li>`).join('');
-    const terms = (ip.terms||[]).map(t =>
-        `<span class="inline-block text-[9px] px-2 py-1 m-0.5 rounded-full border border-[#333]"><b class="text-[#ffaa00]">${t.word}</b> ${t.meaning}</span>`
-    ).join('');
+
+    const finTerms = (ip.finance_glossary || []).slice(0, 8).map(t =>
+        `<span class="inline-block px-2 py-1 bg-black/40 rounded text-[9px] mr-1 mb-1" title="${(t.meaning||'').replace(/"/g,'')}">
+            <b class="text-[#ffaa00]">${t.word}</b> <span class="text-gray-500">${t.meaning||''}</span>
+        </span>`).join('');
 
     return `<div class="space-y-3">
         <div class="al-card border border-purple-500/30">
             <div class="font-bold text-sm">📈 투자 교실 (3층)</div>
             <p class="text-[10px] text-gray-400 mt-1">${ip.kid_summary||''}</p>
-            <p class="text-[9px] text-gray-600 mt-1">중독 방지: 주 단위 시세 · 하루 2번 · 단타 없음 · 교육용</p>
+            <p class="text-[9px] text-gray-600 mt-1">중독 방지: 주 단위 시세 · 하루 7번 · 단타 없음 · 교육용 · 우선주/보통주 구분은 나중에!</p>
         </div>
+        ${ceoHtml}
+        ${disclosureHtml}
         ${shareHtml}
+        ${dilutionHtml}
+        ${valHtml}
+        ${policyHtml}
+        ${quizHtml}
         <div class="al-card">
             <div class="font-bold text-sm mb-2">🤝 NPC 투자자 (선택)</div>
+            <p class="text-[10px] text-gray-500 mb-2">조각을 팔면 <b class="text-gray-300">회사 가치 × 지분 비율</b>만큼 즉시 지갑에 들어와요. 되사기(자사주)는 하루 ${bl.daily_limit||1}회 · 현금 ${bl.cash_ratio_pct||25}% 한도.</p>
             ${npcHtml || '<p class="text-xs text-gray-500">조각 발행 후 친구들이 찾아와요.</p>'}
         </div>
         <div class="al-card">
             <div class="flex flex-wrap justify-between gap-2 mb-2">
-                <div class="font-bold text-sm">🌤️ 하늘 친구 시장</div>
-                <div class="text-[10px] text-gray-400">오늘 ${mm.actions_today||0}/${mm.daily_limit||2}회 · 남음 ${mm.actions_left||0}</div>
+                <div class="font-bold text-sm">🌤️ 하늘 친구 시장 <span class="text-gray-500 font-normal text-[10px]">(${(ip.market||[]).length}곳)</span></div>
+                <div class="text-[10px] text-gray-400">오늘 ${mm.actions_today||0}/${mm.daily_limit!=null?mm.daily_limit:7}회 · 남음 ${mm.actions_left!=null?mm.actions_left:7}</div>
             </div>
             ${ev.name ? `<div class="text-[10px] text-purple-300 mb-2">${ev.icon||'📰'} 이번 주 뉴스: <b>${ev.name}</b> — 시세 이야기의 힌트</div>` : ''}
             <ul class="mb-3 list-disc pl-4">${rules}</ul>
+            <p class="text-[9px] text-gray-500 mb-3">관광·국내·국제·장거리·화물·안전 등 <b class="text-gray-400">섹터별</b>로 모아 봤어요. 하루 7번까지, 신중히!</p>
             ${marketHtml}
         </div>
         <div class="al-card">
             <div class="font-bold text-sm mb-2">💎 주간 배당</div>
-            <p class="text-[10px] text-gray-400 mb-2">내 회사 조각 + 친구 시장 보유분 · 주 1회만</p>
+            <p class="text-[10px] text-gray-400 mb-1">${div.kid||'내 회사 지분 + 친구 시장 보유분 · 주 1회만'}</p>
+            ${sh.issued ? `<p class="text-[10px] text-[#ffaa00] mb-2">내 회사 예상 배당: <b>${div.my_estimate_formatted||fmt(div.my_estimate||0)}</b> <span class="text-gray-500">(풀 ${div.pool_estimate_formatted||''} × 내 지분)</span></p>` : ''}
             <button onclick="investDividend()" class="text-xs px-4 py-2 rounded font-bold ${div.available&&!div.claimed_this_week?'bg-[#ffaa00] text-black':'border opacity-50'}"
                 ${div.available&&!div.claimed_this_week?'':'disabled'}>
                 ${div.claimed_this_week?'이번 주 수령 완료':'이번 주 배당 받기'}
             </button>
         </div>
         ${boardHtml}
+        ${finTerms ? `<div class="al-card text-[10px]"><div class="font-bold text-sm mb-2">📘 금융 용어 카드</div><div>${finTerms}</div></div>` : ''}
         <div class="al-card text-[10px]">
-            <div class="text-gray-500 mb-1">📖 쉬운 단어장</div>
-            ${terms}
+            <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
+                <div class="text-gray-300 font-bold text-sm">📖 쉬운 단어장</div>
+                <div class="text-[9px] text-gray-500" id="invest-glossary-count">라이브러리 ${ip.glossary_count||(ip.glossary||[]).length||0}개 · 5개씩 랜덤</div>
+            </div>
+            <div id="invest-glossary" class="flex flex-wrap gap-1 min-h-[3rem]"></div>
+            <div class="flex flex-wrap gap-2 mt-3">
+                <button type="button" onclick="refreshInvestGlossary(true)"
+                    class="text-xs px-4 py-2 border border-[#ffaa00]/50 text-[#ffaa00] rounded-lg font-bold hover:bg-[#2a2000]">
+                    🔀 추가 5개 단어 랜덤 보기
+                </button>
+                <button type="button" onclick="_glossarySeen=[]; refreshInvestGlossary(false)"
+                    class="text-xs px-3 py-2 border border-[#333] text-gray-400 rounded-lg hover:border-gray-500">
+                    새로 5개 뽑기
+                </button>
+            </div>
             <p class="mt-2 text-gray-600"><a href="/guide" class="text-[#0A84FF]">가이드 → 투자 교실</a></p>
         </div>
     </div>`;
 }
 function investIssue() { apiPost('/api/airline/invest/issue', {}); }
 function investNpc(id, accept) { apiPost('/api/airline/invest/npc', { npc_id: id, accept }); }
+function investBuyback(id) {
+    if (!confirm('이 투자자 지분을 되살까요? (시세보다 조금 싸게 · 교육용 협상)')) return;
+    apiPost('/api/airline/invest/buyback', { npc_id: id });
+}
 function investMarket(firmId, action) {
     if (action === 'buy' && !confirm('조각 1개를 살까요? (오늘 횟수가 줄어들어요)')) return;
     if (action === 'sell' && !confirm('조각 1개를 팔까요?')) return;
@@ -691,6 +996,87 @@ function investMarket(firmId, action) {
 }
 function investDividend() { apiPost('/api/airline/invest/dividend', {}); }
 function investBoard(choiceId) { apiPost('/api/airline/invest/board', { choice_id: choiceId }); }
+function investDivPolicy(policy) { apiPost('/api/airline/invest/dividend-policy', { policy }); }
+function investValueQuiz(answer) { apiPost('/api/airline/invest/value-quiz', { answer }); }
+
+/** 쉬운 단어장: 라이브러리에서 5개 랜덤 (최근 본 단어 제외 우선) */
+let _glossarySeen = [];
+let _glossaryLib = null; // 캐시된 전체 목록
+
+function getGlossaryLib() {
+    if (_glossaryLib && _glossaryLib.length) return _glossaryLib;
+    const fromPanel = D.ops?.invest_panel?.glossary;
+    if (Array.isArray(fromPanel) && fromPanel.length) {
+        _glossaryLib = fromPanel;
+        return _glossaryLib;
+    }
+    return [];
+}
+
+async function ensureGlossaryLib() {
+    if (getGlossaryLib().length) return getGlossaryLib();
+    try {
+        const res = await fetch('/api/airline/invest/glossary');
+        const d = await res.json();
+        if (Array.isArray(d.glossary) && d.glossary.length) {
+            _glossaryLib = d.glossary;
+            if (D.ops?.invest_panel) {
+                D.ops.invest_panel.glossary = d.glossary;
+                D.ops.invest_panel.glossary_count = d.glossary_count || d.glossary.length;
+            }
+            return _glossaryLib;
+        }
+    } catch (e) { /* ignore */ }
+    return [];
+}
+
+function pickGlossaryTerms(n) {
+    const lib = getGlossaryLib().slice();
+    if (!lib.length) return [];
+    const pool = lib.filter(t => t && t.word && !_glossarySeen.includes(t.word));
+    const use = (pool.length >= n ? pool : lib).slice();
+    for (let i = use.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [use[i], use[j]] = [use[j], use[i]];
+    }
+    const picked = use.slice(0, n);
+    picked.forEach(t => {
+        if (t.word && !_glossarySeen.includes(t.word)) _glossarySeen.push(t.word);
+    });
+    if (_glossarySeen.length >= lib.length * 0.85) _glossarySeen = picked.map(t => t.word);
+    return picked;
+}
+
+function renderGlossaryChips(terms) {
+    return (terms || []).map(t =>
+        `<span class="inline-block text-[10px] px-2.5 py-1.5 m-0.5 rounded-xl border border-[#333] bg-black/40 max-w-full">
+            <b class="text-[#ffaa00]">${t.word||''}</b>
+            ${t.category ? `<span class="text-[8px] text-gray-600 ml-1">[${t.category}]</span>` : ''}
+            <span class="text-gray-400"> — ${t.meaning||''}</span>
+        </span>`
+    ).join('');
+}
+
+async function refreshInvestGlossary(append) {
+    const el = document.getElementById('invest-glossary');
+    if (!el) return;
+    el.innerHTML = append ? el.innerHTML : '<span class="text-gray-500">단어 불러오는 중…</span>';
+    const lib = await ensureGlossaryLib();
+    // 카운트 표시 갱신
+    const countEl = document.getElementById('invest-glossary-count');
+    if (countEl) countEl.textContent = `라이브러리 ${lib.length}개 · 5개씩 랜덤`;
+    const picked = pickGlossaryTerms(5);
+    if (!picked.length) {
+        el.innerHTML = '<span class="text-red-400">단어를 불러오지 못했어요. 다시 시도 버튼을 눌러주세요.</span>';
+        return;
+    }
+    const chips = renderGlossaryChips(picked);
+    if (append && el.querySelector('.rounded-xl')) {
+        el.insertAdjacentHTML('beforeend', chips);
+    } else {
+        el.innerHTML = chips;
+    }
+}
 
 function renderFleet() {
     const ops = D.ops || {};
@@ -1089,7 +1475,22 @@ function closeCrewModal() {
     modal.classList.remove('flex');
 }
 
+function setStaffDivision(div) {
+    staffDivision = div;
+    staffRoleFilter = '전체';
+    openAlTab('staff');
+}
+
 function renderStaff() {
+    const divToggle = `<div class="flex gap-2 mb-4">
+        <button type="button" onclick="setStaffDivision('airline')" class="flex-1 py-2 rounded-xl font-bold text-sm border ${staffDivision==='airline'?'bg-purple-600 border-purple-400 text-white':'border-[#333] text-gray-400'}">✈️ 항공 팀</button>
+        <button type="button" onclick="setStaffDivision('space')" class="flex-1 py-2 rounded-xl font-bold text-sm border ${staffDivision==='space'?'bg-indigo-600 border-indigo-400 text-white':'border-[#333] text-gray-400'}">🚀 우주 팀</button>
+    </div>`;
+    if (staffDivision === 'space') return divToggle + renderSpaceStaff();
+    return divToggle + renderAirlineStaff();
+}
+
+function renderAirlineStaff() {
     const crew = D.ops?.hireable_crew || [];
     const meta = D.ops?.crew_meta || {};
     const pool = D.ops?.staff_pool || {};
@@ -1107,7 +1508,6 @@ function renderStaff() {
     }).join(' · ');
     const hiredList = crew.filter(c => c.hired);
     const readyList = crew.filter(c => c.unlocked && !c.hired);
-    const lockedList = crew.filter(c => !c.unlocked);
     const hiredInner = hiredList.map(c => {
         const p = c.profile || {};
         const roleLabel = STAFF_ROLE_LABELS[c.airline_role] || c.role;
@@ -1125,30 +1525,24 @@ function renderStaff() {
         : (hiredList.length ? `<div class="al-card mb-4 p-3 border border-red-500/30"><div class="space-y-2">${hiredInner}</div></div>` : '');
     const unlockedN = crew.filter(c => c.unlocked).length;
     const readyN = readyList.length;
-    // 기본 목록: 채용 가능 우선, 잠긴 건 접기
     let listHtml = '';
     if (staffRoleFilter === '채용됨') {
         listHtml = `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${filtered.map(c => renderCrewHireCard(c)).join('')}</div>`;
     } else {
         const showReady = filtered.filter(c => c.unlocked && !c.hired);
         const showLocked = filtered.filter(c => !c.unlocked);
-        const showHired = filtered.filter(c => c.hired);
         listHtml = `
             <h3 class="text-sm font-bold text-purple-300 mb-2">✨ 지금 채용 가능 (${showReady.length})</h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-4">${showReady.map(c => renderCrewHireCard(c)).join('') || '<p class="text-xs text-gray-500 col-span-full">채용 가능한 동료가 없어요. 기장생활에서 더 만나세요!</p>'}</div>
-            ${showLocked.length && typeof uxCollapseHtml === 'function' ? uxCollapseHtml('al-locked-crew', '🔒 아직 못 만난 동료', `(${showLocked.length})`, `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${showLocked.map(c => renderCrewHireCard(c)).join('')}</div>`, { color: '#888' }) : ''}
-            ${showHired.length && staffRoleFilter !== '전체' ? '' : ''}`;
+            ${showLocked.length && typeof uxCollapseHtml === 'function' ? uxCollapseHtml('al-locked-crew', '🔒 아직 못 만난 동료', `(${showLocked.length})`, `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">${showLocked.map(c => renderCrewHireCard(c)).join('')}</div>`, { color: '#888' }) : ''}`;
     }
     return `${hiredBar}<div class="al-card mb-4 p-3 border border-purple-500/30 text-[10px] text-gray-400">
-        🔗 <b class="text-white">기장생활 → 채용 연동</b><br>
-        기장생활에서 <b class="text-[#33ff33]">만난(체크된) 동료</b>만 여기서 채용할 수 있어요.
-        지금 해금 <b class="text-[#33ff33]">${unlockedN}</b>명 · 바로 채용 가능 <b class="text-purple-300">${readyN}</b>명
-        · <a href="/captain-life" class="text-[#0A84FF]">기장생활에서 더 만나기 →</a>
+        🔗 <b class="text-white">기장생활 → 항공 채용</b> · 노선에 배치해요.
+        해금 <b class="text-[#33ff33]">${unlockedN}</b> · 채용 가능 <b class="text-purple-300">${readyN}</b>
+        · <a href="/captain-life" class="text-[#0A84FF]">기장생활 →</a>
+        · <a href="/guide#space_staff" class="text-[#0A84FF]">우주 팀 가이드 →</a>
     </div>
-    <div class="al-card mb-4 p-3 border border-[#ffaa00]/20 text-[10px] text-gray-400">
-        💡 <b class="text-white">등급이 높을수록</b> 노선 수익이 올라가요! S·A급은 국제선에, B·C급은 국내선에 맞춰 뽑아보세요.
-    </div>
-    <p class="text-xs text-gray-400 mb-1">동료 풀 <b>${poolTotal}</b>명 · 해금 <b class="text-[#33ff33]">${unlockedN}</b> · 채용 <b>${hired}</b>명${D.ops?.crew_full ? '' : ' · <span class="text-gray-600">목록 로딩…</span>'}</p>
+    <p class="text-xs text-gray-400 mb-1">동료 풀 <b>${poolTotal}</b> · 채용 <b>${hired}</b>명</p>
     <p class="text-[10px] text-gray-500 mb-3">${summary}</p>
     <div class="flex gap-1 mb-2 flex-wrap">
         ${roleKeys.map(r => `<button onclick="setStaffFilter('${r}')" class="px-2 py-1 rounded-full text-[10px] border ${staffRoleFilter===r?'border-[#ffaa00] text-[#ffaa00]':'border-[#333] text-gray-400'}">${r==='전체'||r==='채용됨'?r:STAFF_ROLE_LABELS[r]}</button>`).join('')}
@@ -1159,8 +1553,204 @@ function renderStaff() {
             `<button onclick="setStaffSort('${k}')" class="px-2 py-1 rounded-full text-[10px] border ${staffSort===k?'border-purple-500 text-purple-400':'border-[#333] text-gray-400'}">${l}</button>`
         ).join('')}
     </div>
-    ${listHtml}
-    <p class="text-xs text-gray-500 mt-4"><a href="/captain-life" class="text-[#0A84FF]">기장생활</a>에서 더 많은 동료를 만나요! 카드를 누르면 상세 스펙을 볼 수 있어요.</p>`;
+    ${listHtml}`;
+}
+
+function renderSpaceStaff() {
+    const sp = D.space || {};
+    if (!sp.unlocked) {
+        return `<div class="al-card border border-purple-500/30">
+            <h3 class="font-bold">🚀 우주 팀 (잠김)</h3>
+            <p class="text-xs text-gray-400 mt-2">우주 사업부가 열리면 여기서 채용해요. ${sp.kid_hint||''}</p>
+            <a href="/guide#space_staff" class="text-xs text-[#0A84FF] mt-2 inline-block">가이드 →</a>
+        </div>`;
+    }
+    if (!sp.founded) {
+        return `<div class="al-card">
+            <p class="text-sm text-gray-300">먼저 <button type="button" onclick="openAlTab('space')" class="text-purple-400 underline">우주 탭</button>에서 사업부를 설립하세요!</p>
+        </div>`;
+    }
+    const st = sp.staff || {};
+    const crew = st.hireable || [];
+    const meta = st.meta || {};
+    const roleLabels = st.role_labels || SPACE_ROLE_LABELS;
+    const roleKeys = ['전체', '채용됨', ...Object.keys(SPACE_ROLE_LABELS)];
+    let filtered = staffRoleFilter === '전체' ? crew
+        : staffRoleFilter === '채용됨' ? crew.filter(c => c.hired)
+        : crew.filter(c => c.space_role === staffRoleFilter);
+    const hiredList = crew.filter(c => c.hired);
+    const readyList = crew.filter(c => c.unlocked && !c.hired);
+
+    const slotSelect = (role, currentId, onchangeFn) => {
+        const opts = crew.filter(c => c.hired && c.space_role === role)
+            .map(c => `<option value="${c.id}" ${c.id===currentId?'selected':''}>${c.emoji} ${c.name}</option>`).join('');
+        return `<select onchange="${onchangeFn}" class="text-[10px] bg-black/50 border border-[#333] rounded px-2 py-1 max-w-full">
+            <option value="">— 비움 —</option>${opts}</select>`;
+    };
+    const team = st.launch_team || {};
+    const desks = st.desks || {};
+    const hr = st.hr_card || {};
+
+    const quizHtml = (st.quizzes || []).map(q => {
+        if (q.done) return `<div class="text-[10px] text-[#33ff33]">✓ ${q.q} — 완료</div>`;
+        return `<div class="al-card p-3 mb-2 border border-[#0A84FF]/40">
+            <div class="font-bold text-xs mb-1">🎓 교육 퀴즈</div>
+            <p class="text-sm mb-2">${q.q}</p>
+            <div class="flex flex-wrap gap-2">${(q.choices||[]).map(ch =>
+                `<button onclick="spaceQuiz('${q.id}','${ch.id}')" class="text-[10px] px-3 py-1 border border-[#0A84FF]/50 rounded">${ch.label}</button>`
+            ).join('')}</div>
+            <p class="text-[9px] text-gray-500 mt-1">${q.kid||''}</p>
+        </div>`;
+    }).join('');
+
+    const transferHtml = `
+        <div class="al-card mb-4 border border-[#ffaa00]/30">
+            <div class="font-bold text-sm mb-1">🔧→🔥 항공→우주 전직 (주 1회)</div>
+            <p class="text-[10px] text-gray-400 mb-2">채용된 <b>정비사</b>를 우주 추진 엔지니어로 연수 · ${st.transfer_cost_f||''}</p>
+            ${!(st.transfer_available) ? '<p class="text-[10px] text-gray-500">이번 주 전직 완료 또는 이미 전직 엔지니어 있음</p>' :
+              (st.transfer_candidates||[]).length ? (st.transfer_candidates||[]).map(t =>
+                `<button onclick="spaceTransfer('${t.id}')" class="text-[10px] px-3 py-1 mr-1 mb-1 bg-[#ffaa00] text-black rounded font-bold">${t.emoji} ${t.name} 연수</button>`
+              ).join('') : '<p class="text-[10px] text-gray-500">항공 팀에 정비사를 먼저 채용하세요</p>'}
+        </div>`;
+
+    const assignHtml = `<div class="al-card mb-4 border border-indigo-500/40">
+        <div class="font-bold text-sm mb-2">📋 배치 보드</div>
+        <p class="text-[9px] text-gray-500 mb-2">${st.kid||''}</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-[10px]">
+            <div class="p-2 bg-black/40 rounded">
+                <div class="font-bold text-purple-300 mb-1">🚀 발사 팀 (미션)</div>
+                <div class="mb-1">지휘 ${slotSelect('mission_director', team.mission_director?.id, `spaceSetTeam('mission_director',this.value)`)}</div>
+                <div class="mb-1">궤도 ${slotSelect('flight_dynamics', team.flight_dynamics?.id, `spaceSetTeam('flight_dynamics',this.value)`)}</div>
+                <div>탑재 ${slotSelect('payload', team.payload?.id, `spaceSetTeam('payload',this.value)`)}</div>
+            </div>
+            <div class="p-2 bg-black/40 rounded">
+                <div class="font-bold text-blue-300 mb-1">🏢 공통 데스크</div>
+                <div class="mb-1">관제 ${slotSelect('ground_control', desks.ground_control?.id, `spaceSetDesk('ground_control',this.value)`)}</div>
+                <div>계약 ${slotSelect('business', desks.business?.id, `spaceSetDesk('business',this.value)`)}</div>
+                <p class="text-[9px] text-gray-600 mt-2">계약 수령 = 계약 데스크 + 탑재 채용 필수</p>
+            </div>
+        </div>
+        ${sp.last_debrief ? `<p class="text-[10px] text-[#a78bfa] mt-2">📡 ${sp.last_debrief}</p>` : ''}
+        ${sp.debrief_bonus ? `<p class="text-[10px] text-[#33ff33]">다음 발사 보너스 +${sp.debrief_bonus}%</p>` : ''}
+    </div>
+    <div class="al-card mb-4 border border-[#33ff33]/30">
+        <div class="font-bold text-sm">📑 ${hr.title||'드림 스페이스 인사'}</div>
+        <p class="text-xs text-gray-300 mt-1">${hr.tip||''}</p>
+        <p class="text-[10px] text-gray-500 mt-1">우주 인원 ${hr.hired??meta.hired_count??0}명 · 주급 ${hr.payroll_f||meta.weekly_payroll_formatted||'—'}</p>
+        <p class="text-[9px] text-gray-600">${hr.kid||''}</p>
+    </div>
+    ${quizHtml}
+    ${transferHtml}`;
+
+    const hiredInner = hiredList.map(c => {
+        const p = c.profile || {};
+        return `<div class="crew-hired-row">
+            <div class="min-w-0"><span class="text-sm">${c.emoji} <b>${c.name}</b></span>
+            <span class="text-[10px] text-gray-500 ml-1">${SPACE_ROLE_LABELS[c.space_role]||c.role} · ${p.grade||'?'} · ${fmtPay(p.weekly_pay)}/주</span></div>
+            <button type="button" onclick="fireSpaceCrew('${c.id}')" class="crew-fire-btn">해고</button>
+        </div>`;
+    }).join('');
+
+    const cards = (list) => list.map(c => {
+        const p = c.profile || {};
+        let action = '';
+        if (c.hired) action = `<div class="text-[10px] text-[#33ff33] mt-2">✓ 소속</div>`;
+        else if (c.hire_ready || (c.unlocked && !c.hired)) action = `<button onclick="event.stopPropagation();hireSpaceCrew('${c.id}')" class="text-[10px] mt-2 w-full px-2 py-1 bg-indigo-600 rounded font-bold">채용</button>`;
+        else action = `<div class="text-[9px] text-[#ffaa00] mt-2">🔒 ${c.unlock_tip||''}</div>`;
+        return `<div class="al-card text-center cursor-pointer" onclick="openSpaceCrewModal('${c.id}')">
+            <div class="text-3xl">${c.emoji}</div>
+            <div class="text-xs font-bold mt-1">${c.name}</div>
+            <div class="text-[9px] text-gray-500">${SPACE_ROLE_LABELS[c.space_role]||c.role}</div>
+            <div class="text-[9px] text-purple-300">${p.grade_emoji||''} ${p.grade||'?'} · ${fmtPay(p.weekly_pay)}</div>
+            <div class="text-[9px] text-gray-500 mt-1">${c.kid||''}</div>
+            ${action}
+        </div>`;
+    }).join('');
+
+    let listHtml = '';
+    if (staffRoleFilter === '채용됨') {
+        listHtml = `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">${cards(filtered)}</div>`;
+    } else {
+        const showReady = filtered.filter(c => c.unlocked && !c.hired);
+        const showLocked = filtered.filter(c => !c.unlocked);
+        listHtml = `
+            <h3 class="text-sm font-bold text-indigo-300 mb-2">✨ 채용 가능 (${showReady.length}) · 오늘 남음 ${meta.hires_left_today??2}</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mb-4">${cards(showReady) || '<p class="text-xs text-gray-500">조건 해금 또는 퀴즈를 풀어 보세요</p>'}</div>
+            ${showLocked.length ? `<h3 class="text-sm font-bold text-gray-500 mb-2">🔒 잠김 (${showLocked.length})</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 opacity-70">${cards(showLocked)}</div>` : ''}`;
+    }
+
+    const rocketLeadHtml = (sp.rockets||[]).filter(r => r.owned_count > 0).map(r => `
+        <div class="flex flex-wrap items-center gap-2 text-[10px] mb-1">
+            <span>${r.emoji} ${r.name}</span>
+            ${slotSelect('propulsion', r.lead_id, `spaceSetRocketLead('${r.id}',this.value)`)}
+        </div>`).join('');
+
+    return `
+    ${assignHtml}
+    ${rocketLeadHtml ? `<div class="al-card mb-4"><div class="font-bold text-sm mb-2">🔥 로켓 담당 (추진)</div>${rocketLeadHtml}</div>` : ''}
+    ${hiredList.length ? `<div class="al-card mb-4"><div class="font-bold text-xs mb-2">채용 ${hiredList.length}/${meta.max_staff||15} · 주급 ${meta.weekly_payroll_formatted||''}</div>
+        <div class="space-y-2">${hiredInner}</div></div>` : ''}
+    <div class="al-card mb-3 p-3 text-[10px] text-gray-400 border border-indigo-500/30">
+        우주 역할은 항공의 기장·항로·정비·화물·운항·영업과 같아요. 배치하면 성공률·비용·계약이 달라져요!
+        · <a href="/guide#space_staff" class="text-[#0A84FF]">가이드</a>
+    </div>
+    <div class="flex gap-1 mb-3 flex-wrap">
+        ${roleKeys.map(r => `<button onclick="setStaffFilter('${r}')" class="px-2 py-1 rounded-full text-[10px] border ${staffRoleFilter===r?'border-indigo-400 text-indigo-300':'border-[#333] text-gray-400'}">${r==='전체'||r==='채용됨'?r:(SPACE_ROLE_LABELS[r]||r)}</button>`).join('')}
+    </div>
+    ${listHtml}`;
+}
+
+function openSpaceCrewModal(crewId) {
+    const st = (D.space && D.space.staff) || {};
+    const c = (st.hireable || []).find(x => x.id === crewId);
+    if (!c) return;
+    const p = c.profile || {};
+    document.getElementById('crew-modal-body').innerHTML = `
+        <div class="p-5 border-b border-indigo-500/20 flex justify-between">
+            <div class="flex gap-3"><span class="text-4xl">${c.emoji}</span>
+            <div><div class="font-bold text-lg">${c.name}</div>
+            <div class="text-xs text-gray-400">${c.role}</div>
+            <span class="text-xs font-bold text-indigo-300">${p.grade||'?'}등급 · ${fmtPay(p.weekly_pay)}/주</span></div></div>
+            <button onclick="closeCrewModal()" class="text-2xl text-gray-400">×</button>
+        </div>
+        <div class="p-5 text-sm space-y-2">
+            <p class="text-xs text-gray-300">${c.kid||''}</p>
+            <p class="text-[10px] text-purple-300">특기: ${c.specialty||'—'} · ${c.unlock_tip||''}</p>
+            ${c.hired ? `<button onclick="fireSpaceCrew('${c.id}');closeCrewModal();" class="crew-fire-btn w-full">해고</button>` :
+              c.unlocked ? `<button onclick="hireSpaceCrew('${c.id}');closeCrewModal();" class="w-full py-2 bg-indigo-600 rounded font-bold">채용</button>` :
+              `<p class="text-xs text-[#ffaa00]">🔒 ${c.unlock_tip}</p>`}
+        </div>`;
+    const modal = document.getElementById('crew-modal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+function hireSpaceCrew(id) { apiPost('/api/airline/space/hire', { crew_id: id }); }
+function fireSpaceCrew(id) {
+    if (!confirm('우주 팀에서 제외할까요?')) return;
+    apiPost('/api/airline/space/fire', { crew_id: id });
+}
+function spaceSetTeam(role, crewId) {
+    const st = (D.space && D.space.staff && D.space.staff.launch_team) || {};
+    const team = {
+        mission_director: st.mission_director?.id || null,
+        flight_dynamics: st.flight_dynamics?.id || null,
+        payload: st.payload?.id || null,
+    };
+    team[role] = crewId || null;
+    apiPost('/api/airline/space/team', { team });
+}
+function spaceSetDesk(deskId, crewId) {
+    apiPost('/api/airline/space/desk', { desk_id: deskId, crew_id: crewId || null });
+}
+function spaceSetRocketLead(rocketId, crewId) {
+    apiPost('/api/airline/space/rocket-lead', { rocket_id: rocketId, crew_id: crewId || null });
+}
+function spaceQuiz(quizId, answer) { apiPost('/api/airline/space/quiz', { quiz_id: quizId, answer }); }
+function spaceTransfer(crewId) {
+    if (!confirm('정비사를 우주 추진으로 연수할까요? (비용·주 1회)')) return;
+    apiPost('/api/airline/space/transfer', { crew_id: crewId });
 }
 
 function renderStats() {
@@ -1189,31 +1779,114 @@ function renderSpace() {
             <h2 class="font-bold text-lg">🚀 우주 사업부 (잠김)</h2>
             <p class="text-sm text-gray-400 mt-2">${sp.kid_hint}</p>
             <ul class="text-xs mt-3 space-y-1 text-gray-300">
-                <li>항공사 Lv: ${p.airline_level||0} / ${p.need_level||5}</li>
+                <li>항공사 Lv: ${p.airline_level||0} / ${p.need_level||4}</li>
                 <li>상상력: ${p.imagination||0} / ${p.need_imagination||30}</li>
                 <li>능력 합: ${p.stat_sum||0} / ${p.need_stat_sum||80}</li>
             </ul></div>`;
     }
+    const grade = sp.rep_grade || {};
+    const edu = sp.edu || {};
+    const streams = (sp.revenue_streams||[]).map(s =>
+        `<li class="text-[10px] text-gray-400">· <b class="text-gray-300">${s.name}</b> — ${s.kid}</li>`).join('');
     let html = `<div class="al-card mb-4 border border-purple-500/40">
         ${sp.founded ? '<div class="text-[#a78bfa] font-bold">🚀 드림 스페이스 운영 중</div>' :
           '<button onclick="foundSpace()" class="px-4 py-2 bg-purple-600 rounded font-bold text-sm">우주 사업부 설립</button>'}
-        <div class="text-xs text-gray-500 mt-2">발사 ${sp.launches||0}회</div></div>`;
-    html += `<h3 class="font-bold text-sm mb-2">로켓</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">`;
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3 text-[10px]">
+            <div class="p-2 bg-black/40 rounded">오늘 발사<br><b class="text-white">${sp.launches_today||0}/${sp.daily_launch_limit||5}</b></div>
+            <div class="p-2 bg-black/40 rounded">로켓 보유<br><b class="text-white">${sp.rocket_count||0}/${sp.max_rockets||10}</b></div>
+            <div class="p-2 bg-black/40 rounded">위성 · 이번 주<br><b class="text-white">${sp.sat_count||0}기 · +${sp.sats_this_week||0}</b></div>
+            <div class="p-2 bg-black/40 rounded">누적 우주 수입<br><b class="text-[#ffaa00]">${sp.total_space_revenue_formatted||fmt(sp.total_space_revenue||0)}</b></div>
+            <div class="p-2 bg-black/40 rounded">우주 평판<br><b class="text-white">${grade.emoji||''} ${grade.name||''} (${sp.space_rep||0})</b></div>
+            <div class="p-2 bg-black/40 rounded">성공 / 실패<br><b class="text-[#33ff33]">${sp.successes||0}</b> / <b class="text-red-400">${sp.fails||0}</b></div>
+            <div class="p-2 bg-black/40 rounded">친환경 발사<br><b class="text-[#33ff33]">${sp.eco_launches||0}회</b></div>
+            <div class="p-2 bg-black/40 rounded">재사용 절감<br><b class="text-purple-300">${fmt(sp.reuse_saves||0)}</b></div>
+        </div>
+        <p class="text-[10px] text-gray-500 mt-2">${sp.kid_hint||''}</p>
+        ${sp.passive_just_now ? `<p class="text-[10px] text-[#33ff33] mt-1">오늘 수동 수입 +${fmt(sp.passive_just_now)} ${(sp.passive_parts||[]).join(' · ')}</p>` : ''}
+        ${streams ? `<ul class="mt-2 space-y-0.5">${streams}</ul>` : ''}
+        <div class="text-[9px] text-gray-600 mt-2 space-y-0.5">
+            <div>· ${edu.success||'성공률 관리'}</div>
+            <div>· ${edu.insurance||'보험'}</div>
+            <div>· ${edu.reuse||'재사용'}</div>
+            <div>· ${edu.eco||'친환경'}</div>
+            <div>· ${edu.contracts||'계약'}</div>
+            <div>· ${edu.staff||'채용 탭 → 우주 팀'}</div>
+        </div>
+        ${sp.last_debrief ? `<p class="text-[10px] text-[#a78bfa] mt-2">📡 ${sp.last_debrief}</p>` : ''}
+        <div class="text-xs text-gray-500 mt-2">총 발사 ${sp.launches||0}회 · 고객 계약 ${sp.contracts_done||0}건
+            · <button type="button" onclick="staffDivision='space';openAlTab('staff')" class="text-indigo-400 underline">우주 팀 채용·배치</button></div></div>`;
+
+    // 주간 고객 계약 보드
+    const contracts = sp.contracts || [];
+    if (sp.founded) {
+        html += `<div class="al-card mb-4 border border-[#0A84FF]/40">
+            <div class="font-bold text-sm mb-1">📋 고객 계약 보드 (주간 퀘스트)</div>
+            <p class="text-[10px] text-gray-400 mb-2">이번 주 올린 위성으로 고객 요청을 완료해요. 평판이 높을수록 큰 계약!</p>
+            <div class="space-y-2">${contracts.length ? contracts.map(c => `
+                <div class="p-2 bg-black/40 rounded flex flex-wrap justify-between gap-2 items-center">
+                    <div>
+                        <span class="text-lg">${c.emoji||'📋'}</span>
+                        <b class="text-sm">${c.client||''}</b>
+                        <div class="text-[10px] text-gray-400">${c.kid||''} · 필요 위성 ${c.need_sats||0}기
+                            · 진행 <b class="text-white">${c.progress||0}/${c.need_sats||0}</b>
+                            ${c.locked?` · 평판 ${c.min_rep}+ 필요`:''}
+                        </div>
+                        <div class="text-[10px] text-[#ffaa00]">보상 ${fmt(c.reward||0)}</div>
+                    </div>
+                    ${c.claimed ? '<span class="text-[10px] text-[#33ff33]">완료 ✓</span>' :
+                      c.can_claim ? `<button onclick="claimSpaceContract('${c.id}')" class="text-xs px-3 py-1 bg-[#0A84FF] rounded font-bold">수령</button>` :
+                      c.locked ? '<span class="text-[10px] text-gray-600">평판 잠금</span>' :
+                      !c.staff_gate_ok ? `<span class="text-[10px] text-[#ffaa00]" title="${(c.staff_gate_err||'').replace(/"/g,'')}">인원 필요</span>` :
+                      '<span class="text-[10px] text-gray-500">위성 더 필요</span>'}
+                </div>
+                ${!c.claimed && !c.staff_gate_ok ? `<div class="text-[9px] text-[#ffaa00] w-full">${c.staff_gate_err||c.need_staff||''} · <button type="button" onclick="staffDivision='space';openAlTab('staff')" class="underline">채용 탭</button></div>` : ''}
+                `).join('') : '<p class="text-xs text-gray-500">이번 주 계약이 없어요.</p>'}
+            </div>
+            <p class="text-[9px] text-gray-600 mt-2">계약 수령: 계약 데스크 + 탑재 인원 채용 · 채용 탭 → 🚀 우주</p>
+            </div>`;
+
+        // 발사 옵션: 보험 · 친환경
+        html += `<div class="al-card mb-4 border border-purple-400/30">
+            <div class="font-bold text-sm mb-2">🛡️ 발사 준비 (보험 · 친환경)</div>
+            <label class="flex items-center gap-2 text-[11px] mb-2 cursor-pointer">
+                <input type="checkbox" id="space-ins" class="rounded">
+                보험 들기 (${sp.insurance_cost_formatted||fmt(sp.insurance_cost||0)}) — 실패 시 비용 일부 환급
+            </label>
+            <label class="flex items-center gap-2 text-[11px] cursor-pointer">
+                <input type="checkbox" id="space-eco" class="rounded">
+                친환경 연료 (${sp.eco_fuel_cost_formatted||fmt(sp.eco_fuel_cost||0)}) — 성공률·평판↑ · 환경 스토리
+            </label>
+            <p class="text-[9px] text-gray-600 mt-2">재사용 로켓이면 보험·연료 비용이 할인돼요 (재사용 경제).</p>
+        </div>`;
+    }
+
+    html += `<h3 class="font-bold text-sm mb-2">로켓 (최대 ${sp.max_rockets||10}기)</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">`;
     html += (sp.rockets||[]).map(r => `
         <div class="al-card text-center">
             <div class="text-3xl">${r.emoji}</div><div class="text-xs font-bold">${r.name}</div>
-            <div class="text-[10px] text-gray-500">${r.kid_desc}</div>
-            ${r.owned ? '<div class="text-[10px] text-[#33ff33]">보유</div>' :
-              `<button onclick="buyRocket('${r.id}')" class="text-[10px] mt-1 px-2 py-1 bg-[#ffaa00] text-black rounded">${fmt(r.price)}</button>`}
+            <div class="text-[10px] text-gray-500">${r.kid_desc||''}</div>
+            ${r.reusable ? `<div class="text-[9px] text-[#33ff33] mt-0.5">♻️ 재사용 · 발사비 −${Math.round((r.launch_discount||0)*100)}%</div>` : ''}
+            <div class="text-[10px] text-[#a78bfa] mt-1">보유 ${r.owned_count||0}기</div>
+            ${r.can_buy===false ? '<div class="text-[9px] text-gray-600 mt-1">함대 가득</div>' :
+              `<button onclick="buyRocket('${r.id}')" class="text-[10px] mt-1 px-2 py-1 bg-[#ffaa00] text-black rounded">+1 · ${fmt(r.price)}</button>`}
         </div>`).join('');
-    html += `</div><h3 class="font-bold text-sm mb-2">미션</h3><div class="space-y-2">`;
+    html += `</div><h3 class="font-bold text-sm mb-2">발사 미션 (하루 ${(sp.daily_launch_limit||5)}회 · 성공률·평판 연동)</h3><div class="space-y-2">`;
     html += (sp.missions||[]).map(m => `
-        <div class="al-card flex justify-between items-center">
-            <div><span class="text-xl">${m.emoji}</span> <b class="text-sm">${m.name}</b>
-                <div class="text-[10px] text-gray-500">${m.kid_desc}</div></div>
-            ${m.done ? '<span class="text-[#33ff33] text-xs">완료</span>' :
-              m.can_launch ? `<button onclick="launchMission('${m.id}')" class="text-xs px-3 py-1 bg-purple-600 rounded font-bold">발사!</button>` :
-              '<span class="text-xs text-gray-500">로켓 필요</span>'}
+        <div class="al-card flex justify-between items-center gap-2">
+            <div class="min-w-0">
+                <span class="text-xl">${m.emoji}</span> <b class="text-sm">${m.name}</b>
+                <div class="text-[10px] text-gray-500">${m.kid_desc||''}${m.sat_gain?` · 위성+${m.sat_gain}`:''}
+                    ${m.locked_rep?` · 평판 ${m.min_rep}+ 필요`:''}</div>
+                <div class="text-[10px] text-[#ffaa00]">보상 ${fmt(m.reward_money||0)}
+                    · 성공률 <b class="text-white">${m.success_rate||'?'}%</b>
+                    ${m.success_rate_eco?` (에코 ${m.success_rate_eco}%)`:''}
+                    ${m.staff_bonus?` · 팀 +${m.staff_bonus}%`:''}</div>
+                ${(m.staff_parts||[]).length?`<div class="text-[9px] text-indigo-300">${(m.staff_parts||[]).join(' · ')}</div>`:''}
+            </div>
+            ${m.can_launch ? `<button onclick="launchMission('${m.id}')" class="text-xs px-3 py-1 bg-purple-600 rounded font-bold shrink-0">발사!</button>` :
+              !m.has_rocket ? '<span class="text-xs text-gray-500 shrink-0">로켓 필요</span>' :
+              m.locked_rep ? '<span class="text-xs text-gray-500 shrink-0">평판 부족</span>' :
+              '<span class="text-xs text-gray-500 shrink-0">오늘 한도</span>'}
         </div>`).join('');
     return html + '</div>';
 }
@@ -1262,17 +1935,46 @@ async function apiPost(url, body) {
         D.ops = D.ops || {};
         D.ops.invest_panel = d.invest_panel;
     }
+    if (d.space) D.space = d.space;
+    if (d.staff && D.space) D.space.staff = d.staff;
+    if (d.revenue_panel) {
+        D.ops = D.ops || {};
+        D.ops.revenue_panel = d.revenue_panel;
+    }
     if (d.dashboard) {
         await applyDashboard(d.dashboard);
         if (d.invest_panel) D.ops.invest_panel = d.invest_panel;
+        if (d.revenue_panel) D.ops.revenue_panel = d.revenue_panel;
+        if (d.space) D.space = d.space;
+        if (d.staff && D.space) D.space.staff = d.staff;
         const tab = document.querySelector('.al-tab.active')?.dataset.tab || 'overview';
         if (!document.getElementById('al-founded').classList.contains('hidden')) {
             if (tab === 'staff') D.ops.crew_full = false;
-            await openAlTab(tab);
+            if (tab === 'revenue' && d.revenue_panel) {
+                document.getElementById('al-content').innerHTML = renderRevenue();
+            } else {
+                await openAlTab(tab);
+            }
+        }
+    } else if (d.revenue_panel) {
+        const tab = document.querySelector('.al-tab.active')?.dataset.tab;
+        if (tab === 'revenue') {
+            document.getElementById('al-content').innerHTML = renderRevenue();
         }
     } else if (d.invest_panel) {
         const tab = document.querySelector('.al-tab.active')?.dataset.tab;
-        if (tab === 'invest') document.getElementById('al-content').innerHTML = renderInvest();
+        if (tab === 'invest') {
+            document.getElementById('al-content').innerHTML = renderInvest();
+            refreshInvestGlossary(false);
+        }
+    } else if (d.space || d.staff) {
+        if (d.staff && D.space) D.space.staff = d.staff;
+        const tab = document.querySelector('.al-tab.active')?.dataset.tab;
+        if (tab === 'space') {
+            document.getElementById('al-content').innerHTML = renderSpace();
+        } else if (tab === 'staff') {
+            document.getElementById('al-content').innerHTML = renderStaff();
+        }
     } else {
         await loadDash({ light: true });
     }
@@ -1287,8 +1989,210 @@ function allocateProfit(choice) {
     apiPost('/api/airline/company/allocate', { choice });
 }
 function withdrawVault() {
-    if (!confirm('회사 금고에 모은 돈을 지갑으로 옮길까요?')) return;
+    if (!confirm('가수금을 지갑으로 회수할까요?\n(이자 없는 출자 회수 · 전액)')) return;
     apiPost('/api/airline/company/vault/withdraw', {});
+}
+
+async function loadTreasuryPanel(force) {
+    if (!force && D.ops?.treasury_panel) {
+        const el = document.getElementById('al-content');
+        if (el && document.querySelector('.al-tab.active')?.dataset.tab === 'treasury') {
+            el.innerHTML = renderTreasury();
+        }
+        return;
+    }
+    try {
+        const res = await fetch('/api/airline/treasury');
+        const data = await res.json();
+        if (data.error && !data.treasury) {
+            const el = document.getElementById('al-content');
+            if (el) el.innerHTML = `<div class="al-card"><p class="text-red-400 text-sm">${data.error}</p></div>`;
+            return;
+        }
+        D.ops = D.ops || {};
+        D.ops.treasury_panel = data.treasury;
+        if (data.wallet) {
+            D.wallet = data.wallet;
+            const w = document.getElementById('al-wallet');
+            if (w && data.wallet.balance != null) w.textContent = fmt(data.wallet.balance);
+            else if (w && data.wallet.balance_formatted) w.textContent = data.wallet.balance_formatted;
+        }
+        if (data.dashboard?.ops) {
+            D.ops = { ...D.ops, ...data.dashboard.ops, treasury_panel: data.treasury };
+            if (data.dashboard.wallet) D.wallet = data.dashboard.wallet;
+        }
+        const el = document.getElementById('al-content');
+        if (el && document.querySelector('.al-tab.active')?.dataset.tab === 'treasury') {
+            el.innerHTML = renderTreasury();
+        }
+    } catch (e) {
+        const el = document.getElementById('al-content');
+        if (el) el.innerHTML = '<p class="text-red-400 text-sm">자금 탭 연결 오류</p>';
+    }
+}
+
+function renderTreasury() {
+    const T = D.ops?.treasury_panel;
+    if (!T) {
+        return '<p class="text-gray-400 text-sm animate-pulse">자금관리 불러오는 중...</p>';
+    }
+    const rates = T.rates || {};
+    const exp = T.expected || {};
+    const log = (T.log || []).slice(0, 12).map(e => `
+        <div class="flex justify-between gap-2 text-[10px] py-1 border-b border-[#222]">
+            <span class="text-gray-400">${(e.ts||'').replace('T',' ').slice(0,16)} · ${e.label||e.action}</span>
+            <span class="text-[#ffaa00] font-bold">${e.amount_formatted||fmt(e.amount||0)}</span>
+        </div>`).join('') || '<p class="text-[10px] text-gray-600">아직 거래가 없어요.</p>';
+    const terms = (T.terms || []).map(t =>
+        `<span class="inline-block text-[9px] px-2 py-1 m-0.5 rounded-full border border-[#333] bg-black/30"><b class="text-[#ffaa00]">${t.word}</b> ${t.meaning}</span>`
+    ).join('');
+    return `<div class="space-y-3">
+        <div class="al-card border border-[#0A84FF]/40">
+            <div class="flex flex-wrap justify-between gap-2 mb-2">
+                <div>
+                    <div class="font-bold text-sm">🏦 회사 금고 · 자금관리</div>
+                    <p class="text-[10px] text-gray-400 mt-0.5">${T.kid_summary||''}</p>
+                </div>
+                <button type="button" onclick="loadTreasuryPanel(true)" class="text-[10px] px-2 py-1 border rounded text-gray-400">새로고침</button>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 text-xs">
+                <div class="p-2 bg-black/40 rounded"><div class="text-gray-500 text-[10px]">내 지갑</div><b class="text-[#ffaa00]">${T.wallet_formatted||fmt(0)}</b></div>
+                <div class="p-2 bg-black/40 rounded"><div class="text-gray-500 text-[10px]">회사 금고</div><b class="text-[#0A84FF]">${T.company_cash_formatted||fmt(0)}</b></div>
+                <div class="p-2 bg-black/40 rounded"><div class="text-gray-500 text-[10px]">가수금</div><b class="text-[#33ff33]">${T.capital_formatted||fmt(0)}</b></div>
+                <div class="p-2 bg-black/40 rounded"><div class="text-gray-500 text-[10px]">대여채권</div><b class="text-purple-300">${T.loan_to_company_formatted||fmt(0)}</b></div>
+                <div class="p-2 bg-black/40 rounded"><div class="text-gray-500 text-[10px]">회사 차입(빚)</div><b class="text-red-300">${T.loan_from_company_formatted||fmt(0)}</b></div>
+                <div class="p-2 bg-black/40 rounded"><div class="text-gray-500 text-[10px]">여유 현금</div><b>${T.free_cash_formatted||fmt(0)}</b></div>
+            </div>
+            <div class="mt-3 p-2 rounded bg-black/30 border border-[#333] text-[10px] text-gray-400">
+                이자 주 1회 · 대여 <b class="text-[#33ff33]">주 ${rates.lend_weekly_pct??0.5}%</b>
+                · 차입 <b class="text-red-300">주 ${rates.borrow_weekly_pct??0.75}%</b>
+                · 차입 한도 여유현금의 ${rates.borrow_max_pct??50}%
+                · 최소 거래 ${T.min_tx_formatted||'₩10,000'}
+                · 이번 주 이자 ${T.interest_done_this_week ? '✅ 정산됨' : '⏳ 대기(탭 열기·운영 정산 시)'}
+                <div class="mt-1">예상 이자 수입 ${exp.lend_interest_formatted||fmt(0)} − 지출 ${exp.borrow_interest_formatted||fmt(0)}
+                    = 순 <b class="text-[#ffaa00]">${exp.net_interest_formatted||fmt(0)}</b></div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div class="al-card border border-[#33ff33]/30">
+                <div class="font-bold text-sm mb-1">📥 가수금 (이자 0)</div>
+                <p class="text-[10px] text-gray-400 mb-2">지갑 → 회사. 출자성 예치. 언제든 1:1 회수.</p>
+                <input id="tx-capital-amt" type="number" min="0" step="10000" placeholder="금액"
+                    class="w-full mb-2 px-2 py-1.5 bg-black border border-[#333] rounded text-sm">
+                <div class="flex gap-2 flex-wrap">
+                    <button type="button" onclick="treasuryAction('capital','deposit')" class="flex-1 text-xs px-2 py-2 bg-[#33ff33]/20 border border-[#33ff33] text-[#33ff33] rounded font-bold">납입</button>
+                    <button type="button" onclick="treasuryAction('capital','recover')" class="flex-1 text-xs px-2 py-2 border border-[#33ff33]/50 text-[#33ff33] rounded">회수</button>
+                    <button type="button" onclick="treasuryAction('capital','recover', true)" class="text-xs px-2 py-2 border border-[#444] text-gray-400 rounded">전액 회수</button>
+                </div>
+            </div>
+            <div class="al-card border border-purple-400/30">
+                <div class="font-bold text-sm mb-1">🤝 대여금 (이자 받음)</div>
+                <p class="text-[10px] text-gray-400 mb-2">회사에 빌려줌. 주 ${rates.lend_weekly_pct??0.5}% 이자 → 지갑.</p>
+                <input id="tx-lend-amt" type="number" min="0" step="10000" placeholder="금액"
+                    class="w-full mb-2 px-2 py-1.5 bg-black border border-[#333] rounded text-sm">
+                <div class="flex gap-2 flex-wrap">
+                    <button type="button" onclick="treasuryAction('lend','deposit')" class="flex-1 text-xs px-2 py-2 bg-purple-500/20 border border-purple-400 text-purple-200 rounded font-bold">빌려주기</button>
+                    <button type="button" onclick="treasuryAction('lend','recover')" class="flex-1 text-xs px-2 py-2 border border-purple-400/50 text-purple-200 rounded">원금 회수</button>
+                    <button type="button" onclick="treasuryAction('lend','recover', true)" class="text-xs px-2 py-2 border border-[#444] text-gray-400 rounded">전액 회수</button>
+                </div>
+            </div>
+            <div class="al-card border border-red-400/30">
+                <div class="font-bold text-sm mb-1">🏦 회사 차입 (이자 냄)</div>
+                <p class="text-[10px] text-gray-400 mb-2">여유 현금의 ${rates.borrow_max_pct??50}%까지. 주 ${rates.borrow_weekly_pct??0.75}% · 한도 ${T.max_borrow_formatted||fmt(0)}</p>
+                <input id="tx-borrow-amt" type="number" min="0" step="10000" placeholder="금액"
+                    class="w-full mb-2 px-2 py-1.5 bg-black border border-[#333] rounded text-sm">
+                <div class="flex gap-2 flex-wrap">
+                    <button type="button" onclick="treasuryAction('borrow','borrow')" class="flex-1 text-xs px-2 py-2 bg-red-500/20 border border-red-400 text-red-200 rounded font-bold">빌리기</button>
+                    <button type="button" onclick="treasuryAction('borrow','repay')" class="flex-1 text-xs px-2 py-2 border border-red-400/50 text-red-200 rounded">상환</button>
+                    <button type="button" onclick="treasuryAction('borrow','repay', true)" class="text-xs px-2 py-2 border border-[#444] text-gray-400 rounded">전액 상환</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="al-card">
+            <div class="font-bold text-sm mb-2">📜 최근 거래</div>
+            ${log}
+        </div>
+        <div class="al-card">
+            <div class="text-[10px] text-gray-500 mb-1">📖 쉬운 단어장</div>
+            <div>${terms}</div>
+            <p class="text-[9px] text-gray-600 mt-2">조각·배당은 <button type="button" onclick="openAlTab('invest')" class="text-[#0A84FF] underline">📈 투자</button> 탭!
+            · 가이드 <a href="/guide" class="text-[#0A84FF]">회사 경영</a></p>
+        </div>
+    </div>`;
+}
+
+async function treasuryAction(kind, action, all) {
+    const idMap = { capital: 'tx-capital-amt', lend: 'tx-lend-amt', borrow: 'tx-borrow-amt' };
+    const pathMap = {
+        capital: '/api/airline/treasury/capital',
+        lend: '/api/airline/treasury/lend',
+        borrow: '/api/airline/treasury/borrow',
+    };
+    const url = pathMap[kind];
+    if (!url) return;
+    let amount = null;
+    if (!all) {
+        const el = document.getElementById(idMap[kind]);
+        const raw = el ? el.value : '';
+        amount = raw === '' || raw == null ? null : Number(raw);
+        if (amount == null || !Number.isFinite(amount) || amount <= 0) {
+            alert('금액을 입력해주세요. (전액은 전액 버튼 사용)');
+            return;
+        }
+    }
+    const labels = {
+        capital: { deposit: '가수금 납입', recover: '가수금 회수' },
+        lend: { deposit: '대여 실행', recover: '대여 원금 회수' },
+        borrow: { borrow: '회사 차입', repay: '차입 상환' },
+    };
+    const title = (labels[kind] && labels[kind][action]) || action;
+    if (!confirm(`${title}${all ? ' (전액)' : ' ₩' + Number(amount).toLocaleString()} 할까요?`)) return;
+
+    try {
+        const body = { action };
+        if (!all) body.amount = Math.floor(amount);
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        });
+        const data = await res.json();
+        if (!res.ok || data.error) {
+            alert(data.error || '처리 실패');
+            return;
+        }
+        if (data.message) {
+            const toast = document.getElementById('al-income-toast');
+            if (toast) {
+                toast.textContent = data.message;
+                toast.classList.remove('hidden');
+                setTimeout(() => toast.classList.add('hidden'), 4000);
+            } else {
+                alert(data.message);
+            }
+        }
+        if (data.wallet) {
+            D.wallet = data.wallet;
+            const w = document.getElementById('al-wallet');
+            if (w) {
+                if (data.wallet.balance != null) w.textContent = fmt(data.wallet.balance);
+                else if (data.wallet.balance_formatted) w.textContent = data.wallet.balance_formatted;
+            }
+        }
+        if (data.treasury) {
+            D.ops = D.ops || {};
+            D.ops.treasury_panel = data.treasury;
+        }
+        if (data.dashboard?.ops) {
+            D.ops = { ...D.ops, ...data.dashboard.ops, treasury_panel: data.treasury || D.ops.treasury_panel };
+        }
+        const el = document.getElementById('al-content');
+        if (el) el.innerHTML = renderTreasury();
+    } catch (e) {
+        alert('요청 실패: ' + (e.message || e));
+    }
 }
 function deployAc(id, hub) { apiPost('/api/airline/deploy', { aircraft_id: id, hub_id: hub }); }
 function addRoute() { apiPost('/api/airline/route', { template_id: document.getElementById('new-route-tpl').value, aircraft_id: document.getElementById('new-route-ac').value, flights_per_week: 7 }); }
@@ -1308,16 +2212,39 @@ async function settleNow() {
     const res = await fetch('/api/airline/settle', { method:'POST', headers:{'Content-Type':'application/json'}, body:'{}' });
     const d = await res.json();
     if (d.error) { alert(d.error); return; }
-    if (!d.gross && !d.payroll) { alert('오늘 받을 운영 수익이 없어요. 내일 다시 확인해주세요!'); return; }
-    let msg = `수익 반영!\n운영 수익: +${d.formatted_gross||fmt(d.gross||0)}`;
-    if (d.days_accrued > 1) msg += ` (${d.days_accrued}일치)`;
-    msg += `\n주급: −${d.formatted_payroll||fmt(d.payroll||0)}\n순수익: ${d.formatted_net||fmt(d.net||0)}`;
+    // 이미 오늘 받았거나 미수령 없음 — 친절 안내 (오류 아님)
+    if (d.already_done || d.status === 'already_done') {
+        alert(d.message || '오늘 운영 수익은 이미 반영됐어요. 내일 다시 확인해 주세요!');
+        if (d.wallet?.balance != null) {
+            D.wallet = d.wallet;
+            document.getElementById('al-wallet').textContent = fmt(d.wallet.balance);
+        }
+        await loadDash({ light: true });
+        return;
+    }
+    if (!d.gross && !d.payroll) {
+        alert(d.message || '지금은 받을 미수령 수익이 없어요. 내일 다시 확인해 주세요!');
+        return;
+    }
+    let msg = d.message || `수익 반영!\n운영 수익: +${d.formatted_gross||fmt(d.gross||0)}`;
+    if (!d.message) {
+        if (d.days_accrued > 1) msg += ` (${d.days_accrued}일치)`;
+        msg += `\n주급: −${d.formatted_payroll||fmt(d.payroll||0)}\n순수익: ${d.formatted_net||fmt(d.net||0)}`;
+    } else {
+        if (d.gross || d.payroll) {
+            msg += `\n\n운영: +${d.formatted_gross||fmt(d.gross||0)} · 주급: −${d.formatted_payroll||fmt(d.payroll||0)} · 순: ${d.formatted_net||fmt(d.net||0)}`;
+        }
+    }
     if (d.payroll_warning) msg += `\n⚠️ ${d.payroll_warning}`;
     if (d.details?.length) {
         msg += '\n\n노선별:';
-        d.details.forEach(x => { msg += `\n· ${x.route}: ${fmt(x.money)} (보너스+${x.bonus_pct||0}%)`; });
+        d.details.forEach(x => { msg += `\n· ${x.route||x.name}: ${fmt(x.money)} (보너스+${x.bonus_pct||0}%)`; });
     }
     alert(msg);
+    if (d.wallet?.balance != null) {
+        D.wallet = d.wallet;
+        document.getElementById('al-wallet').textContent = fmt(d.wallet.balance);
+    }
     await loadDash({ light: true });
 }
 async function allocStat(id) {
@@ -1338,7 +2265,12 @@ async function allocStat(id) {
 }
 function foundSpace() { apiPost('/api/airline/space/found'); }
 function buyRocket(id) { apiPost('/api/airline/space/buy-rocket', { rocket_id: id }); }
-function launchMission(id) { apiPost('/api/airline/space/launch', { mission_id: id }); }
+function launchMission(id) {
+    const use_insurance = !!document.getElementById('space-ins')?.checked;
+    const use_eco = !!document.getElementById('space-eco')?.checked;
+    apiPost('/api/airline/space/launch', { mission_id: id, use_insurance, use_eco });
+}
+function claimSpaceContract(id) { apiPost('/api/airline/space/contract/claim', { contract_id: id }); }
 
 document.getElementById('al-tabs')?.addEventListener('click', e => {
     const t = e.target.closest('.al-tab');

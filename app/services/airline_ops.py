@@ -380,7 +380,15 @@ def _side_income_weekly(ops, routes, route_gross, prog=None):
     if prog:
         from app.services.airline_revenue import passive_income_weekly
         extra_passive, extra_detail = passive_income_weekly(prog, ops, routes, route_gross)
-    total = ancillary_extra + cargo_weekly + codeshare_passive + extra_passive
+    cabin_net = 0
+    cabin_detail = {}
+    if prog:
+        try:
+            from app.services.cabin_meals import estimate_cabin_weekly
+            cabin_net, cabin_detail = estimate_cabin_weekly(prog, ops, routes)
+        except Exception:
+            cabin_net, cabin_detail = 0, {}
+    total = ancillary_extra + cargo_weekly + codeshare_passive + extra_passive + cabin_net
     return total, {
         'ancillary_tier': ancillary,
         'ancillary': ancillary_extra,
@@ -388,6 +396,8 @@ def _side_income_weekly(ops, routes, route_gross, prog=None):
         'codeshare': codeshare_passive,
         'cargo_routes': cargo_routes,
         'intl_routes': intl_count,
+        'cabin_meals': cabin_net,
+        **cabin_detail,
         **extra_detail,
     }
 
@@ -835,6 +845,11 @@ def tick_airline_economy(prog, force=False):
     wk = week_key()
     from app.services.airline_revenue import tick_revenue_maintenance
     tick_revenue_maintenance(prog, ops)
+    try:
+        from app.services.airline_treasury import settle_treasury_interest
+        settle_treasury_interest(prog, ops)
+    except Exception:
+        pass
     routes = [r for r in ops.get('routes', []) if r.get('active')]
 
     if ops.get('income_week') != wk:
@@ -851,7 +866,8 @@ def tick_airline_economy(prog, force=False):
 
     if routes and daily_rate > 0:
         days_accrued = _days_since_income(ops.get('last_daily_income_date'), today)
-        if force and days_accrued == 0:
+        # force: 미수령(며칠 치)만 당겨 받기. 오늘 이미 받은 날은 절대 재지급 안 함.
+        if force and days_accrued == 0 and ops.get('last_daily_income_date') != today:
             days_accrued = 1
         if days_accrued > 0:
             remaining = max(0, weekly_gross - ops.get('week_income_accrued', 0))
@@ -926,25 +942,107 @@ def tick_airline_economy(prog, force=False):
 
 
 def settle_weekly_revenue(prog, force=False):
-    """수동 정산 — 일일 자동 수익을 즉시 받거나(미수령분) 주급 정산."""
+    """수동 정산 — 일일 자동 수익을 즉시 받거나(미수령분) 주급 정산.
+
+    이미 오늘 수익을 받은 경우 None 대신 already_done 정보를 돌려
+    UI가 오류처럼 보이지 않게 한다.
+    """
     if not get_airline_info(prog).get('founded'):
         return None
     ops = _ops(prog)
-    if not force and ops.get('last_daily_income_date') == today_str():
+    today = today_str()
+    last_g = int(ops.get('last_gross_revenue', 0) or 0)
+    last_n = int(ops.get('last_net_revenue', ops.get('last_revenue', 0)) or 0)
+    week_acc = int(ops.get('week_income_accrued', 0) or 0)
+
+    # 오늘 이미 일일 수익 반영된 경우 — tick 호출 전에 안내 (이중 지급 방지)
+    if ops.get('last_daily_income_date') == today:
+        return {
+            'already_done': True,
+            'status': 'already_done',
+            'auto': False,
+            'gross': 0,
+            'payroll': 0,
+            'net': 0,
+            'revenue': 0,
+            'income': 0,
+            'message': (
+                f'오늘 운영 수익은 이미 반영됐어요! '
+                f'(최근 수령 약 {format_krw(last_g)} · 이번 주 누적 {format_krw(week_acc)})'
+            ),
+            'last_gross': last_g,
+            'last_net': last_n,
+            'week_income_accrued': week_acc,
+            'formatted_gross': format_krw(0),
+            'formatted_payroll': format_krw(0),
+            'formatted_net': format_krw(0),
+            'formatted': format_krw(0),
+        }
+
+    if not force and ops.get('last_daily_income_date') == today:
         routes = [r for r in ops.get('routes', []) if r.get('active')]
         if routes:
             return None
-    result = tick_airline_economy(prog, force=True)
+
+    result = tick_airline_economy(prog, force=bool(force))
     if result:
         result['auto'] = False
+        result['already_done'] = False
+        result['status'] = 'settled'
+        result['income'] = result.get('gross', result.get('revenue', 0))
+        if not result.get('message'):
+            result['message'] = (
+                f"수익 {format_krw(result.get('gross', 0))} 정산 완료! "
+                f"(총매출 {format_krw(result.get('gross', 0))} − 급여 {format_krw(result.get('payroll', 0))})"
+            )
         return result
+
+    ops = _ops(prog)
+    if ops.get('last_daily_income_date') == today:
+        last_g = int(ops.get('last_gross_revenue', 0) or 0)
+        week_acc = int(ops.get('week_income_accrued', 0) or 0)
+        return {
+            'already_done': True,
+            'status': 'already_done',
+            'auto': False,
+            'gross': 0,
+            'payroll': 0,
+            'net': 0,
+            'revenue': 0,
+            'income': 0,
+            'message': (
+                f'오늘 운영 수익은 이미 반영됐어요! '
+                f'(최근 수령 약 {format_krw(last_g)} · 이번 주 누적 {format_krw(week_acc)})'
+            ),
+            'last_gross': last_g,
+            'week_income_accrued': week_acc,
+            'formatted_gross': format_krw(0),
+            'formatted_payroll': format_krw(0),
+            'formatted_net': format_krw(0),
+            'formatted': format_krw(0),
+        }
+
     if not force:
         return None
     wk = week_key()
     from app.services.crew_stats import calc_weekly_payroll
     payroll, payroll_breakdown = calc_weekly_payroll(ops)
     if payroll <= 0 or ops.get('last_payroll_week') == wk:
-        return None
+        return {
+            'already_done': True,
+            'status': 'already_done',
+            'auto': False,
+            'gross': 0,
+            'payroll': 0,
+            'net': 0,
+            'revenue': 0,
+            'income': 0,
+            'message': '지금은 받을 미수령 수익이 없어요. 노선을 돌리거나 내일 다시 확인해 주세요!',
+            'formatted_gross': format_krw(0),
+            'formatted_payroll': format_krw(0),
+            'formatted_net': format_krw(0),
+            'formatted': format_krw(0),
+        }
     paid, ok, warn = _deduct_payroll(prog, ops, payroll, wk)
     ops['last_payroll_week'] = wk
     ops['last_settlement_week'] = wk
@@ -954,10 +1052,13 @@ def settle_weekly_revenue(prog, force=False):
     _save_ops(prog, ops)
     db.session.commit()
     return {
+        'already_done': False,
+        'status': 'settled',
         'revenue': -paid,
         'gross': 0,
         'payroll': paid,
         'net': -paid,
+        'income': 0,
         'week': wk,
         'routes': 0,
         'payroll_ok': ok,
@@ -968,6 +1069,7 @@ def settle_weekly_revenue(prog, force=False):
         'formatted_payroll': format_krw(paid),
         'formatted_net': format_krw(-paid),
         'auto': False,
+        'message': f'주급 정산 완료 · −{format_krw(paid)}',
     }
 
 
