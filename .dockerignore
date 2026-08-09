@@ -5,6 +5,7 @@ __pycache__
 *.pyo
 .pytest_cache
 .mypy_cache
+.venv
 instance
 .env
 *.db
@@ -14,5 +15,14 @@ _test_out.txt
 api_test_result.txt
 docs
 *.md
+!README.md
 fly.toml.bak
 docker-compose.yml
+docker-compose.dev.yml
+terminals
+mcps
+claude_Template-main
+비행기창고
+*.ps1
+verify_*.py
+_test_out.txt

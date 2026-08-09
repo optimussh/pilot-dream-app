@@ -1,26 +1,75 @@
+# Always-on deploy (reboot-safe).
+# Code is baked into the image — no host bind mount of source.
+# That way containers keep working after reboot even if Google Drive
+# is slow/offline, and they are not tied to a moved local path.
+#
+# Start:  .\deploy.ps1
+# Dev live-reload: docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+
 services:
   web:
     build:
       context: .
       dockerfile: Dockerfile
     image: pilot-dream-app-web:latest
+    container_name: pilot-dream-web
     ports:
       - "5000:5000"
     volumes:
-      - .:/app
       - pilot_db:/app/instance
     environment:
-      - FLASK_ENV=development
+      - FLASK_ENV=production
       - FLASK_APP=app.py
       - PYTHONUNBUFFERED=1
-    command: python -m flask run --host=0.0.0.0 --port=5000
+      - SIM_BASE_URL=http://127.0.0.1:5001
+      - WEB_PUBLIC_URL=http://127.0.0.1:5000
+    command: >
+      gunicorn --bind 0.0.0.0:5000
+      --workers 2 --threads 4 --timeout 60
+      --access-logfile - --error-logfile -
+      wsgi:app
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/', timeout=5)"]
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/', timeout=5)",
+        ]
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 60s
+      start_period: 45s
+
+  sim:
+    image: pilot-dream-app-web:latest
+    container_name: pilot-dream-sim
+    working_dir: /app/sim
+    ports:
+      - "5001:5001"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PORT=5001
+      - WEB_BASE_URL=http://web:5000
+      - WEB_PUBLIC_URL=http://127.0.0.1:5000
+    command: python app.py
+    restart: unless-stopped
+    depends_on:
+      web:
+        condition: service_started
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5001/health', timeout=5)",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
 volumes:
   pilot_db:

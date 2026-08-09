@@ -1,0 +1,23 @@
+# Optional live-reload override (dev only).
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+#
+# Binds the project folder into containers. Prefer a local (non-Drive)
+# path when possible — Google Drive File Stream + Docker bind mounts
+# can be flaky after reboot.
+
+services:
+  web:
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+    volumes:
+      - .:/app
+      - pilot_db:/app/instance
+    command: python -m flask run --host=0.0.0.0 --port=5000 --reload
+
+  sim:
+    volumes:
+      - .:/app
+    environment:
+      - FLASK_DEBUG=1
