@@ -4,6 +4,26 @@
 
 ---
 
+## 2026-08-09 — 비행계획 단계별 시간 모델 (이·착륙 반영)
+
+### What / Why
+- 기존: `거리 / (spd×0.85)` 단순 나눗셈 → 단거리(국내선)가 비현실적으로 짧음
+- 버그: `aircraft.spd` 없음(실제 필드는 `cruise_kmh`) → 항상 850 폴백
+- 기본 모델: 택시 아웃·상승·순항·하강·접근·택시 인. 단거리는 순항 미도달(삼각 프로파일)
+- 연료: 상승·하강 구간 소모율 가중. 순항 고도는 구간 거리에 따라 FL 추정
+- UI: 단계별 카드 + 옛 단순 계산 대비 분 단위 비교
+
+### Files
+- `static/js/flight_time.js` (신규)
+- `templates/flight_planner.html`
+
+### Sanity (B737, 맑음)
+- 40km 단거리 ~42분 (옛 ~3분)
+- ICN-CJU 450km ~1h12 (옛 ~39분)
+- ICN-NRT 1250km ~2h10 / ICN-JFK ~14h11
+
+---
+
 ## 2026-08-09 — Always-on Docker (Google Drive 이전 후 복구)
 
 ### What / Why

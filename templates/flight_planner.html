@@ -67,9 +67,21 @@
             <h3 class="font-bold text-xl mb-4 text-[#ffaa00]">계산 결과</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div class="bg-black p-4 rounded">총 거리<br><span id="distance" class="text-2xl font-bold"></span> km</div>
-                <div class="bg-black p-4 rounded">예상 시간<br><span id="time" class="text-2xl font-bold"></span></div>
+                <div class="bg-black p-4 rounded">블록 타임 (게이트↔게이트)<br><span id="time" class="text-2xl font-bold"></span></div>
                 <div class="bg-black p-4 rounded">연료 소모<br><span id="fuel" class="text-2xl font-bold"></span> 톤</div>
-                <div class="bg-black p-4 rounded">평균 고도<br><span id="altitude" class="text-2xl font-bold"></span></div>
+                <div class="bg-black p-4 rounded">순항 고도 (예상)<br><span id="altitude" class="text-2xl font-bold"></span></div>
+            </div>
+
+            <!-- Phase-based time breakdown (climb / cruise / descent / taxi) -->
+            <div class="mt-4 bg-black/70 p-4 rounded-xl border border-[#33ff33]/25">
+                <div class="text-xs font-semibold text-[#33ff33] mb-2">🛫 비행 단계별 시간 (기본 모델)</div>
+                <p class="text-[10px] text-gray-400 mb-3 leading-relaxed">
+                    단순 <code class="text-[#ffaa00]">거리÷순항속도</code>가 아닙니다.
+                    택시·이륙·상승·순항·하강·접근·착륙을 반영합니다.
+                    단거리(국내선 등)는 순항 구간이 짧거나 없어 <strong class="text-white">실효 속도가 크게 떨어집니다</strong>.
+                </p>
+                <div id="phase-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2 text-xs"></div>
+                <div id="phase-note" class="text-[10px] text-gray-500 mt-3 leading-relaxed"></div>
             </div>
             
             <!-- Enhanced fuel cost with per-airline pricing -->
@@ -82,7 +94,7 @@
                     </div>
                     <div id="fuel-price-note" class="text-xs text-gray-500 mt-1"></div>
                     <div class="text-[9px] text-gray-500 mt-2">
-                        ※ 교육용 단순 모델입니다. 실제 연료 소비는 바람, 고도, 탑재량, 예비연료 등에 따라 크게 달라집니다.
+                        ※ 교육용 모델: 상승·하강 구간은 순항 대비 연료 소모율이 더 높습니다. 실제 운항은 바람·고도·탑재·예비연료에 따라 달라집니다.
                     </div>
                 </div>
 
@@ -104,12 +116,17 @@
 </div>
 
 <script src="/static/js/gamification.js"></script>
+<script src="/static/js/flight_time.js"></script>
 <script>
 let airports = [];
 let aircraftList = [];
 let flightsDB = [];
 let airlinePrices = {};
 let airlineNames = {};
+
+function fmtPhaseMin(hours) {
+    return `${Math.round(hours * 60)}분`;
+}
 
 // Realistic per-airline jet fuel prices (USD per kg) - for education/simulation
 const DEFAULT_FUEL_PRICES = {
@@ -211,26 +228,58 @@ function calculateAdvancedFlight() {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     let distance = Math.round(R * c);
 
-    const baseSpeed = parseInt(aircraft.spd || 850);
-    let time = (distance / (baseSpeed * 0.85)) * weather;
-    const hours = Math.floor(time);
-    const mins = Math.round((time - hours) * 60);
+    // Phase-based block time (taxi + climb + cruise + descent). Default for all routes.
+    const FTM = window.FlightTimeModel;
+    if (!FTM) {
+        alert('비행 시간 모델 로드 실패. 페이지를 새로고침 해주세요.');
+        return;
+    }
+    const timeModel = FTM.estimateFlightTime(distance, aircraft, weather);
+    const time = timeModel.blockH;
 
-    // === Realistic Fuel Calculation ===
-    // fuel_burn in data = kg per km (approximate average including climb/cruise/descent)
-    const fuelBurnKgPerKm = aircraft.fuel_burn || 3.5;
-
-    // Total fuel in kg
-    let fuelKg = distance * fuelBurnKgPerKm * loadFactor * weather;
-
-    // Convert to tons only for display
+    // Fuel: climb/descent burn premium + cruise kg/km
+    let fuelKg = FTM.estimateFuelKg(distance, aircraft, loadFactor, weather, timeModel);
     const fuelTons = fuelKg / 1000;
 
     // Render basics
     document.getElementById('distance').innerText = distance.toLocaleString();
-    document.getElementById('time').innerText = `${hours}시간 ${mins}분`;
+    document.getElementById('time').innerText = timeModel.timeText;
     document.getElementById('fuel').innerText = fuelTons.toFixed(1);
-    document.getElementById('altitude').innerText = 'FL' + (320 + Math.floor(Math.random()*40));
+    document.getElementById('altitude').innerText = 'FL' + timeModel.cruiseFL;
+
+    // Phase cards
+    const phaseGrid = document.getElementById('phase-grid');
+    const phaseCards = [
+        { label: '택시 아웃', val: fmtPhaseMin(timeModel.taxiOutH), sub: '게이트→활주로' },
+        { label: '상승', val: fmtPhaseMin(timeModel.climbH), sub: `${timeModel.climbKm} km · ~${timeModel.profile.climbAvgKmh} km/h` },
+        { label: timeModel.hasCruise ? '순항' : '순항 (없음)', val: timeModel.hasCruise ? fmtPhaseMin(timeModel.cruiseH) : '—', sub: timeModel.hasCruise ? `${timeModel.cruiseKm} km · ${timeModel.cruiseKmh} km/h` : '단거리 삼각 프로파일' },
+        { label: '하강·접근', val: fmtPhaseMin(timeModel.descentH), sub: `${timeModel.descentKm} km · ~${timeModel.profile.descentAvgKmh} km/h` },
+        { label: '택시 인', val: fmtPhaseMin(timeModel.taxiInH), sub: '활주로→게이트' },
+        { label: '공중 구간', val: fmtPhaseMin(timeModel.airborneH), sub: weather > 1 ? `기상×${weather}` : '이륙~착륙' },
+    ];
+    phaseGrid.innerHTML = phaseCards.map(p => `
+        <div class="bg-black/80 p-2 rounded border border-white/10">
+            <div class="text-[10px] text-gray-400">${p.label}</div>
+            <div class="text-lg font-bold text-[#33ff33]">${p.val}</div>
+            <div class="text-[9px] text-gray-500">${p.sub}</div>
+        </div>
+    `).join('');
+
+    const naiveMin = Math.round(timeModel.naiveCruiseOnlyH * 60);
+    const blockMin = Math.round(timeModel.blockH * 60);
+    const deltaMin = blockMin - naiveMin;
+    const modeLabel = timeModel.hasCruise
+        ? `순항 포함 (${timeModel.profile.classLabel})`
+        : `단거리·순항 미도달 (${timeModel.profile.classLabel})`;
+    document.getElementById('phase-note').innerHTML = `
+        <strong class="text-[#ffaa00]">${modeLabel}</strong> ·
+        실효 블록 속도 약 <strong class="text-white">${timeModel.effectiveBlockKmh} km/h</strong>
+        (순항 ${timeModel.cruiseKmh} km/h 대비).
+        옛 단순 계산(거리÷순항×0.85)이면 약 ${naiveMin}분 →
+        단계 모델 <strong class="text-white">${blockMin}분</strong>
+        ${deltaMin > 0 ? `(+${deltaMin}분, 이·착륙·택시 반영)` : ''}.
+        이륙·착륙 롤 ${Math.round(timeModel.rollH * 60)}분 포함.
+    `;
 
     // === Per-airline fuel cost (USD + KRW) ===
     const price = getFuelPrice(airlineCode);
