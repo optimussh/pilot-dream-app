@@ -64,6 +64,16 @@ MORE_CATALOG = [
 ]
 
 AIRPORT_BY_CODE = {a['code']: a for a in AIRPORTS}
+# Logbook often uses codes the quiz bank does not have yet.
+EXTRA_AIRPORT_LABELS = {
+    'TPE': '🇹🇼 타이베이',
+    'TSA': '🇹🇼 타이베이',
+    'YYZ': '🇨🇦 토론토',
+    'PVG': '🇨🇳 상하이',
+    'CAN': '🇨🇳 광저우',
+    'KIX': '🇯🇵 오사카',
+    'HND': '🇯🇵 도쿄',
+}
 
 ATC_LINE = {
     'en': 'Request pushback, please.',
@@ -87,9 +97,12 @@ def _norm_route(route):
 
 
 def airport_label(code):
-    row = AIRPORT_BY_CODE.get((code or '').upper())
+    key = (code or '').upper()
+    row = AIRPORT_BY_CODE.get(key)
     if row:
         return f"{row['country_emoji']} {row['city_kr']}"
+    if key in EXTRA_AIRPORT_LABELS:
+        return EXTRA_AIRPORT_LABELS[key]
     return code or '?'
 
 
@@ -221,6 +234,9 @@ def _public_duty(duty):
     for s in BONUS_STEPS:
         bonus.append({**s, 'done': s['id'] in bonus_done})
     flight = duty.get('flight') or {}
+    if flight.get('origin'):
+        flight['origin_name'] = airport_label(flight.get('origin'))
+        flight['dest_name'] = airport_label(flight.get('dest'))
     next_step = None
     for s in steps:
         if not s['done'] and not s['skipped']:

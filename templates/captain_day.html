@@ -63,12 +63,14 @@ let DUTY = null;
 let pendingGameStep = null;
 
 window.onMinigameResult = async function (res) {
-    if (!pendingGameStep) return;
+    if (!pendingGameStep) return null;
     if (res && res.isWin) {
-        await completeStep(pendingGameStep);
+        const wallet = await completeStep(pendingGameStep);
         pendingGameStep = null;
         closeGame();
+        return wallet && wallet.balance != null ? wallet : null;
     }
+    return null;
 };
 
 async function loadDuty() {
@@ -197,7 +199,7 @@ async function completeStep(stepId, extra) {
         confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
     }
     renderDuty();
-    return true;
+    return data.wallet || true;
 }
 
 async function skipStep(id) {

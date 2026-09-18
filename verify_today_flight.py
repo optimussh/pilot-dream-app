@@ -40,6 +40,7 @@ def test_pick_favorite_longhaul():
     assert f['flight_number'] == 'BR001'
     assert f['dest'] == 'JFK'
     assert f['hours'] == 14
+    assert '타이베이' in f['origin_name'], f
 
 
 def test_more_menu_arcade_rises():

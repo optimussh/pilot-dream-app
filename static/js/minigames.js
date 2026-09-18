@@ -29,8 +29,9 @@ let currentGameId = null;
                     window.updateWalletDisplay(data.wallet.balance, data.wallet.balance_formatted);
                 }
                 loadStats();
+                let dutyWallet = null;
                 if (typeof window.onMinigameResult === 'function') {
-                    window.onMinigameResult({ gameId: currentGameId, isWin, score, data });
+                    dutyWallet = await window.onMinigameResult({ gameId: currentGameId, isWin, score, data });
                 }
                 if (isWin) {
                     confetti({
@@ -39,10 +40,11 @@ let currentGameId = null;
                         origin: { y: 0.6 }
                     });
                     const rewardAmount = data.reward || 0;
+                    const bal = (dutyWallet && dutyWallet.balance) || (data.wallet && data.wallet.balance);
                     if (window.showLearningReward) {
                         window.showLearningReward({
                             amount: rewardAmount,
-                            balance: data.wallet.balance,
+                            balance: bal,
                             title: `미니게임 우승! 🥳`,
                             subtitle: data.message
                         });
