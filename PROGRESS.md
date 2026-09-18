@@ -4,6 +4,29 @@
 
 ---
 
+## 2026-09-19 — 항공사 친환경 토글 500 수정
+
+### What / Why
+- 친환경 탭에서 토글 시 `요청 중 오류가 발생했습니다` 발생
+- 원인: `calculate_green_score`가 존재하지 않는 `UserProgress.wallet` JSON 컬럼을 읽어 `AttributeError` → 500 HTML → 프론트 `res.json()` 실패
+- 보유 기체는 `owned_aircraft` 컬럼(`get_owned_aircraft`)을 사용하도록 수정
+- 토글/집무실 구매·장착/미래비행 완료에 `save_progress` 추가
+- 잘못된 옵션은 400, 알 수 없는 `_json` 필드는 AttributeError를 삼키지 않고 기본값으로
+- `verify_green.py` 회귀 테스트 + 관련 GET/POST 빈 바디가 500이 아닌지 스모크
+
+### Files
+- `app/services/green_aviation.py`, `app/routes/airline.py`, `app/routes/learn.py`
+- `app/models.py`, `app/services/ceo_office.py`
+- `templates/airline.html`, `templates/future_aviation.html`
+- `verify_green.py`
+
+### Verify
+- `python verify_green.py` 통과
+- 로컬 :5002 브라우저: 친환경 기내식/재활용 토글 알림 없이 성공, 집무실 구매 200, 승객/미래비행 페이지 200
+- Docker :5000 `POST /api/airline/green/toggle` 200 (on/off)
+
+---
+
 ## 2026-08-09 — 항공사 자금관리 탭 (가수금·대여·차입)
 
 ### What / Why

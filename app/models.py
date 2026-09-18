@@ -67,7 +67,7 @@ class UserProgress(db.Model):
     def _json(self, field, default):
         try:
             return json.loads(getattr(self, field) or json.dumps(default))
-        except (json.JSONDecodeError, TypeError):
+        except (json.JSONDecodeError, TypeError, AttributeError):
             return default
 
     def set_json(self, field, value):

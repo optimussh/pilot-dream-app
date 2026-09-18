@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request
-from app.services.gamification import get_or_create_progress, load_json
+from app.services.gamification import get_or_create_progress, load_json, save_progress
 from app.services.economy import get_wallet_summary
 from app.services.pilot_features import found_airline, get_airline_info
 from app.services.airline_ops import (
@@ -871,3 +871,29 @@ def stats_allocate_api():
     if msg:
         payload['message'] = msg
     return jsonify(payload)
+
+
+@bp.route('/api/airline/green')
+def green_aviation_api():
+    from app.services.green_aviation import get_green_status
+    prog = get_or_create_progress()
+    status = get_green_status(prog)
+    save_progress(prog)
+    return jsonify(status)
+
+
+@bp.route('/api/airline/green/toggle', methods=['POST'])
+def green_aviation_toggle_api():
+    from app.services.green_aviation import toggle_eco_option, get_green_status
+    data = request.get_json() or {}
+    prog = get_or_create_progress()
+    ok, msg = toggle_eco_option(prog, data.get('option'))
+    if not ok:
+        return jsonify({'error': msg}), 400
+    save_progress(prog)
+    return jsonify({
+        'status': 'ok',
+        'message': msg,
+        'green': get_green_status(prog),
+        'wallet': get_wallet_summary(prog)
+    })
