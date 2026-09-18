@@ -82,9 +82,9 @@
   },
   {
     "id": "m_captain_day",
-    "title": "기장의 하루 체험",
-    "desc": "기장이 하루 동안 하는 일을 따라가 보세요",
-    "reward_hours": 0.3,
+    "title": "오늘의 편 끝내기",
+    "desc": "기장의 하루에서 오늘의 편 5칸을 끝내 보세요",
+    "reward_hours": 0.5,
     "type": "captain_day",
     "link": "/captain-day",
     "icon": "⏰"

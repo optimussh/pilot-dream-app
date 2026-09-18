@@ -114,31 +114,64 @@
                 <span class="text-gray-500">지갑</span>
                 <span id="nav-wallet" class="font-bold text-[#ffaa00] ml-1">₩0</span>
             </div>
-        <div class="flex gap-1 text-sm font-medium">
-            <a href="/" class="nav-link {{ 'active' if request.path == '/' else '' }}">대시보드</a>
-            <a href="/world" class="nav-link {{ 'active' if request.path.startswith('/world') else '' }}">🌍 세계</a>
-            <a href="/learn" class="nav-link {{ 'active' if request.path == '/learn' or request.path.startswith('/quiz') or request.path.startswith('/flash') or request.path.startswith('/scenario') or request.path.startswith('/captain') or request.path.startswith('/first-flight') else '' }}">학습</a>
-            <a href="/captain-life" class="nav-link {{ 'active' if request.path.startswith('/captain-life') else '' }}">👑 기장생활</a>
-            <a href="/airline" class="nav-link {{ 'active' if request.path.startswith('/airline') else '' }}">🏢 항공사</a>
-            <a href="/radar" class="nav-link {{ 'active' if request.path == '/radar' else '' }}">레이더</a>
-            <a href="/aircraft" class="nav-link {{ 'active' if request.path == '/aircraft' else '' }}">기종</a>
-            <a href="/atc-english" class="nav-link {{ 'active' if request.path == '/atc-english' else '' }}">항공영어</a>
-            <a href="/flight-planner" class="nav-link {{ 'active' if request.path == '/flight-planner' else '' }}">플래너</a>
-            <a href="/logbook" class="nav-link {{ 'active' if request.path == '/logbook' else '' }}">로그북</a>
-            <a href="/shop" class="nav-link {{ 'active' if request.path.startswith('/shop') or request.path.startswith('/hangar') else '' }}">상점</a>
-            <a href="/badges" class="nav-link {{ 'active' if request.path == '/badges' else '' }}">뱃지</a>
-            <a href="/korea-career" class="nav-link {{ 'active' if request.path == '/korea-career' else '' }}">커리어</a>
-            <a href="/guide" class="nav-link {{ 'active' if request.path.startswith('/guide') else '' }}">📖 가이드</a>
+        <div class="flex gap-1 text-sm font-medium items-center flex-wrap justify-end">
+            <a href="/" class="nav-link {{ 'active' if request.path == '/' or request.path.startswith('/captain-day') or request.path.startswith('/first-flight') else '' }}">오늘</a>
+            <a href="/logbook" class="nav-link {{ 'active' if request.path.startswith('/logbook') else '' }}">기록</a>
+            <a href="/airline" class="nav-link {{ 'active' if request.path.startswith('/airline') else '' }}">항공사</a>
+            <div class="relative">
+                <button type="button" id="nav-more-btn" class="nav-link">더보기 ▾</button>
+                <div id="nav-more-panel" class="hidden absolute right-0 mt-2 w-64 max-h-[70vh] overflow-auto bg-[#1c1c1e] border border-[#2c2c2e] rounded-2xl shadow-xl p-2 z-[80]"></div>
+            </div>
         </div>
         </div>
     </nav>
+    <div id="duty-bar" class="hidden sticky top-[64px] z-40 px-4 py-2 bg-[#001a33] border-b border-[#0A84FF]/40">
+        <a href="/captain-day" class="max-w-7xl mx-auto flex items-center justify-between gap-3 text-sm">
+            <span id="duty-bar-text" class="text-gray-200">오늘의 편</span>
+            <span class="text-[#ffaa00] font-bold">이어서 →</span>
+        </a>
+    </div>
 
     <main class="max-w-7xl mx-auto px-6 py-8">
         {% block content %}{% endblock %}
     </main>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="/static/js/celebrations.js"></script>
     <script src="/static/js/gamification.js"></script>
+    <script>
+    (function () {
+        const btn = document.getElementById('nav-more-btn');
+        const panel = document.getElementById('nav-more-panel');
+        if (btn && panel) {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                panel.classList.toggle('hidden');
+            });
+            document.addEventListener('click', () => panel.classList.add('hidden'));
+            panel.addEventListener('click', (e) => e.stopPropagation());
+            fetch('/api/nav/more').then(r => r.json()).then(d => {
+                const items = d.items || [];
+                panel.innerHTML = items.map(it =>
+                    `<a href="${it.href}" class="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-[#2c2c2e] text-sm">
+                        <span>${it.emoji}</span><span>${it.label}</span>
+                    </a>`
+                ).join('');
+            }).catch(() => {});
+        }
+        const path = location.pathname || '';
+        if (path === '/captain-day' || path.startsWith('/captain-day')) return;
+        fetch('/api/duty/today').then(r => r.json()).then(d => {
+            if (!d || d.complete) return;
+            const bar = document.getElementById('duty-bar');
+            const txt = document.getElementById('duty-bar-text');
+            if (!bar || !txt) return;
+            const f = d.flight || {};
+            txt.textContent = `${f.flight_number || '오늘의 편'}  ${f.origin || ''}→${f.dest || ''}  ·  ${d.core_done}/${d.core_total}`;
+            bar.classList.remove('hidden');
+        }).catch(() => {});
+    })();
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>

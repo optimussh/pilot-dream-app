@@ -43,6 +43,18 @@
         </div>
     </div>
 
+    <a id="dash-duty-card" href="/captain-day" class="info-card p-5 mb-5 border border-[#ffaa00]/50 flex items-center justify-between gap-4 hover:border-[#ffaa00] block">
+        <div>
+            <div class="text-[10px] text-[#ffaa00] font-bold tracking-widest">오늘의 편</div>
+            <div class="text-xl font-black" id="dash-duty-title">불러오는 중…</div>
+            <div class="text-xs text-gray-400 mt-1" id="dash-duty-sub">기장의 하루에서 짧은 게임으로 운항해요</div>
+        </div>
+        <div class="text-right shrink-0">
+            <div class="text-3xl">✈️</div>
+            <div class="text-xs text-[#33ff33] font-bold mt-1" id="dash-duty-prog"></div>
+        </div>
+    </a>
+
     <!-- 파일럿 등급 -->
     <div id="dash-rank-banner" class="info-card p-4 mb-4 flex flex-wrap items-center gap-4 border border-[#0A84FF]/30 hidden">
         <div class="text-4xl" id="dash-rank-icon">📘</div>
@@ -319,8 +331,17 @@ async function loadDashboard() {
     if (!g.first_flight_done) {
         document.getElementById('first-flight-cta').classList.remove('hidden');
     }
+    fetch('/api/duty/today').then(r => r.json()).then(d => {
+        const f = d.flight || {};
+        const title = document.getElementById('dash-duty-title');
+        const sub = document.getElementById('dash-duty-sub');
+        const prog = document.getElementById('dash-duty-prog');
+        if (title) title.textContent = `${f.flight_number || ''}  ${(f.origin_name || f.origin || '')} → ${(f.dest_name || f.dest || '')}`;
+        if (sub) sub.textContent = d.complete ? '오늘 편 착륙! 다시 놀러와도 돼요.' : '짧은 게임으로 이 편을 운항해요';
+        if (prog) prog.textContent = d.complete ? '완료' : `${d.core_done}/${d.core_total}`;
+    }).catch(() => {});
 
-    document.getElementById('daily-missions').innerHTML = g.daily_missions.map(m => `
+    const missionRow = (m) => `
         <div class="flex items-center gap-3 p-3 rounded-lg ${m.completed ? 'bg-[#001a00] opacity-60' : 'bg-black/40'}">
             <span class="text-xl">${m.icon}</span>
             <div class="flex-1">
@@ -331,11 +352,17 @@ async function loadDashboard() {
                 ? '<span class="text-[#33ff33] text-xs">✓ 보상 수령</span>'
                 : `<a href="${m.link}" class="text-xs px-2 py-1 border border-[#ffaa00] rounded hover:bg-[#332200]">학습하기 →</a>
                    <button onclick="completeMission('${m.id}')" class="text-xs px-2 py-1 border border-[#33ff33]/50 rounded text-gray-500" title="학습 완료 시 자동 지급됩니다">보상받기</button>`}
-        </div>
-    `).join('');
+        </div>`;
+    const dailyOpen = (g.daily_missions || []).filter(m => !m.completed);
+    const dailyDone = (g.daily_missions || []).filter(m => m.completed);
+    let dailyHtml = dailyOpen.map(missionRow).join('') || '<p class="text-xs text-[#33ff33]">오늘 미션을 다 했어요! 🎉</p>';
+    if (dailyDone.length && typeof uxCollapseHtml === 'function') {
+        dailyHtml += uxCollapseHtml('dash-daily-done', '✓ 오늘 완료한 미션', `(${dailyDone.length})`, dailyDone.map(missionRow).join(''), { color: '#33ff33' });
+    }
+    document.getElementById('daily-missions').innerHTML = dailyHtml;
 
-    document.getElementById('weekly-challenges').innerHTML = g.weekly_challenges.map(c => `
-        <div class="flex items-center gap-3 p-3 rounded-lg bg-black/40">
+    const weekRow = (c) => `
+        <div class="flex items-center gap-3 p-3 rounded-lg ${c.completed ? 'bg-[#001a00] opacity-60' : 'bg-black/40'}">
             <span class="text-xl">${c.icon}</span>
             <div class="flex-1">
                 <div class="font-semibold text-sm">${c.title}</div>
@@ -344,8 +371,15 @@ async function loadDashboard() {
             ${c.completed
                 ? '<span class="text-[#33ff33] text-xs">✓</span>'
                 : `<button onclick="completeWeekly('${c.id}')" class="text-xs px-2 py-1 border border-[#0A84FF] rounded">완료</button>`}
-        </div>
-    `).join('');
+        </div>`;
+    const weekOpen = (g.weekly_challenges || []).filter(c => !c.completed);
+    const weekDone = (g.weekly_challenges || []).filter(c => c.completed);
+    let weekHtml = weekOpen.map(weekRow).join('') || '<p class="text-xs text-gray-400">주간 도전을 다 끝냈어요!</p>';
+    if (weekDone.length && typeof uxCollapseHtml === 'function') {
+        weekHtml += uxCollapseHtml('dash-week-done', '✓ 완료한 주간 도전', `(${weekDone.length})`, weekDone.map(weekRow).join(''), { color: '#0A84FF' });
+    }
+    document.getElementById('weekly-challenges').innerHTML = weekHtml;
+    if (typeof bindUxCollapses === 'function') bindUxCollapses();
 
     document.getElementById('career-tree').innerHTML = g.career_tree.map((s, i) => `
         <div class="flex-1 min-w-[100px] text-center p-3 rounded-xl ${s.unlocked ? 'bg-[#001a00] border border-[#33ff33]/40' : 'bg-black/30 opacity-50'}">

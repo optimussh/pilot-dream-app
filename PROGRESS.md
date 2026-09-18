@@ -4,6 +4,25 @@
 
 ---
 
+## 2026-09-19 — 오늘의 편 (기장의 하루 게임판 + 더보기 메뉴)
+
+### What / Why
+- 상단을 오늘 / 기록 / 항공사 / 더보기로 줄임. 더보기는 이용 많은 메뉴가 위
+- 기장의 하루 = 로그북 단골 노선의 **오늘의 편** 5칸 (공항퀴즈·급유·수하물·착륙·로그북)
+- 보너스 점검·교신. 기장석 시뮬은 끼우지 않음. 아케이드·항공사 URL은 유지
+- 홈 카드 + 다른 화면 운항 막대
+
+### Files
+- `app/services/today_flight.py`, `app/routes/duty.py`
+- `templates/base.html`, `captain_day.html`, `dashboard.html`, `minigames.html`
+- `static/js/minigames.js`, `docs/today-flight.md`, `verify_today_flight.py`
+
+### Verify
+- `python verify_today_flight.py`
+- 브라우저 :5002 상단 4칸, 더보기 순서, 오늘의 편 보드, 급유 모달
+
+---
+
 ## 2026-09-19 — 항공사 친환경 토글 500 수정
 
 ### What / Why

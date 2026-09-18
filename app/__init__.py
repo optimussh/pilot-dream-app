@@ -88,7 +88,8 @@ def create_app():
         airline,
         guide,
         world,
-    )  # noqa: airline, guide, world registered below
+        duty,
+    )  # noqa: airline, guide, world, duty registered below
 
     app.register_blueprint(main.bp)
     app.register_blueprint(radar.bp)
@@ -104,6 +105,12 @@ def create_app():
     app.register_blueprint(airline.bp)
     app.register_blueprint(guide.bp)
     app.register_blueprint(world.bp)
+    app.register_blueprint(duty.bp)
+    try:
+        from app.routes import sim_hub
+        app.register_blueprint(sim_hub.bp)
+    except ImportError:
+        pass
 
     from app.services.game_bridge import GAMES_ENABLED
     if GAMES_ENABLED:

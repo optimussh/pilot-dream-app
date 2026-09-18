@@ -1,31 +1,218 @@
 {% extends "base.html" %}
-{% block title %}기장의 하루 - Pilot Dream{% endblock %}
+{% block title %}오늘의 편 - Pilot Dream{% endblock %}
 {% block content %}
-<div class="max-w-3xl mx-auto">
-    <h1 class="text-3xl font-bold mb-2">⏰ 기장의 하루</h1>
-    <p class="text-gray-400 mb-8">실제 기장이 하루 동안 하는 일을 따라가 보세요</p>
-    <div id="timeline" class="relative border-l-2 border-[#33ff33]/40 ml-4 space-y-6"></div>
-</div>
-<script src="/static/js/gamification.js"></script>
-<script>
-trackActivity('captain_day', 'visited');
+<div class="max-w-xl mx-auto">
+    <p class="text-xs text-[#ffaa00] font-bold tracking-widest mb-1">TODAY'S FLIGHT</p>
+    <h1 class="text-3xl font-bold mb-1">⏰ 오늘의 편</h1>
+    <p class="text-gray-400 text-sm mb-5">짧은 게임으로 이 편을 운항해요. 다 안 해도 괜찮아요.</p>
 
-fetch('/api/gamification/captain-day').then(r=>r.json()).then(steps => {
-    document.getElementById('timeline').innerHTML = steps.map(s => `
-        <div class="relative pl-8">
-            <div class="absolute -left-[9px] w-4 h-4 bg-[#33ff33] rounded-full"></div>
-            <div class="info-card p-5 rounded-xl">
-                <div class="flex justify-between items-start mb-2">
-                    <span class="text-[#ffaa00] font-mono font-bold">${s.time}</span>
-                    <span class="text-2xl">${s.icon}</span>
-                </div>
-                <div class="font-bold mb-1">${s.title}</div>
-                <p class="text-sm text-gray-300 mb-3">${s.desc}</p>
-                <div class="text-xs text-[#0A84FF] mb-2">💡 ${s.tip}</div>
-                <a href="${s.link}" class="text-xs px-3 py-1 border border-[#33ff33] rounded inline-block hover:bg-[#003300]">체험하러 가기 →</a>
+    <div id="duty-hero" class="info-card p-5 mb-5 border border-[#ffaa00]/40"></div>
+    <div id="duty-steps" class="space-y-3 mb-6"></div>
+    <div id="duty-bonus" class="mb-8"></div>
+    <div id="duty-msg" class="text-sm text-center text-gray-400 min-h-[1.5rem]"></div>
+</div>
+
+<div id="quiz-modal" class="hidden fixed inset-0 bg-black/80 z-[90] flex items-center justify-center p-4">
+    <div class="info-card w-full max-w-md p-5 border border-[#0A84FF]/40">
+        <div class="text-xs text-gray-400 mb-2">공항 알아맞히기</div>
+        <div id="quiz-prompt" class="font-bold text-lg mb-2"></div>
+        <div id="quiz-hint" class="text-xs text-[#0A84FF] mb-4"></div>
+        <div id="quiz-choices" class="space-y-2 mb-4"></div>
+        <button onclick="closeQuiz()" class="w-full py-2 text-sm text-gray-400">닫기</button>
+    </div>
+</div>
+
+<div id="check-modal" class="hidden fixed inset-0 bg-black/80 z-[90] flex items-center justify-center p-4">
+    <div class="info-card w-full max-w-md p-5">
+        <div class="font-bold text-lg mb-3">📋 출발 전 점검</div>
+        <div id="check-items" class="space-y-2 mb-4"></div>
+        <button onclick="submitChecklist()" class="w-full py-3 bg-[#33ff33] text-black font-bold rounded-xl">확인!</button>
+        <button onclick="document.getElementById('check-modal').classList.add('hidden')" class="w-full py-2 text-sm text-gray-400 mt-1">닫기</button>
+    </div>
+</div>
+
+<div id="atc-modal" class="hidden fixed inset-0 bg-black/80 z-[90] flex items-center justify-center p-4">
+    <div class="info-card w-full max-w-md p-5 text-center">
+        <div class="font-bold text-lg mb-2">🎙️ 관제탑에 말하기</div>
+        <div id="atc-en" class="text-xl font-mono text-[#ffaa00] mb-2"></div>
+        <div id="atc-ko" class="text-sm text-gray-300 mb-2"></div>
+        <div id="atc-tip" class="text-xs text-gray-500 mb-4"></div>
+        <button onclick="completeAtc()" class="w-full py-3 bg-[#0A84FF] text-white font-bold rounded-xl">소리 내 읽었어요!</button>
+        <button onclick="document.getElementById('atc-modal').classList.add('hidden')" class="w-full py-2 text-sm text-gray-400 mt-1">닫기</button>
+    </div>
+</div>
+
+<div id="game-modal" class="fixed inset-0 bg-black/90 z-[100] hidden flex-col items-center justify-center p-4">
+    <div class="w-full max-w-md bg-[#1c1c1e] rounded-3xl overflow-hidden shadow-2xl border border-white/10 flex flex-col h-[500px]">
+        <div class="p-4 bg-white/5 flex justify-between items-center border-b border-white/5">
+            <h2 id="modal-title" class="text-lg font-bold text-white">미니 게임</h2>
+            <button onclick="closeGame()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20">✕</button>
+        </div>
+        <div id="game-container" class="flex-1 relative p-4 flex flex-col items-center justify-center bg-[#0a0a0c] overflow-hidden select-none"></div>
+        <div id="game-footer" class="p-4 bg-white/5 border-t border-white/5 text-center">
+            <button onclick="initCurrentGame()" class="w-full py-3 bg-[#33ff33] text-black rounded-xl font-bold text-lg">게임 시작!</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="/static/js/minigames.js"></script>
+<script>
+let DUTY = null;
+let pendingGameStep = null;
+
+window.onMinigameResult = async function (res) {
+    if (!pendingGameStep) return;
+    if (res && res.isWin) {
+        await completeStep(pendingGameStep);
+        pendingGameStep = null;
+        closeGame();
+    }
+};
+
+async function loadDuty() {
+    const res = await fetch('/api/duty/today');
+    DUTY = await res.json();
+    renderDuty();
+}
+
+function renderDuty() {
+    if (!DUTY) return;
+    const f = DUTY.flight || {};
+    const hero = document.getElementById('duty-hero');
+    hero.innerHTML = `
+        <div class="flex justify-between items-start gap-3">
+            <div>
+                <div class="text-xs text-gray-400 mb-1">${f.flight_number || ''} · ${f.aircraft || ''}</div>
+                <div class="text-2xl font-black">${f.origin_name || f.origin} → ${f.dest_name || f.dest}</div>
+                <div class="text-sm text-gray-400 mt-1">${f.route || ''} · 약 ${f.hours || '?'}시간</div>
+            </div>
+            <div class="text-right">
+                <div class="text-3xl">${DUTY.complete ? '🎉' : '✈️'}</div>
+                <div class="text-xs text-[#33ff33] font-bold mt-1">${DUTY.core_done}/${DUTY.core_total}</div>
             </div>
         </div>
-    `).join('');
-});
+        ${DUTY.complete ? '<div class="mt-3 text-sm text-[#33ff33] font-bold">오늘 편 착륙! 로그북에도 남았어요.</div>' : ''}
+    `;
+    document.getElementById('duty-steps').innerHTML = (DUTY.steps || []).map(stepCard).join('');
+    const bonus = DUTY.bonus || [];
+    document.getElementById('duty-bonus').innerHTML = bonus.length ? `
+        <div class="text-xs text-gray-500 mb-2">보너스 (안 해도 돼요)</div>
+        <div class="space-y-2">${bonus.map(stepCard).join('')}</div>
+    ` : '';
+}
+
+function stepCard(s) {
+    const state = s.done ? '끝!' : (s.skipped ? '건너뜀' : '하기');
+    const border = s.done ? 'border-[#33ff33]/50' : 'border-[#2c2c2e]';
+    return `<div class="info-card p-4 border ${border} flex items-center gap-3">
+        <div class="text-3xl">${s.emoji}</div>
+        <div class="flex-1 min-w-0">
+            <div class="font-bold">${s.title}</div>
+            <div class="text-[11px] text-gray-400">${s.blurb || ''}</div>
+        </div>
+        <div class="flex flex-col gap-1">
+            ${s.done || s.skipped ? `<span class="text-xs text-[#33ff33] font-bold">${state}</span>` : `
+            <button onclick="playStep('${s.id}')" class="px-3 py-1.5 bg-[#ffaa00] text-black text-xs font-bold rounded-lg">${state}</button>
+            <button onclick="skipStep('${s.id}')" class="text-[10px] text-gray-500">건너뛰기</button>`}
+        </div>
+    </div>`;
+}
+
+function playStep(id) {
+    const s = [...(DUTY.steps || []), ...(DUTY.bonus || [])].find(x => x.id === id);
+    if (!s) return;
+    if (s.kind === 'quiz') openQuiz();
+    else if (s.kind === 'minigame') {
+        pendingGameStep = s.id;
+        startGame(s.game_id);
+    } else if (s.kind === 'logbook') completeStep('logbook');
+    else if (s.kind === 'checklist') openChecklist();
+    else if (s.kind === 'atc') openAtc();
+}
+
+function openQuiz() {
+    const q = DUTY.airport_q || {};
+    document.getElementById('quiz-prompt').textContent = q.prompt || '';
+    document.getElementById('quiz-hint').textContent = q.hint ? ('💡 ' + q.hint) : '';
+    document.getElementById('quiz-choices').innerHTML = (q.choices || []).map(c =>
+        `<button onclick="answerQuiz('${c.code}')" class="w-full text-left px-4 py-3 rounded-xl bg-black/40 border border-[#2c2c2e] hover:border-[#0A84FF] font-bold">${c.text}</button>`
+    ).join('');
+    document.getElementById('quiz-modal').classList.remove('hidden');
+}
+function closeQuiz() { document.getElementById('quiz-modal').classList.add('hidden'); }
+async function answerQuiz(code) {
+    const ok = await completeStep('airport', { answer_code: code });
+    if (ok) closeQuiz();
+}
+
+function openChecklist() {
+    const done = new Set(DUTY.checklist_done || []);
+    document.getElementById('check-items').innerHTML = (DUTY.checklist_items || []).map(it =>
+        `<label class="flex items-center gap-2 p-2 rounded bg-black/30">
+            <input type="checkbox" class="ck-item" value="${it.id}" ${done.has(it.id) ? 'checked' : ''}>
+            <span>${it.text}</span>
+        </label>`
+    ).join('');
+    document.getElementById('check-modal').classList.remove('hidden');
+}
+async function submitChecklist() {
+    const items = [...document.querySelectorAll('.ck-item:checked')].map(el => el.value);
+    const ok = await completeStep('checklist', { items });
+    if (ok) document.getElementById('check-modal').classList.add('hidden');
+}
+
+function openAtc() {
+    const a = DUTY.atc || {};
+    document.getElementById('atc-en').textContent = a.en || '';
+    document.getElementById('atc-ko').textContent = a.ko || '';
+    document.getElementById('atc-tip').textContent = a.tip || '';
+    document.getElementById('atc-modal').classList.remove('hidden');
+}
+async function completeAtc() {
+    const ok = await completeStep('atc');
+    if (ok) document.getElementById('atc-modal').classList.add('hidden');
+}
+
+async function completeStep(stepId, extra) {
+    const res = await fetch('/api/duty/complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ step_id: stepId, ...(extra || {}) })
+    });
+    const data = await res.json();
+    const box = document.getElementById('duty-msg');
+    if (!res.ok) {
+        box.textContent = data.error || '아직이에요';
+        if (data.duty) { DUTY = data.duty; renderDuty(); }
+        return false;
+    }
+    DUTY = data.duty;
+    if (data.wallet && typeof updateWalletDisplay === 'function') {
+        updateWalletDisplay(data.wallet.balance, data.wallet.balance_formatted);
+    }
+    box.textContent = data.message || '';
+    if (DUTY.just_finished && window.confetti) {
+        confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+    }
+    renderDuty();
+    return true;
+}
+
+async function skipStep(id) {
+    const res = await fetch('/api/duty/skip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ step_id: id })
+    });
+    const data = await res.json();
+    if (data.duty) DUTY = data.duty;
+    document.getElementById('duty-msg').textContent = data.message || '';
+    renderDuty();
+}
+
+if (typeof trackActivity === 'function') trackActivity('captain_day', 'visited');
+loadDuty();
 </script>
 {% endblock %}
