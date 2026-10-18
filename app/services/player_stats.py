@@ -83,20 +83,20 @@ def get_player_stats(prog):
     stat_defs = {s['id']: s for s in cfg.get('stats', [])}
     xp_per = cfg.get('xp_per_level', 100)
     result = []
-    level_cap = max(12, cfg.get('bar_level_cap', 12))
-    band = 100 / level_cap
+    step = 10
     for sid, sdef in stat_defs.items():
-        val = ps['stats'].get(sid, 0)
+        val = int(ps['stats'].get(sid, 0) or 0)
         xp = ps['stat_xp'].get(sid, 0)
-        xp_ratio = (xp / xp_per) if xp_per else 0
-        # 레벨(메인) + 다음 레벨까지 XP(세부) — 레벨이 오르면 바도 함께 오름
-        pct = min(100, int(val * band + xp_ratio * band * 0.9))
+        into = val % step
+        next_goal = val + (step if into == 0 else step - into)
+        pct = int(round((into / step) * 100))
         result.append({
             **sdef,
             'value': val,
             'xp': xp,
             'xp_need': xp_per,
             'pct': pct,
+            'next_goal': next_goal,
         })
     return {
         'stats': result,

@@ -466,6 +466,18 @@ def estimate_weekly_revenue(prog, ops=None):
     log_bonus = min(500000, LogbookEntry.query.count() * 5000)
     route_gross = gross
     side_weekly, side_detail = _side_income_weekly(ops, routes, route_gross, prog)
+    
+    # CEO Office Revenue Bonus
+    try:
+        from app.services.ceo_office import get_office_status
+        office_status = get_office_status(prog)
+        ceo_rev_bonus = office_status.get('total_rev_bonus', 0)
+        ceo_rev_amount = int(route_gross * (ceo_rev_bonus / 100.0))
+        side_detail['ceo_office'] = ceo_rev_amount
+        side_weekly += ceo_rev_amount
+    except Exception:
+        pass
+        
     gross += log_bonus + side_weekly
     payroll, payroll_breakdown = calc_weekly_payroll(ops)
     from app.services.crew_stats import assigned_crew_ids
@@ -604,7 +616,7 @@ def create_route(prog, template_id, aircraft_id, flights_per_week=7):
     ops = _ops(prog)
     routes = ops.get('routes', [])
     if len(routes) >= 100:
-        return False, '노선은 최대 100개까지예요!'
+        return False, '노선은 최대 250개까지예요!'
     pool = ops.get('staff_pool', {})
     fos = pool.get('fo', [])
     route = {
@@ -1112,6 +1124,14 @@ def get_airline_dashboard(prog, light=False, run_tick=False):
     info = get_airline_info(prog)
     ops = _ops(prog)
     wk = week_key()
+    
+    def get_office_rep_bonus(p):
+        try:
+            from app.services.ceo_office import get_office_status
+            return get_office_status(p).get('total_rep_bonus', 0)
+        except Exception:
+            return 0
+
     economy_tick = None
     if info.get('founded') and run_tick:
         economy_tick = tick_airline_economy(prog)
@@ -1148,6 +1168,7 @@ def get_airline_dashboard(prog, light=False, run_tick=False):
         pstats = {}
     company_board = None
     invest_panel = None
+    revenue_panel = None
     if info.get('founded'):
         try:
             from app.services.airline_company import build_company_board
@@ -1162,6 +1183,11 @@ def get_airline_dashboard(prog, light=False, run_tick=False):
             except Exception:
                 import logging
                 logging.getLogger(__name__).exception('invest_panel load failed')
+            try:
+                from app.services.airline_revenue import fetch_revenue_dashboard
+                revenue_panel = fetch_revenue_dashboard(prog).get('revenue_panel')
+            except Exception:
+                pass
     return {
         'wallet': {'balance': prog.wallet_balance or 0},
         'economy_tick': economy_tick,
@@ -1169,6 +1195,8 @@ def get_airline_dashboard(prog, light=False, run_tick=False):
         'light': light,
         'ops': {
             **ops,
+            'reputation': ops.get('reputation', 50) + (get_office_rep_bonus(prog)),
+            'base_reputation': ops.get('reputation', 50),
             'hubs': HUBS,
             'fleet': fleet,
             'routes': enriched_routes,
@@ -1193,7 +1221,7 @@ def get_airline_dashboard(prog, light=False, run_tick=False):
                 'last_payroll': ops.get('last_payroll', 0),
                 'last_net': ops.get('last_net_revenue', ops.get('last_revenue', 0)),
             },
-            'revenue_panel': None,  # 수입원 탭 전용 API
+            'revenue_panel': revenue_panel,  # 수입원 탭 전용 API
             'company_board': company_board,
             'company_vault': ops.get('company_vault', 0),
             'invest_panel': invest_panel,

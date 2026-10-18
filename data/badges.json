@@ -3698,5 +3698,1085 @@
       "type": "atc_phrases",
       "value": 140
     }
+  },
+  {
+    "id": "sim_power_master",
+    "category": "기장석",
+    "name": "첫 전원 마스터",
+    "description": "기장석에서 전원·조명 체크리스트 완료",
+    "icon": "🔋",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "sim_power_master"
+    }
+  },
+  {
+    "id": "sim_takeoff_lights",
+    "category": "기장석",
+    "name": "이륙 조명 세트",
+    "description": "이륙 전 조명·안전 설정 완료",
+    "icon": "💡",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "sim_takeoff_lights"
+    }
+  },
+  {
+    "id": "sim_engine_start",
+    "category": "기장석",
+    "name": "엔진 시동 연습",
+    "description": "엔진 시동 체크리스트 완료",
+    "icon": "🔧",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "sim_engine_start"
+    }
+  },
+  {
+    "id": "sim_landing_ready",
+    "category": "기장석",
+    "name": "착륙 준비 완료",
+    "description": "착륙 전 점검 완료",
+    "icon": "🛬",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "sim_landing_ready"
+    }
+  },
+  {
+    "id": "sim_parking_pro",
+    "category": "기장석",
+    "name": "주기 프로",
+    "description": "게이트 주기 절차 완료",
+    "icon": "🅿️",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "sim_parking_pro"
+    }
+  },
+  {
+    "id": "sim_route_mission",
+    "category": "기장석",
+    "name": "노선 탑승 점검",
+    "description": "오늘 노선 탑승 점검 미션 완료",
+    "icon": "🗺️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "sim_route_mission"
+    }
+  },
+  {
+    "id": "sim_explorer",
+    "category": "기장석",
+    "name": "기장석 탐험가",
+    "description": "기장석 탐험 모드 완료",
+    "icon": "🧭",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "sim_explorer"
+    }
+  },
+  {
+    "id": "sim_icn_departure",
+    "category": "기장석",
+    "name": "ICN 출발 준비",
+    "description": "ICN 출발 전 10분 시나리오 완료",
+    "icon": "🛫",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "sim_icn_departure"
+    }
+  },
+  {
+    "id": "sim_codex_10",
+    "category": "기장석",
+    "name": "스위치 도감 10",
+    "description": "기장석 스위치 10개 발견",
+    "icon": "📘",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "sim_codex_10"
+    }
+  },
+  {
+    "id": "sim_codex_25",
+    "category": "기장석",
+    "name": "스위치 도감 25",
+    "description": "기장석 스위치 25개 발견",
+    "icon": "📗",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "sim_codex_25"
+    }
+  },
+  {
+    "id": "sim_codex_all",
+    "category": "기장석",
+    "name": "스위치 마스터",
+    "description": "거의 모든 스위치 발견 (45+)",
+    "icon": "📕",
+    "rarity": "epic",
+    "requirement": {
+      "type": "special",
+      "id": "sim_codex_all"
+    }
+  },
+  {
+    "id": "sim_cju_landing",
+    "category": "기장석",
+    "name": "CJU 착륙 준비",
+    "description": "CJU 착륙 전 10분 시나리오 완료",
+    "icon": "🛬",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "sim_cju_landing"
+    }
+  },
+  {
+    "id": "sim_weather_dep",
+    "category": "기장석",
+    "name": "악천후 출발",
+    "description": "악천후 출발 시나리오 완료",
+    "icon": "🌧️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "sim_weather_dep"
+    }
+  },
+  {
+    "id": "sim_codex_master5",
+    "category": "기장석",
+    "name": "마스터 스위치 5",
+    "description": "스위치 5개 마스터 등급",
+    "icon": "⭐",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "sim_codex_master5"
+    }
+  },
+  {
+    "id": "sim_weekly_review",
+    "category": "기장석",
+    "name": "주간 복습왕",
+    "description": "주간 복습 미션 완료",
+    "icon": "🃏",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "sim_weekly_review"
+    }
+  },
+  {
+    "id": "space_founded",
+    "category": "우주",
+    "name": "우주 사업부 설립",
+    "description": "드림 스페이스를 세웠어요",
+    "icon": "🚀",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "space_founded"
+    }
+  },
+  {
+    "id": "space_first_launch",
+    "category": "우주",
+    "name": "첫 발사",
+    "description": "우주로 로켓을 한 번 올렸어요",
+    "icon": "🎆",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "space_first_launch"
+    }
+  },
+  {
+    "id": "space_launch_5",
+    "category": "우주",
+    "name": "발사 5회",
+    "description": "누적 발사 5회",
+    "icon": "5️⃣",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "space_launch_5"
+    }
+  },
+  {
+    "id": "space_launch_10",
+    "category": "우주",
+    "name": "발사 10회",
+    "description": "누적 발사 10회",
+    "icon": "🔟",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "space_launch_10"
+    }
+  },
+  {
+    "id": "space_launch_25",
+    "category": "우주",
+    "name": "발사 25회",
+    "description": "누적 발사 25회",
+    "icon": "📡",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "space_launch_25"
+    }
+  },
+  {
+    "id": "space_launch_50",
+    "category": "우주",
+    "name": "발사 50회",
+    "description": "누적 발사 50회 · 베테랑 발사체",
+    "icon": "🏅",
+    "rarity": "epic",
+    "requirement": {
+      "type": "special",
+      "id": "space_launch_50"
+    }
+  },
+  {
+    "id": "space_success_5",
+    "category": "우주",
+    "name": "성공 5회",
+    "description": "발사 성공 5회",
+    "icon": "✅",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "space_success_5"
+    }
+  },
+  {
+    "id": "space_success_10",
+    "category": "우주",
+    "name": "성공 10회",
+    "description": "발사 성공 10회",
+    "icon": "🎯",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "space_success_10"
+    }
+  },
+  {
+    "id": "space_success_25",
+    "category": "우주",
+    "name": "성공 25회",
+    "description": "발사 성공 25회",
+    "icon": "⭐",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "space_success_25"
+    }
+  },
+  {
+    "id": "space_insured_fail",
+    "category": "우주",
+    "name": "보험의 힘",
+    "description": "보험을 들고 실패/지연을 경험했어요",
+    "icon": "🛡️",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "space_insured_fail"
+    }
+  },
+  {
+    "id": "space_resilient",
+    "category": "우주",
+    "name": "다시 일어서기",
+    "description": "실패 후에도 성공이 실패 이상",
+    "icon": "💪",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "space_resilient"
+    }
+  },
+  {
+    "id": "space_eco_3",
+    "category": "우주",
+    "name": "친환경 3회",
+    "description": "친환경 연료 발사 3회",
+    "icon": "🌱",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "space_eco_3"
+    }
+  },
+  {
+    "id": "space_eco_10",
+    "category": "우주",
+    "name": "친환경 10회",
+    "description": "친환경 연료 발사 10회",
+    "icon": "🌍",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "space_eco_10"
+    }
+  },
+  {
+    "id": "space_eco_20",
+    "category": "우주",
+    "name": "그린 우주",
+    "description": "친환경 연료 발사 20회",
+    "icon": "♻️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "space_eco_20"
+    }
+  },
+  {
+    "id": "space_green_launch",
+    "category": "우주",
+    "name": "에코 성공",
+    "description": "친환경 연료로 발사 성공",
+    "icon": "🌿",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "space_green_launch"
+    }
+  },
+  {
+    "id": "space_reuse_fleet",
+    "category": "우주",
+    "name": "재사용 함대",
+    "description": "재사용 로켓을 보유했어요",
+    "icon": "🔄",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "space_reuse_fleet"
+    }
+  },
+  {
+    "id": "space_reuse_economy",
+    "category": "우주",
+    "name": "재사용 경제",
+    "description": "재사용 할인으로 발사비를 아꼈어요",
+    "icon": "💰",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "space_reuse_economy"
+    }
+  },
+  {
+    "id": "space_sat_3",
+    "category": "우주",
+    "name": "위성 3기",
+    "description": "누적 위성 3기 궤도 배치",
+    "icon": "🛰️",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "space_sat_3"
+    }
+  },
+  {
+    "id": "space_sat_10",
+    "category": "우주",
+    "name": "위성 10기",
+    "description": "누적 위성 10기",
+    "icon": "🌐",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "space_sat_10"
+    }
+  },
+  {
+    "id": "space_sat_25",
+    "category": "우주",
+    "name": "위성 성단",
+    "description": "누적 위성 25기",
+    "icon": "✨",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "space_sat_25"
+    }
+  },
+  {
+    "id": "space_contract_1",
+    "category": "우주",
+    "name": "첫 고객 계약",
+    "description": "주간 고객 계약 1건 완료",
+    "icon": "📋",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "space_contract_1"
+    }
+  },
+  {
+    "id": "space_contract_3",
+    "category": "우주",
+    "name": "계약 3건",
+    "description": "고객 계약 3건 완료",
+    "icon": "📑",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "space_contract_3"
+    }
+  },
+  {
+    "id": "space_contract_5",
+    "category": "우주",
+    "name": "계약 프로",
+    "description": "고객 계약 5건 완료",
+    "icon": "🤝",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "space_contract_5"
+    }
+  },
+  {
+    "id": "space_rep_pro",
+    "category": "우주",
+    "name": "프로 발사 등급",
+    "description": "우주 평판 35 이상 (프로)",
+    "icon": "📗",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "space_rep_pro"
+    }
+  },
+  {
+    "id": "space_rep_elite",
+    "category": "우주",
+    "name": "엘리트 우주",
+    "description": "우주 평판 55 이상",
+    "icon": "⭐",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "space_rep_elite"
+    }
+  },
+  {
+    "id": "space_rep_legend",
+    "category": "우주",
+    "name": "전설 발사체",
+    "description": "우주 평판 75 이상",
+    "icon": "🏆",
+    "rarity": "epic",
+    "requirement": {
+      "type": "special",
+      "id": "space_rep_legend"
+    }
+  },
+  {
+    "id": "space_insurer",
+    "category": "우주",
+    "name": "보험 마니아",
+    "description": "보험 발사 5회",
+    "icon": "📑",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "space_insurer"
+    }
+  },
+  {
+    "id": "space_moon",
+    "category": "우주",
+    "name": "달 연습 성공",
+    "description": "달 착륙 연습 미션 성공",
+    "icon": "🌙",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "space_moon"
+    }
+  },
+  {
+    "id": "space_deep",
+    "category": "우주",
+    "name": "심우주 개척",
+    "description": "심우주 탐사 미션 성공",
+    "icon": "🌌",
+    "rarity": "epic",
+    "requirement": {
+      "type": "special",
+      "id": "space_deep"
+    }
+  },
+  {
+    "id": "space_mars",
+    "category": "우주",
+    "name": "화성 드리머",
+    "description": "화성 도전 미션 성공",
+    "icon": "🔴",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "special",
+      "id": "space_mars"
+    }
+  },
+  {
+    "id": "space_mogul",
+    "category": "우주",
+    "name": "우주 수입 5천만",
+    "description": "누적 우주 수입 5,000만원",
+    "icon": "💎",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "space_mogul"
+    }
+  },
+  {
+    "id": "space_tycoon",
+    "category": "우주",
+    "name": "우주 재벌",
+    "description": "누적 우주 수입 2억",
+    "icon": "👑",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "special",
+      "id": "space_tycoon"
+    }
+  },
+  {
+    "id": "space_hire_first",
+    "category": "우주",
+    "name": "첫 우주 동료",
+    "description": "우주 팀 1명 채용",
+    "icon": "🧑‍🚀",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "space_hire_first"
+    }
+  },
+  {
+    "id": "space_hire_5",
+    "category": "우주",
+    "name": "우주 팀 5명",
+    "description": "우주 인원 5명 채용",
+    "icon": "👥",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "space_hire_5"
+    }
+  },
+  {
+    "id": "space_hire_10",
+    "category": "우주",
+    "name": "드림 스페이스 패밀리",
+    "description": "우주 인원 10명",
+    "icon": "🏢",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "space_hire_10"
+    }
+  },
+  {
+    "id": "space_team_director",
+    "category": "우주",
+    "name": "발사 지휘 배치",
+    "description": "발사 팀에 지휘관 배치",
+    "icon": "🎯",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "space_team_director"
+    }
+  },
+  {
+    "id": "space_precision_team",
+    "category": "우주",
+    "name": "정밀 발사 팀",
+    "description": "지휘 + 궤도 동시 배치",
+    "icon": "📐",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "space_precision_team"
+    }
+  },
+  {
+    "id": "space_desks_full",
+    "category": "우주",
+    "name": "본사 데스크 완비",
+    "description": "관제·계약 데스크 모두 배치",
+    "icon": "📡",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "space_desks_full"
+    }
+  },
+  {
+    "id": "space_transfer",
+    "category": "우주",
+    "name": "항공→우주 전직",
+    "description": "정비사를 추진 엔지니어로 연수",
+    "icon": "🔧",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "space_transfer"
+    }
+  },
+  {
+    "id": "space_quiz_orbit",
+    "category": "우주",
+    "name": "궤도 퀴즈 통과",
+    "description": "궤도 교육 퀴즈 정답",
+    "icon": "🧮",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "space_quiz_orbit"
+    }
+  },
+  {
+    "id": "space_rocket_lead",
+    "category": "우주",
+    "name": "로켓 담당 지정",
+    "description": "로켓에 추진 담당 배치",
+    "icon": "🔥",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "space_rocket_lead"
+    }
+  },
+  {
+    "id": "meal_kitchen",
+    "category": "기내식",
+    "name": "키친 오픈",
+    "description": "기내식 메뉴를 슬롯에 올렸어요",
+    "icon": "🍱",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "meal_kitchen"
+    }
+  },
+  {
+    "id": "meal_starter",
+    "category": "기내식",
+    "name": "기본 메뉴 세트",
+    "description": "기내식 8종 이상 해금",
+    "icon": "🍪",
+    "rarity": "common",
+    "requirement": {
+      "type": "special",
+      "id": "meal_starter"
+    }
+  },
+  {
+    "id": "meal_half",
+    "category": "기내식",
+    "name": "메뉴 마니아",
+    "description": "기내식 15종 해금",
+    "icon": "🍜",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "meal_half"
+    }
+  },
+  {
+    "id": "meal_all",
+    "category": "기내식",
+    "name": "풀 코스 항공",
+    "description": "기내식 25종 전부 해금",
+    "icon": "👑",
+    "rarity": "epic",
+    "requirement": {
+      "type": "special",
+      "id": "meal_all"
+    }
+  },
+  {
+    "id": "meal_signature",
+    "category": "기내식",
+    "name": "시그니처 셰프",
+    "description": "드림 시그니처 도시락 등록",
+    "icon": "✨",
+    "rarity": "rare",
+    "requirement": {
+      "type": "special",
+      "id": "meal_signature"
+    }
+  },
+  {
+    "id": "meal_care",
+    "category": "기내식",
+    "name": "모두를 위한 한 끼",
+    "description": "케어(비건·알레르기) 메뉴를 슬롯에",
+    "icon": "🥦",
+    "rarity": "uncommon",
+    "requirement": {
+      "type": "special",
+      "id": "meal_care"
+    }
+  },
+  {
+    "id": "th_6000",
+    "category": "비행 시간",
+    "name": "6,000시간 기장",
+    "description": "총 비행 시간 6,000시간 달성",
+    "icon": "⏱️",
+    "rarity": "epic",
+    "requirement": {
+      "type": "total_hours",
+      "value": 6000
+    }
+  },
+  {
+    "id": "th_8000",
+    "category": "비행 시간",
+    "name": "8,000시간 기장",
+    "description": "총 비행 시간 8,000시간 달성",
+    "icon": "⏱️",
+    "rarity": "epic",
+    "requirement": {
+      "type": "total_hours",
+      "value": 8000
+    }
+  },
+  {
+    "id": "th_10000",
+    "category": "비행 시간",
+    "name": "10,000시간 기장",
+    "description": "총 비행 시간 10,000시간 달성",
+    "icon": "⏱️",
+    "rarity": "epic",
+    "requirement": {
+      "type": "total_hours",
+      "value": 10000
+    }
+  },
+  {
+    "id": "th_15000",
+    "category": "비행 시간",
+    "name": "15,000시간 기장",
+    "description": "총 비행 시간 15,000시간 달성",
+    "icon": "⏱️",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 15000
+    }
+  },
+  {
+    "id": "th_20000",
+    "category": "비행 시간",
+    "name": "20,000시간 기장",
+    "description": "총 비행 시간 20,000시간 달성",
+    "icon": "⏱️",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 20000
+    }
+  },
+  {
+    "id": "th_30000",
+    "category": "비행 시간",
+    "name": "30,000시간 기장",
+    "description": "총 비행 시간 30,000시간 달성",
+    "icon": "⏱️",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "total_hours",
+      "value": 30000
+    }
+  },
+  {
+    "id": "fc_200",
+    "category": "로그북 성실도",
+    "name": "비행 200회",
+    "description": "로그북 200회 기록",
+    "icon": "📖",
+    "rarity": "epic",
+    "requirement": {
+      "type": "flight_count",
+      "value": 200
+    }
+  },
+  {
+    "id": "fc_400",
+    "category": "로그북 성실도",
+    "name": "비행 400회",
+    "description": "로그북 400회 기록",
+    "icon": "📖",
+    "rarity": "epic",
+    "requirement": {
+      "type": "flight_count",
+      "value": 400
+    }
+  },
+  {
+    "id": "fc_800",
+    "category": "로그북 성실도",
+    "name": "비행 800회",
+    "description": "로그북 800회 기록",
+    "icon": "📖",
+    "rarity": "epic",
+    "requirement": {
+      "type": "flight_count",
+      "value": 800
+    }
+  },
+  {
+    "id": "fc_1500",
+    "category": "로그북 성실도",
+    "name": "비행 1,500회",
+    "description": "로그북 1,500회 기록",
+    "icon": "📖",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "flight_count",
+      "value": 1500
+    }
+  },
+  {
+    "id": "fc_3000",
+    "category": "로그북 성실도",
+    "name": "비행 3,000회",
+    "description": "로그북 3,000회 기록",
+    "icon": "📖",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "flight_count",
+      "value": 3000
+    }
+  },
+  {
+    "id": "atc_300",
+    "category": "ATC 영어 정복",
+    "name": "ATC 300구문",
+    "description": "ATC 연습 300회 상당 달성",
+    "icon": "📻",
+    "rarity": "epic",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 300
+    }
+  },
+  {
+    "id": "atc_500",
+    "category": "ATC 영어 정복",
+    "name": "ATC 500구문",
+    "description": "ATC 연습 500회 상당 달성",
+    "icon": "📻",
+    "rarity": "epic",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 500
+    }
+  },
+  {
+    "id": "atc_800",
+    "category": "ATC 영어 정복",
+    "name": "ATC 800구문",
+    "description": "ATC 연습 800회 상당 달성",
+    "icon": "📻",
+    "rarity": "epic",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 800
+    }
+  },
+  {
+    "id": "atc_1200",
+    "category": "ATC 영어 정복",
+    "name": "ATC 1200구문",
+    "description": "ATC 연습 1200회 상당 달성",
+    "icon": "📻",
+    "rarity": "epic",
+    "requirement": {
+      "type": "atc_phrases",
+      "value": 1200
+    }
+  },
+  {
+    "id": "ac_B777_50h",
+    "category": "기종별 전문가",
+    "name": "Boeing 777-300ER 50시간",
+    "description": "Boeing 777-300ER 50시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 777-300ER",
+      "value": 50
+    }
+  },
+  {
+    "id": "ac_B777_100h",
+    "category": "기종별 전문가",
+    "name": "Boeing 777-300ER 100시간",
+    "description": "Boeing 777-300ER 100시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 777-300ER",
+      "value": 100
+    }
+  },
+  {
+    "id": "ac_B777_250h",
+    "category": "기종별 전문가",
+    "name": "Boeing 777-300ER 250시간",
+    "description": "Boeing 777-300ER 250시간 비행",
+    "icon": "✈️",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 777-300ER",
+      "value": 250
+    }
+  },
+  {
+    "id": "ac_A380_50h",
+    "category": "기종별 전문가",
+    "name": "Airbus A380-800 50시간",
+    "description": "Airbus A380-800 50시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A380-800",
+      "value": 50
+    }
+  },
+  {
+    "id": "ac_A380_100h",
+    "category": "기종별 전문가",
+    "name": "Airbus A380-800 100시간",
+    "description": "Airbus A380-800 100시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A380-800",
+      "value": 100
+    }
+  },
+  {
+    "id": "ac_A380_250h",
+    "category": "기종별 전문가",
+    "name": "Airbus A380-800 250시간",
+    "description": "Airbus A380-800 250시간 비행",
+    "icon": "✈️",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Airbus A380-800",
+      "value": 250
+    }
+  },
+  {
+    "id": "ac_B787_50h",
+    "category": "기종별 전문가",
+    "name": "Boeing 787-9 Dreamliner 50시간",
+    "description": "Boeing 787-9 Dreamliner 50시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 787-9 Dreamliner",
+      "value": 50
+    }
+  },
+  {
+    "id": "ac_B787_100h",
+    "category": "기종별 전문가",
+    "name": "Boeing 787-9 Dreamliner 100시간",
+    "description": "Boeing 787-9 Dreamliner 100시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 787-9 Dreamliner",
+      "value": 100
+    }
+  },
+  {
+    "id": "ac_B787_250h",
+    "category": "기종별 전문가",
+    "name": "Boeing 787-9 Dreamliner 250시간",
+    "description": "Boeing 787-9 Dreamliner 250시간 비행",
+    "icon": "✈️",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 787-9 Dreamliner",
+      "value": 250
+    }
+  },
+  {
+    "id": "ac_B737_50h",
+    "category": "기종별 전문가",
+    "name": "Boeing 737-800 50시간",
+    "description": "Boeing 737-800 50시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 737-800",
+      "value": 50
+    }
+  },
+  {
+    "id": "ac_B737_100h",
+    "category": "기종별 전문가",
+    "name": "Boeing 737-800 100시간",
+    "description": "Boeing 737-800 100시간 비행",
+    "icon": "✈️",
+    "rarity": "rare",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 737-800",
+      "value": 100
+    }
+  },
+  {
+    "id": "ac_B737_250h",
+    "category": "기종별 전문가",
+    "name": "Boeing 737-800 250시간",
+    "description": "Boeing 737-800 250시간 비행",
+    "icon": "✈️",
+    "rarity": "legendary",
+    "requirement": {
+      "type": "aircraft_hours",
+      "aircraft": "Boeing 737-800",
+      "value": 250
+    }
   }
 ]

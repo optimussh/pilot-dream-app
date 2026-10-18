@@ -17,8 +17,8 @@ from app.services.pilot_features import get_airline_info
 
 TOTAL_SHARES = 100  # 최초 발행 단위
 ISSUE_MIN_LEVEL = 2
-ISSUE_BATCH = 50  # 추가 발행 묶음
-MAX_TOTAL_SHARES = 500
+ISSUE_BATCH = 500  # 추가 발행 묶음 (증자)
+MAX_TOTAL_SHARES = 50000  # 최대 증자 조각 수
 MARKET_DAILY_LIMIT = 7
 HOLD_BONUS_DAYS = 7
 HOLD_BONUS_MONEY = 40_000

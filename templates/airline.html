@@ -34,6 +34,10 @@
             <button data-tab="treasury" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">🏦 자금</button>
             <button data-tab="stats" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">📊 능력</button>
             <button data-tab="space" class="al-tab px-3 py-2 rounded-lg text-xs font-bold">🚀 우주</button>
+            <button data-tab="green" class="al-tab px-3 py-2 rounded-lg text-xs font-bold text-green-400">🌱 친환경</button>
+            <button data-tab="passengers" class="al-tab px-3 py-2 rounded-lg text-xs font-bold text-[#ffaa00]">😊 승객</button>
+            <button data-tab="crisis" class="al-tab px-3 py-2 rounded-lg text-xs font-bold text-red-400">🚨 위기</button>
+            <button data-tab="office" class="al-tab px-3 py-2 rounded-lg text-xs font-bold text-[#0A84FF]">🏛️ CEO 집무실</button>
         </div>
         <div id="al-content" class="min-h-[360px]"></div>
     </div>
@@ -81,7 +85,6 @@
 </style>
 {% endblock %}
 {% block scripts %}
-<script src="/static/js/gamification.js"></script>
 <script>
 let D = {};
 let staffRoleFilter = '전체';
@@ -207,8 +210,38 @@ async function openAlTab(tab) {
             const res = await fetch('/api/player/stats');
             D.player_stats = await res.json();
         } catch (e) {}
+    } else if (tab === 'green') {
+        if (!D.green) {
+            el.innerHTML = '<p class="text-gray-400 text-sm animate-pulse">친환경 시스템 불러오는 중...</p>';
+            try {
+                const res = await fetch('/api/airline/green');
+                D.green = await res.json();
+            } catch (e) {}
+        }
+    } else if (tab === 'office') {
+        if (!D.office) {
+            el.innerHTML = '<p class="text-gray-400 text-sm animate-pulse">CEO 집무실 불러오는 중...</p>';
+            try {
+                const res = await fetch('/api/airline/office');
+                D.office = await res.json();
+            } catch (e) {}
+        }
+    } else if (tab === 'crisis') {
+        el.innerHTML = '<p class="text-gray-400 text-sm animate-pulse">위기 대응 기록 불러오는 중...</p>';
+        try {
+            const res = await fetch('/api/crisis/history');
+            D.crisis = await res.json();
+        } catch (e) {}
+    } else if (tab === 'passengers') {
+        if (!D.passengers) {
+            el.innerHTML = '<p class="text-gray-400 text-sm animate-pulse">승객 만족도 불러오는 중...</p>';
+            try {
+                const res = await fetch('/api/airline/passengers');
+                D.passengers = await res.json();
+            } catch (e) {}
+        }
     }
-    const r = { overview: renderOverview, fleet: renderFleet, routes: renderRoutes, staff: renderStaff, revenue: renderRevenue, invest: renderInvest, treasury: renderTreasury, stats: renderStats, space: renderSpace };
+    const r = { overview: renderOverview, fleet: renderFleet, routes: renderRoutes, staff: renderStaff, revenue: renderRevenue, invest: renderInvest, treasury: renderTreasury, stats: renderStats, space: renderSpace, green: renderGreen, passengers: renderPassengers, crisis: renderCrisis, office: renderOffice };
     el.innerHTML = (r[tab] || renderOverview)();
     if (typeof bindUxCollapses === 'function') bindUxCollapses(el);
 }
@@ -231,6 +264,300 @@ function renderAlTab(tab) {
     // 동기 호출 호환 — 내부는 openAlTab
     openAlTab(tab);
 }
+
+async function loadPassengersPanel() {
+    const el = document.getElementById('al-content');
+    el.innerHTML = '<p class="text-gray-500 text-sm animate-pulse">승객 만족도 조사 중...</p>';
+    await fetch('/api/airline/passengers/generate', {method: 'POST'});
+    const res = await fetch('/api/airline/passengers');
+    D.passengers = await res.json();
+    openAlTab('passengers');
+}
+
+function renderPassengers() {
+    const p = D.passengers || {};
+    const stats = p.stats || {total: 0, avg: 0.0};
+    const reviews = p.recent_reviews || [];
+    const service = p.service_stats || {meal: 1, punctuality: 1, seat: 1, crew: 1};
+    
+    const priceMap = {
+        1: 400000,
+        2: 800000,
+        3: 1500000,
+        4: 3000000
+    };
+    
+    let html = `<div class="al-card mb-4 border border-[#ffaa00]/40">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h2 class="text-xl font-bold">😊 승객 행복 시스템</h2>
+                <p class="text-[10px] text-gray-400 mt-1">우리 비행기를 탄 승객들의 솔직한 후기예요!</p>
+            </div>
+            <button onclick="loadPassengersPanel()" class="px-4 py-2 bg-[#ffaa00] text-black font-bold rounded shadow shadow-[#ffaa00]/20 hover:scale-105 transition">새로운 비행 후기 받기</button>
+        </div>
+        
+        <div class="flex items-center gap-6 p-4 bg-black/40 rounded-xl mb-6">
+            <div class="text-6xl">${p.emoji || '😐'}</div>
+            <div>
+                <div class="text-3xl font-bold text-[#ffaa00]">${Number(stats.avg || 0).toFixed(1)} / 5.0</div>
+                <div class="text-[10px] text-gray-400">총 ${stats.total}명의 승객이 평가했어요</div>
+                <div class="mt-2 text-sm text-[#0A84FF] font-bold">💡 ${p.tips || ''}</div>
+            </div>
+        </div>`;
+        
+    // 1. Service Stats Dashboard
+    let statsSectionHtml = `
+    <div class="mb-6 p-4 rounded-xl bg-black/30 border border-gray-800">
+        <h3 class="font-bold text-xs text-gray-400 mb-3 uppercase tracking-wider">🛠️ 기내 서비스 인프라 개설 및 업그레이드</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">`;
+        
+    const serviceNames = {
+        meal: { name: '🍱 기내식 품질', key: 'meal' },
+        punctuality: { name: '⏱️ 운항 정시성', key: 'punctuality' },
+        seat: { name: '💺 좌석 편안함', key: 'seat' },
+        crew: { name: '👩‍✈️ 승무원 서비스', key: 'crew' }
+    };
+    
+    Object.keys(serviceNames).forEach(k => {
+        const lv = service[k] || 1;
+        const info = serviceNames[k];
+        const nextPrice = priceMap[lv];
+        
+        let barHtml = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= lv) {
+                barHtml += `<span class="h-2 flex-1 rounded bg-[#ffaa00]"></span>`;
+            } else {
+                barHtml += `<span class="h-2 flex-1 rounded bg-gray-900 border border-white/5"></span>`;
+            }
+        }
+        
+        let actionBtn = '';
+        if (lv >= 5) {
+            actionBtn = `<span class="block w-full text-center py-1.5 bg-gray-800 text-[10px] text-gray-400 font-bold rounded">최고 등급 완료 (Lv.5)</span>`;
+        } else {
+            actionBtn = `<button onclick="upgradeServiceStat('${k}')" class="block w-full py-1.5 bg-[#ffaa00]/10 hover:bg-[#ffaa00] border border-[#ffaa00]/30 hover:border-[#ffaa00] text-center text-[10px] text-gray-300 hover:text-black font-bold rounded transition">Lv.${lv+1} 업그레이드 (₩${nextPrice.toLocaleString()})</button>`;
+        }
+        
+        statsSectionHtml += `
+        <div class="p-3 bg-black/40 rounded-lg border border-gray-900 flex flex-col justify-between">
+            <div>
+                <div class="flex justify-between items-center text-xs font-bold text-gray-200 mb-1">
+                    <span>${info.name}</span>
+                    <span class="text-[#ffaa00]">Lv.${lv}</span>
+                </div>
+                <div class="flex gap-1.5 my-2.5">
+                    ${barHtml}
+                </div>
+            </div>
+            <div class="mt-2">
+                ${actionBtn}
+            </div>
+        </div>`;
+    });
+    
+    statsSectionHtml += `</div></div>`;
+    html += statsSectionHtml;
+    
+    // 2. Passenger Reviews list
+    html += `
+        <h3 class="font-bold text-sm mb-3">최근 승객 후기</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">`;
+        
+    if (reviews.length === 0) {
+        html += `<div class="col-span-2 text-center text-gray-500 text-sm py-4">아직 비행 후기가 없어요. '새로운 비행 후기 받기' 버튼을 눌러보세요!</div>`;
+    } else {
+        reviews.forEach(r => {
+            const rating = Math.max(1, Math.min(5, Math.round(Number(r.rating || 3))));
+            const stars = '⭐'.repeat(rating) + '☆'.repeat(5 - rating);
+            
+            let actionBtn = '';
+            let resolvedBadge = '';
+            
+            if (rating <= 3) {
+                if (r.resolved) {
+                    resolvedBadge = `<span class="px-2 py-0.5 text-[9px] bg-green-950 text-green-300 border border-green-500/30 rounded font-black">✓ 개선 완료</span>`;
+                } else {
+                    resolvedBadge = `<span class="px-2 py-0.5 text-[9px] bg-amber-950 text-amber-300 border border-amber-500/30 rounded font-black">⚠️ 불만 조치 대기</span>`;
+                    actionBtn = `
+                    <div class="mt-3 text-right">
+                        <button onclick="showResolveComplaintModal('${r.id}')" class="px-3 py-1 bg-amber-600 text-white font-bold rounded text-[10px] hover:bg-amber-500 transition">
+                            🛠️ 이 불만 사항 즉시 개선 투자 (₩500,000) ➔
+                        </button>
+                    </div>`;
+                }
+            }
+            
+            html += `<div class="p-3 bg-black/50 rounded-lg border ${r.resolved ? 'border-green-500/30 bg-green-950/5' : 'border-[#2c2c2e]'} flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-bold text-xs text-[#ffaa00] flex items-center gap-1.5">
+                            <span>${r.name} 승객</span>
+                            ${resolvedBadge}
+                        </span>
+                        <span class="text-xs tracking-widest text-[#ffaa00]">${stars}</span>
+                    </div>
+                    <p class="text-sm mt-2 text-gray-200">${r.resolved ? '<span class="text-green-400">✓</span>' : ''} "${r.comment}"</p>
+                </div>
+                <div>
+                    <div class="grid grid-cols-4 gap-1 mt-3 pt-2 border-t border-[#333] text-[9px] text-center">
+                        <div>🍱 식사<br><b class="${r.factors.meal>=4?'text-[#33ff33]':r.factors.meal<=2?'text-red-400':''}">${r.factors.meal}</b></div>
+                        <div>⏱️ 시간<br><b class="${r.factors.punctuality>=4?'text-[#33ff33]':r.factors.punctuality<=2?'text-red-400':''}">${r.factors.punctuality}</b></div>
+                        <div>💺 좌석<br><b class="${r.factors.seat>=4?'text-[#33ff33]':r.factors.seat<=2?'text-red-400':''}">${r.factors.seat}</b></div>
+                        <div>👩‍✈️ 승무원<br><b class="${r.factors.crew>=4?'text-[#33ff33]':r.factors.crew<=2?'text-red-400':''}">${r.factors.crew}</b></div>
+                    </div>
+                    ${actionBtn}
+                </div>
+            </div>`;
+        });
+    }
+    
+    html += `</div></div>`;
+    return html;
+}
+
+async function loadRandomCrisis() {
+    try {
+        const res = await fetch('/api/crisis/random');
+        const ev = await res.json();
+        
+        if (!ev || !ev.id) return;
+        
+        let modal = document.getElementById('crisis-modal');
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'crisis-modal';
+            modal.className = 'fixed inset-0 bg-black/80 flex items-center justify-center z-[5000] p-4';
+            document.body.appendChild(modal);
+        }
+        
+        let html = `<div class="info-card w-full max-w-md border border-red-500/40" onclick="event.stopPropagation()">
+            <div class="p-5 text-center">
+                <div class="text-6xl mb-2">${ev.emoji || '🚨'}</div>
+                <div class="inline-block px-2 py-1 bg-red-900/50 text-red-300 text-[10px] rounded mb-2">${ev.category}</div>
+                <h2 class="text-xl font-bold mb-2">${ev.title}</h2>
+                <p class="text-sm text-gray-300 mb-6">${ev.description}</p>
+                <div class="space-y-2">`;
+                
+        ev.choices.forEach((c, idx) => {
+            html += `<button onclick="handleCrisisChoice('${ev.id}', ${idx})" class="w-full p-3 bg-black/50 border border-[#444] hover:border-red-400 hover:bg-red-900/20 rounded transition text-left text-sm font-bold text-gray-200">${c}</button>`;
+        });
+        
+        html += `<button onclick="closeCrisisModal()" class="w-full mt-4 p-2 text-xs text-gray-500">지금은 무시하기</button>
+                </div></div></div>`;
+                
+        modal.innerHTML = html;
+        modal.classList.remove('hidden');
+    } catch(e) {}
+}
+
+function closeCrisisModal() {
+    const modal = document.getElementById('crisis-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+async function handleCrisisChoice(eventId, choiceIdx) {
+    try {
+        const res = await fetch('/api/crisis/choose', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ event_id: eventId, choice_idx: choiceIdx })
+        });
+        const data = await res.json();
+        
+        if (data.status === 'ok') {
+            if (data.wallet) {
+                D.wallet = data.wallet;
+                document.getElementById('al-wallet').textContent = fmt(D.wallet.balance);
+            }
+            
+            const r = data.result;
+            const isCorrect = r.correct;
+            const emoji = isCorrect ? '🎉' : '❌';
+            const borderColor = isCorrect ? 'border-green-500/50 animate-pulse' : 'border-red-500/50';
+            const titleColor = isCorrect ? 'text-green-400' : 'text-red-400';
+            
+            let repColor = r.rep_change > 0 ? 'text-[#33ff33]' : 'text-red-400';
+            let moneyColor = r.money_change > 0 ? 'text-[#33ff33]' : (r.money_change < 0 ? 'text-red-400' : 'text-gray-400');
+            let moneyText = r.money_change > 0 ? '+'+fmt(r.money_change) : (r.money_change < 0 ? fmt(r.money_change) : '0');
+            
+            let html = `<div class="info-card w-full max-w-md border ${borderColor}" onclick="event.stopPropagation()">
+                <div class="p-5 text-center">
+                    <div class="text-5xl mb-4">${emoji}</div>
+                    <h2 class="text-lg font-bold mb-2 ${titleColor}">${isCorrect ? '위기 대응 성공!' : '위기 대응 실패...'}</h2>
+                    <p class="text-sm font-bold text-white mb-2">${r.result}</p>
+                    <p class="text-xs text-gray-300 bg-black/40 p-3 rounded-lg border border-[#2c2c2e] text-left leading-relaxed mb-6">💡 <b>해설:</b> ${r.explanation}</p>
+                    
+                    <div class="grid grid-cols-2 gap-2 mb-4 text-xs">
+                        <div class="p-2 bg-black/40 rounded">평판 변화<br><b class="${repColor}">${r.rep_change > 0 ? '+'+r.rep_change : r.rep_change}</b></div>
+                        <div class="p-2 bg-black/40 rounded">비용/수익<br><b class="${moneyColor}">${moneyText}</b></div>
+                    </div>`;
+                    
+            if (r.extra_reward > 0) {
+                html += `<div class="mb-4 text-[10px] text-[#ffaa00] font-bold">🌟 특별 보너스 +${fmt(r.extra_reward)}</div>`;
+            }
+            
+            html += `<button onclick="closeCrisisModal(); openAlTab('crisis');" class="px-6 py-2 bg-[#0A84FF] text-white font-bold rounded">확인</button>
+                    </div></div>`;
+                    
+            document.getElementById('crisis-modal').innerHTML = html;
+        }
+    } catch(e) {}
+}
+
+function renderCrisis() {
+    const c = D.crisis || {history: [], reputation: 85};
+    const rep = c.reputation;
+    const history = c.history || [];
+    
+    let repEmoji = rep >= 800 ? '🌟' : (rep >= 500 ? '👍' : '⚠️');
+    let repColor = rep >= 800 ? 'text-[#33ff33]' : (rep >= 500 ? 'text-[#0A84FF]' : 'text-red-400');
+    
+    let html = `<div class="al-card mb-4 border border-red-500/40">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h2 class="text-xl font-bold">🚨 위기 대응 훈련</h2>
+                <p class="text-[10px] text-gray-400 mt-1">항공사에 위기가 생겼을 때 어떻게 할까요? 기장님의 선택을 보여주세요!</p>
+            </div>
+            <button onclick="loadRandomCrisis()" class="px-4 py-2 bg-red-600 text-white font-bold rounded shadow shadow-red-500/20 hover:scale-105 transition animate-pulse">새로운 사건 발생!</button>
+        </div>
+        
+        <div class="flex items-center justify-between p-4 bg-black/40 rounded-xl mb-6">
+            <div>
+                <div class="text-[10px] text-gray-400">항공사 평판 점수</div>
+                <div class="text-2xl font-bold ${repColor}">${repEmoji} ${rep} / 1000</div>
+            </div>
+            <div class="w-1/2 bg-black rounded-full h-3 border border-[#333] overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 transition-all duration-500" style="width: ${(rep / 10)}%"></div>
+            </div>
+        </div>
+        
+        <h3 class="font-bold text-sm mb-3">과거 대응 기록</h3>
+        <div class="space-y-3">`;
+        
+    if (history.length === 0) {
+        html += `<div class="text-center text-gray-500 text-sm py-4">아직 위기 상황이 없었어요. 안전한 비행 중입니다! ✈️</div>`;
+    } else {
+        history.forEach(h => {
+            let rc = h.rep_change > 0 ? 'text-[#33ff33]' : 'text-red-400';
+            let mc = h.money_change > 0 ? 'text-[#33ff33]' : (h.money_change < 0 ? 'text-red-400' : 'text-gray-400');
+            html += `<div class="p-3 bg-black/50 rounded-lg border border-[#2c2c2e]">
+                <div class="flex justify-between items-start mb-2">
+                    <b class="text-sm text-gray-200">${h.title}</b>
+                    <div class="text-[10px] text-right">
+                        <div>평판 <span class="${rc}">${h.rep_change > 0 ? '+'+h.rep_change : h.rep_change}</span></div>
+                    </div>
+                </div>
+                <div class="text-xs text-[#0A84FF] mb-1">선택: ${h.choice_text}</div>
+                <div class="text-[10px] text-gray-400">${h.result}</div>
+            </div>`;
+        });
+    }
+    
+    html += `</div></div>`;
+    return html;
+}
+
 
 let _revenueLoading = false;
 async function loadRevenuePanel(force) {
@@ -1195,7 +1522,7 @@ function renderRoutes() {
     let html = `<div class="al-card mb-4">
         <div class="flex justify-between items-center mb-2">
             <div class="font-bold text-sm">➕ 새 노선</div>
-            <span class="text-[10px] text-gray-500">템플릿 ${tpls.length}개 · 운영 ${routes.length}/100</span>
+            <span class="text-[10px] text-gray-500">템플릿 ${tpls.length}개 · 운영 ${routes.length}/250</span>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
             <select id="new-route-tpl" class="bg-black border rounded p-2 max-h-40">${renderRouteTemplateOptions(tpls, routeGroupMode === 'all' ? 'type' : routeGroupMode)}</select>
@@ -1765,7 +2092,7 @@ function renderStats() {
         <div class="al-card">
             <div class="flex justify-between text-sm"><span>${s.emoji} ${s.name}</span><b>Lv.${s.value}</b></div>
             <div class="stat-bar mt-1"><div class="stat-bar-fill" style="width:${s.pct||0}%"></div></div>
-            <div class="text-[10px] text-gray-500 mt-1">${s.kid_desc} · XP ${s.xp||0}/${s.xp_need||100}</div>
+            <div class="text-[10px] text-gray-500 mt-1">${s.kid_desc} · 다음 목표 Lv.${s.next_goal || ((s.value||0)+10)} · XP ${s.xp||0}/${s.xp_need||100}</div>
             ${(ps.stat_points||0)>0 ? `<button onclick="allocStat('${s.id}')" class="text-[10px] mt-2 px-2 py-0.5 border rounded">+1 올리기</button>` : ''}
         </div>`).join('')}</div>
     <a href="/guide#stats" class="text-xs text-[#0A84FF] mt-4 inline-block">능력치 가이드 →</a>`;
@@ -2296,5 +2623,359 @@ document.getElementById('al-tabs')?.addEventListener('click', e => {
         }
     } catch (e) { /* tick optional */ }
 })();
+
+async function toggleGreenOption(option) {
+    try {
+        const res = await fetch('/api/airline/green/toggle', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ option })
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+            alert(data.error || '요청 중 오류가 발생했습니다.');
+            openAlTab('green');
+            return;
+        }
+        D.green = data.green;
+        if (data.wallet) {
+            if (typeof updateWalletDisplay === 'function') updateWalletDisplay(data.wallet);
+            else if (document.getElementById('al-wallet')) document.getElementById('al-wallet').textContent = fmt(data.wallet.balance);
+            D.wallet = data.wallet;
+        }
+        openAlTab('green');
+    } catch (e) {
+        alert('요청 중 오류가 발생했습니다.');
+    }
+}
+
+function renderGreen() {
+    const g = D.green || { points: 0, level_name: '🌱 새싹', progress_percent: 0, next_level_points: 21, eco_meals: false, recycling: false, saf: false, tips: [] };
+    
+    return `
+    <div class="al-card mb-4 border border-green-500/30">
+        <h3 class="text-xl font-black text-green-400 mb-2">🌱 친환경 비행 시스템</h3>
+        <p class="text-[10px] text-gray-300 mb-4">지구를 사랑하는 항공사가 되어봐요! 비행기가 많아질수록 기본 포인트가 오르고, 추가 설정을 통해 등급을 올려 보너스를 받을 수 있어요!</p>
+        
+        <div class="bg-black/60 rounded-xl p-4 mb-4 flex items-center justify-between border border-green-500/30">
+            <div>
+                <div class="text-xs text-gray-400 mb-1">현재 등급</div>
+                <div class="text-2xl font-bold text-white">${g.level_name}</div>
+            </div>
+            <div class="text-right">
+                <div class="text-xs text-gray-400 mb-1">친환경 포인트</div>
+                <div class="text-2xl font-black text-green-400">${g.points}<span class="text-sm">P</span></div>
+            </div>
+        </div>
+        
+        <div class="mb-6">
+            <div class="flex justify-between text-xs mb-1">
+                <span class="text-gray-400">${g.next_level_points ? '다음 등급까지' : '최고 등급 달성!'}</span>
+                <span class="text-green-400">${g.next_level_points ? g.next_level_points + 'P 필요' : ''}</span>
+            </div>
+            <div class="h-3 bg-gray-700 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-green-500 to-green-300 transition-all duration-1000" style="width: ${g.progress_percent}%"></div>
+            </div>
+        </div>
+        
+        <h4 class="font-bold text-white mb-3 flex items-center gap-2 text-sm">
+            <span>⚙️</span> 친환경 설정
+        </h4>
+        
+        <div class="space-y-3 mb-6">
+            <div class="bg-black/40 p-3 rounded-xl flex items-center justify-between border border-gray-700">
+                <div>
+                    <div class="font-bold text-xs">🍱 친환경 기내식</div>
+                    <div class="text-[10px] text-gray-400">포인트 +15</div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" class="sr-only peer" onchange="toggleGreenOption('eco_meals')" ${g.eco_meals ? 'checked' : ''}>
+                    <div class="w-9 h-5 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
+                </label>
+            </div>
+            
+            <div class="bg-black/40 p-3 rounded-xl flex items-center justify-between border border-gray-700">
+                <div>
+                    <div class="font-bold text-xs">♻️ 기내 재활용</div>
+                    <div class="text-[10px] text-gray-400">포인트 +20</div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" class="sr-only peer" onchange="toggleGreenOption('recycling')" ${g.recycling ? 'checked' : ''}>
+                    <div class="w-9 h-5 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
+                </label>
+            </div>
+            
+            <div class="bg-black/40 p-3 rounded-xl flex items-center justify-between border border-gray-700">
+                <div>
+                    <div class="font-bold text-xs">⛽ 친환경 연료 (SAF)</div>
+                    <div class="text-[9px] text-gray-400">포인트 +30 (비용: ₩500,000)</div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" class="sr-only peer" onchange="toggleGreenOption('saf')" ${g.saf ? 'checked' : ''}>
+                    <div class="w-9 h-5 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
+                </label>
+            </div>
+        </div>
+        
+        <h4 class="font-bold text-white mb-2 flex items-center gap-2 text-sm">
+            <span>💡</span> 지구를 지키는 팁
+        </h4>
+        <div class="space-y-1">
+            ${(g.tips || []).map(tip => `
+                <div class="text-[10px] bg-black/40 p-2 rounded border border-gray-700 text-green-100 flex gap-2">
+                    <span>${tip}</span>
+                </div>
+            `).join('')}
+        </div>
+    </div>
+    `;
+}
+
+function renderOffice() {
+    const o = D.office || { items: [], equipped_details: {}, total_rep_bonus: 0, total_rev_bonus: 0 };
+    
+    // Background style for room
+    let roomHtml = `
+    <div class="relative w-full h-48 sm:h-64 bg-gradient-to-b from-[#1c1c1e] to-[#0a0a0a] rounded-xl border border-[#0A84FF]/40 mb-6 overflow-hidden flex items-end justify-center perspective-1000">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMSIgZmlsbD0iI2ZmZiIgZmlsbC1vcGFjaXR5PSIwLjEiLz48L3N2Zz4=')] opacity-30"></div>
+        
+        <!-- Room Elements -->
+        <div class="absolute top-0 left-0 w-full h-full flex flex-col justify-between p-4">
+            <div class="w-full flex justify-between items-start">
+                <div id="office-wall" class="text-4xl sm:text-6xl drop-shadow-lg transition-transform hover:scale-110">
+                    ${o.equipped_details.wall ? o.equipped_details.wall.emoji : '<span class="opacity-10">🖼️</span>'}
+                </div>
+                <div id="office-kitchen" class="text-4xl sm:text-6xl drop-shadow-lg transition-transform hover:scale-110">
+                    ${o.equipped_details.kitchen ? o.equipped_details.kitchen.emoji : '<span class="opacity-10">🍵</span>'}
+                </div>
+            </div>
+            
+            <div class="w-full flex justify-around items-end pb-2 sm:pb-4">
+                <div id="office-cabinet" class="text-5xl sm:text-7xl drop-shadow-lg transition-transform hover:scale-110 z-10">
+                    ${o.equipped_details.cabinet ? o.equipped_details.cabinet.emoji : '<span class="opacity-10">🗄️</span>'}
+                </div>
+                
+                <div class="relative flex flex-col items-center z-20">
+                    <div id="office-desk" class="text-3xl sm:text-5xl absolute -top-8 sm:-top-12 z-30 drop-shadow-lg transition-transform hover:scale-110">
+                        ${o.equipped_details.desk ? o.equipped_details.desk.emoji : '<span class="opacity-10">📝</span>'}
+                    </div>
+                    <div id="office-chair" class="text-6xl sm:text-8xl drop-shadow-2xl transition-transform hover:scale-110">
+                        ${o.equipped_details.chair ? o.equipped_details.chair.emoji : '<span class="opacity-10">🪑</span>'}
+                    </div>
+                </div>
+                
+                <div id="office-plant" class="text-5xl sm:text-7xl drop-shadow-lg transition-transform hover:scale-110 z-10">
+                    ${o.equipped_details.plant ? o.equipped_details.plant.emoji : '<span class="opacity-10">🌱</span>'}
+                </div>
+            </div>
+        </div>
+    </div>`;
+
+    let statsHtml = `
+    <div class="flex gap-4 mb-6 text-center justify-center">
+        <div class="bg-black/60 border border-[#ffaa00]/40 rounded-xl px-6 py-3 min-w-[120px]">
+            <div class="text-[10px] text-gray-400 mb-1">총 명예 보너스</div>
+            <div class="text-2xl font-bold text-[#ffaa00]">+${o.total_rep_bonus} 🌟</div>
+        </div>
+        <div class="bg-black/60 border border-[#33ff33]/40 rounded-xl px-6 py-3 min-w-[120px]">
+            <div class="text-[10px] text-gray-400 mb-1">총 수익 보너스</div>
+            <div class="text-2xl font-bold text-[#33ff33]">+${o.total_rev_bonus}% 💰</div>
+        </div>
+    </div>`;
+
+    let itemsHtml = `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">`;
+    (o.items || []).forEach(item => {
+        let btn = '';
+        if (item.equipped) {
+            btn = `<button onclick="equipOfficeItem('${item.slot}', null)" class="w-full mt-2 py-1.5 text-xs font-bold rounded border border-red-500/50 text-red-400 hover:bg-red-500/20 transition">배치 해제</button>`;
+        } else if (item.owned) {
+            btn = `<button onclick="equipOfficeItem('${item.slot}', '${item.id}')" class="w-full mt-2 py-1.5 text-xs font-bold rounded bg-[#0A84FF] text-white hover:bg-blue-600 transition shadow-[0_0_10px_rgba(10,132,255,0.3)]">방에 배치하기</button>`;
+        } else {
+            btn = `<button onclick="buyOfficeItem('${item.id}')" class="w-full mt-2 py-1.5 text-xs font-bold rounded bg-[#ffaa00] text-black hover:bg-yellow-500 transition shadow-[0_0_10px_rgba(255,170,0,0.3)]">구매 ${item.price_formatted}</button>`;
+        }
+        
+        itemsHtml += `
+        <div class="al-card border ${item.equipped ? 'border-[#0A84FF]/60 bg-[#001a33]/40' : item.owned ? 'border-[#33ff33]/40' : 'border-[#2c2c2e]'} hover:border-[#ffaa00]/60 transition-colors">
+            <div class="flex items-start gap-3">
+                <div class="text-4xl">${item.emoji}</div>
+                <div class="flex-1">
+                    <div class="font-bold text-sm text-white mb-0.5">${item.name}</div>
+                    <div class="text-[10px] text-gray-400 mb-1 leading-tight">${item.desc}</div>
+                    <div class="flex gap-2 text-[10px] font-bold">
+                        <span class="text-[#ffaa00]">명예 +${item.rep_bonus}</span>
+                        <span class="text-[#33ff33]">수익 +${item.rev_bonus}%</span>
+                    </div>
+                </div>
+            </div>
+            ${btn}
+        </div>`;
+    });
+    itemsHtml += `</div>`;
+
+    return `
+    <div class="al-card mb-4 border border-[#0A84FF]/30">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h2 class="text-xl font-bold">🏛️ CEO 전용 집무실</h2>
+                <p class="text-[10px] text-gray-400 mt-1">멋진 인테리어로 방을 꾸미고 명예와 수익을 높이세요!</p>
+            </div>
+        </div>
+        ${roomHtml}
+        ${statsHtml}
+        <h3 class="font-bold text-sm mb-3">인테리어 상점 & 보관함</h3>
+        ${itemsHtml}
+    </div>`;
+}
+
+async function buyOfficeItem(itemId) {
+    try {
+        const res = await fetch('/api/airline/office/buy', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ item_id: itemId })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            alert(data.error);
+            return;
+        }
+        D.office = data.office;
+        if (data.wallet) {
+            if (typeof updateWalletDisplay === 'function') updateWalletDisplay(data.wallet);
+            else if (document.getElementById('al-wallet')) document.getElementById('al-wallet').textContent = fmt(data.wallet.balance);
+            D.wallet = data.wallet;
+        }
+        openAlTab('office');
+    } catch (e) {
+        alert('구매 중 오류가 발생했습니다.');
+    }
+}
+
+async function equipOfficeItem(slot, itemId) {
+    try {
+        const res = await fetch('/api/airline/office/equip', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slot, item_id: itemId })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            alert(data.error);
+            return;
+        }
+        D.office = data.office;
+        openAlTab('office');
+    } catch (e) {
+        alert('배치 중 오류가 발생했습니다.');
+    }
+}
+
+async function upgradeServiceStat(statKey) {
+    try {
+        const res = await fetch('/api/airline/service-upgrade', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ stat_key: statKey })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            alert(data.error || '업그레이드 중 오류가 발생했습니다.');
+            return;
+        }
+        alert(data.message);
+        
+        D.passengers.service_stats = data.service_stats;
+        if (data.wallet) {
+            if (typeof updateWalletDisplay === 'function') updateWalletDisplay(data.wallet);
+            else if (document.getElementById('al-wallet')) document.getElementById('al-wallet').textContent = fmt(data.wallet.balance);
+            D.wallet = data.wallet;
+        }
+        
+        openAlTab('passengers');
+    } catch (e) {
+        alert('업그레이드 중 통신 오류가 발생했습니다.');
+    }
+}
+
+function showResolveComplaintModal(reviewId) {
+    const reviews = D.passengers?.recent_reviews || [];
+    const r = reviews.find(x => x.id === reviewId);
+    if (!r) return;
+    
+    const factors = r.factors || {};
+    const lowestKey = Object.keys(factors).reduce((a, b) => factors[a] < factors[b] ? a : b);
+    const namesMap = {
+        meal: '🍱 기내식 품질',
+        punctuality: '⏱️ 운항 정시성',
+        seat: '💺 좌석 편안함',
+        crew: '👩‍✈️ 승무원 서비스'
+    };
+    const factorName = namesMap[lowestKey] || lowestKey;
+    
+    let modal = document.getElementById('resolve-complaint-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'resolve-complaint-modal';
+        modal.className = 'fixed inset-0 bg-black/80 flex items-center justify-center z-[5000] p-4';
+        document.body.appendChild(modal);
+    }
+    
+    modal.innerHTML = `
+    <div class="info-card w-full max-w-md border border-amber-500/40" onclick="event.stopPropagation()">
+        <div class="p-5 text-center">
+            <div class="text-5xl mb-2">🛠️</div>
+            <div class="inline-block px-2 py-1 bg-amber-950/50 text-amber-300 text-[10px] rounded mb-2">불만 즉각 개선 대처</div>
+            <h2 class="text-lg font-bold mb-2">승객 불편 사항에 조치하기</h2>
+            <div class="p-3 bg-black/30 border border-gray-800 rounded-lg text-left text-xs text-gray-400 mb-4 leading-relaxed font-mono">
+                <span class="font-bold text-[#ffaa00]">${r.name} 승객 후기:</span><br>
+                "${r.comment}"
+            </div>
+            <p class="text-xs text-gray-300 mb-6">
+                현재 승객은 <b class="text-[#ffaa00]">${factorName}</b>에 대해 가장 낮은 점수를 주었습니다.<br>
+                즉각적인 시스템 교체 및 피드백 개선을 위해 <b>₩500,000</b>을 투자합니다.<br><br>
+                <span class="text-[#33ff33] font-bold">💎 혜택: ${factorName} 레벨 +1 상승 및 항공사 평판 대폭 향상!</span>
+            </p>
+            <div class="flex gap-2">
+                <button onclick="resolvePassengerComplaint('${reviewId}')" class="flex-1 py-2 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded text-xs transition">개선 투자하기 (₩500,000)</button>
+                <button onclick="closeResolveModal()" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs rounded transition">취소</button>
+            </div>
+        </div>
+    </div>`;
+    modal.classList.remove('hidden');
+}
+
+function closeResolveModal() {
+    const modal = document.getElementById('resolve-complaint-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+async function resolvePassengerComplaint(reviewId) {
+    closeResolveModal();
+    try {
+        const res = await fetch('/api/airline/passenger/resolve', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ review_id: reviewId })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            alert(data.error || '개선 조치 중 오류가 발생했습니다.');
+            return;
+        }
+        alert(data.message);
+        
+        D.passengers.recent_reviews = data.reviews;
+        D.passengers.service_stats = data.service_stats;
+        if (data.wallet) {
+            if (typeof updateWalletDisplay === 'function') updateWalletDisplay(data.wallet);
+            else if (document.getElementById('al-wallet')) document.getElementById('al-wallet').textContent = fmt(data.wallet.balance);
+            D.wallet = data.wallet;
+        }
+        
+        openAlTab('passengers');
+    } catch (e) {
+        alert('통신 오류가 발생했습니다.');
+    }
+}
 </script>
 {% endblock %}
