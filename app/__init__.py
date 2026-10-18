@@ -23,9 +23,15 @@ def create_app():
         # Supabase / PostgreSQL 사용
         # Supabase가 가끔 'postgres://'로 주는데 SQLAlchemy는 'postgresql://'을 선호
         if database_url.startswith("postgres://"):
-            database_url = database_url.replace("postgres://", "postgresql://", 1)
+            database_url = "postgresql+psycopg2://" + database_url[len("postgres://"):]
+        elif database_url.startswith("postgresql://"):
+            database_url = "postgresql+psycopg2://" + database_url[len("postgresql://"):]
         
         app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+            'pool_pre_ping': True,
+            'pool_recycle': 300,
+        }
     else:
         # 로컬 개발용 SQLite
         os.makedirs(app.instance_path, exist_ok=True)

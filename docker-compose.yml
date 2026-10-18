@@ -17,6 +17,8 @@ services:
       - "5000:5000"
     volumes:
       - pilot_db:/app/instance
+    env_file:
+      - .env
     environment:
       - FLASK_ENV=production
       - FLASK_APP=app.py

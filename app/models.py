@@ -16,7 +16,7 @@ class LogbookEntry(db.Model):
 class UserBadge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     badge_id = db.Column(db.String(50), nullable=False)
-    unlocked_at = db.Column(db.DateTime, default=datetime.utcnow)
+    unlocked_at = db.Column(db.Text)
 
     __table_args__ = (db.UniqueConstraint('badge_id', name='_badge_uc'),)
 
@@ -28,8 +28,8 @@ class UserRadarFlight(db.Model):
     org_id = db.Column(db.String(10), nullable=False)
     dest_id = db.Column(db.String(10), nullable=False)
     ac_name = db.Column(db.String(50))
-    is_korea = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    is_korea = db.Column(db.Integer, default=0)
+    created_at = db.Column(db.Text)
 
 
 class UserProgress(db.Model):
@@ -41,7 +41,7 @@ class UserProgress(db.Model):
     flashcard_streak = db.Column(db.Integer, default=0)
     last_flashcard_date = db.Column(db.String(10))
     flashcards_learned = db.Column(db.Text, default='[]')
-    first_flight_done = db.Column(db.Boolean, default=False)
+    first_flight_done = db.Column(db.Integer, default=0)
     first_flight_step = db.Column(db.Integer, default=0)
     unlocked_content = db.Column(db.Text, default='[]')
     completed_missions = db.Column(db.Text, default='{}')
@@ -52,7 +52,7 @@ class UserProgress(db.Model):
     daily_mission_streak = db.Column(db.Integer, default=0)
     last_all_missions_date = db.Column(db.String(10))
     daily_learning = db.Column(db.Text, default='{}')
-    wallet_balance = db.Column(db.Integer, default=0)
+    wallet_balance = db.Column(db.BigInteger, default=0)
     salary_milestones_paid = db.Column(db.Integer, default=0)
     hour_boosts = db.Column(db.Float, default=0.0)
     inventory = db.Column(db.Text, default='[]')
@@ -77,6 +77,6 @@ class UserProgress(db.Model):
 class FutureLetter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    written_at = db.Column(db.DateTime, default=datetime.utcnow)
-    is_opened = db.Column(db.Boolean, default=False)
-    opened_at = db.Column(db.DateTime)
+    written_at = db.Column(db.Text)
+    is_opened = db.Column(db.Integer, default=0)
+    opened_at = db.Column(db.Text)
